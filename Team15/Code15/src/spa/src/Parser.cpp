@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include "Tokeniser.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,12 +19,7 @@ int Parse (string filename) {
         return 0;
     }
 
-    string line;
-    // Parse the SIMPLE program line by line
-    while (getline(file, line)) {
-        cout << line << endl;
-
-    }
+    processFile(file);
 
     file.close();
     return 0;
