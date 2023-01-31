@@ -53,7 +53,7 @@ namespace Tokens {
             {Keyword::MODULO, "%"},
             {Keyword::GT, ">"},
             {Keyword::GTE, ">="},
-            {Keyword::LT, "<="},
+            {Keyword::LT, "<"},
             {Keyword::LTE, "<="},
             {Keyword::EQUAL, "=="},
             {Keyword::NOT_EQUAL, "!="},
