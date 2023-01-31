@@ -13,10 +13,10 @@ private:
 public:
 	PreProcessedResults();
 	~PreProcessedResults();
-	addVarTable(multimap<std::string, std::string> varTable);
-	addSelectClause(SelectClause selectClause);
-	addPatternClause(PatternClause patternClause);
-	addSuchThatClause(SuchThatClause suchThatClause);
+	void addVarTable(std::multimap<std::string, std::string> varTable);
+	void addSelectClause(SelectClause selectClause);
+	void addPatternClause(PatternClause patternClause);
+	void addSuchThatClause(SuchThatClause suchThatClause);
 	std::multimap<std::string, std::string> getVarTable();
 	SelectClause getSelectClause();
 	PatternClause getPatternClause();

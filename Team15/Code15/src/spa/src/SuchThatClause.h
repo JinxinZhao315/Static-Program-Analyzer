@@ -1,13 +1,14 @@
 #include <string>
-#include "PQLConstants.h"
 #include <vector> 
 
 #pragma once
 
-class SuchThatClause: AbstractClause {
+class SuchThatClause {
 private:
 	std::vector <std::string> suchThatVector;
 public:
+	SuchThatClause();
+
 	SuchThatClause(std::string relationship,
 		std::string leftType,  std::string leftArg, std::string rightType, std::string rightArg);
 

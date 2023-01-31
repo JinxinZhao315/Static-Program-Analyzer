@@ -1,14 +1,14 @@
 #include <string>
-#include "PQLConstants.h"
-#include "AbstractClause.h"
-#include "vector"
+#include <vector>
 
 #pragma once
 
-class SelectClause: AbstractClause {
+class SelectClause {
 private:
 	std::vector<std::string> selectVector;
 public:
+	SelectClause();
+
 	SelectClause(std::string varName, std::string entity);
 
 	~SelectClause();
