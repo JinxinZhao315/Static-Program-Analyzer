@@ -4,19 +4,19 @@ PreProcessedResults::PreProcessedResults() {};
 
 PreProcessedResults:: ~PreProcessedResults() {};
 
-PreProcessedResults::addVarTable(multimap<std::string, std::string> varTable) {
+void PreProcessedResults::addVarTable(std::multimap<std::string, std::string> varTable) {
 	varTable = varTable;
 }
 
-PreProcessedResults::addSelectClause(SelectClause selectClause) {
+void PreProcessedResults::addSelectClause(SelectClause selectClause) {
 	selectClause = selectClause;
 }
 
-PreProcessedResults::addPatternClause(PatternClause patternClause) {
+void PreProcessedResults::addPatternClause(PatternClause patternClause) {
 	patternClause = patternClause;
 }
 
-PreProcessedResults::addSuchThatClause(SuchThatClause suchThatClause) {
+void PreProcessedResults::addSuchThatClause(SuchThatClause suchThatClause) {
 	suchThatClause = suchThatClause;
 }
 
