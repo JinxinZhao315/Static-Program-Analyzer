@@ -18,9 +18,10 @@ private:
 	std::string VARIABLE = "variable";
 
 	std::unordered_map<std::string,
-		std::pair<std::unordered_map<std::string,std::string>, std::unordered_map<std::string,std::string>>> LogicMap;
+		std::pair<std::set<std::string>, std::set<std::string>>> LogicMap;
 
 public:
+
 	SemanticLogic();
 
 	~SemanticLogic();
@@ -30,5 +31,5 @@ public:
 	std::set<std::string> createStmt_Ref_Modifies();
 	std::set<std::string> createStmt_Ref_Uses();
 	std::set<std::string> createSemanticMap();
-	bool checkLogic();
+
 };

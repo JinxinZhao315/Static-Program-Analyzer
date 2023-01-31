@@ -18,7 +18,7 @@ bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 	PatternClause patternClause = preProcessedResults.getPatternClause();
 	SuchThatClause suchThatClause = preProcessedResults.getSuchThatClause();
 
-	PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
+	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
 
 	for (auto iter = varTable.begin(); iter != varTable.end(); iter++) {
 		if (varTable.count(iter->first) > 1) {
@@ -29,6 +29,15 @@ bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 	if (varTable.count(selectClause.getVarEntityPair().first) != 1) {
 		return false;
 	}
+	// to do check whether integer or underscore(non synonym)
+	std::string suchThatLeftType = suchThatClause.getLeftPair().first;
+	std::string suchThatRightType = suchThatClause.getRightPair().first;
+	std::string patternLeftType = patternClause.getLeftPair().first;
+	std::string patternRightType = patternClause.getRightPair().first;
+
+	if (leftPairType != "_" && leftPairType != "integer") {
+
+	}
 
 	if (varTable.count(suchThatClause.getLeftPair().second) != 1 || varTable.count(suchThatClause.getRightPair().second) != 1) {
 		return false;
@@ -38,16 +47,5 @@ bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 		return false;
 	}
 
-	if ((suchThatType == MODIFIES || (suchThatClause->relRefType) == USES) && (suchThatClause->leftHandArg) == UNDERSCORE) {
-		return false;
-	}
 
-	if ((suchThatClause->relRefType) == MODIFIES && check_synonym(suchThatClause->rightHandArg)) {
-		if (suchThatClause->rightHandType != VARIABLE) {
-			return false;
-		}
-	}
-
-	if () {
-	}
 }
