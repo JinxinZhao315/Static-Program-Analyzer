@@ -25,11 +25,5 @@ public:
 	SemanticLogic();
 
 	~SemanticLogic();
-	std::set<std::string> createProc_Ref();
-	std::set<std::string> createStmt_Ref();
-	std::set<std::string> createVar_Ref();
-	std::set<std::string> createStmt_Ref_Modifies();
-	std::set<std::string> createStmt_Ref_Uses();
-	std::set<std::string> createSemanticMap();
 
 };
