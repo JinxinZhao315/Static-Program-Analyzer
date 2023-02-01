@@ -15,6 +15,8 @@ map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
 
+std::vector<std::string> procedures;
+
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
     if (it != Tokens::TOKEN_MAP.end()) {
@@ -39,6 +41,14 @@ std::vector<std::string> pushToken(std::vector<std::string> tokens, std::string 
     return tokens;
 }
 
+void extractProcedures(std::vector<std::string> tokens) {
+    for(int i = 0; i < tokens.size(); ++i) {
+        if(tokens[i] == "procedure") {
+            procedures.push_back(tokens[i+1]);
+        }
+    }
+}
+
 std::vector<std::string> tokenise(std::string line) {
     std::vector<std::string> tokens;
     std::string currentToken = "";
@@ -55,6 +65,7 @@ std::vector<std::string> tokenise(std::string line) {
             currentToken += c;
         }
     }
+    extractProcedures(tokens);
     return tokens;
 }
 
