@@ -35,9 +35,9 @@ bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 	std::string patternLeftType = patternClause.getLeftPair().first;
 	std::string patternRightType = patternClause.getRightPair().first;
 
-	if (leftPairType != "_" && leftPairType != "integer") {
+	/*if (leftPairType != "_" && leftPairType != "integer") {
 
-	}
+	}*/
 
 	if (varTable.count(suchThatClause.getLeftPair().second) != 1 || varTable.count(suchThatClause.getRightPair().second) != 1) {
 		return false;

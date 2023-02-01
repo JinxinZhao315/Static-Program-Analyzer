@@ -9,4 +9,4 @@ public:
 	~SemanticCheck();
 
 	bool checkSemantics(PreProcessedResults preProcessedResults);
-}
+};
