@@ -5,6 +5,7 @@
 #include <map>
 #include <fstream>
 #include <cctype>
+#include <set>
 
 using namespace std;
 
@@ -16,8 +17,9 @@ map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
 
-std::vector<std::string> procedures;
+std::set<std::string> procedures;
 std::vector<std::string> constants;
+std::set<std::string> variables;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -55,9 +57,11 @@ bool isNumeric(const std::string token) {
 void extract(std::vector<std::string> tokens) {
     for(int i = 0; i < tokens.size(); ++i) {
         if(tokens[i] == "procedure") {
-            procedures.push_back(tokens[i+1]);
+            procedures.insert(tokens[i+1]);
         } else if (isNumeric(tokens[i])) {
             constants.push_back(tokens[i]);
+        } else if (i > 0 && tokens[i-1] == "=") {
+            variables.insert(tokens[i]);
         }
     }
 }
