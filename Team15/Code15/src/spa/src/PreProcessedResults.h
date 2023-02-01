@@ -3,6 +3,8 @@
 #include "PatternClause.h"
 #include "SuchThatClause.h"
 
+#pragma once
+
 class PreProcessedResults {
 private:
 	std::multimap<std::string, std::string> varTable;
