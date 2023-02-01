@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <cctype>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ map<int, int> follows;
 map<int, vector<int> > follows_star;
 
 std::vector<std::string> procedures;
+std::vector<std::string> constants;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -41,10 +43,21 @@ std::vector<std::string> pushToken(std::vector<std::string> tokens, std::string 
     return tokens;
 }
 
-void extractProcedures(std::vector<std::string> tokens) {
+bool isNumeric(const std::string token) {
+    for (char c : token) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void extract(std::vector<std::string> tokens) {
     for(int i = 0; i < tokens.size(); ++i) {
         if(tokens[i] == "procedure") {
             procedures.push_back(tokens[i+1]);
+        } else if (isNumeric(tokens[i])) {
+            constants.push_back(tokens[i]);
         }
     }
 }
@@ -65,7 +78,7 @@ std::vector<std::string> tokenise(std::string line) {
             currentToken += c;
         }
     }
-    extractProcedures(tokens);
+    extract(tokens);
     return tokens;
 }
 
