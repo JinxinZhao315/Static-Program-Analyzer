@@ -2,8 +2,11 @@
 #include "SelectClause.h"
 #include "PatternClause.h"
 #include "SuchThatClause.h"
+#pragma once
 
-class Query {
+class Query
+{
+
 private:
 	std::multimap<std::string, std::string> varTable;
 	SelectClause selectClause;
