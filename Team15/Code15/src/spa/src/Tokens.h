@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <vector>
 
 namespace Tokens {
     enum class Keyword {
@@ -60,5 +61,14 @@ namespace Tokens {
             {"!", Keyword::NOT},
             {"&&", Keyword::AND},
             {"||",Keyword::OR}
+    };
+
+    class Token {
+    private:
+        Keyword keyword;
+        std::vector<std::string> parameters;
+    public:
+        Token();
+        Token(Keyword keyword, std::vector<std::string> parameters);
     };
 }
