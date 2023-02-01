@@ -19,6 +19,13 @@ bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::strin
 	}
 }
 
+bool validateDesignEntity(std::string designEntity) {
+    std::unordered_set<std::string> designEntitySet = { "Uses", "Modifies", "Parent",  "Parent*", "Follows", "Follows*" };
+    if (designEntitySet.find(designEntity) == designEntitySet.end()) {
+        return false;
+    }
+}
+
 
 bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg, std::string rightArg) {
 	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
@@ -45,3 +52,4 @@ bool PQLSyntaxChecker::validateEntRef(std::string input) {
 		std::regex_match(input, std::regex(integerFormat)) ||
 		std::regex_match(input, std::regex(identFormat));
 }
+
