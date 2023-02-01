@@ -5,9 +5,7 @@
 
 class SelectClause {
 private:
-	// std::vector<std::string> selectVector;
-    std::string varName;
-    std::string entity;
+	std::vector<std::string> selectVector;
 public:
 	SelectClause();
 
@@ -17,7 +15,7 @@ public:
 
 	std::pair <std::string, std::string> getVarEntityPair();
 
-	void ModifyVarName(std::string varName);
+	void ModifyFirst(std::string varName);
 
-	void ModifyEntity(std::string entity);
+	void ModifySecond(std::string entity);
 };

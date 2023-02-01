@@ -5,13 +5,7 @@
 
 class PatternClause {
 private:
-	//std::vector<std::string> patternVector;
-    std::string patternType;
-    std::string patternSynonym;
-    std::string leftType;
-    std::string leftArg;
-    std::string rightType;
-    std::string rightArg;
+	std::vector<std::string> patternVector;
 public:
 	PatternClause();
 

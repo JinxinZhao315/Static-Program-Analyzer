@@ -3,7 +3,7 @@
 #include "PatternClause.h"
 #include "SuchThatClause.h"
 
-class Query {
+class PreProcessedResults {
 private:
 	std::multimap<std::string, std::string> varTable;
 	SelectClause selectClause;
@@ -11,8 +11,8 @@ private:
 	SuchThatClause suchThatClause;
 
 public:
-	Query();
-	~Query();
+	PreProcessedResults();
+	~PreProcessedResults();
 	void addVarTable(std::multimap<std::string, std::string> varTable);
 	void addSelectClause(SelectClause selectClause);
 	void addPatternClause(PatternClause patternClause);
