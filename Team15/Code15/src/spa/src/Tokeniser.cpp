@@ -4,10 +4,10 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include <cctype>
-#include <set>
+#include <climits>
 
 using namespace std;
+using namespace Tokens;
 
 void generateFollowsRS();
 void generateNestingLevel();
@@ -16,10 +16,6 @@ map<int, vector<string>> parsed;
 map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
-
-std::set<std::string> procedures;
-std::vector<std::string> constants;
-std::set<std::string> variables;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -45,32 +41,11 @@ std::vector<std::string> pushToken(std::vector<std::string> tokens, std::string 
     return tokens;
 }
 
-bool isNumeric(const std::string token) {
-    for (char c : token) {
-        if (!isdigit(c)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void extract(std::vector<std::string> tokens) {
-    for(int i = 0; i < tokens.size(); ++i) {
-        if(tokens[i] == "procedure") {
-            procedures.insert(tokens[i+1]);
-        } else if (isNumeric(tokens[i])) {
-            constants.push_back(tokens[i]);
-        } else if (i > 0 && tokens[i-1] == "=") {
-            variables.insert(tokens[i]);
-        }
-    }
-}
-
 std::vector<std::string> tokenise(std::string line) {
-    std::vector<std::string> tokens;
-    std::string currentToken = "";
+    vector<std::string> tokens;
+    string currentToken = "";
     for(char c : line) {
-        std:string s(1, c);
+        string s(1, c);
         if(findToken(s)) {
             tokens = pushToken(tokens, currentToken);
             tokens = pushToken(tokens, s);
@@ -82,7 +57,6 @@ std::vector<std::string> tokenise(std::string line) {
             currentToken += c;
         }
     }
-    extract(tokens);
     return tokens;
 }
 
@@ -92,32 +66,47 @@ void processFile(std::ifstream &file) {
     int line_number;
     line_number = 1;
     while (getline(file, curr_line)) {
-        line_number++;
         parsed[line_number] = tokenise(curr_line);
+        line_number++;
     }
     generateNestingLevel();
     generateFollowsRS();
 }
 
 void generateNestingLevel() {
+    int curr_level;
+    curr_level = 0;
     for (auto it = parsed.begin(); it != parsed.end(); ++it) {
         int line_number = it->first;
         vector<std::string> tokens = it->second;
-        int curr_level;
-        curr_level = 1;
-        // key is the int key and value is the vector<std::string> associated with that key
-        for (const auto &token: tokens) {
-            if (token == "{") {
+        int final_nesting_level = 0;
+        for (int i = 0; i < tokens.size(); i++) {
+            string token = tokens[i];
+            if (token == "procedure") {
+                final_nesting_level = 0;
+                curr_level = 0;
+            } else if (token == ";") {
+                final_nesting_level = curr_level;
+            } else if (token == "}" && i == 0) { // starts with opening brace
+                curr_level--;
+                final_nesting_level = curr_level;
+            } else if (token == "{") {
+                final_nesting_level = curr_level;
                 curr_level++;
             } else if (token == "}") {
                 curr_level--;
             }
         }
-        nesting_level[line_number] = curr_level;
+        if (tokens.size() == 0) {
+            final_nesting_level = -1;
+        }
+        nesting_level[line_number] = final_nesting_level;
+
     }
     for (const auto &pair : nesting_level) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+        std::cout << "Line number: " << pair.first << ", Nesting level: " << pair.second << std::endl;
     }
+    cout << endl;
 }
 
 void generateFollowsRS() {
@@ -127,7 +116,9 @@ void generateFollowsRS() {
             int second_line_number = inner_it->first;
             int first_nesting_level = outer_it->second;
             int second_nesting_level = inner_it->second;
-
+            if (second_nesting_level == -1) { // new procedure
+                break;
+            }
             // For follows rs
             bool is_line_after = second_line_number == first_line_number + 1;
             bool is_same_nesting_level = first_nesting_level == second_nesting_level;
@@ -165,7 +156,6 @@ int main(int argc, char* argv[]) {
         cout << "Failed to open file: " << filename << endl;
         return 0;
     }
-
     processFile(file);
 
     file.close();
