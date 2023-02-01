@@ -37,7 +37,7 @@ std::vector<std::string> tokenise(std::string line) {
     std::vector<std::string> tokens;
     std::string currentToken = "";
     for(char c : line) {
-        std::string s(1, c);
+        std:string s(1, c);
         if(findToken(s)) {
             tokens = pushToken(tokens, currentToken);
             tokens = pushToken(tokens, s);

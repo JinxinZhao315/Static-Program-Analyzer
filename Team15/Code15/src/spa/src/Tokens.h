@@ -2,7 +2,7 @@
 #include <string>
 
 namespace Tokens {
-    enum Keyword {
+    enum class Keyword {
         PROCEDURE,
         WHILE,
         IF,
