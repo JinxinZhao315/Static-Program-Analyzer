@@ -5,7 +5,8 @@
 void QueryTokenizer::tokenizeQuery(std::string queryString) {
 	size_t lastSemicolon = queryString.find_last_of(';');
 	std::multimap<std::string, std::string> varTable;
-	std::shared_ptr<SelectClause> selectClause_ptr = std::make_shared<SelectClause>();
+	//std::shared_ptr<SelectClause> selectClause_ptr = std::make_shared<SelectClause>();
+	SelectClause selectClause;
 	std::vector<SuchThatClause> suchThatClauses;
 	std::vector<PatternClause> patternClauses;
 	if (lastSemicolon == std::string::npos) {
@@ -15,14 +16,14 @@ void QueryTokenizer::tokenizeQuery(std::string queryString) {
 	else {
 		std::string declaration = trim(queryString.substr(0, lastSemicolon));
 		std::string remainingQuery = trim(queryString.substr(lastSemicolon + 1));
-		varTable = tokenizeDeclaration(declaration);
+		//varTable = tokenizeDeclaration(declaration);
 		tokenizeClauses(remainingQuery, selectClause, suchThatClauses, patternClauses);
 	}
 }
 
-std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std::string input) {
-
-}
+//std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std::string input) {
+//	
+//}
 
 void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClause,
 	std::vector<SuchThatClause>& suchThatClauses, std::vector<PatternClause>& patternClauses) {
@@ -52,7 +53,7 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& sele
 	if (!syntaxChecker.validateSynonym(synonym)) {
 		throw - 1;
 	}
-	selectClause = SelectClause(synonym);
+	//selectClause = new SelectClause(synonym, "synonym");
 	input = trim(input.substr(synonymEndIndex + 1));
 	return;
 }
@@ -89,7 +90,7 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 }
 
 std::string QueryTokenizer::getType(std::string& input) {
-
+	return "string example";
 }
 
 void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<PatternClause>& patternClauses, PQLSyntaxChecker syntaxChecker) {

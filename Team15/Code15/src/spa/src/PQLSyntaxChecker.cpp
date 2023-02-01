@@ -26,14 +26,14 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
 		return false;
 	}*/
-	if (!validateSynonym(synonym)) {
+	if (validateSynonym(synonym) == false) {
 		throw - 1;
 	}
 	return validateEntRef(leftArg) && validateExprSpec(rightArg);
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return std::regex_match(input, std::regex("\"[\s\S]*\""));
+	return std::regex_match(input, std::regex("\"[\\s\\S]*\""));
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
