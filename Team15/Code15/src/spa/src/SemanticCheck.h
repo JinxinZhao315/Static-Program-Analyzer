@@ -1,4 +1,4 @@
-#include "PreProcessedResults.h"
+#include "Query.h"
 
 #pragma once
 
@@ -8,5 +8,5 @@ public:
 
 	~SemanticCheck();
 
-	bool checkSemantics(PreProcessedResults preProcessedResults);
+	bool checkSemantics(Query query);
 };

@@ -4,7 +4,7 @@ SemanticCheck::SemanticCheck() {}
 
 SemanticCheck::~SemanticCheck() {}
 
-bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
+bool SemanticCheck::checkSemantics(Query query) {
 	/*A synonym name can only be declared once.
 		All the synonyms used in clauses must be declared exactly once.
 		syn - assign must be declared as a synonym of an assignment(design entity assign).
@@ -13,10 +13,10 @@ bool SemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 		E.g.For Parent(arg1, arg2), if arg1 is a synonym, then arg1 must be a statement synonym, or a subtype of a statement synonym(read, print, assign, if, while, call).
 		E.g.For Modifies(arg1, arg2), if arg2 is a synonym, then arg2 must be a variable synonym.*/
 
-	std::multimap<std::string, std::string> varTable = preProcessedResults.getVarTable();
-	SelectClause selectClause = preProcessedResults.getSelectClause();
-	PatternClause patternClause = preProcessedResults.getPatternClause();
-	SuchThatClause suchThatClause = preProcessedResults.getSuchThatClause();
+	std::multimap<std::string, std::string> varTable = query.getVarTable();
+	SelectClause selectClause = query.getSelectClause();
+	PatternClause patternClause = query.getPatternClause();
+	SuchThatClause suchThatClause = query.getSuchThatClause();
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
 
