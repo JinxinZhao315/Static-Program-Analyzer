@@ -4,9 +4,9 @@ PQLRefConsistentCheck::PQLRefConsistentCheck() {}
 
 PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
 
-bool PQLRefConsistentCheck::checkPQLRefConsistent(PreProcessedResults preProcessedResults) {
-	SuchThatClause suchThatClause = preProcessedResults.getSuchThatClause();
-	std::multimap < std::string, std::string > varTable = preProcessedResults.getVarTable();
+bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
+	SuchThatClause suchThatClause = query.getSuchThatClause();
+	std::multimap < std::string, std::string > varTable = query.getVarTable();
 	// to do check whether integer or underscore(non synonym)
 	std::string suchThatRefType = suchThatClause.getRelationShip();
 	std::string suchThatLeftVarName = suchThatClause.getLeftPair().second;

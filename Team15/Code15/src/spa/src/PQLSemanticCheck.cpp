@@ -6,7 +6,7 @@ PQLSemanticCheck::~PQLSemanticCheck() {}
 
 bool PQLSemanticCheck::checkSynonym() { return false; }
 
-bool PQLSemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
+bool PQLSemanticCheck::checkSemantics(Query query) {
 	/*A synonym name can only be declared once.
 		All the synonyms used in clauses must be declared exactly once.
 		syn - assign must be declared as a synonym of an assignment(design entity assign).
@@ -18,10 +18,10 @@ bool PQLSemanticCheck::checkSemantics(PreProcessedResults preProcessedResults) {
 	std::shared_ptr<PQLRefConsistentCheck> refConsistentCheckInstance = std::make_shared<PQLRefConsistentCheck>();
 
 
-	if (!oneSynonymCheckInstance->checkPQLOneSynonym(preProcessedResults)) {
+	if (!oneSynonymCheckInstance->checkPQLOneSynonym(query)) {
 		return false;
 	};
-	if (!refConsistentCheckInstance->checkPQLRefConsistent(preProcessedResults)) {
+	if (!refConsistentCheckInstance->checkPQLRefConsistent(query)) {
 		return false;
 	};
 	return true;

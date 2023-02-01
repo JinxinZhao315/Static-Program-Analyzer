@@ -1,6 +1,5 @@
 #include "QueryTokenizer.h"	
-#include <memory>
-#pragma once
+
 
 void QueryTokenizer::tokenizeQuery(std::string queryString) {
 	size_t lastSemicolon = queryString.find_last_of(';');

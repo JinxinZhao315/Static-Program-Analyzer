@@ -8,11 +8,11 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 
 }
 
-bool PQLOneSynonymCheck::checkPQLOneSynonym(PreProcessedResults preProcessedResults) {
-	std::multimap<std::string, std::string> varTable = preProcessedResults.getVarTable();
-	SelectClause selectClause = preProcessedResults.getSelectClause();
-	PatternClause patternClause = preProcessedResults.getPatternClause();
-	SuchThatClause suchThatClause = preProcessedResults.getSuchThatClause();
+bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
+	std::multimap<std::string, std::string> varTable = query.getVarTable();
+	SelectClause selectClause = query.getSelectClause();
+	PatternClause patternClause = query.getPatternClause();
+	SuchThatClause suchThatClause = query.getSuchThatClause();
 
 	// to do check whether integer or underscore(non synonym)
 	std::string suchThatLeftType = suchThatClause.getLeftPair().first;

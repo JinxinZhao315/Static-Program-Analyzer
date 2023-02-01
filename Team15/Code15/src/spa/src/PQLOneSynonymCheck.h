@@ -1,4 +1,4 @@
-#include "PreProcessedResults.h"
+#include "Query.h"
 
 #pragma once
 class PQLOneSynonymCheck {
@@ -7,7 +7,7 @@ public:
 
 	~PQLOneSynonymCheck();
 
-	bool checkPQLOneSynonym(PreProcessedResults preProcessedResults);
+	bool checkPQLOneSynonym(Query query);
 
 	bool checkSynonym();
 };

@@ -1,4 +1,4 @@
-#include "PreProcessedResults.h"
+#include "Query.h"
 #include "PQLRefConsistentLogic.h"
 #include <memory>
 
@@ -10,7 +10,7 @@ public:
 
 	~PQLRefConsistentCheck();
 
-	bool checkPQLRefConsistent(PreProcessedResults preProcessedResults);
+	bool checkPQLRefConsistent(Query query);
 
 	bool checkSynonym();
 };

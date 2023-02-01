@@ -10,7 +10,7 @@ public:
 
 	~PQLSemanticCheck();
 
-	bool checkSemantics(PreProcessedResults preProcessedResults);
+	bool checkSemantics(Query query);
 
 	bool checkSynonym();
 };
