@@ -1,6 +1,4 @@
-#include "PQLSyntaxChecker.h"	
-
-#pragma once
+#include "PQLSyntaxChecker.h"
 
 bool PQLSyntaxChecker::validateSynonym(std::string synonym) {
 	return std::regex_match(synonym, std::regex(synonymFormat));
@@ -27,7 +25,7 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 		return false;
 	}*/
 	if (validateSynonym(synonym) == false) {
-		throw - 1;
+		return false;
 	}
 	return validateEntRef(leftArg) && validateExprSpec(rightArg);
 }

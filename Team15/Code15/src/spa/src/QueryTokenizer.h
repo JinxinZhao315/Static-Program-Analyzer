@@ -7,6 +7,7 @@
 #include "SelectClause.h"
 #include "PatternClause.h"
 #include "PQLSyntaxChecker.h"
+#include "exceptions/PQLSyntaxError.h"
 
 #pragma once
 
