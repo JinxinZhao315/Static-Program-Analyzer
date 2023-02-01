@@ -9,8 +9,7 @@ void QueryTokenizer::tokenizeQuery(std::string queryString) {
 	std::vector<SuchThatClause> suchThatClauses;
 	std::vector<PatternClause> patternClauses;
 	if (lastSemicolon == std::string::npos) {
-		//tokenize select
-
+		throw PQLSyntaxError("PQL syntax error: No synonym declaration");
 	}
 	else {
 		std::string declaration = trim(queryString.substr(0, lastSemicolon));
@@ -29,7 +28,7 @@ void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClau
 	PQLSyntaxChecker syntaxChecker;
 	std::string keyword = extractKeyword(input);
 	if (keyword != "Select") {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: No 'select' keyword");
 	}
 	tokenizeSelectClause(input, selectClause, syntaxChecker);
 	while (input.length() != 0) {
@@ -41,7 +40,7 @@ void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClau
 			tokenizePatternClause(input, patternClauses, syntaxChecker);
 		}
 		else {
-			throw - 1;
+			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
 		}
 	}
 }
@@ -50,7 +49,7 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& sele
 	std::size_t synonymEndIndex = input.find_first_of(" \t\n");
 	std::string synonym = input.substr(0, synonymEndIndex + 1);
 	if (!syntaxChecker.validateSynonym(synonym)) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid synonym");
 	}
 	//selectClause = new SelectClause(synonym, "synonym");
 	input = trim(input.substr(synonymEndIndex + 1));
@@ -64,17 +63,17 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 	}*/
 	std::string keyword = extractKeyword(input);
 	if (keyword != "that") {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: No 'that' keyword");
 	}
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
 
 	if (nextLeftPar == std::string::npos || nextComma == std::string::npos || nextRightPar == std::string::npos) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid such that clause syntax");
 	}
 	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid such that clause syntax");
 	}
 	std::string relationship = trim(input.substr(0, nextLeftPar));
 	std::string leftArg = trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar));
@@ -82,7 +81,7 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 	std::string rightArg = trim(input.substr(nextComma + 1, nextRightPar - nextComma));
 	//std::string rightArgType = getType(rightArg);
 	if (!syntaxChecker.validateRelationship(relationship, leftArg, rightArg)) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid such that relationship");
 	}
 	suchThatClauses.push_back(SuchThatClause(relationship, leftArg, "integer", rightArg, "integer"));
 	return;
@@ -98,16 +97,16 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<Patte
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
 	if (nextLeftPar == std::string::npos || nextComma == std::string::npos || nextRightPar == std::string::npos) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
 	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
 	std::string relationship = trim(input.substr(0, nextLeftPar));
 	std::string leftArg = trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar));
 	std::string rightArg = trim(input.substr(nextComma + 1, nextRightPar - nextComma));
 	if (!syntaxChecker.validatePattern(keyword, leftArg, rightArg)) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
 	patternClauses.push_back(PatternClause("assign", keyword, "integer",
 		leftArg, "integer", rightArg));
@@ -116,7 +115,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<Patte
 std::string QueryTokenizer::extractKeyword(std::string& input) {
 	std::size_t nextWhiteSpace = input.find_first_of(" \t\n");
 	if (nextWhiteSpace == std::string::npos) {
-		throw - 1;
+		throw PQLSyntaxError("PQL syntax error: Invalid keyword");
 	}
 	std::string keyword = input.substr(0, nextWhiteSpace);
 	input = trim(input.substr(nextWhiteSpace));
