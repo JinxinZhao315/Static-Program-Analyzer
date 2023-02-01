@@ -3,7 +3,7 @@
 #include <vector>
 
 namespace Tokens {
-    enum class Keyword {
+    enum Keyword {
         PROCEDURE,
         WHILE,
         IF,
