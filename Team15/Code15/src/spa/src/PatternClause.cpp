@@ -4,24 +4,24 @@ PatternClause::PatternClause() {}
 
 PatternClause::PatternClause(std::string patternType, std::string patternSynonym, std::string leftType,
 	std::string leftArg, std::string rightType, std::string rightArg) {
-	patternVector.push_back(patternType);
-	patternVector.push_back(patternSynonym);
-	patternVector.push_back(leftType);
-	patternVector.push_back(leftArg);
-	patternVector.push_back(rightType);
-	patternVector.push_back(rightArg);
+	this->patternType = patternType;
+	this->patternSynonym = patternSynonym;
+    this->leftType = leftType;
+    this->leftArg = leftArg;
+    this->rightType = rightType;
+    this->rightArg = rightArg;
 }
 
 std::pair <std::string, std::string> PatternClause::getPatternPair() {
-	return std::pair <std::string, std::string>(patternVector[0], patternVector[1]);
+	return std::pair <std::string, std::string>(this->patternType, this->patternType);
 }
 
 std::pair <std::string, std::string> PatternClause::getLeftPair() {
-	return std::pair <std::string, std::string>(patternVector[2], patternVector[3]);
+	return std::pair <std::string, std::string>(this->leftType, this->leftArg);
 }
 
 std::pair <std::string, std::string> PatternClause::getRightPair() {
-	return std::pair <std::string, std::string>(patternVector[4], patternVector[5]);
+	return std::pair <std::string, std::string>(this->rightType, this->rightArg);
 }
 
 PatternClause::~PatternClause() {}
