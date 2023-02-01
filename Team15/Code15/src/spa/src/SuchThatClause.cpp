@@ -1,5 +1,7 @@
 #include "SuchThatClause.h"
 
+SuchThatClause::SuchThatClause() {}
+
 SuchThatClause::SuchThatClause(std::string relationship,
 	std::string leftType, std::string leftArg, std::string rightType, std::string rightArg) {
 	suchThatVector.push_back(relationship);

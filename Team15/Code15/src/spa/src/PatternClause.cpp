@@ -1,5 +1,7 @@
 #include "PatternClause.h"
 
+PatternClause::PatternClause() {}
+
 PatternClause::PatternClause(std::string patternType, std::string patternSynonym, std::string leftType,
 	std::string leftArg, std::string rightType, std::string rightArg) {
 	patternVector.push_back(patternType);

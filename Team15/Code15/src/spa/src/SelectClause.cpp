@@ -1,5 +1,7 @@
 #include "SelectClause.h"
 
+SelectClause::SelectClause() {}
+
 SelectClause::~SelectClause() {}
 
 SelectClause::SelectClause(std::string varName, std::string entity) {
