@@ -14,21 +14,20 @@
 
 class QueryTokenizer {
 public:
+	QueryTokenizer();
 	std::pair<std::string, std::string> tokenizeQuery(std::string input);
 	void tokenizeClauses(std::string input,
 		SelectClause& selectClause,
-		std::vector<SuchThatClause>& suchThatClauses,
-		std::vector<PatternClause>& patternClauses);
+		SuchThatClause& suchThatClause,
+		PatternClause& patternClause);
 	std::multimap<std::string, std::string> tokenizeDeclaration(std::string declaration);
 	void tokenizeSelectClause(std::string& input, SelectClause& selectClause);
-	void tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauses);
-	void tokenizePatternClause(std::string& input, std::vector<PatternClause>& patternClauses);
+	void tokenizeSuchThatClause(std::string& input, SuchThatClause& suchThatClause);
+	void tokenizePatternClause(std::string& input, PatternClause& patternClause);
 
 private:
     PQLSyntaxChecker syntaxChecker = PQLSyntaxChecker();
 	std::string trim(std::string input);
-	// std::multimap<std::string, std::string> tokenizeDeclaration(std::string input);
-
 	std::string extractKeyword(std::string &input);
 	std::string getType(std::string &input);
     std::vector<std::string> tokenizeCsv(std::string);

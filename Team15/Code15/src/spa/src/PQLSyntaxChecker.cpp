@@ -19,8 +19,8 @@ bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::strin
 	}
 }
 
-bool validateDesignEntity(std::string designEntity) {
-    std::unordered_set<std::string> designEntitySet = { "Uses", "Modifies", "Parent",  "Parent*", "Follows", "Follows*" };
+bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
+    std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print", "assign", "call", "while", "if" "variable", "constant"};
     if (designEntitySet.find(designEntity) == designEntitySet.end()) {
         return false;
     }
