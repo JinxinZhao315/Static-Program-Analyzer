@@ -1,11 +1,15 @@
 #include <map>
 #include <string>
 #include <regex>
+#include <memory>
 #include "SuchThatClause.h"
 #include "SelectClause.h"
 #include "PatternClause.h"
 #include "PQLSyntaxChecker.h"
 
+#include "exceptions/PQLSyntaxError.h"
+
+#pragma once
 class QueryTokenizer {
 public:
 	void tokenizeQuery(std::string queryString);
