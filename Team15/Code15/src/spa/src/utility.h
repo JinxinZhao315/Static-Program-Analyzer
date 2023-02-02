@@ -3,6 +3,8 @@
 #include <unordered_set>
 #include"exceptions/PQLSyntaxError.h"
 
+#pragma once
+
 namespace Utility{
 	std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print", 
 		"assign", "call", "while", "if" "variable", "constant" };
