@@ -2,8 +2,8 @@
 // Created by Jinxin Zhao on 1/2/23.
 //
 
-#ifndef SPA_PQLSYNTAXERROR_H
-#define SPA_PQLSYNTAXERROR_H
+#ifndef SPA_PQLSEMANTICERROR_H
+#define SPA_PQLSEMANTICERROR_H
 
 #include <iostream>
 #include <string>
@@ -20,4 +20,4 @@ public:
 };
 
 
-#endif //SPA_PQLSYNTAXERROR_H
+#endif //SPA_PQLSEMANTICERROR_H

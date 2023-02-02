@@ -1,6 +1,8 @@
 #include "QueryTokenizer.h"	
 
-QueryTokenizer::QueryTokenizer() {}
+QueryTokenizer::QueryTokenizer() {
+    this->syntaxChecker = PQLSyntaxChecker();
+}
 
 std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string input) {
 	size_t lastSemicolon = input.find_last_of(';');
@@ -35,7 +37,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
             if (!isSynonValid) {
                 throw PQLSyntaxError("PQL syntax error: invalid synonym");
             }
-            varTable.insert({designEntity, synon});
+            varTable.insert({synon, designEntity});
         }
 
         declaration = trim(declaration.substr((semicolonPos + 1)));

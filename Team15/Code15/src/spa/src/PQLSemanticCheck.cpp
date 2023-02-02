@@ -6,7 +6,7 @@ PQLSemanticCheck::~PQLSemanticCheck() {}
 
 bool PQLSemanticCheck::checkSynonym() { return false; }
 
-bool PQLSemanticCheck::checkSemantics(Query query) {
+std::pair<bool,std::string> PQLSemanticCheck::checkSemantics(Query query) {
 	/*A synonym name can only be declared once.
 		All the synonyms used in clauses must be declared exactly once.
 		syn - assign must be declared as a synonym of an assignment(design entity assign).
@@ -19,10 +19,10 @@ bool PQLSemanticCheck::checkSemantics(Query query) {
 
 
 	if (!oneSynonymCheckInstance->checkPQLOneSynonym(query)) {
-		return false;
+		return std::make_pair(false, "PQL semantic error: synonym declared more than once");
 	};
 	if (!refConsistentCheckInstance->checkPQLRefConsistent(query)) {
-		return false;
+		return std::make_pair(false, "PQL semantic error: inconsistent reference");
 	};
-	return true;
+	return std::make_pair(true, "");
 }
