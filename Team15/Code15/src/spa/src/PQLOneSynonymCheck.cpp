@@ -13,14 +13,19 @@ std::string PQLOneSynonymCheck::getPrimitiveType(std::string varName) { return "
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::multimap<std::string, std::string> varTable = query.getVarTable();
 	SelectClause selectClause = query.getSelectClause();
-	PatternClause patternClause = query.getPatternClause();
-	SuchThatClause suchThatClause = query.getSuchThatClause();
+    std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
 
+
+
+<<<<<<< HEAD
 	// to do check whether integer or underscore(non synonym)
 	std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
 	std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
 	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
 	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
+=======
+>>>>>>> 8dcec7943a2806c7da3e1daea2a70094ed5501c1
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
 	// A synonym name can only be declared once.
@@ -39,28 +44,39 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 		return false;
 	}
 
-	// SuchThat Clause
-	if (checkSynonym() && varTable.count(suchThatLeftType) != 1) {
-		return false;
-	}
+    // to do check whether integer or underscore(non synonym)
+    // SuchThat Clause
+    for (SuchThatClause suchThatClause: suchThatClauseVec) {
+        std::string suchThatLeftType = suchThatClause.getLeftPair().first;
+        std::string suchThatRightType = suchThatClause.getRightPair().first;
+        if (checkSynonym() && varTable.count(suchThatLeftType) != 1) {
+            return false;
+        }
 
-	if (checkSynonym() && varTable.count(suchThatRightType) != 1) {
-		return false;
-	}
+        if (checkSynonym() && varTable.count(suchThatRightType) != 1) {
+            return false;
+        }
 
-	// Pattern Clause
-	if (checkSynonym() && varTable.count(patternLeftType) != 1) {
-		return false;
-	}
+    }
 
-	if (checkSynonym() && varTable.count(patternRightType) != 1) {
-		return false;
-	}
+    // Pattern Clause
+    for (PatternClause patternClause: patternClauseVec) {
+    	std::string patternLeftType = patternClause.getLeftPair().first;
+    	std::string patternRightType = patternClause.getRightPair().first;
+        if (checkSynonym() && varTable.count(patternLeftType) != 1) {
+            return false;
+        }
 
-	// Further Check: syn - assign must be declared as a synonym of an assignment(design entity assign)
-	if (checkSynonym() && varTable.find(patternRightType)->second != "assign") {
-		return false;
-	}
+        if (checkSynonym() && varTable.count(patternRightType) != 1) {
+            return false;
+        }
+        // Further Check: syn - assign must be declared as a synonym of an assignment(design entity assign)
+        if (checkSynonym() && varTable.find(patternRightType)->second != "assign") {
+            return false;
+        }
+    }
+
+
 	return true;
 }
 

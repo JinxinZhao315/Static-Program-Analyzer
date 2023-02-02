@@ -9,9 +9,11 @@ class Query
 
 private:
 	std::multimap<std::string, std::string> varTable;
-	SelectClause selectClause;
-	PatternClause patternClause;
-	SuchThatClause suchThatClause;
+    SelectClause selectClause;
+    std::vector<PatternClause> patternClauseVec;
+	std::vector<SuchThatClause> suchThatClauseVec;
+//	PatternClause patternClause;
+//	SuchThatClause suchThatClause;
 
 public:
 	Query();
@@ -22,6 +24,8 @@ public:
 	void addSuchThatClause(SuchThatClause suchThatClause);
 	std::multimap<std::string, std::string> getVarTable();
 	SelectClause getSelectClause();
-	PatternClause getPatternClause();
-	SuchThatClause getSuchThatClause();
+    //PatternClause getPatternClause();
+    //SuchThatClause getSuchThatClause();
+    std::vector<PatternClause> getPatternClauseVec();
+    std::vector<SuchThatClause> getSuchThatClauseVec();
 };
