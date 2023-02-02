@@ -20,6 +20,7 @@ map<int, vector<int> > follows_star;
 std::set<std::string> procedures;
 std::vector<std::string> constants;
 std::set<std::string> variables;
+std::map<Tokens::Keyword, std::vector<int>> statements;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -54,19 +55,35 @@ bool isNumeric(const std::string token) {
     return true;
 }
 
-void extract(std::vector<std::string> tokens) {
+bool isStatement(std::string token) {
+    return token == "read"
+        || token == "print"
+        || token == "call"
+        || token == "while"
+        || token == "if"
+        || token == "assign";
+}
+
+Tokens::Keyword getStatementType(std::string token) {
+    return TOKEN_MAP[token];
+}
+
+void extract(std::vector<std::string> tokens, int lineNumber) {
     for(int i = 0; i < tokens.size(); ++i) {
         if(tokens[i] == "procedure") {
             procedures.insert(tokens[i+1]);
+        } else if (isStatement(tokens[i])) {
+            Tokens::Keyword statementType = getStatementType(tokens[i]);
+            statements[statementType].push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
-            constants.push_back(tokens[i]);
+                constants.push_back(tokens[i]);
         } else if (i > 0 && tokens[i-1] == "=") {
             variables.insert(tokens[i]);
         }
     }
 }
 
-std::vector<std::string> tokenise(std::string line) {
+std::vector<std::string> tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
     string currentToken = "";
     for(char c : line) {
@@ -82,7 +99,7 @@ std::vector<std::string> tokenise(std::string line) {
             currentToken += c;
         }
     }
-    extract(tokens);
+    extract(tokens, lineNumber);
     return tokens;
 }
 
@@ -92,7 +109,7 @@ void processFile(std::ifstream &file) {
     int line_number;
     line_number = 1;
     while (getline(file, curr_line)) {
-        parsed[line_number] = tokenise(curr_line);
+        parsed[line_number] = tokenise(curr_line, line_number);
         line_number++;
     }
     generateNestingLevel();
