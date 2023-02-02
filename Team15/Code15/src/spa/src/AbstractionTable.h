@@ -7,17 +7,17 @@
 
 using namespace std;
 
-template <typename LHS, typename RHS>
+template <typename Lhs, typename Rhs>
 class AbstractionTable {
 public:
 	AbstractionTable() = default;
 
-	void storeAbstraction(const LHS& lhs, const RHS& rhs) {
-		storeRhs(lhs, rhs);
-		storeLhs(lhs, rhs);
+	void addAbstraction(const Lhs& lhs, const Rhs& rhs) {
+		addRhs(lhs, rhs);
+		addLhs(lhs, rhs);
 	}
 
-	void retrieveRhsAbstraction(const LHS& lhs) {
+	void getRhsAbstraction(const Lhs& lhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			return {};
@@ -25,7 +25,7 @@ public:
 		return pair->second;
 	}
 
-	void retrieveLhsAbstraction(const RHS& rhs) {
+	void getLhsAbstraction(const Rhs& rhs) {
 		auto pair = rhsToLhsMap.find(rhs);
 		if (pair == rhsToLhsMap.end()) {
 			return {};
@@ -33,7 +33,7 @@ public:
 		return pair->second;
 	}
 
-	void retrieveFirstRhsAbstraction(const LHS& lhs) {
+	void getFirstRhsAbstraction(const Lhs& lhs) {
 		auto pair = lhsToFirstRhsMap.find(lhs);
 		if (pair == lhsToFirstRhsMap.end()) {
 			return nullptr;
@@ -41,7 +41,7 @@ public:
 		return pair->second;
 	}
 
-	void retrieveFirstLhsAbstraction(const RHS& rhs) {
+	void getFirstLhsAbstraction(const Rhs& rhs) {
 		auto pair = rhsToFirstLhsMap.find(rhs);
 		if (pair == rhsToFirstLhsMap.end()) {
 			return nullptr;
@@ -49,7 +49,7 @@ public:
 		return pair->second;
 	}
 
-	bool inRelationship(const LHS& lhs, const RHS& rhs) {
+	bool inRelationship(const Lhs& lhs, const Rhs& rhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			return false;
@@ -61,13 +61,14 @@ public:
 		}
 		return true;
 	}
-private:
-	unordered_map<LHS, unordered_set<RHS>> lhsToRhsMap;
-	unordered_map<RHS, unordered_set<LHS>> rhsToLhsMap;
-	unordered_map<LHS, RHS> lhsToFirstRhsMap;
-	unordered_map<RHS, LHS> rhsToFirstLhsMap;
 
-    void storeRhs(const LHS& lhs, const RHS& rhs) {
+private:
+	unordered_map<Lhs, unordered_set<Rhs>> lhsToRhsMap;
+	unordered_map<Rhs, unordered_set<Lhs>> rhsToLhsMap;
+	unordered_map<Lhs, Rhs> lhsToFirstRhsMap;
+	unordered_map<Rhs, Lhs> rhsToFirstLhsMap;
+
+    void addRhs(const Lhs& lhs, const Rhs& rhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			lhsToFirstRhsMap[lhs] = rhs;
@@ -78,7 +79,7 @@ private:
 		}
 	}
 
-	void storeLhs(const LHS& lhs, const RHS& rhs) {
+	void addLhs(const Lhs& lhs, const Rhs& rhs) {
 		auto pair = rhsToLhsMap.find(rhs);
 		if (pair == rhsToLhsMap.end()) {
 			rhsToFirstLhsMap[rhs] = lhs;
