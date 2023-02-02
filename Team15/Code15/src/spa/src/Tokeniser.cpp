@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <set>
 
 using namespace std;
 using namespace Tokens;
@@ -15,6 +16,10 @@ map<int, vector<string>> parsed;
 map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
+
+std::set<std::string> procedures;
+std::vector<std::string> constants;
+std::set<std::string> variables;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -40,6 +45,27 @@ std::vector<std::string> pushToken(std::vector<std::string> tokens, std::string 
     return tokens;
 }
 
+bool isNumeric(const std::string token) {
+    for (char c : token) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void extract(std::vector<std::string> tokens) {
+    for(int i = 0; i < tokens.size(); ++i) {
+        if(tokens[i] == "procedure") {
+            procedures.insert(tokens[i+1]);
+        } else if (isNumeric(tokens[i])) {
+            constants.push_back(tokens[i]);
+        } else if (i > 0 && tokens[i-1] == "=") {
+            variables.insert(tokens[i]);
+        }
+    }
+}
+
 std::vector<std::string> tokenise(std::string line) {
     vector<std::string> tokens;
     string currentToken = "";
@@ -56,6 +82,7 @@ std::vector<std::string> tokenise(std::string line) {
             currentToken += c;
         }
     }
+    extract(tokens);
     return tokens;
 }
 
