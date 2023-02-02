@@ -6,38 +6,21 @@ PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
 std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName) { return ""; }
 
 bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
-<<<<<<< HEAD
-	SuchThatClause suchThatClause = query.getSuchThatClause();
-	std::multimap < std::string, std::string > varTable = query.getVarTable();
-	// to do check whether integer or underscore(non synonym)
-	std::string suchThatRefType = getPrimitiveType(suchThatClause.getRelationShip());
-	std::string suchThatLeftVarName = suchThatClause.getLeftArg();
-	std::string suchThatRightVarName = suchThatClause.getRightArg();
-	std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
-	if (suchThatLeftType == "synonym") {
-		suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
-	}
-	
-	std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
-	if (suchThatRightType == "synonym") {
-		suchThatRightType = varTable.find(suchThatRightVarName)->second;
-	}
-=======
+
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::multimap < std::string, std::string > varTable = query.getVarTable();
         // to do check whether integer or underscore(non synonym)
         std::string suchThatRefType = suchThatClause.getRelationShip();
-        std::string suchThatLeftVarName = suchThatClause.getLeftPair().second;
-        std::string suchThatRightVarName = suchThatClause.getRightPair().second;
-        std::string suchThatLeftType = suchThatClause.getLeftPair().first;
->>>>>>> 8dcec7943a2806c7da3e1daea2a70094ed5501c1
+        std::string suchThatLeftVarName = suchThatClause.getLeftArg();
+        std::string suchThatRightVarName = suchThatClause.getRightArg();
+        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
 
         if (suchThatLeftType == "synonym") {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
-        std::string suchThatRightType = suchThatClause.getRightPair().first;
+        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
         if (suchThatRightType == "synonym") {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }

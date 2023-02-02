@@ -17,16 +17,6 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
 
 
-
-<<<<<<< HEAD
-	// to do check whether integer or underscore(non synonym)
-	std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
-	std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
-	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
-	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
-=======
->>>>>>> 8dcec7943a2806c7da3e1daea2a70094ed5501c1
-
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
 	// A synonym name can only be declared once.
 	for (auto iter = varTable.begin(); iter != varTable.end(); iter++) {
@@ -47,8 +37,8 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     // to do check whether integer or underscore(non synonym)
     // SuchThat Clause
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
-        std::string suchThatLeftType = suchThatClause.getLeftPair().first;
-        std::string suchThatRightType = suchThatClause.getRightPair().first;
+        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
+        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
         if (checkSynonym() && varTable.count(suchThatLeftType) != 1) {
             return false;
         }
@@ -61,8 +51,8 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
     // Pattern Clause
     for (PatternClause patternClause: patternClauseVec) {
-    	std::string patternLeftType = patternClause.getLeftPair().first;
-    	std::string patternRightType = patternClause.getRightPair().first;
+    	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
+    	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
         if (checkSynonym() && varTable.count(patternLeftType) != 1) {
             return false;
         }
