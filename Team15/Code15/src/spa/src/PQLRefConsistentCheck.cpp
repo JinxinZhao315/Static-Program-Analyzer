@@ -35,7 +35,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == "indent_string") {
+            if (suchThatLeftType == "ident_string") {
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
@@ -54,7 +54,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == "indent_string") {
+            if (suchThatLeftType == "ident_string") {
                 return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
