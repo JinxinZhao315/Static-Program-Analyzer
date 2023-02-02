@@ -10,7 +10,7 @@ public:
 
 	~PQLSemanticCheck();
 
-	bool checkSemantics(Query query);
+	std::pair<bool,std::string> checkSemantics(Query query);
 
 	bool checkSynonym();
 };
