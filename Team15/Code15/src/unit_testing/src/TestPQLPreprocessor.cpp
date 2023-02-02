@@ -12,7 +12,7 @@ TEST_CASE("PQLPreprocessor test 1") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	try {
-		query = preprocessor.preprocess("assigns a; Select a such that Follows(a, 11)");
+		query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 		cout << "syntax correct" << endl;
 	}
 	catch (PQLSyntaxError e) {
@@ -77,5 +77,17 @@ TEST_CASE("PQLPreprocessor test 6") {
 	}
 	catch (PQLSyntaxError e) {
 		cout << "syntax errors 1*1" << endl;
+	}
+}
+TEST_CASE("PQLPreprocessor test 7") {
+
+	PQLPreprocessor preprocessor;
+	Query query;
+	try {
+		query = preprocessor.preprocess("assign a; read r1, r2, r3; stmt s; Select a such that Follows(a, 11)");
+		cout << "syntax correct" << endl;
+	}
+	catch (PQLSyntaxError e) {
+		cout << "syntax errors: assigns" << endl;
 	}
 }

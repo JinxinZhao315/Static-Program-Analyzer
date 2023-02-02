@@ -40,9 +40,8 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
 
         declaration = trim(declaration.substr((semicolonPos + 1)));
         semicolonPos = declaration.find(";");
-
-        return varTable;
     }
+	return varTable;
 }
 
 void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClause,
