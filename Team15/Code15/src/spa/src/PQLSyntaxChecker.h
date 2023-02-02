@@ -14,9 +14,4 @@ public:
 	bool validateEntRef(std::string input);
 	bool validatePattern(std::string assign, std::string leftArg, std::string rightArg);
 	bool validateExprSpec(std::string input);
-private:
-	std::unordered_set<std::string> relationshipSet{ "Follows",
-		"Follows*", "Parent", "Parent*", "Uses", "Modifies" };
-
-
 };
