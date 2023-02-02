@@ -1,10 +1,9 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "Tokens.h"
 #include <iostream>
 #include <vector>
 #include <map>
 #include <fstream>
-#include <climits>
 
 using namespace std;
 using namespace Tokens;
@@ -127,7 +126,7 @@ void generateFollowsRS() {
             }
 
             // For follows* rs
-            if (first_nesting_level == second_nesting_level) {
+            if (is_same_nesting_level) {
                 if (follows_star.count(first_line_number)) {
                     follows_star[first_line_number].push_back(second_line_number);
                 } else {
@@ -138,6 +137,14 @@ void generateFollowsRS() {
             }
         }
     }
+    // print out follows relationship
+    for (const auto& [key, value] : follows) {
+        cout << "Follows relationship" << endl;
+        cout << key << ": " << value << endl;
+    }
+
+    // print out follows* relationship
+    cout << "Follows* relationship" << endl;
     for (auto it = follows_star.begin(); it != follows_star.end(); ++it) {
         cout << it->first << ": [";
         for (int i : it->second) {
