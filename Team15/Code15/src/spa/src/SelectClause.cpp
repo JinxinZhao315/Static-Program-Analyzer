@@ -5,18 +5,18 @@ SelectClause::SelectClause() {}
 SelectClause::~SelectClause() {}
 
 SelectClause::SelectClause(std::string varName, std::string entity) {
-	selectVector.push_back(varName);
-	selectVector.push_back(entity);
+    this->varName = varName;
+    this->entity = entity;
 }
 
-void SelectClause::ModifyFirst(std::string varName) {
+void SelectClause::modifyVarName(std::string varName) {
 	varName = varName;
 }
 
-void SelectClause::ModifySecond(std::string entity) {
+void SelectClause::modifyEntity(std::string entity) {
 	entity = entity;
 }
 
 std::pair <std::string, std::string> SelectClause::getVarEntityPair() {
-	return std::pair <std::string, std::string>(selectVector[0], selectVector[1]);
+    return std::pair <std::string, std::string>(this->varName, this->entity);
 }

@@ -5,19 +5,19 @@ Query::Query() {};
 Query:: ~Query() {};
 
 void Query::addVarTable(std::multimap<std::string, std::string> varTable) {
-	varTable = varTable;
+	this->varTable = varTable;
 }
 
 void Query::addSelectClause(SelectClause selectClause) {
-	selectClause = selectClause;
+	this->selectClause = selectClause;
 }
 
 void Query::addPatternClause(PatternClause patternClause) {
-	patternClause = patternClause;
+	this->patternClauseVec.push_back(patternClause);
 }
 
 void Query::addSuchThatClause(SuchThatClause suchThatClause) {
-	suchThatClause = suchThatClause;
+	this->suchThatClauseVec.push_back(suchThatClause);
 }
 
 std::multimap<std::string, std::string> Query::getVarTable() {
@@ -28,10 +28,10 @@ SelectClause Query::getSelectClause() {
 	return selectClause;
 }
 
-PatternClause Query::getPatternClause() {
-	return patternClause; 
+std::vector<PatternClause> Query::getPatternClauseVec() {
+	return patternClauseVec;
 }
 
-SuchThatClause Query::getSuchThatClause() {
-	return suchThatClause;
+std::vector<SuchThatClause> Query::getSuchThatClauseVec() {
+	return suchThatClauseVec;
 }
