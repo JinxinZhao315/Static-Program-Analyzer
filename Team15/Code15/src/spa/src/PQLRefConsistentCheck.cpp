@@ -12,7 +12,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 	std::string suchThatLeftVarName = suchThatClause.getLeftPair().second;
 	std::string suchThatRightVarName = suchThatClause.getRightPair().second;
 	std::string suchThatLeftType = suchThatClause.getLeftPair().first;
-	if (suchThatLeftType == "synonym") {
+	if (suchThatLeftType == "synonym") {//7--isValidSynonym -> varTable.find(suchThatLeftArg)
 		suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
 	}
 	

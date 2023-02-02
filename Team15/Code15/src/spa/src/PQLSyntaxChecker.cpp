@@ -1,13 +1,10 @@
 #include "PQLSyntaxChecker.h"
 
-bool PQLSyntaxChecker::validateSynonym(std::string synonym) {
-	return std::regex_match(synonym, std::regex(synonymFormat));
+bool PQLSyntaxChecker::validateSynonym(std::string input) {
+	return Utility::getPrimitiveType(input) == "synonym";
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
-	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
-		return false;
-	}*/
 	if (relationship == "Follows" || relationship == "Follows*" || relationship == "Parent" || relationship == "parent*") {
 		return validateStmtRef(leftArg) && validateStmtRef(rightArg);
 	}
@@ -20,8 +17,7 @@ bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::strin
 }
 
 bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
-    std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print", "assign", "call", "while", "if" "variable", "constant"};
-    if (designEntitySet.find(designEntity) == designEntitySet.end()) {
+	if (Utility::designEntitySet.find(designEntity) == Utility::designEntitySet.end()) {
         return false;
     }
 }
