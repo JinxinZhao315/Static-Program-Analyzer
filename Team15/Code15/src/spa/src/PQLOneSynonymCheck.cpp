@@ -8,13 +8,13 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 
 }
 
+std::string PQLOneSynonymCheck::getPrimitiveType(std::string varName) { return ""; }
+
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::multimap<std::string, std::string> varTable = query.getVarTable();
 	SelectClause selectClause = query.getSelectClause();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
-
-
 
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
@@ -30,15 +30,15 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	// Select Clause
 	// toDo remove type attribute in selectClause
 	// Check if haven't been defined after checking all synonyms declared once.
-	if (varTable.count(selectClause.getVarEntityPair().first) != 1) {
+	if (varTable.count(selectClause.getVarName()) != 1) {
 		return false;
 	}
 
     // to do check whether integer or underscore(non synonym)
     // SuchThat Clause
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
-        std::string suchThatLeftType = suchThatClause.getLeftPair().first;
-        std::string suchThatRightType = suchThatClause.getRightPair().first;
+        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
+        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
         if (checkSynonym() && varTable.count(suchThatLeftType) != 1) {
             return false;
         }
@@ -51,8 +51,8 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
     // Pattern Clause
     for (PatternClause patternClause: patternClauseVec) {
-    	std::string patternLeftType = patternClause.getLeftPair().first;
-    	std::string patternRightType = patternClause.getRightPair().first;
+    	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
+    	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
         if (checkSynonym() && varTable.count(patternLeftType) != 1) {
             return false;
         }

@@ -13,4 +13,6 @@ public:
 	bool checkPQLRefConsistent(Query query);
 
 	bool checkSynonym();
+
+	std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName);
 };

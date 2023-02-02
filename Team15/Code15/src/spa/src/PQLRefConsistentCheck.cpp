@@ -3,22 +3,24 @@
 PQLRefConsistentCheck::PQLRefConsistentCheck() {}
 
 PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
+std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName) { return ""; }
 
 bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
+
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::multimap < std::string, std::string > varTable = query.getVarTable();
         // to do check whether integer or underscore(non synonym)
         std::string suchThatRefType = suchThatClause.getRelationShip();
-        std::string suchThatLeftVarName = suchThatClause.getLeftPair().second;
-        std::string suchThatRightVarName = suchThatClause.getRightPair().second;
-        std::string suchThatLeftType = suchThatClause.getLeftPair().first;
+        std::string suchThatLeftVarName = suchThatClause.getLeftArg();
+        std::string suchThatRightVarName = suchThatClause.getRightArg();
+        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
 
         if (suchThatLeftType == "synonym") {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
-        std::string suchThatRightType = suchThatClause.getRightPair().first;
+        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
         if (suchThatRightType == "synonym") {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
@@ -33,7 +35,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == "indent_string") {
+            if (suchThatLeftType == "ident_string") {
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
@@ -52,7 +54,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == "indent_string") {
+            if (suchThatLeftType == "ident_string") {
                 return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {

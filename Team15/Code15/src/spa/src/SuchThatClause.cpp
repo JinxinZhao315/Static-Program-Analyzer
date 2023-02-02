@@ -2,12 +2,9 @@
 
 SuchThatClause::SuchThatClause() {}
 
-SuchThatClause::SuchThatClause(std::string relationship,
-	std::string leftType, std::string leftArg, std::string rightType, std::string rightArg) {
+SuchThatClause::SuchThatClause(std::string relationship, std::string leftArg, std::string rightArg) {
     this->relationship = relationship;
-    this->leftType = leftType;
     this->leftArg = leftArg;
-    this->rightType = rightType;
     this->rightArg = rightArg;
 }
 
@@ -15,12 +12,12 @@ std::string SuchThatClause::getRelationShip() {
     return this->relationship;
 }
 
-std::pair <std::string, std::string> SuchThatClause::getLeftPair() {
-    return std::pair <std::string, std::string>(this->leftType, this->leftArg);
+std::string SuchThatClause::getLeftArg() {
+    return this->leftArg;
 }
 
-std::pair <std::string, std::string> SuchThatClause::getRightPair() {
-    return std::pair <std::string, std::string>(this->rightType, this->rightArg);
+std::string SuchThatClause::getRightArg() {
+    return this->rightArg;
 }
 
 SuchThatClause::~SuchThatClause() {}
