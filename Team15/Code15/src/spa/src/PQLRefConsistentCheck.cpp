@@ -32,8 +32,10 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 		return refConsistentLogic->hasRef("Follows", suchThatLeftType, suchThatRightType);
 	}
 	
+
+
 	if (suchThatRefType == "Modifies") {
-		if (suchThatLeftType == "indent_string") {
+		if (suchThatLeftType == "ident_string") {
 			return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
 		}
 		if (suchThatLeftType == "integer") {
@@ -43,7 +45,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 			return false;
 		}
 		if (suchThatLeftType == "procedure") {
-			//leftArg type is procedure		
+			//leftArg type is procedure
 			return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
 		}
 		else {
@@ -52,7 +54,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
 	}
 	if (suchThatRefType == "Uses") {
-		if (suchThatLeftType == "indent_string") {
+		if (suchThatLeftType == "ident_string") {
 			return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
 		}
 		if (suchThatLeftType == "integer") {
@@ -62,14 +64,14 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 			return false;
 		}
 		if (suchThatLeftType == "procedure") {
-			//leftArg type is procedure		
+			//leftArg type is procedure
 			return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
 		}
 		else {
 			return refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
 		}
 	}
-
+    
 }
 
 bool PQLRefConsistentCheck::checkSynonym() {
