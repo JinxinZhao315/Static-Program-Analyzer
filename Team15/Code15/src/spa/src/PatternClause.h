@@ -8,21 +8,19 @@ private:
     //std::vector<std::string> patternVector;
     std::string patternType;
     std::string patternSynonym;
-    std::string leftType;
     std::string leftArg;
-    std::string rightType;
     std::string rightArg;
 public:
 	PatternClause();
 
-	PatternClause(std::string patternType, std::string patternSynonym, std::string leftType,
-		std::string leftArg, std::string rightType,std::string rightArg);
+	PatternClause(std::string patternType, std::string patternSynonym,
+		std::string leftArg, std::string rightArg);
 
 	std::pair <std::string, std::string> getPatternPair();
 
-	std::pair <std::string, std::string> getLeftPair();
+	std::string getLeftArg();
 
-	std::pair <std::string, std::string> getRightPair();
+	std::string getRightArg();
 
 	~PatternClause();
 };

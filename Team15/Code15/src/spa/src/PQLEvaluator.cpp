@@ -7,5 +7,5 @@
 PQLEvaluator::PQLEvaluator() {}
 
 std::string PQLEvaluator::evaluate(Query query) {
-
+	return "";
 }

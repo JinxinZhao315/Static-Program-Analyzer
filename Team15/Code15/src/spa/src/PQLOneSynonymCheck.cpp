@@ -8,6 +8,8 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 
 }
 
+std::string PQLOneSynonymCheck::getPrimitiveType(std::string varName) { return ""; }
+
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::multimap<std::string, std::string> varTable = query.getVarTable();
 	SelectClause selectClause = query.getSelectClause();
@@ -15,10 +17,10 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	SuchThatClause suchThatClause = query.getSuchThatClause();
 
 	// to do check whether integer or underscore(non synonym)
-	std::string suchThatLeftType = suchThatClause.getLeftPair().first;
-	std::string suchThatRightType = suchThatClause.getRightPair().first;
-	std::string patternLeftType = patternClause.getLeftPair().first;
-	std::string patternRightType = patternClause.getRightPair().first;
+	std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
+	std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
+	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
+	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
 	// A synonym name can only be declared once.
@@ -33,7 +35,7 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	// Select Clause
 	// toDo remove type attribute in selectClause
 	// Check if haven't been defined after checking all synonyms declared once.
-	if (varTable.count(selectClause.getVarEntityPair().first) != 1) {
+	if (varTable.count(selectClause.getVarName()) != 1) {
 		return false;
 	}
 

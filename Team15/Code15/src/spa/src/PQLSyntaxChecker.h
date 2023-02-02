@@ -18,6 +18,4 @@ private:
 	std::string identFormat = "\"[a-zA-Z][a-zA-Z0-9]*\"";
 	std::unordered_set<std::string> relationshipSet{ "Follows",
 		"Follows*", "Parent", "Parent*", "Uses", "Modifies" };
-
-
 };
