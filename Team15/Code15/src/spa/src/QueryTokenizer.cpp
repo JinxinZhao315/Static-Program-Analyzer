@@ -80,7 +80,7 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& sele
 	if (!syntaxChecker.validateSynonym(synonym) == false) {
 		throw PQLSyntaxError("PQL syntax error: Invalid synonym");
 	};
-	selectClause = SelectClause(synonym, "entity");
+	selectClause = SelectClause(synonym);
 }
 
 void QueryTokenizer::tokenizeSuchThatClause(std::string& input, SuchThatClause& suchThatClause) {
@@ -111,12 +111,9 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, SuchThatClause& 
 		throw PQLSyntaxError("PQL syntax error: Invalid such that relationship");
 	}
 	input = input.substr(nextRightPar + 1);
-	suchThatClause = SuchThatClause(relationship, "integer", leftArg, "integer", rightArg);
+	suchThatClause = SuchThatClause(relationship, leftArg, rightArg);
 }
 
-std::string QueryTokenizer::getType(std::string& input) {
-	return "string example";
-}
 
 
 void QueryTokenizer::tokenizePatternClause(std::string& input, PatternClause& patternClause) {
@@ -137,7 +134,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, PatternClause& pa
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
 	input = input.substr(nextRightPar);
-	patternClause = PatternClause("assign", keyword, "integer", leftArg, "integer", rightArg);
+	patternClause = PatternClause("assign", keyword, leftArg, rightArg);
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {
