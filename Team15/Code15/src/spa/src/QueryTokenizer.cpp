@@ -1,6 +1,8 @@
 #include "QueryTokenizer.h"	
 
-QueryTokenizer::QueryTokenizer() {}
+QueryTokenizer::QueryTokenizer() {
+    this->syntaxChecker = PQLSyntaxChecker();
+}
 
 std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string input) {
 	size_t lastSemicolon = input.find_last_of(';');

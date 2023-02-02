@@ -26,7 +26,7 @@ public:
 	void tokenizePatternClause(std::string& input, PatternClause& patternClause);
 
 private:
-    PQLSyntaxChecker syntaxChecker = PQLSyntaxChecker();
+    PQLSyntaxChecker syntaxChecker;
 	std::string trim(std::string input);
 	std::string extractKeyword(std::string &input);
 	std::string getType(std::string &input);
