@@ -7,6 +7,7 @@
 
 class PQLSyntaxChecker {
 public:
+	PQLSyntaxChecker();
 	bool validateSynonym(std::string synonym);
 	bool validateRelationship(std::string relationship, std::string leftArg, std::string rightArg);
     bool validateDesignEntity(std::string designEntity);
@@ -17,6 +18,4 @@ public:
 private:
 	std::unordered_set<std::string> relationshipSet{ "Follows",
 		"Follows*", "Parent", "Parent*", "Uses", "Modifies" };
-
-
 };

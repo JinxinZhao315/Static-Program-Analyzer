@@ -1,5 +1,7 @@
 #include "PQLSyntaxChecker.h"
 
+PQLSyntaxChecker::PQLSyntaxChecker() {}
+
 bool PQLSyntaxChecker::validateSynonym(std::string input) {
 	return Utility::getPrimitiveType(input) == "synonym";
 }
@@ -34,18 +36,17 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return std::regex_match(input, std::regex("\"[\\s\\S]*\""));
+	std::string type = Utility::getPrimitiveType(input);
+	return type == "expr" || type == "underscoredExpr" || type == "underscore";
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-	return std::regex_match(input, std::regex(synonymFormat)) ||
-		std::regex_match(input, std::regex(integerFormat)) ||
-		std::regex_match(input, std::regex("_"));
+	std::string type = Utility::getPrimitiveType(input);
+	return  type == "synonym" || type == "underscore" || type == "integer";
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
-	return std::regex_match(input, std::regex(synonymFormat)) ||
-		std::regex_match(input, std::regex(integerFormat)) ||
-		std::regex_match(input, std::regex(identFormat));
+	std::string type = Utility::getPrimitiveType(input);
+	return  type == "synonym" || type == "underscore" || type == "quotedIdentFormat";
 }
 

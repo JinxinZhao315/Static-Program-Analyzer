@@ -10,4 +10,6 @@ public:
 	bool checkPQLOneSynonym(Query query);
 
 	bool checkSynonym();
+
+	std::string getPrimitiveType(std::string varName);
 };
