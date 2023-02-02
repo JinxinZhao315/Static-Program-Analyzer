@@ -37,7 +37,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
             if (!isSynonValid) {
                 throw PQLSyntaxError("PQL syntax error: invalid synonym");
             }
-            varTable.insert({designEntity, synon});
+            varTable.insert({synon, designEntity});
         }
 
         declaration = trim(declaration.substr((semicolonPos + 1)));
