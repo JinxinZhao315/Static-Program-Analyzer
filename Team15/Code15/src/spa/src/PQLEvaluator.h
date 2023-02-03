@@ -3,6 +3,7 @@
 //
 #include "Query.h"
 #include <string>
+#include <unordered_map>
 #ifndef SPA_PQLEVALUATOR_H
 #define SPA_PQLEVALUATOR_H
 
