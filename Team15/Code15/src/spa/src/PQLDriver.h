@@ -1,6 +1,7 @@
 #include "Query.h"
 #include "PQLPreprocessor.h"
 #include "PQLEvaluator.h"
+#include "PKB.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "exceptions/PQLSemanticError.h"
 #include <string>
@@ -10,11 +11,12 @@
 
 class PQLDriver {
 public:
-    PQLDriver();
+    PQLDriver(PKB pkb);
     std::string processPQL(std::string queryStr);
 private:
     PQLPreprocessor preprocessor;
     PQLEvaluator evaluator;
+    PKB pkb;
 };
 
 
