@@ -8,3 +8,5 @@ ClauseHandler::ClauseHandler(PKB pkb, ResultTable resultTable) {
     this->pkb = pkb;
     this->resultTable = resultTable;
 }
+
+// TODO: Add combineResults method

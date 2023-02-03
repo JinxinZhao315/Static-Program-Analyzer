@@ -20,5 +20,6 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause) {
         }
         return result;
     }
+    // TODO: add other cases
 
 }

@@ -32,9 +32,11 @@ std::string PQLEvaluator::evaluate(Query query) {
 
    }
 
+   // TODO: return the values of the selected synonym in ResultTable
 	return "";
 }
 
+// TODO: finish this function
 std::vector<string> PQLEvaluator::parseSelectClause(SelectClause selectClause) {
     std::vector<string> returnVars;
     // Put every variable name selected in selectClause into ResultTable keys,
