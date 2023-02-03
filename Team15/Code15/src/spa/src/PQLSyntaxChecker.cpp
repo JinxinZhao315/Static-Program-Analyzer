@@ -1,5 +1,7 @@
 #include "PQLSyntaxChecker.h"
 
+PQLSyntaxChecker::PQLSyntaxChecker() {}
+
 bool PQLSyntaxChecker::validateSynonym(std::string input) {
 	return Utility::getPrimitiveType(input) == "synonym";
 }
@@ -34,20 +36,35 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return Utility::getPrimitiveType(input) == "expr" ||
-		Utility::getPrimitiveType(input) == "underscoredExpr" ||
-		Utility::getPrimitiveType(input) == "underscore";
+//<<<<<<< HEAD
+//	return Utility::getPrimitiveType(input) == "expr" ||
+//		Utility::getPrimitiveType(input) == "underscoredExpr" ||
+//		Utility::getPrimitiveType(input) == "underscore";
+//}
+//
+//bool PQLSyntaxChecker::validateStmtRef(std::string input) {
+//	return Utility::getPrimitiveType(input) == "synonym" ||
+//		Utility::getPrimitiveType(input) == "integer" ||
+//		Utility::getPrimitiveType(input) == "underscore";
+//}
+//
+//bool PQLSyntaxChecker::validateEntRef(std::string input) {
+//	return Utility::getPrimitiveType(input) == "synonym" ||
+//		Utility::getPrimitiveType(input) == "integer" ||
+//		Utility::getPrimitiveType(input) == "quotedIdent";
+//=======
+	std::string type = Utility::getPrimitiveType(input);
+	return type == "expr" || type == "underscoredExpr" || type == "underscore";
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-	return Utility::getPrimitiveType(input) == "synonym" ||
-		Utility::getPrimitiveType(input) == "integer" ||
-		Utility::getPrimitiveType(input) == "underscore";
+	std::string type = Utility::getPrimitiveType(input);
+	return  type == "synonym" || type == "underscore" || type == "integer";
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
-	return Utility::getPrimitiveType(input) == "synonym" ||
-		Utility::getPrimitiveType(input) == "integer" ||
-		Utility::getPrimitiveType(input) == "quotedIdent";
+	std::string type = Utility::getPrimitiveType(input);
+	return  type == "synonym" || type == "underscore" || type == "quotedIdentFormat";
+//>>>>>>> zhijie-fix-git-error
 }
 
