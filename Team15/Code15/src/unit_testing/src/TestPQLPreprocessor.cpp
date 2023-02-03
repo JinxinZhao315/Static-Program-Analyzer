@@ -3,8 +3,6 @@
 
 #include "catch.hpp"
 
-#pragma once
-
 using namespace std;
 
 TEST_CASE("PQLPreprocessor test syntax cheker 1") {

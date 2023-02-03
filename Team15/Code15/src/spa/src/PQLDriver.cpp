@@ -1,9 +1,9 @@
 
 #include "PQLDriver.h"
 
-PQLDriver::PQLDriver() {
+PQLDriver::PQLDriver(PKB pkb) : evaluator(pkb) {
+    this->pkb = pkb;
     this->preprocessor = PQLPreprocessor();
-    this->evaluator = PQLEvaluator();
 }
 
 std::string PQLDriver::processPQL(std::string queryStr) {

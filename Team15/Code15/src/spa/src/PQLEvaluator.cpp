@@ -4,19 +4,28 @@
 
 #include "PQLEvaluator.h"
 
-PQLEvaluator::PQLEvaluator() {}
+PQLEvaluator::PQLEvaluator(PKB pkb) {
+    this->pkb = pkb;
+}
 
 std::string PQLEvaluator::evaluate(Query query) {
-   std::unordered_map<std::string, std::vector<std::string>> resultTable;
+    ResultTable resultTable = ResultTable();
+
    std::multimap<std::string, std::string> varTable = query.getVarTable();
-   for (auto varPair: varTable) {
-       resultTable.insert({varPair.first, std::vector<std::string>()});
-   }
+
+   // resultTable.insert({varName, std::set<std::string>()});
+   SelectClause selectClause = query.getSelectClause();
+   std::vector<string> returnSynons = parseSelectClause(selectClause);
+
    std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
    std::vector<PatternClause> patternVec = query.getPatternClauseVec();
 
    for (SuchThatClause suchThatCl: suchThatVec) {
-
+       std::string relationship = suchThatCl.getRelationShip();
+       if (relationship == "Follows" || relationship == "Follows*") {
+           FollowsHandler followsHandler = FollowsHandler(pkb, resultTable);
+           Result result = followsHandler.evalFollows(suchThatCl);
+       }
    }
 
    for (PatternClause patternCl: patternVec) {
@@ -24,4 +33,12 @@ std::string PQLEvaluator::evaluate(Query query) {
    }
 
 	return "";
+}
+
+std::vector<string> PQLEvaluator::parseSelectClause(SelectClause selectClause) {
+    std::vector<string> returnVars;
+    // Put every variable name selected in selectClause into ResultTable keys,
+    // and add full set of possible values of that variable into ResultTable values.
+    // return vector of return variables
+    return returnVars;
 }
