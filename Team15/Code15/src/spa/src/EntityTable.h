@@ -28,6 +28,6 @@ public:
     }
 
 private:
-    std::unordered_set<Id> ids;
-    std::unordered_map<Id, E*> entities;
+    unordered_set<Id> ids;
+    unordered_map<Id, E*> entities;
 };
