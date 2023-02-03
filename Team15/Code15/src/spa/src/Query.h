@@ -12,8 +12,8 @@ private:
     SelectClause selectClause;
     std::vector<PatternClause> patternClauseVec;
 	std::vector<SuchThatClause> suchThatClauseVec;
-	PatternClause patternClause;/*
-	SuchThatClause suchThatClause;*/
+//	PatternClause patternClause;
+//	SuchThatClause suchThatClause;
 
 public:
 	Query();
