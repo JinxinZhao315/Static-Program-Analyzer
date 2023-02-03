@@ -1,25 +1,27 @@
 #include "PQLPreprocessor.h"
-#include "Query.h"
-#include "exceptions/PQLSyntaxError.h"
-#include "exceptions/PQLSemanticError.h"
+//#include "PQLDriver.h"
 
 #include "catch.hpp"
 
+#pragma once
+
 using namespace std;
 
-TEST_CASE("PQLPreprocessor test 1") {
-
-	PQLPreprocessor preprocessor;
-	Query query;
+TEST_CASE("PQLPreprocessor test syntax cheker 1") {
 	try {
+		PQLPreprocessor preprocessor;
+		Query query = Query();
+		//preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
+
 		query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
-		cout << "syntax correct" << endl;
+		std::cout << "syntax correct" << std::endl;
 	}
 	catch (PQLSyntaxError e) {
-		cout << "syntax errors: assigns" << endl;
+		std::cout << "syntax should be correct, but syntax checker give error!" << std::endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 2") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 2") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -31,7 +33,8 @@ TEST_CASE("PQLPreprocessor test 2") {
 		cout << "syntax errors a)" << endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 3") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 3") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -43,7 +46,8 @@ TEST_CASE("PQLPreprocessor test 3") {
 		cout << "syntax errors select" << endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 4") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 4") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -55,7 +59,8 @@ TEST_CASE("PQLPreprocessor test 4") {
 		cout << "syntax errors Follow" << endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 5") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 5") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -67,7 +72,8 @@ TEST_CASE("PQLPreprocessor test 5") {
 		cout << "syntax errors Follows ( a ,  11)" << endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 6") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 6") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -79,7 +85,8 @@ TEST_CASE("PQLPreprocessor test 6") {
 		cout << "syntax errors 1*1" << endl;
 	}
 }
-TEST_CASE("PQLPreprocessor test 7") {
+
+TEST_CASE("PQLPreprocessor test syntax cheker 7") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -89,5 +96,20 @@ TEST_CASE("PQLPreprocessor test 7") {
 	}
 	catch (PQLSyntaxError e) {
 		cout << "syntax errors: assigns" << endl;
+	}
+}
+
+TEST_CASE("PQLPreprocessor test semantic checker 1") {
+	try {
+		PQLPreprocessor preprocessor;
+		Query query;
+		//preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
+
+		query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
+		std::cout << "syntax correct" << std::endl;
+	}
+
+	catch (PQLSemanticError e) {
+		std::cout << "semantic errors: a1 not found" << std::endl;
 	}
 }

@@ -3,24 +3,22 @@
 PQLRefConsistentCheck::PQLRefConsistentCheck() {}
 
 PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
-std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName) { return ""; }
 
 bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
-
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
-    for (SuchThatClause suchThatClause: suchThatClauseVec) {
+    for (SuchThatClause suchThatClause : suchThatClauseVec) {
         std::multimap < std::string, std::string > varTable = query.getVarTable();
         // to do check whether integer or underscore(non synonym)
         std::string suchThatRefType = suchThatClause.getRelationShip();
         std::string suchThatLeftVarName = suchThatClause.getLeftArg();
         std::string suchThatRightVarName = suchThatClause.getRightArg();
-        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
+        std::string suchThatLeftType = Utility::getPrimitiveType(suchThatClause.getLeftArg());
 
         if (suchThatLeftType == "synonym") {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
-        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
+        std::string suchThatRightType = Utility::getPrimitiveType(suchThatClause.getRightArg());
         if (suchThatRightType == "synonym") {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
@@ -35,35 +33,34 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == "ident_string") {
+            if (suchThatLeftType == "quotedIdent") {
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
                 return refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "_") {
+            if (suchThatLeftType == "underscore") {
                 return false;
             }
-            if (suchThatLeftType == "procedure") {
-                //leftArg type is procedure
+            if (suchThatLeftType == "synonym" && varTable.find(suchThatLeftVarName)->second == "procedure") {
+                //leftArg type is procedure		
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             else {
                 return refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == "ident_string") {
+            if (suchThatLeftType == "quotedIdent") {
                 return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
                 return refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "_") {
+            if (suchThatLeftType == "underscore") {
                 return false;
             }
-            if (suchThatLeftType == "procedure") {
+            if (suchThatLeftType == "synonym" && varTable.find(suchThatLeftVarName)->second == "procedure") {
                 //leftArg type is procedure
                 return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
@@ -75,5 +72,5 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 }
 
 bool PQLRefConsistentCheck::checkSynonym() {
-	return false;
+    return false;
 }
