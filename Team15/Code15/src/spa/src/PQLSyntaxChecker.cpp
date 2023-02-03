@@ -1,13 +1,10 @@
 #include "PQLSyntaxChecker.h"
 
-bool PQLSyntaxChecker::validateSynonym(std::string synonym) {
-	return std::regex_match(synonym, std::regex(synonymFormat));
+bool PQLSyntaxChecker::validateSynonym(std::string input) {
+	return Utility::getPrimitiveType(input) == "synonym";
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
-	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
-		return false;
-	}*/
 	if (relationship == "Follows" || relationship == "Follows*" || relationship == "Parent" || relationship == "parent*") {
 		return validateStmtRef(leftArg) && validateStmtRef(rightArg);
 	}
@@ -20,8 +17,7 @@ bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::strin
 }
 
 bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
-    std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print", "assign", "call", "while", "if" "variable", "constant"};
-    if (designEntitySet.find(designEntity) == designEntitySet.end()) {
+	if (Utility::designEntitySet.find(designEntity) == Utility::designEntitySet.end()) {
         return false;
     }
 }
@@ -31,25 +27,27 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
 		return false;
 	}*/
-	if (validateSynonym(synonym) == false) {
+	if (Utility::getPrimitiveType(synonym) != "synonym") {
 		return false;
 	}
 	return validateEntRef(leftArg) && validateExprSpec(rightArg);
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return std::regex_match(input, std::regex("\"[\\s\\S]*\""));
+	return Utility::getPrimitiveType(input) == "expr" ||
+		Utility::getPrimitiveType(input) == "underscoredExpr" ||
+		Utility::getPrimitiveType(input) == "underscore";
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-	return std::regex_match(input, std::regex(synonymFormat)) ||
-		std::regex_match(input, std::regex(integerFormat)) ||
-		std::regex_match(input, std::regex("_"));
+	return Utility::getPrimitiveType(input) == "synonym" ||
+		Utility::getPrimitiveType(input) == "integer" ||
+		Utility::getPrimitiveType(input) == "underscore";
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
-	return std::regex_match(input, std::regex(synonymFormat)) ||
-		std::regex_match(input, std::regex(integerFormat)) ||
-		std::regex_match(input, std::regex(identFormat));
+	return Utility::getPrimitiveType(input) == "synonym" ||
+		Utility::getPrimitiveType(input) == "integer" ||
+		Utility::getPrimitiveType(input) == "quotedIdent";
 }
 
