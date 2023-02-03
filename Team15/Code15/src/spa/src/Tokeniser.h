@@ -8,6 +8,11 @@
 void processFile(std::ifstream &file);
 void generateFollowsRS();
 void generateNestingLevel();
+void generateAssignmentRS();
+int precedence(std::string c);
+int isOperator(std::string c);
+bool isNumber(std::string num) {
+std::string convertToPostfix(std::vector<std::string> tokens, int startIndex);
 bool findToken(std::string s);
 bool emptyToken(std::string token);
 std::vector<std::string> pushToken(std::vector<std::string> tokens, std::string token);

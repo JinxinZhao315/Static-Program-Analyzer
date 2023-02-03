@@ -11,16 +11,19 @@ using namespace Tokens;
 
 void generateFollowsRS();
 void generateNestingLevel();
+void generateAssignmentRS();
+void convertToPostfix();
 
 map<int, vector<string>> parsed;
 map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
+map<string, vector<string>> assigns;
 
-std::set<std::string> procedures;
-std::vector<std::string> constants;
-std::set<std::string> variables;
-std::map<Tokens::Keyword, std::vector<int>> statements;
+set<string> procedures;
+vector<string> constants;
+set<string> variables;
+map<Tokens::Keyword, vector<int>> statements;
 
 bool findToken(std::string s) {
     auto it = Tokens::TOKEN_MAP.find(s);
@@ -112,8 +115,6 @@ void processFile(std::ifstream &file) {
         parsed[line_number] = tokenise(curr_line, line_number);
         line_number++;
     }
-    generateNestingLevel();
-    generateFollowsRS();
 }
 
 void generateNestingLevel() {
@@ -121,7 +122,7 @@ void generateNestingLevel() {
     curr_level = 0;
     for (auto it = parsed.begin(); it != parsed.end(); ++it) {
         int line_number = it->first;
-        vector<std::string> tokens = it->second;
+        vector<string> tokens = it->second;
         int final_nesting_level = 0;
         for (int i = 0; i < tokens.size(); i++) {
             string token = tokens[i];
@@ -197,6 +198,99 @@ void generateFollowsRS() {
         cout << "]" << endl;
     }
 }
+int precedence(string c) {
+    if (c == "-" || c == "+") {
+        return 1;
+    } else if (c == "*" || c == "/" || c == "%") {
+        return 2;
+    } else if (c == "^") {
+        return 3;
+    }
+    return -1;
+}
+
+bool isOperator(string c) {
+    return precedence(c) > 0;
+}
+
+bool isNumber(string num) {
+    try {
+        stod(num);
+        return true;
+    } catch (const invalid_argument &e) {
+        return false;
+    }
+}
+
+
+string convertToPostfix(vector<string> tokens, int startIndex) {
+    string result;
+    stack<string> s;
+    for (int i = startIndex; i < tokens.size(); i++) {
+        string token = tokens[i];
+        if (variables.count(token)) {
+            result += token;
+        } else if (isOperator(tokens[i])) {
+            while (!s.empty() && precedence(s.top()) >= precedence(token)) {
+                result += s.top();
+                s.pop();
+            }
+            s.push(tokens[i]);
+        } else if (isNumber(token)) {
+            result += token;
+        }
+    }
+    while (!s.empty()) {
+        result += s.top();
+        s.pop();
+    }
+    return result;
+}
+
+void generateAssignmentRS() {
+    for (auto it = parsed.begin(); it != parsed.end(); ++it) {
+        vector<string> tokens = it->second;
+        string prev;
+        string LHS;
+        string RHS;
+        int startIndexForRHS;
+        bool hasRHS = false;
+        string res = ""; //TODO: remove
+        for (int i = 0; i < tokens.size(); i++) {
+            string token = tokens[i];
+            if (token == "=") {
+                LHS = prev;
+                hasRHS = true;
+                startIndexForRHS = i;
+//                break;
+            }
+            if (hasRHS) { //TODO: remove
+                res += token;
+            }
+            prev = token;
+        }
+        if (!hasRHS) {
+            continue;
+        }
+        cout << res << " -> " << convertToPostfix(tokens, startIndexForRHS) << endl;
+        RHS = convertToPostfix(tokens, startIndexForRHS);
+        if (assigns.count(LHS)) {
+            assigns[LHS].push_back(RHS);
+        } else {
+            vector<string> new_vector;
+            new_vector.push_back(RHS);
+            assigns.insert(make_pair(LHS, new_vector));
+        }
+    }
+    cout << "Assigns relationship" << endl;
+    for (auto it = assigns.begin(); it != assigns.end(); ++it) {
+        cout << it->first << ": [";
+        for (string s : it->second) {
+            cout << s << ", ";
+        }
+        cout << "]" << endl;
+    }
+}
 
 int main(int argc, char* argv[]) {
     // For early testing this filepath is temporarily hard coded
@@ -208,6 +302,9 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     processFile(file);
+    generateNestingLevel();
+    generateFollowsRS();
+    generateAssignmentRS();
 
     file.close();
     return 0;
