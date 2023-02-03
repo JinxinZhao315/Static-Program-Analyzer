@@ -255,24 +255,19 @@ void generateAssignmentRS() {
         string RHS;
         int startIndexForRHS;
         bool hasRHS = false;
-        string res = ""; //TODO: remove
         for (int i = 0; i < tokens.size(); i++) {
             string token = tokens[i];
             if (token == "=") {
                 LHS = prev;
                 hasRHS = true;
                 startIndexForRHS = i;
-//                break;
-            }
-            if (hasRHS) { //TODO: remove
-                res += token;
+                break;
             }
             prev = token;
         }
         if (!hasRHS) {
             continue;
         }
-        cout << res << " -> " << convertToPostfix(tokens, startIndexForRHS) << endl;
         RHS = convertToPostfix(tokens, startIndexForRHS);
         if (assigns.count(LHS)) {
             assigns[LHS].push_back(RHS);
