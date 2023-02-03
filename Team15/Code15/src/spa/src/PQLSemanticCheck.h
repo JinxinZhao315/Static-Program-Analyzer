@@ -11,6 +11,4 @@ public:
 	~PQLSemanticCheck();
 
 	std::pair<bool,std::string> checkSemantics(Query query);
-
-	bool checkSynonym();
 };

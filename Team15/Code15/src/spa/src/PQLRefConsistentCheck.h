@@ -12,6 +12,4 @@ public:
 	~PQLRefConsistentCheck();
 
 	bool checkPQLRefConsistent(Query query);
-
-	bool checkSynonym();
 };

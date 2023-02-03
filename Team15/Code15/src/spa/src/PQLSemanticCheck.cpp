@@ -4,8 +4,6 @@ PQLSemanticCheck::PQLSemanticCheck() {}
 
 PQLSemanticCheck::~PQLSemanticCheck() {}
 
-bool PQLSemanticCheck::checkSynonym() { return false; }
-
 std::pair<bool,std::string> PQLSemanticCheck::checkSemantics(Query query) {
 	/*A synonym name can only be declared once.
 		All the synonyms used in clauses must be declared exactly once.

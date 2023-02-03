@@ -7,7 +7,7 @@ bool PQLSyntaxChecker::validateSynonym(std::string input) {
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
-	if (relationship == "Follows" || relationship == "Follows*" || relationship == "Parent" || relationship == "parent*") {
+	if (relationship == "Follows" || relationship == "Follows*" || relationship == "Parent" || relationship == "Parent*") {
 		return validateStmtRef(leftArg) && validateStmtRef(rightArg);
 	}
 	else if (relationship == "Uses" || relationship == "Modifies") {

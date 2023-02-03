@@ -9,6 +9,4 @@ public:
 	~PQLOneSynonymCheck();
 
 	bool checkPQLOneSynonym(Query query);
-
-	bool checkSynonym();
 };
