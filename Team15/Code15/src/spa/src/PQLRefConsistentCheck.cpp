@@ -54,16 +54,16 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == "indent_string") {
+            if (suchThatLeftType == "quotedIdent") {
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             if (suchThatLeftType == "integer") {
                 return refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "_") {
+            if (suchThatLeftType == "underscore") {
                 return false;
             }
-            if (suchThatLeftType == "procedure") {
+            if (suchThatLeftType == "synonym" && varTable.find(suchThatLeftVarName)->second == "procedure") {
                 //leftArg type is procedure		
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
@@ -94,16 +94,16 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             //
             //=======
             if (suchThatRefType == "Modifies") {
-                if (suchThatLeftType == "ident_string") {
+                if (suchThatLeftType == "quotedIdent") {
                     return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
                 }
                 if (suchThatLeftType == "integer") {
                     return refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
                 }
-                if (suchThatLeftType == "_") {
+                if (suchThatLeftType == "underscore") {
                     return false;
                 }
-                if (suchThatLeftType == "procedure") {
+                if (suchThatLeftType == "synonym" && varTable.find(suchThatLeftVarName)->second == "procedure") {
                     //leftArg type is procedure
                     return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
                 }
@@ -113,16 +113,16 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
             }
             if (suchThatRefType == "Uses") {
-                if (suchThatLeftType == "ident_string") {
+                if (suchThatLeftType == "quotedIdent") {
                     return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
                 }
                 if (suchThatLeftType == "integer") {
                     return refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
                 }
-                if (suchThatLeftType == "_") {
+                if (suchThatLeftType == "underscore") {
                     return false;
                 }
-                if (suchThatLeftType == "procedure") {
+                if (suchThatLeftType == "synonym" && varTable.find(suchThatLeftVarName)->second == "procedure") {
                     //leftArg type is procedure
                     return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
                 }

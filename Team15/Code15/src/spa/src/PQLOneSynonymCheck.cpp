@@ -37,13 +37,15 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     // to do check whether integer or underscore(non synonym)
     // SuchThat Clause
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
-        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
-        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
-        if (checkSynonym() && varTable.count(suchThatLeftType) != 1) {
+        std::string suchThatLeftArg = suchThatClause.getLeftArg();
+        std::string suchThatRightArg = suchThatClause.getRightArg();
+        std::string suchThatLeftType = getPrimitiveType(suchThatLeftArg);
+        std::string suchThatRightType = getPrimitiveType(suchThatRightArg);
+        if (suchThatLeftType == "synonym" && varTable.count(suchThatLeftArg) != 1) {
             return false;
         }
 
-        if (checkSynonym() && varTable.count(suchThatRightType) != 1) {
+        if (suchThatRightType == "synonym" && varTable.count(suchThatRightArg) != 1) {
             return false;
         }
 
@@ -51,17 +53,19 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
     // Pattern Clause
     for (PatternClause patternClause: patternClauseVec) {
+        std::string patternLeftArg = patternClause.getLeftArg();
+        std::string patternRightArg = patternClause.getRightArg();
     	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
     	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
-        if (checkSynonym() && varTable.count(patternLeftType) != 1) {
+        if (patternLeftType == "synonym" && varTable.count(patternLeftArg) != 1) {
             return false;
         }
 
-        if (checkSynonym() && varTable.count(patternRightType) != 1) {
+        if (patternRightType == "synonym" && varTable.count(patternRightArg) != 1) {
             return false;
         }
         // Further Check: syn - assign must be declared as a synonym of an assignment(design entity assign)
-        if (checkSynonym() && varTable.find(patternRightType)->second != "assign") {
+        if (patternRightType == "synonym" && varTable.find(patternRightArg)->second != "assign") {
             return false;
         }
     }
