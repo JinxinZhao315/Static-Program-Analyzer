@@ -8,8 +8,6 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 
 }
 
-std::string PQLOneSynonymCheck::getPrimitiveType(std::string varName) { return ""; }
-
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::multimap<std::string, std::string> varTable = query.getVarTable();
 	SelectClause selectClause = query.getSelectClause();
@@ -39,8 +37,8 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::string suchThatLeftArg = suchThatClause.getLeftArg();
         std::string suchThatRightArg = suchThatClause.getRightArg();
-        std::string suchThatLeftType = getPrimitiveType(suchThatLeftArg);
-        std::string suchThatRightType = getPrimitiveType(suchThatRightArg);
+        std::string suchThatLeftType = Utility::getPrimitiveType(suchThatLeftArg);
+        std::string suchThatRightType = Utility::getPrimitiveType(suchThatRightArg);
         if (suchThatLeftType == "synonym" && varTable.count(suchThatLeftArg) != 1) {
             return false;
         }
@@ -55,8 +53,8 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     for (PatternClause patternClause: patternClauseVec) {
         std::string patternLeftArg = patternClause.getLeftArg();
         std::string patternRightArg = patternClause.getRightArg();
-    	std::string patternLeftType = getPrimitiveType(patternClause.getLeftArg());
-    	std::string patternRightType = getPrimitiveType(patternClause.getRightArg());
+    	std::string patternLeftType = Utility::getPrimitiveType(patternClause.getLeftArg());
+    	std::string patternRightType = Utility::getPrimitiveType(patternClause.getRightArg());
         if (patternLeftType == "synonym" && varTable.count(patternLeftArg) != 1) {
             return false;
         }

@@ -102,7 +102,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 7") {
 TEST_CASE("PQLPreprocessor test semantic checker 1") {
 	try {
 		PQLPreprocessor preprocessor;
-		Query query = Query();
+		Query query;
 		//preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 
 		query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
@@ -110,6 +110,6 @@ TEST_CASE("PQLPreprocessor test semantic checker 1") {
 	}
 
 	catch (PQLSemanticError e) {
-		std::cout << "semantic errors: assigns" << std::endl;
+		std::cout << "semantic errors: a1 not found" << std::endl;
 	}
 }

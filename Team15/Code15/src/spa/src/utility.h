@@ -1,4 +1,6 @@
 #include<string>
+#include<regex>
+#include<unordered_set>
 #include"exceptions/PQLSyntaxError.h"
 
 #pragma once

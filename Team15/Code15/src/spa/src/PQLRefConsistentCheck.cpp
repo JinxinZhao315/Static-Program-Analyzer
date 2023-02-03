@@ -3,7 +3,6 @@
 PQLRefConsistentCheck::PQLRefConsistentCheck() {}
 
 PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
-std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName) { return ""; }
 
 bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
@@ -13,13 +12,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         std::string suchThatRefType = suchThatClause.getRelationShip();
         std::string suchThatLeftVarName = suchThatClause.getLeftArg();
         std::string suchThatRightVarName = suchThatClause.getRightArg();
-        std::string suchThatLeftType = getPrimitiveType(suchThatClause.getLeftArg());
+        std::string suchThatLeftType = Utility::getPrimitiveType(suchThatClause.getLeftArg());
 
         if (suchThatLeftType == "synonym") {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
-        std::string suchThatRightType = getPrimitiveType(suchThatClause.getRightArg());
+        std::string suchThatRightType = Utility::getPrimitiveType(suchThatClause.getRightArg());
         if (suchThatRightType == "synonym") {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
