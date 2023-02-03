@@ -29,7 +29,5 @@ private:
     PQLSyntaxChecker syntaxChecker;
 	std::string trim(std::string input);
 	std::string extractKeyword(std::string &input);
-	std::string getType(std::string &input);
     std::vector<std::string> tokenizeCsv(std::string);
-
 };

@@ -7,7 +7,7 @@
 class PQLRefConsistentLogic {
 private:
 	std::string PROCEDURE = "procedure";
-	std::string INDENT_STRING = "ident_string";
+	std::string INDENT_STRING = "quotedIdent";
 	std::string STMT = "stmt";
 	std::string READ = "read";
 	std::string PRINT = "print";
@@ -15,7 +15,7 @@ private:
 	std::string WHILE = "while";
 	std::string IF = "if";
 	std::string ASSIGN = "assign";
-	std::string UNDERSCORE = "_";
+	std::string UNDERSCORE = "underscore";
 	std::string INTEGER = "integer";
 	std::string VARIABLE = "variable";
 

@@ -104,9 +104,7 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, SuchThatClause& 
 	}
 	std::string relationship = trim(input.substr(0, nextLeftPar));
 	std::string leftArg = trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1));
-	//std::string leftArgType = getType(leftArg);
 	std::string rightArg = trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1));
-	//std::string rightArgType = getType(rightArg);
 	if (!syntaxChecker.validateRelationship(relationship, leftArg, rightArg)) {
 		throw PQLSyntaxError("PQL syntax error: Invalid such that relationship");
 	}

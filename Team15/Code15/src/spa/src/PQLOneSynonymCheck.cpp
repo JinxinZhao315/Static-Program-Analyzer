@@ -71,7 +71,3 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
 	return true;
 }
-
-bool PQLOneSynonymCheck::checkSynonym() {
-	return false;
-}
