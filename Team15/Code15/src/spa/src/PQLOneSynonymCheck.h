@@ -1,4 +1,5 @@
 #include "Query.h"
+#include "Utility.h"
 
 #pragma once
 class PQLOneSynonymCheck {
@@ -10,6 +11,4 @@ public:
 	bool checkPQLOneSynonym(Query query);
 
 	bool checkSynonym();
-
-	std::string getPrimitiveType(std::string varName);
 };

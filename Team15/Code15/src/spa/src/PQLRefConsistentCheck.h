@@ -1,5 +1,6 @@
 #include "Query.h"
 #include "PQLRefConsistentLogic.h"
+#include "Utility.h"
 #include <memory>
 
 #pragma once
@@ -13,6 +14,4 @@ public:
 	bool checkPQLRefConsistent(Query query);
 
 	bool checkSynonym();
-
-	std::string PQLRefConsistentCheck::getPrimitiveType(std::string varName);
 };

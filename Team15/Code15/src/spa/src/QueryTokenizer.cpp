@@ -74,10 +74,10 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& sele
 		synonym = input;
 		input = "";
 	} else {
-		synonym = input.substr(0, synonymEndIndex + 1);
+		synonym = input.substr(0, synonymEndIndex);
 		input = trim(input.substr(synonymEndIndex + 1));
 	}
-	if (!syntaxChecker.validateSynonym(synonym) == false) {
+	if (!syntaxChecker.validateSynonym(synonym)) {
 		throw PQLSyntaxError("PQL syntax error: Invalid synonym");
 	};
 	selectClause = SelectClause(synonym);
