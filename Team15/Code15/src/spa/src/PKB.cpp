@@ -1,17 +1,16 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
 #include "PKB.h"
-#include "TNode.h"
 
-int PKB::setProcToAST(PROC p, TNode* r) {
-	return 0;
-}
+void PKB::addProc(std::string procName) {
 
-TNode* PKB::getRootAST (PROC p){
-	return nullptr;
 }

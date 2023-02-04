@@ -1,53 +1,63 @@
 #pragma once
 
-#include<stdio.h>
+#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 
-#include "EntityTable.h"
-#include "AbstractionTable.h"
+#include "ProcedureTable.h"
 #include "StatementTable.h"
+#include "VariableTable.h"
+#include "ConstantTable.h"
+#include "AbstractionTable.h"
 
 using namespace std;
 
 class PKB {
 public:
-	virtual void addProc(Procedure* proc);
+	void addProc(std::string procName);
 
-	virtual void addStmt(Statement* stmt);
+	void addStmt(std::string stmtType, int stmtNum);
 
-	virtual void addVar(Variable* var);
+	void addVar(std::string varName);
 
-	virtual void addConst(Constant* constant);
+	void addConst(std::string constVal);
 
-	virtual void addFollows(Statement* leader, Statement* follower);
+	void addFollows(int leaderNum, int followerNum);
 
-	virtual void addParent(Statement* parent, Statement* child);
+	void addFollowsStar(int leaderNum, std::vector<int> followerNums);
 
-	virtual void addStmtUsesVar(Statement* stmt, Variable* var);
+	std::unordered_set<std::string> getAllProcNames();
 
-	virtual void addProcUsesVar(Procedure* proc, Variable* var);
+	std::unordered_set<int> getAllStmtNums();
 
-	virtual void addStmtModifiesVar(Statement* stmt, Variable* var);
+	std::unordered_set<int> getAllStmtNumsByType(std::string stmtType);
 
-	virtual void addProcModifiesVar(Procedure* proc, Variable* var);
+	std::string getStmtType(int stmtNum);
 
-	virtual Procedure* getProc(const ProcedureName& procName);
+	std::unordered_set<std::string> getAllVarNames();
 
-	virtual Statement* getStmt(const StatementNumber& stmtNum);
+	std::vector<std::string> getAllConstVals();
 
-	virtual Variable* getVar(const VariableName& varName);
+	int getFollowsLeaderNum(int followerNum);
 
-	virtual Constant* getConst(const ConstantName& constName);
+	int getFollowsFollowerNum(int leaderNum);
 
-	virtual unordered_set<ProcedureName> getAllProcNames();
+	std::unordered_set<int> getFollowsStarLeaderNums(int followerNum);
 
-	virtual unordered_set<StatementNumber> getAllStmtNums();
+	std::unordered_set<int> getFollowsStarFollowerNums(int leaderNum);
 
-	virtual unordered_set<VariableName> getAllVarNames();
+	bool areInFollowsRelationship(int leaderNum, int followerNum);
 
-	virtual unordered_set<ConstantName> getAllConstNames();
+	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
+
+private:
+	ProcedureTable procTable;
+	StatementTable stmtTable;
+	VariableTable varTable;
+	ConstantTable constTable;
 };
