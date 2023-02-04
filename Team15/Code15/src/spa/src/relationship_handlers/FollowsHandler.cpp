@@ -66,9 +66,8 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
                 return result;
             }
         }
+        result.setLeftArg(leftArg, resultSynonValues);
 
-        //result.addLeftArg(leftArg)
-        //result.addLeftVal(resultSynonValues)
     // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
         resultTableCheckAndAdd(rightArg, resultTable);
@@ -95,8 +94,7 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
             }
 
         }
-        //result.addRightArg(rightArg)
-        //result.addRightVal(resultSynonValues)
+        result.setRightArg(rightArg, resultSynonValues);
     // Synon - Synon
     } else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
         resultTableCheckAndAdd(leftArg, resultTable);
@@ -122,12 +120,10 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
             return result;
         }
 
-        //result.addLeftArg(leftArg)
-        //result.addLeftVal(resultSynonValues)
-        //result.addRightArg(rightArg)
-        //result.addRightVal(resultSynonValues)
+        result.setLeftArg(leftArg, leftResultValues);
+        result.setRightArg(rightArg, rightResultValues);
     } else {
-        throw exception();
+        throw std::runtime_error("Unhandled left or right arg type in FollowsHandler");
     }
 
 
@@ -145,5 +141,4 @@ void resultTableCheckAndAdd(string arg, ResultTable& resultTable) {
         }
         resultTable.insertKeyValuePair(arg, allStmtStrSet);
     }
-
 }
