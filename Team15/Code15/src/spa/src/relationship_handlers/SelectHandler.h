@@ -12,7 +12,7 @@
 class SelectHandler : public ClauseHandler {
 
 public:
-    SelectHandler(PKB pkb, ResultTable resultTable);
+    SelectHandler(PKB pkb);
     Result evalSelect(SelectClause selectClause, std::multimap<std::string, std::string> varTable);
 
 private:

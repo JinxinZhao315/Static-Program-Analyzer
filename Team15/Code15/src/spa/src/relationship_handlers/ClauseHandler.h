@@ -3,6 +3,7 @@
 //
 #include "PKB.h"
 #include "ResultTable.h"
+#include "Result.h"
 
 #ifndef SPA_CLAUSEHANDLER_H
 #define SPA_CLAUSEHANDLER_H
