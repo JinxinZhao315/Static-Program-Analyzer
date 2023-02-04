@@ -1,17 +1,18 @@
 #include "SelectHandler.h"
 
-SelectHandler::SelectHandler(PKB pkb) : ClauseHandler(pkb) {}
+SelectHandler::SelectHandler(PKB &pkb) : 
+    ClauseHandler(pkb), pkb(pkb), resultTable(resultTable){}
 
-Result SelectHandler::evalSelect(SelectClause selectClause, std::multimap<std::string, std::string> varTable) {
+std::string SelectHandler::evalSelect(SelectClause &selectClause, std::multimap<std::string, std::string> &varTable, ResultTable& resultTable) {
     std::string varName = selectClause.getVarName();
-    Result result;
-    // Wildcard-Wildcard
     std::string varType = varTable.find(varName)->second;
-    
+    Result result;
+    result.setLeftArg(varName, ClauseHandler::getResultFromPKB(this->pkb, varType));
+    ClauseHandler::combineResult(resultTable, result);
 
-    //returnVars = PKB.getEntity(varType);
-    return result;
-
-    // TODO: add other cases
+    // Put every variable name selected in selectClause into ResultTable keys,
+    // and add full set of possible values of that variable into ResultTable values.
+    // return vector of return variables
+    return varName;
     
 }

@@ -25,7 +25,7 @@ void ClauseHandler::combineResult(ResultTable& resultTable, Result& result) {
     }
    
 }
-void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable) {
+void ClauseHandler::combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable) {
     std::set<std::string> intersection;
     std::insert_iterator<std::set<std::string>> intersectIterate(intersection, intersection.begin());
     if (resultTable.isKeyPresent(synonymName)) {
@@ -36,4 +36,33 @@ void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTab
     else {
         resultTable.insertKeyValuePair(synonymName, synonymSet);
     }
+}
+
+std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string resultType) {
+    std::set<std::string> temp;
+    if (resultType == "constant") {
+        //convertVecToSet(pkb.getConstants());
+        return temp;
+    }
+    else if (resultType == "procedure") {
+        //pkb.getProcedures();
+        return temp;
+    }
+    else if (resultType == "variable") {
+        //pkb.getVariables();
+        return temp;
+    }
+    else {
+        //pkb.getEntities(resultType);
+        return temp;
+    }
+}
+
+template <typename T>
+std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
+    std::set<T> resultSet;
+    for (T t : vec) {
+        resultSet.insert(t);
+    }
+    return resultSet;
 }

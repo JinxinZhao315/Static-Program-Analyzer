@@ -14,9 +14,12 @@ public:
     ClauseHandler(PKB& pkb);
 protected:
     void combineResult(ResultTable& resultTable, Result& result);
+    std::set<std::string> getResultFromPKB(PKB& pkb, std::string resultType);
 private:
     PKB pkb;
     void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);
+    template <typename T>
+    std::set<T> convertVecToSet(std::vector<T> vec);
 };
 
 
