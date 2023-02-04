@@ -7,7 +7,7 @@ void ProcedureTable::addProcedureName(std::string procedureName) {
 	tableSize++;
 }
 
-std::unordered_set<std::string> ProcedureTable::getAllProcedureNames() {
+std::set<std::string> ProcedureTable::getAllProcedureNames() {
 	return procedureTable;
 }
 
