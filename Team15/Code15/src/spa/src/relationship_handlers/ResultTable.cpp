@@ -3,6 +3,7 @@
 //
 
 #include "ResultTable.h"
+ResultTable::ResultTable() {}
 
 bool ResultTable::isKeyPresent(std::string key) {
     if (this->resultTable.find(key) == this->resultTable.end()) {

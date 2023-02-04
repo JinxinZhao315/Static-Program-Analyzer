@@ -10,12 +10,12 @@
 
 class ClauseHandler {
 public:
-    ClauseHandler(PKB pkb, ResultTable resultTable);
-
+    ClauseHandler(PKB& pkb);
+protected:
+    void combineResult(ResultTable& resultTable, Result& result);
 private:
     PKB pkb;
-    ResultTable resultTable;
-
+    void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);
 };
 
 
