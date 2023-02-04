@@ -3,7 +3,7 @@
 PQLSyntaxChecker::PQLSyntaxChecker() {}
 
 bool PQLSyntaxChecker::validateSynonym(std::string input) {
-	return Utility::getPrimitiveType(input) == "synonym";
+	return Utility::getReferenceType(input) == Utility::SYNONYM;
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
@@ -29,27 +29,27 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
 		return false;
 	}*/
-	if (Utility::getPrimitiveType(synonym) != "synonym") {
+	if (Utility::getReferenceType(synonym) != Utility::SYNONYM) {
 		return false;
 	}
 	return validateEntRef(leftArg) && validateExprSpec(rightArg);
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return Utility::getPrimitiveType(input) == "expr" ||
-		Utility::getPrimitiveType(input) == "underscoredExpr" ||
-		Utility::getPrimitiveType(input) == "underscore";
+	return Utility::getReferenceType(input) == Utility::EXPR ||
+            Utility::getReferenceType(input) == Utility::UNDERSCORED_EXPR ||
+            Utility::getReferenceType(input) == Utility::UNDERSCORE;
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-	return Utility::getPrimitiveType(input) == "synonym" ||
-		Utility::getPrimitiveType(input) == "integer" ||
-		Utility::getPrimitiveType(input) == "underscore";
+	return Utility::getReferenceType(input) == Utility::SYNONYM ||
+            Utility::getReferenceType(input) == Utility::INTEGER ||
+            Utility::getReferenceType(input) == Utility::UNDERSCORE;
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
-	return Utility::getPrimitiveType(input) == "synonym" ||
-		Utility::getPrimitiveType(input) == "integer" ||
-		Utility::getPrimitiveType(input) == "quotedIdent";
+	return Utility::getReferenceType(input) == Utility::SYNONYM ||
+            Utility::getReferenceType(input) == Utility::INTEGER ||
+            Utility::getReferenceType(input) == Utility::QUOTED_IDENT;
 }
 

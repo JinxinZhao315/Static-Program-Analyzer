@@ -37,13 +37,13 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::string suchThatLeftArg = suchThatClause.getLeftArg();
         std::string suchThatRightArg = suchThatClause.getRightArg();
-        std::string suchThatLeftType = Utility::getPrimitiveType(suchThatLeftArg);
-        std::string suchThatRightType = Utility::getPrimitiveType(suchThatRightArg);
-        if (suchThatLeftType == "synonym" && varTable.count(suchThatLeftArg) != 1) {
+        std::string suchThatLeftType = Utility::getReferenceType(suchThatLeftArg);
+        std::string suchThatRightType = Utility::getReferenceType(suchThatRightArg);
+        if (suchThatLeftType == Utility::SYNONYM && varTable.count(suchThatLeftArg) != 1) {
             return false;
         }
 
-        if (suchThatRightType == "synonym" && varTable.count(suchThatRightArg) != 1) {
+        if (suchThatRightType == Utility::SYNONYM && varTable.count(suchThatRightArg) != 1) {
             return false;
         }
 
@@ -53,17 +53,17 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     for (PatternClause patternClause: patternClauseVec) {
         std::string patternLeftArg = patternClause.getLeftArg();
         std::string patternRightArg = patternClause.getRightArg();
-    	std::string patternLeftType = Utility::getPrimitiveType(patternClause.getLeftArg());
-    	std::string patternRightType = Utility::getPrimitiveType(patternClause.getRightArg());
-        if (patternLeftType == "synonym" && varTable.count(patternLeftArg) != 1) {
+    	std::string patternLeftType = Utility::getReferenceType(patternClause.getLeftArg());
+    	std::string patternRightType = Utility::getReferenceType(patternClause.getRightArg());
+        if (patternLeftType == Utility::SYNONYM && varTable.count(patternLeftArg) != 1) {
             return false;
         }
 
-        if (patternRightType == "synonym" && varTable.count(patternRightArg) != 1) {
+        if (patternRightType == Utility::SYNONYM && varTable.count(patternRightArg) != 1) {
             return false;
         }
         // Further Check: syn - assign must be declared as a synonym of an assignment(design entity assign)
-        if (patternRightType == "synonym" && varTable.find(patternRightArg)->second != "assign") {
+        if (patternRightType == Utility::SYNONYM && varTable.find(patternRightArg)->second != "assign") {
             return false;
         }
     }

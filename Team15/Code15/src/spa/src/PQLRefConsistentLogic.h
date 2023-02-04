@@ -6,6 +6,7 @@
 
 class PQLRefConsistentLogic {
 private:
+    // TODO: Put these constants into Utility class
 	std::string PROCEDURE = "procedure";
 	std::string INDENT_STRING = "quotedIdent";
 	std::string STMT = "stmt";

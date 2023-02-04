@@ -4,14 +4,17 @@
 
 #include "FollowsHandler.h"
 
-FollowsHandler::FollowsHandler(PKB pkb, ResultTable resultTable) : ClauseHandler(pkb, resultTable) {}
+FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
 Result FollowsHandler::evalFollows(SuchThatClause suchThatClause) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
+    std::string leftType = Utility::getReferenceType(leftArg);
+    std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
+
     // Wildcard-Wildcard
-    if (leftArg == "_" && rightArg == "_") {
+    if (leftType ==  "_" && rightArg == "_") {
         bool isFollowEmpty; // = pkb.isFollowEmpty()
         if (isFollowEmpty) {
             result.setResultTrue(false);
@@ -19,6 +22,8 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause) {
             result.setResultTrue(true);
         }
         return result;
+    } else if () {
+
     }
     // TODO: add other cases
 

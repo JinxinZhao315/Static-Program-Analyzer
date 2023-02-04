@@ -4,7 +4,7 @@
 
 #include "PQLEvaluator.h"
 
-PQLEvaluator::PQLEvaluator(PKB pkb) {
+PQLEvaluator::PQLEvaluator(PKB& pkb) {
     this->pkb = pkb;
 }
 
@@ -23,8 +23,9 @@ std::string PQLEvaluator::evaluate(Query query) {
    for (SuchThatClause suchThatCl: suchThatVec) {
        std::string relationship = suchThatCl.getRelationShip();
        if (relationship == "Follows" || relationship == "Follows*") {
-           FollowsHandler followsHandler = FollowsHandler(pkb, resultTable);
+           FollowsHandler followsHandler = FollowsHandler(pkb);
            Result result = followsHandler.evalFollows(suchThatCl);
+           //followsHandler.combineResult(resulTable, result);
        }
    }
 

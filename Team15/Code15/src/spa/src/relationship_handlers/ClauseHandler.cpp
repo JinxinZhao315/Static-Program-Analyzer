@@ -4,9 +4,8 @@
 
 #include "ClauseHandler.h"
 
-ClauseHandler::ClauseHandler(PKB pkb, ResultTable resultTable) {
+ClauseHandler::ClauseHandler(PKB& pkb) {
     this->pkb = pkb;
-    this->resultTable = resultTable;
 }
 
 // TODO: Add combineResults method

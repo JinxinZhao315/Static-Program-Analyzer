@@ -15,7 +15,7 @@
 
 class PQLEvaluator {
 public:
-    PQLEvaluator(PKB pkb);
+    PQLEvaluator(PKB& pkb);
     std::string evaluate(Query query);
     std::vector<string> parseSelectClause(SelectClause selectClause);
 
