@@ -2,12 +2,12 @@
 
 ConstantTable::ConstantTable() = default;
 
-void ConstantTable::addConstantValue(std::string ConstantValue) {
-	constantTable.emplace(ConstantValue);
+void ConstantTable::addConstantValue(std::string constantValue) {
+	constantTable.emplace(constantValue);
 	tableSize++;
 }
 
-std::unordered_set<int> ConstantTable::getAllConstantValues() {
+std::set<std::string > ConstantTable::getAllConstantValues() {
 	return constantTable;
 }
 

@@ -1,7 +1,9 @@
+#pragma once
+
 #include <stdio.h>
 #include <iostream>
 #include <string>
-#include <unordered_set>
+#include <set>
 
 using namespace std;
 
@@ -9,13 +11,13 @@ class ConstantTable {
 public:
 	ConstantTable();
 
-	void addConstantValue(std::string ConstantValue);
+	void addConstantValue(std::string constantValue);
 
-	std::unordered_set<int> getAllConstantValues();
+	std::set<std::string > getAllConstantValues();
 
 	size_t getTableSize();
 
 private:
-	std::unordered_set<int> constantTable;
+	std::set<std::string > constantTable;
 	size_t tableSize = 0;
 };
