@@ -1,9 +1,9 @@
 #pragma once
 
 #include <stdio.h>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
+#include <iostream>
+#include <string>
+#include <set>
 
 using namespace std;
 
@@ -11,25 +11,13 @@ class StatementTable {
 public:
 	StatementTable();
 
-	void addStmt(Statement* stmt);
+	void addStatementNumber(int statementNumber);
 
-	unordered_set<StatementNumber> getStmtNums();
+	std::set<int> getAllStatementNumbers();
 
-	Statement* getStmt(const StatementNumber& stmtNum);
-
-	StatementType getStmtType(const StatementNumber& stmtNum);
-
-	unordered_set<StatementNumber> getStmtNumsByType(const StatementType& stmtType);
+	size_t getTableSize();
 
 private:
-	unordered_set<Statement*> stmts;
-	unordered_set<StatementNumber> stmtNums;
-	unordered_map<StatementType, unordered_set<StatementNumber>> stmtNumsByType = {
-		{StatementType::READ, {}},
-		{StatementType::PRINT, {}},
-		{StatementType::ASSIGN, {}},
-		{StatementType::CALL, {}},
-		{StatementType::WHILE, {}},
-		{StatementType::IF, {}},
-	};
+	std::set<int> statementTable;
+	size_t tableSize = 0;
 };
