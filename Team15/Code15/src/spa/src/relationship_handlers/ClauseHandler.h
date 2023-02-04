@@ -15,6 +15,7 @@ protected:
     void combineResult(ResultTable& resultTable, Result& result);
 private:
     PKB pkb;
+    void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);
 };
 
 
