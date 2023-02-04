@@ -11,7 +11,6 @@ TEST_CASE("PQLPreprocessor test syntax cheker 1") {
 	try {
 		PQLPreprocessor preprocessor;
 		Query query = Query();
-		//preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 
 		query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 		std::cout << "syntax correct" << std::endl;
