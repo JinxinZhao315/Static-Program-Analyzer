@@ -22,9 +22,9 @@ std::string PQLEvaluator::evaluate(Query query) {
 
    for (SuchThatClause suchThatCl: suchThatVec) {
        std::string relationship = suchThatCl.getRelationShip();
-       if (relationship == "Follows" || relationship == "Follows*") {
+       if (relationship == "Follows") {
            FollowsHandler followsHandler = FollowsHandler(pkb);
-           Result result = followsHandler.evalFollows(suchThatCl);
+           Result result = followsHandler.evalFollows(suchThatCl, resultTable);
            //followsHandler.combineResult(resulTable, result);
        }
    }

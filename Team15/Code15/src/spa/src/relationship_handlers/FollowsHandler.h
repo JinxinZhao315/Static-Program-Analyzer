@@ -17,7 +17,8 @@ class FollowsHandler : public ClauseHandler {
 
 public:
     FollowsHandler(PKB& pkb);
-    Result evalFollows(SuchThatClause suchThatClause);
+    Result evalFollows(SuchThatClause suchThatClause, ResultTable& resultTable);
+    void resultTableCheckAndAdd(string arg, ResultTable& resultTable);
 };
 
 
