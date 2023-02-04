@@ -24,6 +24,7 @@ std::string PQLEvaluator::evaluate(Query query) {
        std::string relationship = suchThatCl.getRelationShip();
        if (relationship == "Follows" || relationship == "Follows*") {
            FollowsHandler followsHandler = FollowsHandler(pkb, resultTable);
+           //evalFollows return true/false
            Result result = followsHandler.evalFollows(suchThatCl);
        }
    }
