@@ -25,7 +25,7 @@ void ClauseHandler::combineResult(ResultTable& resultTable, Result& result) {
     }
    
 }
-void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable) {
+void ClauseHandler::combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable) {
     std::set<std::string> intersection;
     std::insert_iterator<std::set<std::string>> intersectIterate(intersection, intersection.begin());
     if (resultTable.isKeyPresent(synonymName)) {
