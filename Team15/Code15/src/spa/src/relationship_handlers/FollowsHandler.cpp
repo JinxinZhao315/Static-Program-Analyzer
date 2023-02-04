@@ -61,10 +61,10 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
                     resultSynonValues.insert(currSynonVal);
                 }
             }
-            if (resultSynonValues.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
+        }
+        if (resultSynonValues.empty()) {
+            result.setResultTrue(false);
+            return result;
         }
         result.setLeftArg(leftArg, resultSynonValues);
 
@@ -88,11 +88,10 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
                     resultSynonValues.insert(currSynonVal);
                 }
             }
-            if (resultSynonValues.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
-
+        }
+        if (resultSynonValues.empty()) {
+            result.setResultTrue(false);
+            return result;
         }
         result.setRightArg(rightArg, resultSynonValues);
     // Synon - Synon
