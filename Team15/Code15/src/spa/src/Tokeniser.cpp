@@ -12,13 +12,13 @@ using namespace Tokens;
 void generateFollowsRS();
 void generateNestingLevel();
 void generateAssignmentRS();
-void convertToPostfix();
+std::vector<std::string> convertToPostfix(std::vector<std::string> tokens, int startIndex);
 
 map<int, vector<string>> parsed;
 map<int, int> nesting_level;
 map<int, int> follows;
 map<int, vector<int> > follows_star;
-map<string, vector<string>> assigns;
+map<string, vector<vector<string>>> assigns;
 
 set<string> procedures;
 vector<string> constants;
@@ -223,25 +223,25 @@ bool isNumber(string num) {
 }
 
 
-string convertToPostfix(vector<string> tokens, int startIndex) {
-    string result;
+vector<string> convertToPostfix(vector<string> tokens, int startIndex) {
+    vector<string> result;
     stack<string> s;
     for (int i = startIndex; i < tokens.size(); i++) {
         string token = tokens[i];
         if (variables.count(token)) {
-            result += token;
+            result.push_back(token);
         } else if (isOperator(tokens[i])) {
             while (!s.empty() && precedence(s.top()) >= precedence(token)) {
-                result += s.top();
+                result.push_back(s.top());
                 s.pop();
             }
             s.push(tokens[i]);
         } else if (isNumber(token)) {
-            result += token;
+            result.push_back(token);
         }
     }
     while (!s.empty()) {
-        result += s.top();
+        result.push_back(s.top());
         s.pop();
     }
     return result;
@@ -252,7 +252,7 @@ void generateAssignmentRS() {
         vector<string> tokens = it->second;
         string prev;
         string LHS;
-        string RHS;
+        vector<string> RHS;
         int startIndexForRHS;
         bool hasRHS = false;
         for (int i = 0; i < tokens.size(); i++) {
@@ -272,7 +272,7 @@ void generateAssignmentRS() {
         if (assigns.count(LHS)) {
             assigns[LHS].push_back(RHS);
         } else {
-            vector<string> new_vector;
+            vector<vector<string>> new_vector;
             new_vector.push_back(RHS);
             assigns.insert(make_pair(LHS, new_vector));
         }
@@ -280,8 +280,12 @@ void generateAssignmentRS() {
     cout << "Assigns relationship" << endl;
     for (auto it = assigns.begin(); it != assigns.end(); ++it) {
         cout << it->first << ": [";
-        for (string s : it->second) {
-            cout << s << ", ";
+        for (auto match : it->second) {
+            cout << "[";
+            for (auto s: match) {
+                cout << s << ", ";
+            }
+            cout << "]" << endl;
         }
         cout << "]" << endl;
     }
