@@ -1,7 +1,7 @@
 
 #include "PQLDriver.h"
 
-PQLDriver::PQLDriver(PKB pkb) : evaluator(pkb) {
+PQLDriver::PQLDriver(PKB& pkb) : evaluator(pkb) {
     this->pkb = pkb;
     this->preprocessor = PQLPreprocessor();
 }

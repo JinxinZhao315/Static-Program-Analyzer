@@ -16,7 +16,7 @@
 
 class PQLEvaluator {
 public:
-    PQLEvaluator(PKB pkb);
+    PQLEvaluator(PKB& pkb);
     std::string evaluate(Query query);
     std::string parseSelectClause(SelectClause selectClause, std::multimap<std::string, std::string> varTable, PKB& pkb, ResultTable& resultTable);
     std::set<std::string> getResultFromPKB(PKB& pkb, std::string resultType);
