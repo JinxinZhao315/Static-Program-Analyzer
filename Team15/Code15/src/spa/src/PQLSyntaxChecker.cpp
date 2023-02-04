@@ -22,6 +22,7 @@ bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
 	if (Utility::designEntitySet.find(designEntity) == Utility::designEntitySet.end()) {
         return false;
     }
+    return true;
 }
 
 
