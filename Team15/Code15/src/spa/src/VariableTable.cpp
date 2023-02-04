@@ -7,7 +7,7 @@ void VariableTable::addVariableName(std::string variableName) {
 	tableSize++;
 }
 
-std::unordered_set<std::string> VariableTable::getAllVariableNames() {
+std::set<std::string> VariableTable::getAllVariableNames() {
 	return variableTable;
 }
 
