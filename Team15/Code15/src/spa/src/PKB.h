@@ -1,14 +1,6 @@
 #pragma once
 
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-#include <unordered_map>
-#include <unordered_set>
-
+#include "EntityTable.h"
 #include "ProcedureTable.h"
 #include "StatementTable.h"
 #include "VariableTable.h"
@@ -21,7 +13,7 @@ class PKB {
 public:
 	void addProc(std::string procName);
 
-	void addStmt(std::string stmtType, int stmtNum);
+	void addStmt(int stmtNum, std::string stmtType);
 
 	void addVar(std::string varName);
 
@@ -31,17 +23,15 @@ public:
 
 	void addFollowsStar(int leaderNum, std::vector<int> followerNums);
 
-	std::unordered_set<std::string> getAllProcNames();
+	std::set<std::string> getAllProcNames();
 
-	std::unordered_set<int> getAllStmtNums();
+	std::set<int> getAllStmtNums();
 
-	std::unordered_set<int> getAllStmtNumsByType(std::string stmtType);
+	std::set<int> getAllStmtNumsByType(std::string stmtType);
 
-	std::string getStmtType(int stmtNum);
+	std::set<std::string> getAllVarNames();
 
-	std::unordered_set<std::string> getAllVarNames();
-
-	std::vector<std::string> getAllConstVals();
+	std::set<std::string> getAllConstVals();
 
 	int getFollowsLeaderNum(int followerNum);
 
@@ -56,8 +46,14 @@ public:
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
 private:
-	ProcedureTable procTable;
+	EntityTable procTable;
 	StatementTable stmtTable;
-	VariableTable varTable;
-	ConstantTable constTable;
+	StatementTable readTable;
+	StatementTable printTable;
+	StatementTable assignTable;
+	StatementTable callTable;
+	StatementTable whileTable;
+	StatementTable ifTable;
+	EntityTable varTable;
+	EntityTable constTable;
 };
