@@ -16,14 +16,14 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         std::string suchThatRefType = suchThatClause.getRelationShip();
         std::string suchThatLeftVarName = suchThatClause.getLeftArg();
         std::string suchThatRightVarName = suchThatClause.getRightArg();
-        std::string suchThatLeftType = Utility::getPrimitiveType(suchThatClause.getLeftArg());
+        std::string suchThatLeftType = Utility::getReferenceType(suchThatClause.getLeftArg());
 
-        if (suchThatLeftType == "synonym") {
+        if (suchThatLeftType == Utility::SYNONYM) {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
-        std::string suchThatRightType = Utility::getPrimitiveType(suchThatClause.getRightArg());
-        if (suchThatRightType == "synonym") {
+        std::string suchThatRightType = Utility::getReferenceType(suchThatClause.getRightArg());
+        if (suchThatRightType == Utility::SYNONYM) {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
         
@@ -37,13 +37,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == "quotedIdent") {
+            if (suchThatLeftType == Utility::QUOTED_IDENT) {
                 return refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "integer") {
+            if (suchThatLeftType == Utility::INTEGER) {
                 return refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "underscore") {
+            if (suchThatLeftType == Utility::UNDERSCORE) {
                 return false;
             }
             if (suchThatLeftType == "procedure") {
@@ -55,13 +55,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             }
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == "quotedIdent") {
+            if (suchThatLeftType == Utility::QUOTED_IDENT) {
                 return refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "integer") {
+            if (suchThatLeftType == Utility::INTEGER) {
                 return refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == "underscore") {
+            if (suchThatLeftType == Utility::UNDERSCORE) {
                 return false;
             }
             if (suchThatLeftType == "procedure") {

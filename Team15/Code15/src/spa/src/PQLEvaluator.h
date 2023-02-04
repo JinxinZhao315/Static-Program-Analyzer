@@ -16,7 +16,7 @@
 
 class PQLEvaluator {
 public:
-    PQLEvaluator(PKB pkb);
+    PQLEvaluator(PKB& pkb);
     std::string evaluate(Query query);
 private:
     PKB pkb;
