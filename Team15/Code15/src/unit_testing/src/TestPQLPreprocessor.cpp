@@ -145,6 +145,7 @@ TEST_CASE("PQLPreprocessor test semantic checker 3") {
 	}
 }
 
+
 TEST_CASE("PQLPreprocessor query object test 1") {
     try {
         PQLPreprocessor preprocessor;
