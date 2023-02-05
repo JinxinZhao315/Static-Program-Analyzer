@@ -10,7 +10,3 @@ void VariableTable::addVariableName(std::string variableName) {
 std::set<std::string> VariableTable::getAllVariableNames() {
 	return variableTable;
 }
-
-size_t VariableTable::getTableSize() {
-	return tableSize;
-}

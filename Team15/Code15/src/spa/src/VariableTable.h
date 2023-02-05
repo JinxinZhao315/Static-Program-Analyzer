@@ -15,8 +15,6 @@ public:
 
 	std::set<std::string> getAllVariableNames();
 
-	size_t getTableSize();
-
 private:
 	std::set<std::string> variableTable;
 	size_t tableSize = 0;
