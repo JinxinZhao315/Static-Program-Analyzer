@@ -4,9 +4,10 @@
 #include "Query.h"
 #include "PKB.h"
 #include "relationship_handlers/Result.h"
+#include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/ResultTable.h"
+#include "relationship_handlers/FollowsStarHandler.h"
 #include <string>
 #include <set>
 #include <unordered_map>
