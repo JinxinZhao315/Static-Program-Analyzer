@@ -2,8 +2,8 @@
 
 EntityTable::EntityTable() = default;
 
-void EntityTable::addEntity(std::string constantValue) {
-	entityTable.emplace(constantValue);
+void EntityTable::addEntity(std::string entity) {
+	entityTable.emplace(entity);
 	tableSize++;
 }
 
