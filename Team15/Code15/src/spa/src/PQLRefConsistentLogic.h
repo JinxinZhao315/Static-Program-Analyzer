@@ -16,7 +16,7 @@ private:
 	std::string WHILE = "while";
 	std::string IF = "if";
 	std::string ASSIGN = "assign";
-	std::string UNDERSCORE = "underscore";
+	std::string UNDERSCORE = "_";
 	std::string INTEGER = "integer";
 	std::string VARIABLE = "variable";
 
