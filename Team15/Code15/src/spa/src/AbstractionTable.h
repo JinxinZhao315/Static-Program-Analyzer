@@ -7,86 +7,30 @@
 
 using namespace std;
 
-template <typename Lhs, typename Rhs>
+template <typename L, typename R>
 class AbstractionTable {
 public:
-	AbstractionTable() = default;
+	AbstractionTable();
 
-	void addAbstraction(const Lhs& lhs, const Rhs& rhs) {
-		addRhs(lhs, rhs);
-		addLhs(lhs, rhs);
-	}
+	void addAbstraction(L lhs, R rhs);
 
-	void getRhsAbstraction(const Lhs& lhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
-			return {};
-		}
-		return pair->second;
-	}
+	void getRhsAbstraction(L lhs);
 
-	void getLhsAbstraction(const Rhs& rhs) {
-		auto pair = rhsToLhsMap.find(rhs);
-		if (pair == rhsToLhsMap.end()) {
-			return {};
-		}
-		return pair->second;
-	}
+	void getLhsAbstraction(R rhs);
 
-	void getFirstRhsAbstraction(const Lhs& lhs) {
-		auto pair = lhsToFirstRhsMap.find(lhs);
-		if (pair == lhsToFirstRhsMap.end()) {
-			return nullptr;
-		}
-		return pair->second;
-	}
+	void getFirstRhsAbstraction(L lhs);
 
-	void getFirstLhsAbstraction(const Rhs& rhs) {
-		auto pair = rhsToFirstLhsMap.find(rhs);
-		if (pair == rhsToFirstLhsMap.end()) {
-			return nullptr;
-		}
-		return pair->second;
-	}
+	void getFirstLhsAbstraction(R rhs);
 
-	bool inRelationship(const Lhs& lhs, const Rhs& rhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
-			return false;
-		}
-		auto rhsAbstraction = pair->second;
-		auto rhsAbstractionValue = rhsAbstraction.find(rhs);
-		if (rhsAbstractionValue == rhsAbstraction.end()) {
-			return false;
-		}
-		return true;
-	}
+	bool inRelationship(L lhs, R rhs);
+
+	void addRhs(L lhs, R rhs);
+
+	void addLhs(L lhs, R rhs);
 
 private:
-	unordered_map<Lhs, unordered_set<Rhs>> lhsToRhsMap;
-	unordered_map<Rhs, unordered_set<Lhs>> rhsToLhsMap;
-	unordered_map<Lhs, Rhs> lhsToFirstRhsMap;
-	unordered_map<Rhs, Lhs> rhsToFirstLhsMap;
-
-    void addRhs(const Lhs& lhs, const Rhs& rhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
-			lhsToFirstRhsMap[lhs] = rhs;
-			lhsToRhsMap[lhs] = { rhs };
-		}
-		else {
-			pair->second.insert(rhs);
-		}
-	}
-
-	void addLhs(const Lhs& lhs, const Rhs& rhs) {
-		auto pair = rhsToLhsMap.find(rhs);
-		if (pair == rhsToLhsMap.end()) {
-			rhsToFirstLhsMap[rhs] = lhs;
-			rhsToLhsMap[rhs] = { lhs };
-		}
-		else {
-			pair->second.insert(rhs);
-		}
-	}
+	unordered_map<L, unordered_set<R>> lhsToRhsMap;
+	unordered_map<R, unordered_set<L>> rhsToLhsMap;
+	unordered_map<L, R> lhsToFirstRhsMap;
+	unordered_map<R, L> rhsToFirstLhsMap;
 };
