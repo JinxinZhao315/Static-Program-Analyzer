@@ -37,3 +37,32 @@ void ClauseHandler::combine(std::string synonymName, std::set<std::string>synony
         resultTable.insertKeyValuePair(synonymName, synonymSet);
     }
 }
+
+std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string resultType) {
+    std::set<std::string> temp;
+    if (resultType == "constant") {
+        //convertVecToSet(pkb.getConstants());
+        return temp;
+    }
+    else if (resultType == "procedure") {
+        //pkb.getProcedures();
+        return temp;
+    }
+    else if (resultType == "variable") {
+        //pkb.getVariables();
+        return temp;
+    }
+    else {
+        //pkb.getEntities(resultType);
+        return temp;
+    }
+}
+
+template <typename T>
+std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
+    std::set<T> resultSet;
+    for (T t : vec) {
+        resultSet.insert(t);
+    }
+    return resultSet;
+}

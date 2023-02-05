@@ -12,8 +12,8 @@
 class SelectHandler : public ClauseHandler {
 
 public:
-    SelectHandler(PKB pkb);
-    Result evalSelect(SelectClause selectClause, std::multimap<std::string, std::string> varTable);
+    SelectHandler(PKB &pkb);
+    std::string evalSelect(SelectClause &selectClause, std::multimap<std::string, std::string> &varTable, ResultTable& resultTable);
 
 private:
     PKB pkb;
