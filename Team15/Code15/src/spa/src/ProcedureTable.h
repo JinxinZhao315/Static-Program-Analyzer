@@ -15,8 +15,6 @@ public:
 
 	std::set<std::string> getAllProcedureNames();
 
-	size_t getTableSize();
-
 private:
 	std::set<std::string> procedureTable;
 	size_t tableSize = 0;

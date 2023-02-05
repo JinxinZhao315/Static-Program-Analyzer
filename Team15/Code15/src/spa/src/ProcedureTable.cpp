@@ -10,7 +10,3 @@ void ProcedureTable::addProcedureName(std::string procedureName) {
 std::set<std::string> ProcedureTable::getAllProcedureNames() {
 	return procedureTable;
 }
-
-size_t ProcedureTable::getTableSize() {
-	return tableSize;
-}
