@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 #include <iostream>
-#include <unordered_map>
-#include <unordered_set>
+#include <map>
+#include <set>
 
 using namespace std;
 
@@ -12,12 +12,12 @@ class AbstractionTable {
 public:
 	inline AbstractionTable() = default;
 
-	inline void AbstractionTable::addAbstraction(L lhs, R rhs) {
+	inline void addAbstraction(L lhs, R rhs) {
 		addRhs(lhs, rhs);
 		addLhs(lhs, rhs);
 	}
 
-	inline void AbstractionTable::getRhsAbstraction(L lhs) {
+	inline std::set<R> getRhsAbstraction(L lhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			return {};
@@ -25,7 +25,7 @@ public:
 		return pair->second;
 	}
 
-	inline void AbstractionTable::getLhsAbstraction(R rhs) {
+	inline std::set<L> getLhsAbstraction(R rhs) {
 		auto pair = rhsToLhsMap.find(rhs);
 		if (pair == rhsToLhsMap.end()) {
 			return {};
@@ -33,7 +33,7 @@ public:
 		return pair->second;
 	}
 
-	inline void AbstractionTable::getFirstRhsAbstraction(L lhs) {
+	inline R getFirstRhsAbstraction(L lhs) {
 		auto pair = lhsToFirstRhsMap.find(lhs);
 		if (pair == lhsToFirstRhsMap.end()) {
 			return nullptr;
@@ -41,7 +41,7 @@ public:
 		return pair->second;
 	}
 
-	inline void AbstractionTable::getFirstLhsAbstraction(R rhs) {
+	inline L getFirstLhsAbstraction(R rhs) {
 		auto pair = rhsToFirstLhsMap.find(rhs);
 		if (pair == rhsToFirstLhsMap.end()) {
 			return nullptr;
@@ -49,7 +49,7 @@ public:
 		return pair->second;
 	}
 
-	inline bool AbstractionTable::inRelationship(L lhs, R rhs) {
+	inline bool inRelationship(L lhs, R rhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			return false;
@@ -63,12 +63,12 @@ public:
 	}
 
 private:
-	unordered_map<L, unordered_set<R>> lhsToRhsMap;
-	unordered_map<R, unordered_set<L>> rhsToLhsMap;
-	unordered_map<L, R> lhsToFirstRhsMap;
-	unordered_map<R, L> rhsToFirstLhsMap;
+	std::map<L, std::set<R>> lhsToRhsMap;
+	std::map<R, std::set<L>> rhsToLhsMap;
+	std::map<L, R> lhsToFirstRhsMap;
+	std::map<R, L> rhsToFirstLhsMap;
 
-	inline void AbstractionTable::addRhs(L lhs, R rhs) {
+	inline void addRhs(L lhs, R rhs) {
 		auto pair = lhsToRhsMap.find(lhs);
 		if (pair == lhsToRhsMap.end()) {
 			lhsToFirstRhsMap[lhs] = rhs;
@@ -79,7 +79,7 @@ private:
 		}
 	}
 
-	inline void AbstractionTable::addLhs(L lhs, R rhs) {
+	inline void addLhs(L lhs, R rhs) {
 		auto pair = rhsToLhsMap.find(rhs);
 		if (pair == rhsToLhsMap.end()) {
 			rhsToFirstLhsMap[rhs] = lhs;
