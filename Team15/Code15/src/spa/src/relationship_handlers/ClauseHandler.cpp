@@ -68,7 +68,7 @@ std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
 }
 
 // This function can only be used to check and add statements
-void resultTableCheckAndAdd(string arg, ResultTable& resultTable) {
+void ClauseHandler::resultTableCheckAndAdd(string arg, ResultTable& resultTable) {
     if (!resultTable.isKeyPresent(arg)) {
         std::set<int> allStmtIntSet; //pkb.getAllStmtNums()
         std::set<string> allStmtStrSet;

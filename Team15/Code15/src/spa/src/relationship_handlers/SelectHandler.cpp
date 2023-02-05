@@ -1,7 +1,6 @@
 #include "SelectHandler.h"
 
-SelectHandler::SelectHandler(PKB &pkb) : 
-    ClauseHandler(pkb), pkb(pkb), resultTable(resultTable){}
+SelectHandler::SelectHandler(PKB& pkb) : ClauseHandler(pkb){}
 
 std::string SelectHandler::evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable) {
     std::string varName = selectClause.getVarName();
