@@ -104,3 +104,7 @@ bool PKB::areInFollowsRelationship(int leaderNum, int followerNum) {
 bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
 	return followsStarTable.inRelationship(leaderNum, followerNum);
 }
+
+bool PKB::isFollowsEmpty() {
+	return followsTable.isEmpty();
+}

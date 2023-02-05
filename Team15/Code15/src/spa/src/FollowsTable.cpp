@@ -48,3 +48,7 @@ bool FollowsTable::inRelationship(int leaderNumber, int followerNumber) {
 	}
 	return false;
 }
+
+bool FollowsTable::isEmpty() {
+	return leaderToFollowerMap.empty();
+}

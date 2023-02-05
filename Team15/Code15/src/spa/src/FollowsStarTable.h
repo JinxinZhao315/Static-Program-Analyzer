@@ -22,6 +22,7 @@ public:
 	void addFollowers(int leader, std::set<int> followers);
 
 	void addLeaders(int leader, std::set<int> followers);
+
 private:
 	std::map<int, std::set<int>> leaderToFollowersMap;
 	std::map<int, std::set<int>> followerToLeadersMap;

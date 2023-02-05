@@ -43,6 +43,8 @@ public:
 
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
+	bool isFollowsEmpty();
+
 private:
 	EntityStorage<std::string> procTable;
 	StatementTable stmtTable;
