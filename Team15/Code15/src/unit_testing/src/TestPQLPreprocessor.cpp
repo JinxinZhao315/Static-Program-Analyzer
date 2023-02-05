@@ -2,6 +2,7 @@
 #include "PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
+#include <assert.h>
 
 #include "catch.hpp"
 
