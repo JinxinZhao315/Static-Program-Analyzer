@@ -7,10 +7,6 @@ void ConstantTable::addConstantValue(std::string constantValue) {
 	tableSize++;
 }
 
-std::set<std::string > ConstantTable::getAllConstantValues() {
+std::set<std::string> ConstantTable::getAllConstantValues() {
 	return constantTable;
-}
-
-size_t ConstantTable::getTableSize() {
-	return tableSize;
 }

@@ -15,8 +15,6 @@ public:
 
 	std::set<std::string > getAllConstantValues();
 
-	size_t getTableSize();
-
 private:
 	std::set<std::string > constantTable;
 	size_t tableSize = 0;
