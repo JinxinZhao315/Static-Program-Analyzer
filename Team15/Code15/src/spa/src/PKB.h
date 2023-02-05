@@ -1,11 +1,9 @@
 #pragma once
 
-#include "EntityTable.h"
-#include "ProcedureTable.h"
+#include "EntityStorage.h"
 #include "StatementTable.h"
-#include "VariableTable.h"
-#include "ConstantTable.h"
-#include "AbstractionTable.h"
+#include "FollowsTable.h"
+#include "FollowsStarTable.h"
 
 using namespace std;
 
@@ -21,7 +19,7 @@ public:
 
 	void addFollows(int leaderNum, int followerNum);
 
-	void addFollowsStar(int leaderNum, std::vector<int> followerNums);
+	void addFollowsStar(int leaderNum, std::set<int> followerNums);
 
 	std::set<std::string> getAllProcNames();
 
@@ -37,16 +35,16 @@ public:
 
 	int getFollowsFollowerNum(int leaderNum);
 
-	std::unordered_set<int> getFollowsStarLeaderNums(int followerNum);
+	std::set<int> getFollowsStarLeaderNums(int followerNum);
 
-	std::unordered_set<int> getFollowsStarFollowerNums(int leaderNum);
+	std::set<int> getFollowsStarFollowerNums(int leaderNum);
 
 	bool areInFollowsRelationship(int leaderNum, int followerNum);
 
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
 private:
-	EntityTable procTable;
+	EntityStorage<std::string> procTable;
 	StatementTable stmtTable;
 	StatementTable readTable;
 	StatementTable printTable;
@@ -54,6 +52,8 @@ private:
 	StatementTable callTable;
 	StatementTable whileTable;
 	StatementTable ifTable;
-	EntityTable varTable;
-	EntityTable constTable;
+	EntityStorage<std::string> varTable;
+	EntityStorage<std::string> constTable;
+	FollowsTable followsTable;
+	FollowsStarTable followsStarTable;
 };
