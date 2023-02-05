@@ -9,6 +9,7 @@ void processFile(std::ifstream &file);
 void generateFollowsRS();
 void generateNestingLevel();
 void generateAssignmentRS();
+void addFollowsStarRelationship(int line_number, int follower_line_number);
 int precedence(std::string c);
 int isOperator(std::string c);
 bool isNumber(std::string num) {
