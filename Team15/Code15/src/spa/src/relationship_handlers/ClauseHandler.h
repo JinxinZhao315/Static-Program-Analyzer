@@ -13,15 +13,15 @@ class ClauseHandler
 {
 public:
     ClauseHandler(PKB &pkb);
-
-protected:
     void combineResult(ResultTable& resultTable, Result& result);
     std::set<std::string> getResultFromPKB(PKB& pkb, std::string resultType);
+    void resultTableCheckAndAdd(string arg, ResultTable& resultTable);
 private:
     PKB pkb;
     void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);
     template <typename T>
     std::set<T> convertVecToSet(std::vector<T> vec);
+
 };
 
 #endif // SPA_CLAUSEHANDLER_H
