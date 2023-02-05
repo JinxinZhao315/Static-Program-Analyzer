@@ -10,7 +10,3 @@ void EntityTable::addEntity(std::string entity) {
 std::set<std::string> EntityTable::getAllEntities() {
 	return entityTable;
 }
-
-size_t EntityTable::getTableSize() {
-	return tableSize;
-}

@@ -15,8 +15,6 @@ public:
 
 	std::set<std::string> getAllEntities();
 
-	size_t getTableSize();
-
 private:
 	std::set<std::string> entityTable;
 	size_t tableSize = 0;
