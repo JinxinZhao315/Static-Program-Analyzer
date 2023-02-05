@@ -213,3 +213,39 @@ TEST_CASE("PQLPreprocessor query object test 2") {
     }
 }
 
+TEST_CASE("PQLPreprocessor query object test 3") {
+    try {
+        PQLPreprocessor preprocessor;
+        Query query = Query();
+
+        query = preprocessor.preprocess("stmt s1; Select s1 such that Follows(_,_)");
+
+        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        string type = varTable.find("s1")->second;
+        assert(type == "stmt");
+        std::cout << "var table correct" << std::endl;
+
+        SelectClause selectClause = query.getSelectClause();
+        string varName = selectClause.getVarName();
+        assert(varName == "s1");
+        std::cout << "select correct" << std::endl;
+
+        vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
+        for (SuchThatClause cl : suchThatClauseVec) {
+            string relationship = cl.getRelationShip();
+            string leftArg = cl.getLeftArg();
+            string rightArg = cl.getRightArg();
+            assert(relationship == "Follows");
+            std::cout << "relationship correct" << std::endl;
+            assert(leftArg == "_");
+            std::cout << "leftArg correct" << std::endl;
+            assert(rightArg == "_");
+            std::cout << "rightArg correct" << std::endl;
+        }
+        std::cout << "syntax correct" << std::endl;
+    }
+    catch (PQLSyntaxError e) {
+        std::cout << "syntax should be correct, but syntax checker give error!" << std::endl;
+    }
+}
+

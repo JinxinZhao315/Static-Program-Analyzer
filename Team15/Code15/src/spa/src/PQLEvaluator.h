@@ -8,6 +8,7 @@
 #include "relationship_handlers/SelectHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/FollowsStarHandler.h"
+#include <numeric>
 #include <string>
 #include <set>
 #include <unordered_map>

@@ -19,12 +19,13 @@ std::string Result::getLeftArgName() {
 std::set<std::string> Result::getLeftArgValue() {
     return this->leftArgValue;
 };
-void setLeftArg(std::string name, std::set<std::string> value) {
+void Result::setLeftArg(std::string name, std::set<std::string> value) {
     this->leftArgName = name;
     this->leftArgValue = value;
     this->isLeftArgAvailable = true;
 }
-bool isLeftArgSynonym() {
+
+bool Result::isLeftArgSynonym() {
     return this->isLeftArgAvailable;
 }
 
@@ -35,11 +36,12 @@ std::string Result::getRightArgName() {
 std::set<std::string> Result::getRightArgValue() {
     return this->rightArgValue;
 };
-void setRightArg(std::string name, std::set<std::string> value) {
-    this->RightArgName = name;
+
+void Result::setRightArg(std::string name, std::set<std::string> value) {
+    this->rightArgName = name;
     this->rightArgValue = value;
     this->isRightArgAvailable = true;
 }
-bool isRightArgSynonym() {
+bool Result::isRightArgSynonym() {
     return this->isRightArgAvailable;
 }
