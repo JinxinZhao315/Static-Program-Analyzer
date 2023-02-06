@@ -26,7 +26,7 @@ TEST_CASE("Tokeniser test 1") {
 
 TEST_CASE("Tokeniser test 2") {
     Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { }", 1);
+    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
     for(string c : *tokeniser->getVariables()) {
         cout << c << endl;
     }
@@ -34,7 +34,7 @@ TEST_CASE("Tokeniser test 2") {
 
 TEST_CASE("Tokeniser test 3") {
     Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { }", 1);
+    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
     for(string c : *tokeniser->getConstants()) {
         cout << c << endl;
     }
@@ -42,10 +42,10 @@ TEST_CASE("Tokeniser test 3") {
 
 TEST_CASE("Tokeniser test 4") {
     Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { }", 1);
+    tokeniser->tokenise("procedure example { x = 1; y = 2; read z;}", 1);
     for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
         for(int i : statements) {
-            cout << i << endl;
+            cout << keyword << i << endl;
         }
     }
 }

@@ -14,6 +14,7 @@ Tokeniser::Tokeniser() {
     this->variables = new set<string>();
     this->constants = new vector<string>();
     this->statements = new map<Tokens::Keyword, vector<int>>();
+
 }
 
 TokenMap* Tokeniser::getTokenMap() {
@@ -61,11 +62,11 @@ bool Tokeniser::isNumeric(const std::string token) {
 }
 
 bool Tokeniser::isStatement(std::string token) {
-    return token == this->tokenMap->getStringByToken(Tokens::Keyword::READ)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::PRINT)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::CALL)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::WHILE)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::IF);
+    return token == this->getTokenMap()->getStringByToken(Tokens::Keyword::READ)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::PRINT)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::CALL)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::WHILE)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::IF);
 }
 
 Tokens::Keyword Tokeniser::getStatementType(std::string token) {
@@ -78,11 +79,11 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
             this->getProcedures()->insert(tokens[i+1]);
         } else if (isStatement(tokens[i])) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
-            this->statements->at(statementType).push_back(lineNumber);
+            this->getStatements()->at(statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
-            this->constants->push_back(tokens[i]);
+            this->getConstants()->push_back(tokens[i]);
         } else if (i > 0 && tokens[i+1] == "=") {
-            this->variables->insert(tokens[i]);
+            this->getVariables()->insert(tokens[i]);
         }
     }
 }
