@@ -43,12 +43,13 @@ TEST_CASE("Overall test") {
 
     }
 
+    Tokeniser tokeniser = Tokeniser();
     // Tokeniser process
-    map<int, vector<string>> parsed = processFile(file);
-    map<int, int> nesting_level = generateNestingLevel(parsed);
-    map<int, int> follows = generateFollowsRS(nesting_level);
-    map<int, set<int>> follows_star = generateFollowsStarRS(nesting_level);
-    map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
+    map<int, vector<string>> parsed = tokeniser.processFile(file);
+    map<int, int> nesting_level = tokeniser.generateNestingLevel(parsed);
+    map<int, int> follows = tokeniser.generateFollowsRS(nesting_level);
+    map<int, set<int>> follows_star = tokeniser.generateFollowsStarRS(nesting_level);
+    map<string, vector<vector<string>>> assigns = tokeniser.generateAssignmentRS(parsed);
 
     file.close();
 
