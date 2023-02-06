@@ -10,6 +10,7 @@
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
 #include "Tokeniser.h"
+#include "PQLDriver.h"
 
 #include "catch.hpp"
 
@@ -52,8 +53,8 @@ TEST_CASE("Overall test") {
     file.close();
 
     // TODO: add PKB calls
-
+    PKB pkb = PKB();
     // TODO: add PQL calls
     string queryStr = "stmt s; Select s such that Follows(_,_)";
-    //PQLDriver pqlDriver = PQLDriver();
+    PQLDriver pqlDriver = PQLDriver(pkb);
 }

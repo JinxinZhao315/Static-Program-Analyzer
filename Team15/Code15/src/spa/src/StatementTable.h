@@ -20,7 +20,7 @@ public:
 
 	std::set<int> getAllStatementNumbers();
 
-	std::set<int> StatementTable::getAllStatementNumbersByType(Tokens::Keyword statementType);
+	std::set<int> getAllStatementNumbersByType(Tokens::Keyword statementType);
 
 private:
 	std::set<int> statementTable;
