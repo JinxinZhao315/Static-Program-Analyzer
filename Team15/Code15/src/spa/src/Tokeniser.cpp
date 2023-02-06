@@ -1,14 +1,16 @@
-#include <cstdio>
-#include "Tokens.h"
 #include <iostream>
 #include <vector>
 #include <map>
 #include <fstream>
 #include <set>
 #include <stack>
+#include "Tokeniser.h"
+#include "TokenMap.h"
 
 using namespace std;
 using namespace Tokens;
+
+TokenMap tokenMap;
 
 map<int, int> generateFollowsRS(map<int, int> nesting_level);
 map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
@@ -19,15 +21,6 @@ set<string> procedures;
 vector<string> constants;
 set<string> variables;
 map<Tokens::Keyword, vector<int>> statements;
-
-bool findToken(std::string s) {
-    auto it = Tokens::TOKEN_MAP.find(s);
-    if (it != Tokens::TOKEN_MAP.end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 bool emptyToken(std::string token) {
     if(token == "" || token == " ") {
@@ -63,7 +56,7 @@ bool isStatement(std::string token) {
 }
 
 Tokens::Keyword getStatementType(std::string token) {
-    return TOKEN_MAP.at(token);
+    return tokenMap.getTokenByString(token);
 }
 
 void extract(std::vector<std::string> tokens, int lineNumber) {
@@ -86,7 +79,7 @@ std::vector<std::string> tokenise(std::string line, int lineNumber) {
     string currentToken = "";
     for(char c : line) {
         string s(1, c);
-        if(findToken(s)) {
+        if(tokenMap.findToken(s)) {
             tokens = pushToken(tokens, currentToken);
             tokens = pushToken(tokens, s);
             currentToken = "";
@@ -307,7 +300,6 @@ map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>
 }
 
 void driver() {
-
     string filename = "Team15/Tests15/Sample_source.txt";
     ifstream file(filename);
 
@@ -322,4 +314,8 @@ void driver() {
     map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
 
     file.close();
+}
+
+int main() {
+    driver();
 }

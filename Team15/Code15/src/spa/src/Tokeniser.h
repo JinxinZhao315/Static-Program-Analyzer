@@ -2,8 +2,11 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <set>
 #include <string>
 #include <stdio.h>
+
+using namespace std;
 
 void driver();
 map<int, vector<string>> processFile(std::ifstream &file);
@@ -12,7 +15,7 @@ map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
 map<int, int> generateNestingLevel(map<int, vector<string>>);
 map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>>);
 int precedence(std::string c);
-int isOperator(std::string c);
+bool isOperator(std::string c);
 bool isNumber(std::string num);
 std::vector<std::string> convertToPostfix(std::vector<std::string> tokens, int startIndex);
 bool findToken(std::string s);
