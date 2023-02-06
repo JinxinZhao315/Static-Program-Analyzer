@@ -49,16 +49,35 @@ TEST_CASE("Overall test") {
     map<int, int> follows = generateFollowsRS(nesting_level);
     map<int, set<int>> follows_star = generateFollowsStarRS(nesting_level);
     map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
+    // ADI TODO
+    set<string> procedures;
+    set<string> constants;
+    set<string> variables;
+    map<Tokens::Keyword, set<int>> statements;
 
     file.close();
 
     // TODO: add PKB calls
     PKB pkb = PKB();
-    for (auto const& [key, value] : follows) {
-        pkb.addFollows(key, value);
+    for (string p : procedures) {
+        pkb.addProc(p);
     }
-    for (auto const& [key, value] : follows_star) {
-        pkb.addFollowsStar(key, value);
+    for (string c : constants) {
+        pkb.addConst(c);
+    }
+    for (string v : variables) {
+        pkb.addVar(v);
+    }
+    for (auto pair : statements) {
+        for (int s : pair.second) {
+            pkb.addStmt(pair.first, s);
+        }
+    }
+    for (auto pair : follows) {
+        pkb.addFollows(pair.first, pair.second);
+    }
+    for (auto pair : follows_star) {
+        pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
     string queryStr = "stmt s; Select s such that Follows(_,_)";
