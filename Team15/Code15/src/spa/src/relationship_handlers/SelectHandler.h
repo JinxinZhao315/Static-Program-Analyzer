@@ -16,6 +16,5 @@ public:
     std::string evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
 
 private:
-    PKB pkb;
     ResultTable resultTable;
 };

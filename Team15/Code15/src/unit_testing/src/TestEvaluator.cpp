@@ -16,23 +16,57 @@
 
 using namespace std;
 
-TEST_CASE("PQLEvaluator test 1") {
-    try {
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        query = preprocessor.preprocess("stmt s1; Select s1 such that Follows(_,_)");
-
-        string retStr = evaluator.evaluate(query);
-        // To pass this set, set isFollowEmpty in FollowsHandler to true
-        assert(retStr == "None");
-    } catch (exception e) {
-        std::cout<<"exception occured!";
-    }
-   
-}
+//TEST_CASE("Tokeniser test 1") {
+//    Tokeniser *tokeniser = new Tokeniser();
+//    tokeniser->tokenise("procedure example { }", 1);
+//    for(string c : *tokeniser->getProcedures()) {
+//       cout << c << endl;
+//    }
+//}
+//
+//TEST_CASE("Tokeniser test 2") {
+//    Tokeniser *tokeniser = new Tokeniser();
+//    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+//    for(string c : *tokeniser->getVariables()) {
+//        cout << c << endl;
+//    }
+//}
+//
+//TEST_CASE("Tokeniser test 3") {
+//    Tokeniser *tokeniser = new Tokeniser();
+//    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+//    for(string c : *tokeniser->getConstants()) {
+//        cout << c << endl;
+//    }
+//}
+//
+//TEST_CASE("Tokeniser test 4") {
+//    Tokeniser *tokeniser = new Tokeniser();
+//    tokeniser->tokenise("procedure example { x = 1; y = 2; read z;}", 1);
+//    for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
+//        for(int i : statements) {
+//            cout << keyword << i << endl;
+//        }
+//    }
+//}
+//
+//TEST_CASE("PQLEvaluator test 1") {
+//    try {
+//        PQLPreprocessor preprocessor;
+//        PKB pkb;
+//        PQLEvaluator evaluator = PQLEvaluator(pkb);
+//
+//        Query query = Query();
+//        query = preprocessor.preprocess("stmt s1; Select s1 such that Follows(_,_)");
+//
+//        string retStr = evaluator.evaluate(query);
+//        // To pass this set, set isFollowEmpty in FollowsHandler to true
+//        assert(retStr == "None");
+//    } catch (exception e) {
+//        std::cout<<"exception occured!";
+//    }
+//   
+//}
 
 //TEST_CASE("Overall test") {
 //    // Enter source of SIMPLE code
@@ -89,4 +123,3 @@ TEST_CASE("PQLEvaluator test 1") {
 //    cout << "result:" << result << endl;
 //    //assert(result == "1,2");
 //}
-

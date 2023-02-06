@@ -14,6 +14,11 @@ Tokeniser::Tokeniser() {
     this->variables = new set<string>();
     this->constants = new vector<string>();
     this->statements = new map<Tokens::Keyword, vector<int>>();
+
+}
+
+TokenMap* Tokeniser::getTokenMap() {
+    return this->tokenMap;
 }
 
 set<string>* Tokeniser::getProcedures() {
@@ -57,11 +62,11 @@ bool Tokeniser::isNumeric(const std::string token) {
 }
 
 bool Tokeniser::isStatement(std::string token) {
-    return token == this->tokenMap->getStringByToken(Tokens::Keyword::READ)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::PRINT)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::CALL)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::WHILE)
-        || token == this->tokenMap->getStringByToken(Tokens::Keyword::IF);
+    return token == this->getTokenMap()->getStringByToken(Tokens::Keyword::READ)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::PRINT)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::CALL)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::WHILE)
+        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::IF);
 }
 
 Tokens::Keyword Tokeniser::getStatementType(std::string token) {
@@ -71,14 +76,17 @@ Tokens::Keyword Tokeniser::getStatementType(std::string token) {
 void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
     for(int i = 0; i < tokens.size(); ++i) {
         if(tokens[i] == "procedure") {
-            this->procedures->insert(tokens[i+1]);
+            this->getProcedures()->insert(tokens[i+1]);
         } else if (isStatement(tokens[i])) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
-            this->statements->at(statementType).push_back(lineNumber);
+            if (statements->count(statementType) == 0) {
+                statements->insert({statementType, vector<int>{}});
+            }
+            statements->operator[](statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
-            this->constants->push_back(tokens[i]);
-        } else if (i > 0 && tokens[i-1] == "=") {
-            this->variables->insert(tokens[i]);
+            this->getConstants()->push_back(tokens[i]);
+        } else if (i > 0 && tokens[i+1] == "=") {
+            this->getVariables()->insert(tokens[i]);
         }
     }
 }
@@ -86,28 +94,29 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
 std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
     string currentToken = "";
-    for(int i; i < line.length(); i++) {
+    TokenMap* tokenMap = this->getTokenMap();
+    for(int i = 0; i < line.length(); i++) {
         char c = line[i];
         string s(1, line[i]);
-        if(this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::NOT
-            || this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
+        if(this->getTokenMap()->getTokenByString(currentToken) == Tokens::Keyword::NOT
+           || this->getTokenMap()->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
             char nextC = line[i+1];
             if(nextC == '=') {
                 currentToken += nextC;
                 i++;
             }
-        } else if(tokenMap->findToken(s)) {
-            tokens = pushToken(tokens, currentToken);
-            tokens = pushToken(tokens, s);
+        } else if(tokenMap->tokenExistsByString(s)) {
+            tokens = this->pushToken(tokens, currentToken);
+            tokens = this->pushToken(tokens, s);
             currentToken = "";
         } else if (c == ' ') {
-            tokens = pushToken(tokens, currentToken);
+            tokens = this->pushToken(tokens, currentToken);
             currentToken = "";
         } else {
             currentToken += c;
         }
     }
-    extract(tokens, lineNumber);
+    this->extract(tokens, lineNumber);
     return tokens;
 }
 
@@ -178,8 +187,8 @@ map<int, int> Tokeniser::generateFollowsRS(map<int, int> nesting_level) {
         }
     }
     // print out follows relationship
+    cout << "Follows relationship" << endl;
     for (const auto& [key, value] : follows) {
-        cout << "Follows relationship" << endl;
         cout << key << ": " << value << endl;
     }
 
@@ -316,7 +325,8 @@ map<string, vector<vector<string>>> Tokeniser::generateAssignmentRS(map<int, vec
     return assigns;
 }
 
-void Tokeniser::driver() {
+void driver() {
+    Tokeniser *tokeniser = new Tokeniser();
     string filename = "Team15/Tests15/Sample_source.txt";
     ifstream file(filename);
 
@@ -324,16 +334,11 @@ void Tokeniser::driver() {
         cout << "Failed to open file: " << filename << endl;
     }
 
-    map<int, vector<string>> parsed = processFile(file);
-    map<int, int> nesting_level = generateNestingLevel(parsed);
-    map<int, int> follows = generateFollowsRS(nesting_level);
-    map<int, set<int>> follows_star = generateFollowsStarRS(nesting_level);
-    map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
+    map<int, vector<string>> parsed = tokeniser->processFile(file);
+    map<int, int> nesting_level = tokeniser->generateNestingLevel(parsed);
+    map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
+    map<int, set<int>> follows_star = tokeniser->generateFollowsStarRS(nesting_level);
+    map<string, vector<vector<string>>> assigns = tokeniser->generateAssignmentRS(parsed);
 
     file.close();
-}
-
-int Tokeniser::main() {
-    driver();
-    return 0;
 }

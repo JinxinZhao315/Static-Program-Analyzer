@@ -64,6 +64,7 @@ private:
             {Tokens::Keyword::AND, "&&"},
             {Tokens::Keyword::OR,"||"}
     };
+
     std::pair<std::map<Tokens::Keyword, std::string>, std::map<std::string, Tokens::Keyword>> doubleKeyedTokenMap = std::make_pair(STRING_MAP, TOKEN_MAP);
 
 public:
@@ -73,6 +74,7 @@ public:
 
     std::string getStringByToken(Tokens::Keyword keyword);
 
-    bool findToken(std::string s);
+    bool tokenExistsByString(std::string s);
 
+    bool stringExistsByToken(Tokens::Keyword keyword);
 };
