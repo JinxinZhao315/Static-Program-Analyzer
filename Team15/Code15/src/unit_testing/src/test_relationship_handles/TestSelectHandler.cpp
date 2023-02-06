@@ -40,6 +40,8 @@ TEST_CASE("Select Handler test 1") {
         pkb.addStmt(Tokens::ASSIGN, 1);
         pkb.addStmt(Tokens::ASSIGN, 2);
         pkb.addStmt(Tokens::READ, 3);
+        pkb.addStmt(Tokens::READ, 7);
+        pkb.addStmt(Tokens::READ, 8);
         pkb.addStmt(Tokens::IF, 4);
         pkb.addStmt(Tokens::WHILE, 5);
         pkb.addStmt(Tokens::CALL, 6);
