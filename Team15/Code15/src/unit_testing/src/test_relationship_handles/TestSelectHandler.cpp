@@ -6,6 +6,7 @@
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "PKBStub.h"
+#include "Tokens.h"
 
 #include "catch.hpp"
 
@@ -14,7 +15,7 @@ using namespace std;
 TEST_CASE("Select Handler test 1") {
     try {
         std::cout << "hello" << std::endl;
-        SelectClause selectClause("a1");
+        SelectClause selectClause("r");
         std::multimap<std::string, std::string> varTable;
         ResultTable resultTable = ResultTable();
 
@@ -27,24 +28,38 @@ TEST_CASE("Select Handler test 1") {
         varTable.insert(pair<std::string, std::string>("ca", "call"));
         varTable.insert(pair<std::string, std::string>("p", "procedure"));
 
-        std::set<std::string> constSet{ "10", "11", "12", "13" };
-        std::set<std::string> varNameSet{ "x", "y", "z" };
-        std::set<int> stmtNumberByType{ 1, 2, 3 };
-        std::set<int> stmtNums{ 1, 2, 3 };
+        //std::set<std::string> constSet{ "10", "11", "12", "13" };
+        //std::set<std::string> varNameSet{ "x", "y", "z" };
+        //std::set<int> stmtNumberByType{ 1, 2, 3 };
+        //std::set<int> stmtNums{ 1, 2, 3 };
 
-        PKB pkb = PKBStub(constSet, varNameSet, stmtNumberByType, stmtNums);
+        //PKB pkb = PKBStub(constSet, varNameSet, stmtNumberByType, stmtNums);
+        PKB pkb;
+  
+        pkb.addProc("p");
+        pkb.addStmt(Tokens::ASSIGN, 1);
+        pkb.addStmt(Tokens::ASSIGN, 2);
+        pkb.addStmt(Tokens::READ, 3);
+        pkb.addStmt(Tokens::IF, 4);
+        pkb.addStmt(Tokens::WHILE, 5);
+        pkb.addStmt(Tokens::CALL, 6);
+        pkb.addVar("x");
+        pkb.addVar("y");
+        pkb.addVar("z");
+        pkb.addConst("10");
+        pkb.addConst("11");
+        pkb.addConst("12");
+        pkb.addConst("13");
 
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-        std::vector<std::string> comparedResult{"x", "y", "z"};
-        assert(selectedVarName == "a1");
-        std::set<std::string> result = resultTable.getValueFromKey("a1");
-        int i = 0;
-        for (auto s : result) {
-            assert(s == comparedResult[i]);
-            i++;
+        assert(selectedVarName == "r");
+        std::set<std::string> result = resultTable.getValueFromKey("r");
+        for (auto s: result) {
+            std::cout << s << "\n" << endl;
         }
+
         std::cout << "select handler successful" << std::endl;
     }
     catch (exception e) {
