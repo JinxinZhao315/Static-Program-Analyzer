@@ -358,7 +358,9 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
+
         std::set<std::string> expectedResult{ "1"};
+
 
         REQUIRE(result == expectedResult);
 

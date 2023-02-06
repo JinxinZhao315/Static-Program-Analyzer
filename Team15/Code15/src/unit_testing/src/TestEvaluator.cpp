@@ -81,18 +81,18 @@ TEST_CASE("PQLEvaluator test 1")
     }
 }
 
-
-TEST_CASE("Overall test") {
+TEST_CASE("Overall test")
+{
     // Enter source of SIMPLE code
     string filename = "../../../../Tests15/Sample_source2.txt";
     ifstream file(filename);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cout << "Failed to open file: " << filename << endl;
-
     }
 
-    Tokeniser* tokeniser = new Tokeniser();
+    Tokeniser *tokeniser = new Tokeniser();
     // Tokeniser process
 
     map<int, vector<string>> parsed = tokeniser->processFile(file);
@@ -110,44 +110,49 @@ TEST_CASE("Overall test") {
 
     // TODO: add PKB calls
     PKB pkb = PKB();
-    for (string p : *procedures) {
+    for (string p : *procedures)
+    {
         pkb.addProc(p);
     }
-    for (string c : *constants) {
+    for (string c : *constants)
+    {
         pkb.addConst(c);
     }
-    for (string v : *variables) {
+    for (string v : *variables)
+    {
         pkb.addVar(v);
     }
-    for (auto pair : *statements) {
-        for (int s : pair.second) {
+    for (auto pair : *statements)
+    {
+        for (int s : pair.second)
+        {
             pkb.addStmt(pair.first, s);
         }
     }
-    for (auto pair : follows) {
+    for (auto pair : follows)
+    {
         pkb.addFollows(pair.first, pair.second);
     }
-    for (auto pair : follows_star) {
+    for (auto pair : follows_star)
+    {
         pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
 
-        set<int> allStmtNums = pkb.getAllStmtNumsByType(Tokens::Keyword::READ);
-        cout << "Stmt Numbers" << endl;
-        for (int num: allStmtNums) {
-            cout << num << endl;
-        }
+    set<int> allStmtNums = pkb.getAllStmtNumsByType(Tokens::Keyword::READ);
+    cout << "Stmt Numbers" << endl;
+    for (int num : allStmtNums)
+    {
+        cout << num << endl;
+    }
 
-//    int leader = pkb.getFollowsLeaderNum(2);
-//    cout << "Stmt Number" << endl;
-//    cout << leader << endl;
+    //    int leader = pkb.getFollowsLeaderNum(2);
+    //    cout << "Stmt Number" << endl;
+    //    cout << leader << endl;
 
-
-//    string queryStr = "stmt s; Select s";
-//    PQLDriver pqlDriver = PQLDriver(pkb);
-//    string result = pqlDriver.processPQL(queryStr);
-//    cout << "result:" << result << endl;
-    //assert(result == "1,2");
+    //    string queryStr = "stmt s; Select s";
+    //    PQLDriver pqlDriver = PQLDriver(pkb);
+    //    string result = pqlDriver.processPQL(queryStr);
+    //    cout << "result:" << result << endl;
+    //    //assert(result == "1,2");
 }
-
-
