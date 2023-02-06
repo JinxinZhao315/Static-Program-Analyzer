@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include "Tokens.h"
 #include <iostream>
 #include <vector>
@@ -9,7 +9,6 @@
 using namespace std;
 using namespace Tokens;
 
-map<int, int> generateNestingLevel();
 map<int, int> generateFollowsRS(map<int, int> nesting_level);
 map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
 map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>> parsed);
