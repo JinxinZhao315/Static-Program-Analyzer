@@ -61,16 +61,16 @@ TEST_CASE("Overall test") {
 
     // TODO: add PKB calls
     PKB pkb = PKB();
-    for (string p : procedures) {
+    for (string p : *procedures) {
         pkb.addProc(p);
     }
-    for (string c : constants) {
+    for (string c : *constants) {
         pkb.addConst(c);
     }
-    for (string v : variables) {
+    for (string v : *variables) {
         pkb.addVar(v);
     }
-    for (auto pair : statements) {
+    for (auto pair : *statements) {
         for (int s : pair.second) {
             pkb.addStmt(pair.first, s);
         }
