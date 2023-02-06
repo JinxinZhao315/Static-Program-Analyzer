@@ -12,6 +12,5 @@ std::string SelectHandler::evalSelect(SelectClause selectClause, std::multimap<s
     // Put every variable name selected in selectClause into ResultTable keys,
     // and add full set of possible values of that variable into ResultTable values.
     // return vector of return variables
-    return varName;
-    
+    return varName;  
 }

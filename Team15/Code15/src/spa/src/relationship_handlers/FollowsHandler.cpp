@@ -10,7 +10,7 @@ FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {
 
 std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string arg) {
     std::set<int> ret;
-    if (isStar) {
+    if (!isStar) {
         if (type == GET_LEADER) {
             int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
             if (leader != -1) {
