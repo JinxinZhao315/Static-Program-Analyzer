@@ -9,16 +9,11 @@
 using namespace std;
 using namespace Tokens;
 
-void generateFollowsRS();
-void generateNestingLevel();
-void generateAssignmentRS();
-std::vector<std::string> convertToPostfix(std::vector<std::string> tokens, int startIndex);
-
-map<int, vector<string>> parsed;
-map<int, int> nesting_level;
-map<int, int> follows;
-map<int, set<int>> follows_star;
-map<string, vector<vector<string>>> assigns;
+map<int, int> generateNestingLevel();
+map<int, int> generateFollowsRS(map<int, int> nesting_level);
+map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
+map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>> parsed);
+vector<string> convertToPostfix(vector<string> tokens, int startIndex);
 
 set<string> procedures;
 vector<string> constants;
@@ -106,7 +101,8 @@ std::vector<std::string> tokenise(std::string line, int lineNumber) {
     return tokens;
 }
 
-void processFile(std::ifstream &file) {
+map<int, vector<string>> processFile(std::ifstream &file) {
+    map<int, vector<string>> parsed;
     string curr_line;
     // Parse the SIMPLE program line by line
     int line_number;
@@ -115,9 +111,11 @@ void processFile(std::ifstream &file) {
         parsed[line_number] = tokenise(curr_line, line_number);
         line_number++;
     }
+    return parsed;
 }
 
-void generateNestingLevel() {
+map<int, int> generateNestingLevel(map<int, vector<string>> parsed) {
+    map<int, int> nesting_level;
     int curr_level;
     curr_level = 0;
     for (auto it = parsed.begin(); it != parsed.end(); ++it) {
@@ -151,17 +149,35 @@ void generateNestingLevel() {
         std::cout << "Line number: " << pair.first << ", Nesting level: " << pair.second << std::endl;
     }
     cout << endl;
+    return nesting_level;
 }
 
-void addFollowsStarRelationship(int line_number, int follower_line_number) {
-    if (follows_star[line_number].empty()) {
-        set<int> new_set;
-        follows_star[line_number] = new_set;
+map<int, int> generateFollowsRS(map<int, int> nesting_level) {
+    map<int, int> follows;
+    auto second_last = prev(nesting_level.end());
+    for (auto it = nesting_level.begin(); it != second_last; ++it) {
+        int line_number = it->first;
+        int first_nesting_level = it->second;
+        int second_nesting_level = next(it)->second;
+        if (second_nesting_level == -1) { // new procedure
+            break;
+        }
+        bool is_same_nesting_level = first_nesting_level == second_nesting_level;
+        if (is_same_nesting_level) { // Line right after is same indentation -> follows
+            follows[line_number] = line_number + 1;
+        }
     }
-    follows_star[line_number].insert(follower_line_number);
+    // print out follows relationship
+    for (const auto& [key, value] : follows) {
+        cout << "Follows relationship" << endl;
+        cout << key << ": " << value << endl;
+    }
+
+    return follows;
 }
 
-void generateFollowsRS() {
+map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level) {
+    map<int, set<int>> follows_star;
     for (auto outer_it = nesting_level.begin(); outer_it != nesting_level.end(); ++outer_it) {
         for (auto inner_it = next(outer_it); inner_it != nesting_level.end(); ++inner_it) {
             int first_line_number = outer_it->first;
@@ -171,23 +187,16 @@ void generateFollowsRS() {
             if (second_nesting_level == -1) { // new procedure
                 break;
             }
-            // For follows rs
-            bool is_line_after = second_line_number == first_line_number + 1;
             bool is_same_nesting_level = first_nesting_level == second_nesting_level;
-            if (is_line_after && is_same_nesting_level) { // Line right after is same indentation -> follows
-                follows[first_line_number] = second_line_number;
+            if (!is_same_nesting_level) {
+                continue;
             }
-
-            // For follows* rs
-            if (is_same_nesting_level) {
-                addFollowsStarRelationship(first_line_number, second_line_number);
+            if (follows_star[first_line_number].empty()) {
+                set<int> new_set;
+                follows_star[first_line_number] = new_set;
             }
+            follows_star[first_line_number].insert(second_line_number);
         }
-    }
-    // print out follows relationship
-    for (const auto& [key, value] : follows) {
-        cout << "Follows relationship" << endl;
-        cout << key << ": " << value << endl;
     }
 
     // print out follows* relationship
@@ -199,7 +208,9 @@ void generateFollowsRS() {
         }
         cout << "}" << endl;
     }
+    return follows_star;
 }
+
 int precedence(string c) {
     if (c == "-" || c == "+") {
         return 1;
@@ -249,7 +260,8 @@ vector<string> convertToPostfix(vector<string> tokens, int startIndex) {
     return result;
 }
 
-void generateAssignmentRS() {
+map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>> parsed) {
+    map<string, vector<vector<string>>> assigns;
     for (auto it = parsed.begin(); it != parsed.end(); ++it) {
         vector<string> tokens = it->second;
         string prev;
@@ -294,7 +306,7 @@ void generateAssignmentRS() {
 }
 
 int main(int argc, char* argv[]) {
-    // For early testing this filepath is temporarily hard coded
+
     string filename = "Team15/Tests15/Sample_source.txt";
     ifstream file(filename);
 
@@ -302,10 +314,12 @@ int main(int argc, char* argv[]) {
         cout << "Failed to open file: " << filename << endl;
         return 0;
     }
-    processFile(file);
-    generateNestingLevel();
-    generateFollowsRS();
-    generateAssignmentRS();
+
+    map<int, vector<string>> parsed = processFile(file);
+    map<int, int> nesting_level = generateNestingLevel(parsed);
+    map<int, int> follows = generateFollowsRS(nesting_level);
+    map<int, set<int>> follows_star = generateFollowsStarRS(nesting_level);
+    map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
 
     file.close();
     return 0;

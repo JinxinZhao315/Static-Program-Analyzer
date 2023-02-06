@@ -5,11 +5,11 @@
 #include <string>
 #include <stdio.h>
 
-void processFile(std::ifstream &file);
-void generateFollowsRS();
-void generateNestingLevel();
-void generateAssignmentRS();
-void addFollowsStarRelationship(int line_number, int follower_line_number);
+map<int, vector<string>> processFile(std::ifstream &file);
+map<int, int> generateFollowsRS(map<int, int> nesting_level);
+map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
+map<int, int> generateNestingLevel(map<int, vector<string>>);
+map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>>);
 int precedence(std::string c);
 int isOperator(std::string c);
 bool isNumber(std::string num) {
