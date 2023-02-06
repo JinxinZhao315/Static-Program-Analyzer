@@ -3,18 +3,31 @@
 TokenMap::TokenMap() {}
 
 std::string TokenMap::getStringByToken(Tokens::Keyword keyword) {
-    return this->doubleKeyedTokenMap.first.at(keyword);
+    if(stringExistsByToken(keyword)) {
+        return this->doubleKeyedTokenMap.first.at(keyword);
+    }
+}
+
+bool TokenMap::stringExistsByToken(Tokens::Keyword keyword) {
+    try {
+        this->doubleKeyedTokenMap.first.at(keyword);
+        return true;
+    } catch (std::exception exception){
+        return false;
+    }
+}
+
+bool TokenMap::tokenExistsByString(std::string token) {
+    try {
+        this->doubleKeyedTokenMap.second.at(token);
+        return true;
+    } catch (std::exception exception){
+        return false;
+    }
 }
 
 Tokens::Keyword TokenMap::getTokenByString(std::string token) {
-    return this->doubleKeyedTokenMap.second.at(token);
-}
-
-bool TokenMap::findToken(std::string s) {
-    Tokens::Keyword token = getTokenByString(s);
-    if(token) {
-        return true;
-    } else {
-        return false;
+    if(tokenExistsByString(token)) {
+        return this->doubleKeyedTokenMap.second.at(token);
     }
 }
