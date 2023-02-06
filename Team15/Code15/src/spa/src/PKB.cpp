@@ -6,23 +6,23 @@ void PKB::addProc(std::string procName) {
 	return procTable.addEntity(procName);
 }
 
-void PKB::addStmt(int stmtNum, std::string stmtType) {
-	if (stmtType == "read") {
+void PKB::addStmt(Tokens::Keyword stmtType, int stmtNum) {
+	if (stmtType == Tokens::Keyword::READ) {
 		readTable.addStatementNumber(stmtNum);
 	}
-	else if (stmtType == "print") {
+	else if (stmtType == Tokens::Keyword::PRINT) {
 		printTable.addStatementNumber(stmtNum);
 	}
-	else if (stmtType == "assign") {
+	else if (stmtType == Tokens::Keyword::ASSIGN) {
 		assignTable.addStatementNumber(stmtNum);
 	}
-	else if (stmtType == "call") {
+	else if (stmtType == Tokens::Keyword::CALL) {
 		callTable.addStatementNumber(stmtNum);
 	}
-	else if (stmtType == "while") {
+	else if (stmtType == Tokens::Keyword::WHILE) {
 		whileTable.addStatementNumber(stmtNum);
 	}
-	else if (stmtType == "if") {
+	else if (stmtType == Tokens::Keyword::IF) {
 		ifTable.addStatementNumber(stmtNum);
 	}
 	return stmtTable.addStatementNumber(stmtNum);

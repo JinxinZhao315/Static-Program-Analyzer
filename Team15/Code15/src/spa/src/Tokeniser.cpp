@@ -73,7 +73,7 @@ void extract(std::vector<std::string> tokens, int lineNumber) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
             statements[statementType].push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
-                constants.push_back(tokens[i]);
+            constants.push_back(tokens[i]);
         } else if (i > 0 && tokens[i-1] == "=") {
             variables.insert(tokens[i]);
         }
