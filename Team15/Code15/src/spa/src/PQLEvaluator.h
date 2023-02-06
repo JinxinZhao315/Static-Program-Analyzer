@@ -7,7 +7,7 @@
 #include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/FollowsStarHandler.h"
+#include "relationship_handlers/FollowsHandler.h"
 #include <numeric>
 #include <string>
 #include <set>

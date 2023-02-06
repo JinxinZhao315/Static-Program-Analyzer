@@ -38,24 +38,29 @@ void ClauseHandler::combine(std::string synonymName, std::set<std::string>synony
     }
 }
 
-std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string resultType) {
-    std::set<std::string> temp;
-    if (resultType == "constant") {
+std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string DeType) {
+    std::set<std::string> ret;
+    if (DeType == "constant") {
         //convertVecToSet(pkb.getConstants());
-        return temp;
     }
-    else if (resultType == "procedure") {
+    else if (DeType == "procedure") {
         //pkb.getProcedures();
-        return temp;
     }
-    else if (resultType == "variable") {
+    else if (DeType == "variable") {
         //pkb.getVariables();
-        return temp;
     }
-    else {
-        //pkb.getEntities(resultType);
-        return temp;
+    else if (DeType == "stmt") {
+        std::set<int> allStmtIntSet; // =pkb.getAllStmtNums();
+        for (int stmtNum: allStmtIntSet) {
+            ret.insert(to_string(stmtNum));
+        }
+    } else  {
+        std::set<int> allStmtIntSet; //pkb.getAllStmtNumsByType(DeType)
+        for (int stmtNum: allStmtIntSet) {
+            ret.insert(to_string(stmtNum));
+        }
     }
+    return ret;
 }
 
 template <typename T>
@@ -67,14 +72,9 @@ std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
     return resultSet;
 }
 
-// This function can only be used to check and add statements
-void ClauseHandler::resultTableCheckAndAdd(string arg, ResultTable& resultTable) {
+void ClauseHandler::resultTableCheckAndAdd(string arg, ResultTable& resultTable, string DeType) {
     if (!resultTable.isKeyPresent(arg)) {
-        std::set<int> allStmtIntSet; //pkb.getAllStmtNums()
-        std::set<string> allStmtStrSet;
-        for (int stmtNum: allStmtIntSet) {
-            allStmtStrSet.insert(to_string(stmtNum));
-        }
+        std::set<string> allStmtStrSet = getResultFromPKB(pkb, DeType);
         resultTable.insertKeyValuePair(arg, allStmtStrSet);
     }
 }

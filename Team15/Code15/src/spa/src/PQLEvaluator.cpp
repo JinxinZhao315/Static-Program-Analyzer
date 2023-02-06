@@ -20,17 +20,19 @@ std::string PQLEvaluator::evaluate(Query query) {
 
     for (SuchThatClause suchThatCl: suchThatVec) {
        std::string relationship = suchThatCl.getRelationShip();
-       if (relationship == "Follows") {
+       if (relationship == "Follows" || relationship == "Follows*") {
            FollowsHandler followsHandler = FollowsHandler(pkb);
-           Result result = followsHandler.evalFollows(suchThatCl, resultTable);
+           bool isStar = relationship == "Follows" ? false : true;
+           Result result = followsHandler.evalFollowsStar(isStar, suchThatCl, resultTable, varTable);
            followsHandler.combineResult(resultTable, result);
-       } else if (relationship == "Follows*") {
-           FollowsStarHandler followsStarHandler = FollowsStarHandler(pkb);
-           Result result = followsStarHandler.evalFollowsStar(suchThatCl, resultTable);
-           followsStarHandler.combineResult(resultTable, result);
        }
     }
 
+    //   for (PatternClause patternCl: patternVec) {
+    //
+    //   }
+
+    // return the values of the selected synonym in ResultTable
     std::string retStr;
     set<string> retSet = resultTable.getValueFromKey(selectedVarName);
     if (retSet.empty()) {
@@ -44,13 +46,6 @@ std::string PQLEvaluator::evaluate(Query query) {
     }
 
 
-
-    //   for (PatternClause patternCl: patternVec) {
-    //
-    //   }
-
-
-   // TODO: return the values of the selected synonym in ResultTable
    return retStr;
 }
 

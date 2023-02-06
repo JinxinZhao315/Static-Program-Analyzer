@@ -1,12 +1,47 @@
 //
-// Created by Jinxin Zhao on 3/2/23.
+// Created by Jinxin Zhao on 5/2/23.
 //
 
 #include "FollowsHandler.h"
 
 FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& resultTable) {
+
+std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string arg) {
+    std::set<int> ret;
+    if (isStar) {
+        if (type == GET_LEADER) {
+            int leader; // = pkb.getFollowsLeaderNum(stoi(arg))
+            if (leader != -1) {
+                ret.insert(leader);
+            }
+        } else { //if (type == GET_FOLLOWER)
+            int follower;// = pkb.getFollowsFollowerNum(stoi(arg))
+            if (follower != -1) {
+                ret.insert(follower);
+            }
+        }
+    } else {
+        if (type == GET_LEADER) {
+            // ret = pkb.getFollowsStarLeaderNums(stoi(arg));
+        } else { //  if (type == GET_FOLLOWER)
+            // ret = pkb.getFollowsStarFollowerNums(stoi(arg))
+        }
+    }
+    return ret;
+}
+
+bool FollowsHandler:: getIsFollowsFromPKB(bool isStar, string leftArg, string rightArg) {
+    bool ret;
+    if (isStar) {
+        // ret =pkb.areInFollowsStarRelationship(leftArg, rightArg)
+    } else {
+        // ret =pkb.areInFollowsRelationship(leftArg, rightArg)
+    }
+    return ret;
+}
+
+Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -20,44 +55,46 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
             result.setResultTrue(false);
             return result;
         }
-    // Wildcard-Int
+        // Wildcard-Int
     } else if (leftType == Utility::UNDERSCORE && rightType == Utility::INTEGER) {
-        int leader; // = pkb.getFollowsLeaderNum(stoi(rightArg))
-        if (leader == -1) {
+        std::set<int> leaderSet = getFollowsFromPKB(isStar, GET_LEADER, rightArg); // = pkb.getFollowsStarLeaderNums(stoi(rightArg))
+        if (leaderSet.empty()) {
             result.setResultTrue(false);
             return result;
         }
-    // Int-Wildcard
+        // Int-Wildcard
     } else if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
-        int follower; // = pkb.getFollowsFollowerNum(stoi(leftArg))
-        if (follower == -1) {
+        std::set<int> followerSet = getFollowsFromPKB(isStar, GET_FOLLOWER, leftArg); // = pkb.getFollowsStarFollowerNums(stoi(leftArg))
+        if (followerSet.empty()) {
             result.setResultTrue(false);
             return result;
         }
-    // Int-Int
+        // Int-Int
     } else if (leftType == Utility::INTEGER && rightType == Utility::INTEGER) {
-        bool isFollow; // =pkb.areInFollowsRelationship(leftArg, rightArg)
+        bool isFollow = getIsFollowsFromPKB(isStar, leftArg, rightArg); // =pkb.areInFollowsStarRelationship(leftArg, rightArg)
         if (!isFollow) {
             result.setResultTrue(false);
             return result;
         }
-    // Synon - Wildcard/Int
+        // Synon - Wildcard/Int
     } else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
-        resultTableCheckAndAdd(leftArg, resultTable);
+        string synonDeType = varTable.find(leftArg)->second;
+        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::set<string> currSynonValues = resultTable.getValueFromKey(leftArg);
+
         std::set<string> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
             for (string currSynonVal: currSynonValues) {
-                int currFollow; //=pkb.getFollowsFollowerNum(stoi(currSynonVal))
-                if (currFollow != -1) {
+                std::set<int> followerSet = getFollowsFromPKB(isStar, GET_FOLLOWER, currSynonVal); //=pkb.getFollowsStarFollowerNums(stoi(currSynonVal))
+                if (!followerSet.empty()) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
         } else if (rightType == Utility:: INTEGER) {
             for (string currSynonVal: currSynonValues) {
-                bool isRightFollowLeft; //=pkb.areInFollowsRelationship(currSynonVal, rightArg)
-                if (isRightFollowLeft) {
+                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
+                if (isRightFollowStarLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
@@ -68,23 +105,24 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
         }
         result.setLeftArg(leftArg, resultSynonValues);
 
-    // Wilcard/Int - Synon
+        // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
-        resultTableCheckAndAdd(rightArg, resultTable);
+        string synonDeType = varTable.find(rightArg)->second;
+        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::set<string> currSynonValues = resultTable.getValueFromKey(rightArg);
         std::set<string> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
             for (string currSynonVal: currSynonValues) {
-                int currLeader; //=pkb.getFollowsLeaderNum(stoi(currSynonVal))
-                if (currLeader != -1) {
+                std::set<int> leaderSet = getFollowsFromPKB(isStar, GET_LEADER, currSynonVal); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
+                if (!leaderSet.empty()) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
         } else if (leftType == Utility::INTEGER) {
             for (string currSynonVal: currSynonValues) {
-                bool isRightFollowLeft; //=pkb.areInFollowsRelationship(leftArg, currSynonVal)
-                if (isRightFollowLeft) {
+                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
+                if (isRightFollowStarLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
@@ -94,10 +132,12 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
             return result;
         }
         result.setRightArg(rightArg, resultSynonValues);
-    // Synon - Synon
+        // Synon - Synon
     } else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
-        resultTableCheckAndAdd(leftArg, resultTable);
-        resultTableCheckAndAdd(rightArg, resultTable);
+        string leftDeType = varTable.find(leftArg)->second;
+        string rightDeType = varTable.find(rightArg)->second;
+        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
+        resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
         std::set<string> currLeftValues = resultTable.getValueFromKey(leftArg);
         std::set<string> currRightValues = resultTable.getValueFromKey(rightArg);
 
@@ -106,8 +146,8 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
 
         for (string currLeftVal: currLeftValues) {
             for (string currRightVal: currRightValues) {
-                bool isRightFollowLeft; //=pkb.areInFollowsRelationship(currLeftVal, currRightVal)
-                if (isRightFollowLeft) {
+                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
+                if (isRightFollowStarLeft) {
                     leftResultValues.insert(currLeftVal);
                     rightResultValues.insert(currRightVal);
                 }
@@ -130,4 +170,3 @@ Result FollowsHandler::evalFollows(SuchThatClause suchThatClause, ResultTable& r
 
 
 }
-

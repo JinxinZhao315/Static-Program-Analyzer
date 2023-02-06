@@ -14,8 +14,8 @@ class ClauseHandler
 public:
     ClauseHandler(PKB &pkb);
     void combineResult(ResultTable& resultTable, Result& result);
-    std::set<std::string> getResultFromPKB(PKB& pkb, std::string resultType);
-    void resultTableCheckAndAdd(string arg, ResultTable& resultTable);
+    std::set<std::string> getResultFromPKB(PKB& pkb, std::string DeType);
+    void resultTableCheckAndAdd(string arg, ResultTable& resultTable, string DeType);
 private:
     PKB pkb;
     void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);

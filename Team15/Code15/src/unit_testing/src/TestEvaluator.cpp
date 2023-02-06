@@ -8,7 +8,7 @@
 #include "relationship_handlers/Result.h"
 #include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/FollowsStarHandler.h"
+#include "relationship_handlers/FollowsHandler.h"
 
 #include "catch.hpp"
 
