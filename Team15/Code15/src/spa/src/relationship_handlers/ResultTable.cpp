@@ -22,3 +22,11 @@ std::set<std::string> ResultTable::getValueFromKey(std::string key) {
 void ResultTable::insertKeyValuePair(std::string key, std::set<std::string> value) {
     this->resultTable.insert({key, value});
 }
+
+int ResultTable::sizeOfResultTable() {
+    return resultTable.size();
+} 
+
+void ResultTable::deleteKeyValuePair(std::string key) {
+    this->resultTable.erase(key);
+}
