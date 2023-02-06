@@ -75,8 +75,10 @@ Tokens::Keyword Tokeniser::getStatementType(std::string token) {
 
 void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
     for(int i = 0; i < tokens.size(); ++i) {
-        if(tokens[i] == "procedure") {
-            this->getProcedures()->insert(tokens[i+1]);
+        bool nextTokenWithinBounds = i < tokens.size() - 1;
+        string nextToken = nextTokenWithinBounds ? tokens[i + 1] : "";
+        if(tokens[i] == "procedure" && nextTokenWithinBounds) {
+            this->getProcedures()->insert(nextToken);
         } else if (isStatement(tokens[i])) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
             if (statements->count(statementType) == 0) {
@@ -85,7 +87,7 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
             statements->operator[](statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
             this->getConstants()->push_back(tokens[i]);
-        } else if (i > 0 && tokens[i+1] == "=") {
+        } else if (i > 0 && nextToken == "=") {
             this->getVariables()->insert(tokens[i]);
         }
     }
@@ -93,27 +95,32 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
 
 std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
-    string currentToken = "";
+    string tokenChunk = "";
     TokenMap* tokenMap = this->getTokenMap();
     for(int i = 0; i < line.length(); i++) {
         char c = line[i];
-        string s(1, line[i]);
-        if(this->getTokenMap()->getTokenByString(currentToken) == Tokens::Keyword::NOT
-           || this->getTokenMap()->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
+        string currentToken = c + string();
+        Tokens::Keyword tokenKeyword = this->getTokenMap()->getTokenByString(currentToken);
+        if (c == ' ') {
+            tokens = this->pushToken(tokens, tokenChunk);
+            tokenChunk = "";
+        } else if(tokenKeyword == Tokens::Keyword::NOT || tokenKeyword == Tokens::Keyword::ASSIGN) {
+            bool nextCharWithinBounds =  i < line.length() - 1;
+            if (!nextCharWithinBounds) continue;
             char nextC = line[i+1];
             if(nextC == '=') {
-                currentToken += nextC;
+                tokenChunk = currentToken + nextC;
+                tokens = this->pushToken(tokens, tokenChunk);
+                tokenChunk = "";
                 i++;
             }
-        } else if(tokenMap->tokenExistsByString(s)) {
-            tokens = this->pushToken(tokens, currentToken);
-            tokens = this->pushToken(tokens, s);
-            currentToken = "";
-        } else if (c == ' ') {
+        } else if(tokenMap->tokenExistsByString(currentToken)) {
+            tokens = this->pushToken(tokens, tokenChunk);
             tokens = this->pushToken(tokens, currentToken);
             currentToken = "";
+            tokenChunk = "";
         } else {
-            currentToken += c;
+            tokenChunk += c;
         }
     }
     this->extract(tokens, lineNumber);
