@@ -38,24 +38,41 @@ void ClauseHandler::combine(std::string synonymName, std::set<std::string>synony
     }
 }
 
-std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string DeType) {
+std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, string DeType) {
     std::set<std::string> ret;
     if (DeType == "constant") {
-        //convertVecToSet(pkb.getConstants());
+        ret = pkb.getAllConstVals();
     }
     else if (DeType == "procedure") {
-        //pkb.getProcedures();
+        ret = pkb.getAllProcNames();
     }
     else if (DeType == "variable") {
-        //pkb.getVariables();
+        ret = pkb.getAllVarNames();
     }
     else if (DeType == "stmt") {
-        std::set<int> allStmtIntSet; // =pkb.getAllStmtNums();
+        std::set<int> allStmtIntSet = pkb.getAllStmtNums();
         for (int stmtNum: allStmtIntSet) {
             ret.insert(to_string(stmtNum));
         }
     } else  {
-        std::set<int> allStmtIntSet; //pkb.getAllStmtNumsByType(DeType)
+        Tokens::Keyword DeToken;
+        if (DeType == "read") {
+            DeToken = Tokens::Keyword::READ;
+        } else if (DeType == "print") {
+            DeToken = Tokens::Keyword::PRINT;
+        } else if (DeType == "assign") {
+            DeToken = Tokens::Keyword::ASSIGN;
+        } else if (DeType == "call") {
+            DeToken = Tokens::Keyword::CALL;
+        } else if (DeType == "while") {
+            DeToken = Tokens::Keyword::WHILE;
+        } else if (DeType == "if") {
+            DeToken = Tokens::Keyword::IF;
+        } else {
+            throw runtime_error("unsupported DeType in ClauseHandler");
+        }
+
+        std::set<int> allStmtIntSet = pkb.getAllStmtNumsByType(DeToken);
         for (int stmtNum: allStmtIntSet) {
             ret.insert(to_string(stmtNum));
         }
@@ -63,14 +80,14 @@ std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, std::string DeTy
     return ret;
 }
 
-template <typename T>
-std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
-    std::set<T> resultSet;
-    for (T t : vec) {
-        resultSet.insert(t);
-    }
-    return resultSet;
-}
+//template <typename T>
+//std::set<T> ClauseHandler::convertVecToSet(std::vector<T> vec) {
+//    std::set<T> resultSet;
+//    for (T t : vec) {
+//        resultSet.insert(t);
+//    }
+//    return resultSet;
+//}
 
 void ClauseHandler::resultTableCheckAndAdd(string arg, ResultTable& resultTable, string DeType) {
     if (!resultTable.isKeyPresent(arg)) {
