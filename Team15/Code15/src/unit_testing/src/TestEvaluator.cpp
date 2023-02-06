@@ -54,6 +54,12 @@ TEST_CASE("Overall test") {
 
     // TODO: add PKB calls
     PKB pkb = PKB();
+    for (auto const& [key, value] : follows) {
+        pkb.addFollows(key, value);
+    }
+    for (auto const& [key, value] : follows_star) {
+        pkb.addFollowsStar(key, value);
+    }
     // TODO: add PQL calls
     string queryStr = "stmt s; Select s such that Follows(_,_)";
     PQLDriver pqlDriver = PQLDriver(pkb);
