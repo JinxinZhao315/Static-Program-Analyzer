@@ -35,7 +35,7 @@ TEST_CASE("PQLEvaluator test 1") {
 
 TEST_CASE("Overall test") {
     // Enter source of SIMPLE code
-    string filename = "Team15/Tests15/Sample_source.txt";
+    string filename = "../../../../Tests15/Sample_source.txt";
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -43,13 +43,18 @@ TEST_CASE("Overall test") {
 
     }
 
-    Tokeniser tokeniser = Tokeniser();
+    Tokeniser* tokeniser = new Tokeniser();
     // Tokeniser process
-    map<int, vector<string>> parsed = tokeniser.processFile(file);
-    map<int, int> nesting_level = tokeniser.generateNestingLevel(parsed);
-    map<int, int> follows = tokeniser.generateFollowsRS(nesting_level);
-    map<int, set<int>> follows_star = tokeniser.generateFollowsStarRS(nesting_level);
-    map<string, vector<vector<string>>> assigns = tokeniser.generateAssignmentRS(parsed);
+    map<int, vector<string>> parsed = tokeniser->processFile(file);
+    map<int, int> nesting_level = tokeniser->generateNestingLevel(parsed);
+    map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
+    map<int, set<int>> follows_star = tokeniser->generateFollowsStarRS(nesting_level);
+    map<string, vector<vector<string>>> assigns = tokeniser->generateAssignmentRS(parsed);
+
+    std::set<std::string> *procedures = tokeniser->getProcedures();
+    std::vector<std::string> *constants = tokeniser->getConstants();
+    std::set<std::string> *variables = tokeniser->getVariables();
+    std::map<Tokens::Keyword, std::vector<int>> *statements = tokeniser->getStatements();
 
     file.close();
 

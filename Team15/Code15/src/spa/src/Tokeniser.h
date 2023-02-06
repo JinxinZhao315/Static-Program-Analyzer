@@ -33,6 +33,10 @@ public:
     std::vector<std::string> tokenise(std::string line, int lineNumber);
     void extract(std::vector<std::string> tokens, int lineNumber);
     int main();
+    set<string>* getProcedures();
+    set<string>* getVariables();
+    vector<string>* getConstants();
+    map<Tokens::Keyword, vector<int>>* getStatements();
 
 private:
     TokenMap *tokenMap;

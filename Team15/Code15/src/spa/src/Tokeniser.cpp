@@ -16,6 +16,22 @@ Tokeniser::Tokeniser() {
     this->statements = new map<Tokens::Keyword, vector<int>>();
 }
 
+set<string>* Tokeniser::getProcedures() {
+    return this->procedures;
+};
+
+set<string>* Tokeniser::getVariables() {
+    return this->variables;
+};
+
+vector<string>* Tokeniser::getConstants() {
+    return this->constants;
+};
+
+map<Tokens::Keyword, vector<int>>* Tokeniser::getStatements() {
+    return this->statements;
+};
+
 bool Tokeniser::emptyToken(std::string token) {
     if(token == "" || token == " ") {
         return true;
@@ -66,35 +82,6 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
         }
     }
 }
-
-//std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
-//    vector<std::string> tokens;
-//    string currentToken = "";
-//    for(char c : line) {
-//        string s(1, c);
-//        if(this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::NOT
-//            || this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
-//            char* cp = &c;
-//            char* nextCp = cp++;
-//            char nextC = *nextCp;
-//            if(nextC == '=') {
-//                currentToken += c + nextC;
-//                cp = nextCp;
-//            }
-//        } else if(tokenMap->findToken(s)) {
-//            tokens = pushToken(tokens, currentToken);
-//            tokens = pushToken(tokens, s);
-//            currentToken = "";
-//        } else if (c == ' ') {
-//            tokens = pushToken(tokens, currentToken);
-//            currentToken = "";
-//        } else {
-//            currentToken += c;
-//        }
-//    }
-//    extract(tokens, lineNumber);
-//    return tokens;
-//}
 
 std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
