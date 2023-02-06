@@ -86,7 +86,6 @@ TEST_CASE("Overall test") {
     map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
     map<int, set<int>> follows_star = tokeniser->generateFollowsStarRS(nesting_level);
     map<string, vector<vector<string>>> assigns = tokeniser->generateAssignmentRS(parsed);
-
     std::set<std::string> *procedures = tokeniser->getProcedures();
     std::vector<std::string> *constants = tokeniser->getConstants();
     std::set<std::string> *variables = tokeniser->getVariables();

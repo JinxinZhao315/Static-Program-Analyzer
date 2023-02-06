@@ -91,7 +91,7 @@ std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
     string currentToken = "";
     TokenMap* tokenMap = this->getTokenMap();
-    for(int i; i < line.length(); i++) {
+    for(int i = 0; i < line.length(); i++) {
         char c = line[i];
         string s(1, line[i]);
         if(this->getTokenMap()->getTokenByString(currentToken) == Tokens::Keyword::NOT
@@ -183,8 +183,8 @@ map<int, int> Tokeniser::generateFollowsRS(map<int, int> nesting_level) {
         }
     }
     // print out follows relationship
+    cout << "Follows relationship" << endl;
     for (const auto& [key, value] : follows) {
-        cout << "Follows relationship" << endl;
         cout << key << ": " << value << endl;
     }
 
