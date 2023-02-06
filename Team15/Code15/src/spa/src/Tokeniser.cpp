@@ -63,7 +63,7 @@ bool isStatement(std::string token) {
 }
 
 Tokens::Keyword getStatementType(std::string token) {
-    return TOKEN_MAP[token];
+    return TOKEN_MAP.at(token);
 }
 
 void extract(std::vector<std::string> tokens, int lineNumber) {
@@ -306,14 +306,13 @@ map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>
     return assigns;
 }
 
-int main(int argc, char* argv[]) {
+void driver() {
 
     string filename = "Team15/Tests15/Sample_source.txt";
     ifstream file(filename);
 
     if (!file.is_open()) {
         cout << "Failed to open file: " << filename << endl;
-        return 0;
     }
 
     map<int, vector<string>> parsed = processFile(file);
@@ -323,5 +322,4 @@ int main(int argc, char* argv[]) {
     map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
 
     file.close();
-    return 0;
 }

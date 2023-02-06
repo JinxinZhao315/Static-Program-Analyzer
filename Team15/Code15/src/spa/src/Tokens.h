@@ -32,7 +32,7 @@ namespace Tokens {
         NOT
     };
 
-    std::map<std::string , Tokens::Keyword> TOKEN_MAP = {
+    inline static const std::map<std::string , Tokens::Keyword> TOKEN_MAP = {
             {"procedure", Keyword::PROCEDURE},
             {"while", Keyword::WHILE},
             {"if", Keyword::IF},

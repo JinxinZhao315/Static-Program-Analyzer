@@ -5,6 +5,7 @@
 #include <string>
 #include <stdio.h>
 
+void driver();
 map<int, vector<string>> processFile(std::ifstream &file);
 map<int, int> generateFollowsRS(map<int, int> nesting_level);
 map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
