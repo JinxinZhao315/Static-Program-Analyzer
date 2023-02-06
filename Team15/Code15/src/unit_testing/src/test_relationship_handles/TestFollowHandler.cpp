@@ -126,7 +126,8 @@ TEST_CASE("Follows Handler Synonym Integer test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -159,7 +160,8 @@ TEST_CASE("Follows Handler Integer Synonym test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -193,7 +195,8 @@ TEST_CASE("Follows Handler Synonym Synonym test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -230,7 +233,8 @@ TEST_CASE("Follows Handler WildCard Synonym test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -268,7 +272,8 @@ TEST_CASE("Follows Handler Synonym WildCard test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -306,7 +311,8 @@ TEST_CASE("Follows Handler Integer WildCard test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -347,7 +353,8 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        multimap<string, string> varTable = query.getVarTable();
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
@@ -362,7 +369,7 @@ TEST_CASE("Follows Handler WildCard Integer test") {
     }
 }
 
-TEST_CASE("Follows Handler WildCard Synonym test") {
+TEST_CASE("Follows Handler WildCard Synonym test 2") {
     try {
         ResultTable resultTable = ResultTable();
         PQLPreprocessor preprocessor;
