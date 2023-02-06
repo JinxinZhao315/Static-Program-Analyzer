@@ -3,12 +3,12 @@
 using namespace std;
 
 PKB::PKB() {
-	procTable = ProcedureTable::ProcedureTable();
-	stmtTable = StatementTable::StatementTable();
-	varTable = VariableTable::VariableTable();
-	constTable = ConstantTable::ConstantTable();
-	followsTable = FollowsTable::FollowsTable();
-	followsStarTable = FollowsStarTable::FollowsStarTable();
+	procTable = ProcedureTable();
+	stmtTable = StatementTable();
+	varTable = VariableTable();
+	constTable = ConstantTable();
+	followsTable = FollowsTable();
+	followsStarTable = FollowsStarTable();
 }
 
 void PKB::addProc(std::string procName) {
