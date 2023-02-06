@@ -4,7 +4,8 @@
 
 #include "FollowsHandler.h"
 
-FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {}
+FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {
+}
 
 
 std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string arg) {

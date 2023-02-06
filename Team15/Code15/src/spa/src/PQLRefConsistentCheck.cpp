@@ -73,4 +73,5 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             }
         }
     }
+    return true;
 }

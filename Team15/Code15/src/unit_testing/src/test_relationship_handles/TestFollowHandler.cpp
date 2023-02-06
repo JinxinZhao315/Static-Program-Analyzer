@@ -328,6 +328,52 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         PQLEvaluator evaluator = PQLEvaluator(pkb);
 
         Query query = Query();
+
+        pkb.addFollows(2, 3);
+        pkb.addFollows(1, 2);
+        pkb.addFollows(3, 4);
+        pkb.addFollows(4, 5);
+
+
+        pkb.addStmt(Tokens::READ, 1);
+        pkb.addStmt(Tokens::CALL, 2);
+        pkb.addStmt(Tokens::READ, 3);
+        pkb.addStmt(Tokens::READ, 4);
+        pkb.addStmt(Tokens::READ, 5);
+        
+        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,1)");
+
+
+        FollowsHandler followsHandler = FollowsHandler(pkb);
+        bool isStar = false;
+        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        followsHandler.combineResult(resultTable, followResult);
+
+        std::set<std::string> result = resultTable.getValueFromKey("s1");
+<<<<<<< HEAD
+        std::set<std::string> expectedResult{ "1" , "23"};
+=======
+        std::set<std::string> expectedResult{ "1"};
+
+>>>>>>> 6ca8a5709465e0c2a21ed4a17e58775f31360937
+        REQUIRE(result == expectedResult);
+
+        std::cout << "select handler successful" << std::endl;
+    }
+    catch (exception e) {
+        std::cout << "exception occured!";
+    }
+}
+
+TEST_CASE("Follows Handler WildCard Synonym test") {
+    try {
+        ResultTable resultTable = ResultTable();
+        PQLPreprocessor preprocessor;
+        PKB pkb;
+        PQLEvaluator evaluator = PQLEvaluator(pkb);
+
+        Query query = Query();
         pkb.addFollows(2, 3);
         pkb.addFollows(1, 2);
         pkb.addFollows(3, 4);
@@ -338,17 +384,17 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
-        
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,1)");
+        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,s1)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
+        multimap<string, string> varTable = query.getVarTable();
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
-        std::set<std::string> expectedResult{ "1" , "23"};
+        std::set<std::string> expectedResult{ "3" , "4", "5" };
         REQUIRE(result == expectedResult);
 
         std::cout << "select handler successful" << std::endl;
@@ -357,3 +403,4 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         std::cout << "exception occured!";
     }
 }
+
