@@ -4,6 +4,7 @@
 #include "StatementTable.h"
 #include "FollowsTable.h"
 #include "FollowsStarTable.h"
+#include "Tokens.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ class PKB {
 public:
 	void addProc(std::string procName);
 
-	void addStmt(int stmtNum, std::string stmtType);
+	void addStmt(Tokens::Keyword stmtType, int stmtNum);
 
 	void addVar(std::string varName);
 
