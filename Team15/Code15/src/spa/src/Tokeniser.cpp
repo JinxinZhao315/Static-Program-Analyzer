@@ -109,10 +109,15 @@ std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
             if (!nextCharWithinBounds) continue;
             char nextC = line[i+1];
             if(nextC == '=') {
+                tokens = this->pushToken(tokens, tokenChunk);
                 tokenChunk = currentToken + nextC;
                 tokens = this->pushToken(tokens, tokenChunk);
                 tokenChunk = "";
                 i++;
+            } else {
+                tokens = this->pushToken(tokens, currentToken);
+                currentToken = "";
+                tokenChunk = "";
             }
         } else if(tokenMap->tokenExistsByString(currentToken)) {
             tokens = this->pushToken(tokens, tokenChunk);

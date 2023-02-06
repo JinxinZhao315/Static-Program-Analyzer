@@ -26,7 +26,7 @@ TEST_CASE("Tokeniser test 1") {
 
 TEST_CASE("Tokeniser test 2") {
     Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+    vector<string> tokens =  tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
     for(string c : *tokeniser->getVariables()) {
         cout << c << endl;
     }
