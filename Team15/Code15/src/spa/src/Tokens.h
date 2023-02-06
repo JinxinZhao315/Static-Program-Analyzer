@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <utility>
 
 namespace Tokens {
     enum Keyword {
@@ -32,33 +33,13 @@ namespace Tokens {
         NOT
     };
 
-    std::map<std::string , Tokens::Keyword> TOKEN_MAP = {
-            {"procedure", Keyword::PROCEDURE},
-            {"while", Keyword::WHILE},
-            {"if", Keyword::IF},
-            {"else", Keyword::ELSE},
-            {"(", Keyword::OPEN_BRACKET},
-            {")", Keyword::CLOSE_BRACKET, },
-            {"{", Keyword::OPEN_CURLY_BRACE},
-            {"}", Keyword::CLOSE_CURLY_BRACE},
-            {";", Keyword::SEMICOLON},
-            {"assign", Keyword::ASSIGN},
-            {"read", Keyword::READ},
-            {"call", Keyword::CALL},
-            {"print", Keyword::PRINT},
-            {"+", Keyword::ADD},
-            {"-", Keyword::SUBTRACT},
-            {"*", Keyword::MULTIPLY},
-            {"/", Keyword::DIVIDE},
-            {"%", Keyword::MODULO},
-            {">", Keyword::GT},
-            {">=", Keyword::GTE},
-            {"<", Keyword::LT},
-            {"<=", Keyword::LTE},
-            {"==", Keyword::EQUAL},
-            {"!=", Keyword::NOT_EQUAL},
-            {"!", Keyword::NOT},
-            {"&&", Keyword::AND},
-            {"||",Keyword::OR}
+    class TokenMap {
+    private:
+        std::pair<std::map<Keyword, std::string>, std::map<std::string, Keyword>> doubleKeyedTokenMap;
+    public:
+        TokenMap();
+        void setMap(std::map<Keyword, std::string> mapToString, std::map<std::string, Keyword> mapToKeyword);
+        Keyword getTokenByString(std::string token);
+        std::string getStringByToken(Keyword keyword);
     };
 }
