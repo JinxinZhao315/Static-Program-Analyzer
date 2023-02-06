@@ -7,6 +7,8 @@ PKB::PKB() {
 	constTable = ConstantTable();
 	followsTable = FollowsTable();
 	followsStarTable = FollowsStarTable();
+	//parentTable = AbstractionTable<int, int>();
+	//parentStarTable = AbstractionTable<int, int>();
 }
 
 void PKB::addProc(std::string procName) {

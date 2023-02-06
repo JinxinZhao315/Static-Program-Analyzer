@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Tokens.h"
 #include "ProcedureTable.h"
 #include "StatementTable.h"
 #include "VariableTable.h"
 #include "ConstantTable.h"
 #include "FollowsTable.h"
 #include "FollowsStarTable.h"
-#include "Tokens.h"
 
 using namespace std;
 
@@ -25,6 +25,10 @@ public:
 	void addFollows(int leaderNum, int followerNum);
 
 	void addFollowsStar(int leaderNum, std::set<int> followerNums);
+
+	//void addParent(int parentNum, int childNum);
+
+	//void addParentStar(int parentNum, std::set<int> childrenNums);
 
 	std::set<std::string> getAllProcNames();
 
@@ -57,4 +61,6 @@ private:
 	ConstantTable constTable;
 	FollowsTable followsTable;
 	FollowsStarTable followsStarTable;
+	//AbstractionTable<int, int> parentTable;
+	//AbstractionTable<int, int> parentStarTable;
 };

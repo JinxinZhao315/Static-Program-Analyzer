@@ -30,18 +30,6 @@ void FollowsStarTable::addLeaders(int leader, set<int> followers) {
 	}
 }
 
-/*
-void FollowsStarTable::addLeaders(int follower, std::set<int> leaders) {
-	auto pair = followerToLeadersMap.find(follower);
-	if (pair == followerToLeadersMap.end()) {
-		followerToLeadersMap[follower] = leaders;
-	}
-	else {
-		pair->second.insert(leaders.begin(), leaders.end());
-	}
-}
-*/
-
 std::set<int> FollowsStarTable::getFollowers(int leader) {
 	auto pair = leaderToFollowersMap.find(leader);
 	if (pair == leaderToFollowersMap.end()) {

@@ -10,81 +10,112 @@ class AbstractionTable {
 public:
 	inline AbstractionTable() = default;
 
-	inline void addAbstraction(L lhs, R rhs) {
-		addRhs(lhs, rhs);
-		addLhs(lhs, rhs);
+	inline void addOneToOneAbstraction(L left, R right) {
+		addLeftToOneRight(left, right);
+		addRightToOneLeft(left, right);
 	}
 
-	inline std::set<R> getRhsAbstraction(L lhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
-			return {};
-		}
-		return pair->second;
+	inline void addOneToManyAbstraction(L left, std::set<R> right) {
+		addLeftToManyRight(left, right);
+		addRightToManyLeft(left, right);
 	}
 
-	inline std::set<L> getLhsAbstraction(R rhs) {
-		auto pair = rhsToLhsMap.find(rhs);
-		if (pair == rhsToLhsMap.end()) {
-			return {};
-		}
-		return pair->second;
-	}
-
-	inline R getFirstRhsAbstraction(L lhs) {
-		auto pair = lhsToFirstRhsMap.find(lhs);
-		if (pair == lhsToFirstRhsMap.end()) {
+	inline R getOneRight(L left) {
+		auto pair = leftToOneRightMap.find(left);
+		if (pair == leftToOneRightMap.end()) {
 			return nullptr;
 		}
 		return pair->second;
 	}
 
-	inline L getFirstLhsAbstraction(R rhs) {
-		auto pair = rhsToFirstLhsMap.find(rhs);
-		if (pair == rhsToFirstLhsMap.end()) {
+	inline L getOneLeft(R right) {
+		auto pair = rightToOneLeftMap.find(right);
+		if (pair == rightToOneLeftMap.end()) {
 			return nullptr;
 		}
 		return pair->second;
 	}
 
-	inline bool inRelationship(L lhs, R rhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
+	inline std::set<R> getManyRight(L left) {
+		auto pair = leftToManyRightMap.find(left);
+		if (pair == leftToManyRightMap.end()) {
+			return {};
+		}
+		return pair->second;
+	}
+
+	inline std::set<L> getManyLeft(R right) {
+		auto pair = rightToManyLeftMap.find(right);
+		if (pair == rightToManyLeftMap.end()) {
+			return {};
+		}
+		return pair->second;
+	}
+
+	inline bool inOneToOneRelationship(L left, R right) {
+		auto pair = leftToOneRightMap.find(left);
+		if (pair == leftToOneRightMap.end()) {
 			return false;
 		}
-		auto rhsAbstraction = pair->second;
-		auto rhsAbstractionValue = rhsAbstraction.find(rhs);
-		if (rhsAbstractionValue == rhsAbstraction.end()) {
+		auto rightOne = pair->second;
+		if (rightOne == right) {
+			return true;
+		}
+		return false;
+	}
+
+	inline bool inOneToManyRelationship(L left, R right) {
+		auto pair = leftToManyRightMap.find(left);
+		if (pair == leftToManyRightMap.end()) {
+			return false;
+		}
+		auto rightSide = pair->second;
+		auto rightOne = rightSide.find(right);
+		if (rightOne == rightSide.end()) {
 			return false;
 		}
 		return true;
 	}
 
 private:
-	std::map<L, std::set<R>> lhsToRhsMap;
-	std::map<R, std::set<L>> rhsToLhsMap;
-	std::map<L, R> lhsToFirstRhsMap;
-	std::map<R, L> rhsToFirstLhsMap;
-
-	inline void addRhs(L lhs, R rhs) {
-		auto pair = lhsToRhsMap.find(lhs);
-		if (pair == lhsToRhsMap.end()) {
-			lhsToFirstRhsMap[lhs] = rhs;
-			lhsToRhsMap[lhs] = { rhs };
-		}
-		else {
-			pair->second.insert(rhs);
+	inline void addLeftToOneRight(L left, R right) {
+		auto pair = leftToOneRightMap.find(left);
+		if (pair == leftToOneRightMap.end()) {
+			leftToOneRightMap[left] = right;
 		}
 	}
 
-	inline void addLhs(L lhs, R rhs) {
-		auto pair = rhsToLhsMap.find(rhs);
-		if (pair == rhsToLhsMap.end()) {
-			rhsToFirstLhsMap[rhs] = lhs;
-			rhsToLhsMap[rhs] = { lhs };
-		}
-		else {
-			pair->second.insert(rhs);
+	inline void addRightToOneLeft(L left, R right) {
+		auto pair = rightToOneLeftMap.find(right);
+		if (pair == rightToOneLeftMap.end()) {
+			rightToOneLeftMap[right] = left;
 		}
 	}
+
+	inline void addLeftToManyRight(L left, std::set<R> right) {
+		auto pair = leftToManyRightMap.find(left);
+		if (pair == leftToManyRightMap.end()) {
+			leftToManyRightMap[left] = right;
+		}
+		else {
+			pair->second.insert(right.begin(), right.end());
+		}
+	}
+
+	inline void addRightToManyLeft(L left, std::set<R> right) {
+		for (R r : right) {
+			auto pair = rightToManyLeftMap.find(r);
+			if (pair == rightToManyLeftMap.end()) {
+				rightToManyLeftMap[r] = { left };
+			}
+			else {
+				pair->second.insert(left);
+			}
+		}
+	}
+	
+	std::map<L, R> leftToOneRightMap;
+	std::map<R, L> rightToOneLeftMap;
+	std::map<L, std::set<R>> leftToManyRightMap;
+	std::map<R, std::set<L>> rightToManyLeftMap;	
 };

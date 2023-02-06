@@ -21,6 +21,7 @@ public:
 	void addLeader(int leader, int follower);
 
 	bool isEmpty();
+
 private:
 	std::map<int, int> leaderToFollowerMap;
 	std::map<int, int> followerToLeaderMap;
