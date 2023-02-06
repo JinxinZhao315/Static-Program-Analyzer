@@ -17,5 +17,4 @@ public:
 
 private:
 	std::set<std::string > constantTable;
-	size_t tableSize = 0;
 };

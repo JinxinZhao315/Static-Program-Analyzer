@@ -8,7 +8,9 @@
 #include "relationship_handlers/Result.h"
 #include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/FollowsStarHandler.h"
+#include "relationship_handlers/FollowsHandler.h"
+#include "Tokeniser.h"
+#include "PQLDriver.h"
 
 #include "catch.hpp"
 
@@ -31,4 +33,34 @@ TEST_CASE("PQLEvaluator test 1") {
     }
 }
 
+TEST_CASE("Overall test") {
+    // Enter source of SIMPLE code
+    string filename = "Team15/Tests15/Sample_source.txt";
+    ifstream file(filename);
 
+    if (!file.is_open()) {
+        cout << "Failed to open file: " << filename << endl;
+
+    }
+
+    // Tokeniser process
+    map<int, vector<string>> parsed = processFile(file);
+    map<int, int> nesting_level = generateNestingLevel(parsed);
+    map<int, int> follows = generateFollowsRS(nesting_level);
+    map<int, set<int>> follows_star = generateFollowsStarRS(nesting_level);
+    map<string, vector<vector<string>>> assigns = generateAssignmentRS(parsed);
+
+    file.close();
+
+    // TODO: add PKB calls
+    PKB pkb = PKB();
+    for (auto const& [key, value] : follows) {
+        pkb.addFollows(key, value);
+    }
+    for (auto const& [key, value] : follows_star) {
+        pkb.addFollowsStar(key, value);
+    }
+    // TODO: add PQL calls
+    string queryStr = "stmt s; Select s such that Follows(_,_)";
+    PQLDriver pqlDriver = PQLDriver(pkb);
+}

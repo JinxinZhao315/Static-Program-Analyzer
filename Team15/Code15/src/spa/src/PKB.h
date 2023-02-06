@@ -1,7 +1,9 @@
 #pragma once
 
-#include "EntityStorage.h"
+#include "ProcedureTable.h"
 #include "StatementTable.h"
+#include "VariableTable.h"
+#include "ConstantTable.h"
 #include "FollowsTable.h"
 #include "FollowsStarTable.h"
 #include "Tokens.h"
@@ -10,6 +12,8 @@ using namespace std;
 
 class PKB {
 public:
+	PKB();
+
 	void addProc(std::string procName);
 
 	void addStmt(Tokens::Keyword stmtType, int stmtNum);
@@ -26,7 +30,7 @@ public:
 
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(std::string stmtType);
+	std::set<int> getAllStmtNumsByType(Tokens::Keyword stmtType);
 
 	std::set<std::string> getAllVarNames();
 
@@ -47,16 +51,10 @@ public:
 	bool isFollowsEmpty();
 
 private:
-	EntityStorage<std::string> procTable;
+	ProcedureTable procTable;
 	StatementTable stmtTable;
-	StatementTable readTable;
-	StatementTable printTable;
-	StatementTable assignTable;
-	StatementTable callTable;
-	StatementTable whileTable;
-	StatementTable ifTable;
-	EntityStorage<std::string> varTable;
-	EntityStorage<std::string> constTable;
+	VariableTable varTable;
+	ConstantTable constTable;
 	FollowsTable followsTable;
 	FollowsStarTable followsStarTable;
 };

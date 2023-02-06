@@ -17,5 +17,4 @@ public:
 
 private:
 	std::set<std::string> entityTable;
-	size_t tableSize = 0;
 };
