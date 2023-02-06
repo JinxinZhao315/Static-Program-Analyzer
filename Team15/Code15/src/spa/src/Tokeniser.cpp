@@ -184,8 +184,8 @@ map<int, int> Tokeniser::generateFollowsRS(map<int, int> nesting_level) {
         }
     }
     // print out follows relationship
+    cout << "Follows relationship" << endl;
     for (const auto& [key, value] : follows) {
-        cout << "Follows relationship" << endl;
         cout << key << ": " << value << endl;
     }
 

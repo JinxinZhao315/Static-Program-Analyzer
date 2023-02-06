@@ -65,11 +65,12 @@ TEST_CASE("PQLEvaluator test 1") {
     } catch (exception e) {
         std::cout<<"exception occured!";
     }
+   
 }
 
 TEST_CASE("Overall test") {
     // Enter source of SIMPLE code
-    string filename = "../../../../Tests15/Sample_source.txt";
+    string filename = "../../../../Tests15/Sample_source2.txt";
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -85,7 +86,6 @@ TEST_CASE("Overall test") {
     map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
     map<int, set<int>> follows_star = tokeniser->generateFollowsStarRS(nesting_level);
     map<string, vector<vector<string>>> assigns = tokeniser->generateAssignmentRS(parsed);
-
     std::set<std::string> *procedures = tokeniser->getProcedures();
     std::vector<std::string> *constants = tokeniser->getConstants();
     std::set<std::string> *variables = tokeniser->getVariables();
@@ -116,6 +116,10 @@ TEST_CASE("Overall test") {
         pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
-    string queryStr = "stmt s; Select s such that Follows(_,_)";
+    string queryStr = "stmt s; Select s";
     PQLDriver pqlDriver = PQLDriver(pkb);
+    string result = pqlDriver.processPQL(queryStr);
+    cout << "result:" << result << endl;
+    //assert(result == "1,2");
 }
+
