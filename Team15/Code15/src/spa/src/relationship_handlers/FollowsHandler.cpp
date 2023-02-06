@@ -11,21 +11,21 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
     std::set<int> ret;
     if (isStar) {
         if (type == GET_LEADER) {
-            int leader; // = pkb.getFollowsLeaderNum(stoi(arg))
+            int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
             if (leader != -1) {
                 ret.insert(leader);
             }
         } else { //if (type == GET_FOLLOWER)
-            int follower;// = pkb.getFollowsFollowerNum(stoi(arg))
+            int follower = pkb.getFollowsFollowerNum(stoi(arg));//
             if (follower != -1) {
                 ret.insert(follower);
             }
         }
     } else {
         if (type == GET_LEADER) {
-            // ret = pkb.getFollowsStarLeaderNums(stoi(arg));
+            ret = pkb.getFollowsStarLeaderNums(stoi(arg));
         } else { //  if (type == GET_FOLLOWER)
-            // ret = pkb.getFollowsStarFollowerNums(stoi(arg))
+            ret = pkb.getFollowsStarFollowerNums(stoi(arg));
         }
     }
     return ret;
@@ -34,9 +34,9 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
 bool FollowsHandler:: getIsFollowsFromPKB(bool isStar, string leftArg, string rightArg) {
     bool ret;
     if (isStar) {
-        // ret =pkb.areInFollowsStarRelationship(leftArg, rightArg)
+        ret =pkb.areInFollowsStarRelationship(stoi(leftArg), stoi(rightArg));
     } else {
-        // ret =pkb.areInFollowsRelationship(leftArg, rightArg)
+        ret =pkb.areInFollowsRelationship(stoi(leftArg), stoi(rightArg));
     }
     return ret;
 }
@@ -50,7 +50,7 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
 
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
-        bool isFollowEmpty; // = pkb.isFollowEmpty()
+        bool isFollowEmpty = pkb.isFollowsEmpty(); //
         if (isFollowEmpty) {
             result.setResultTrue(false);
             return result;

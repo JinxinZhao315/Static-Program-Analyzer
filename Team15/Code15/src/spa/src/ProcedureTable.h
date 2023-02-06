@@ -17,5 +17,4 @@ public:
 
 private:
 	std::set<std::string> procedureTable;
-	size_t tableSize = 0;
 };

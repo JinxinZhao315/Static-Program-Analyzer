@@ -2,83 +2,58 @@
 
 using namespace std;
 
+PKB::PKB() {
+	procTable = ProcedureTable();
+	stmtTable = StatementTable();
+	varTable = VariableTable();
+	constTable = ConstantTable();
+	followsTable = FollowsTable();
+	followsStarTable = FollowsStarTable();
+}
+
 void PKB::addProc(std::string procName) {
-	return procTable.addEntity(procName);
+	procTable.addProcedureName(procName);
 }
 
 void PKB::addStmt(Tokens::Keyword stmtType, int stmtNum) {
-	if (stmtType == Tokens::Keyword::READ) {
-		readTable.addStatementNumber(stmtNum);
-	}
-	else if (stmtType == Tokens::Keyword::PRINT) {
-		printTable.addStatementNumber(stmtNum);
-	}
-	else if (stmtType == Tokens::Keyword::ASSIGN) {
-		assignTable.addStatementNumber(stmtNum);
-	}
-	else if (stmtType == Tokens::Keyword::CALL) {
-		callTable.addStatementNumber(stmtNum);
-	}
-	else if (stmtType == Tokens::Keyword::WHILE) {
-		whileTable.addStatementNumber(stmtNum);
-	}
-	else if (stmtType == Tokens::Keyword::IF) {
-		ifTable.addStatementNumber(stmtNum);
-	}
-	return stmtTable.addStatementNumber(stmtNum);
+	stmtTable.addStatementNumber(stmtNum);
+	stmtTable.addStatementNumberByType(stmtNum, stmtType);
 }
 
 void PKB::addVar(std::string varName) {
-	return varTable.addEntity(varName);
+	varTable.addVariableName(varName);
 }
 
 void PKB::addConst(std::string constVal) {
-	return constTable.addEntity(constVal);
+	constTable.addConstantValue(constVal);
 }
 
 void PKB::addFollows(int leaderNum, int followerNum) {
-	return followsTable.addFollows(leaderNum, followerNum);
+	followsTable.addFollows(leaderNum, followerNum);
 }
 
 void PKB::addFollowsStar(int leaderNum, std::set<int> followerNums) {
-	return followsStarTable.addFollowsStar(leaderNum, followerNums);
+	followsStarTable.addFollowsStar(leaderNum, followerNums);
 }
 
 std::set<std::string> PKB::getAllProcNames() {
-	return procTable.getAllEntities();
+	return procTable.getAllProcedureNames();
 }
 
 std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
-	if (stmtType == "read") {
-		return readTable.getAllStatementNumbers();
-	}
-	else if (stmtType == "print") {
-		return printTable.getAllStatementNumbers();
-	}
-	else if (stmtType == "assign") {
-		return assignTable.getAllStatementNumbers();
-	}
-	else if (stmtType == "call") {
-		return callTable.getAllStatementNumbers();
-	}
-	else if (stmtType == "while") {
-		return whileTable.getAllStatementNumbers();
-	}
-	else {
-		return ifTable.getAllStatementNumbers();
-	}
+std::set<int> PKB::getAllStmtNumsByType(Tokens::Keyword stmtType) {
+	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
 std::set<std::string> PKB::getAllVarNames() {
-	return varTable.getAllEntities();
+	return varTable.getAllVariableNames();
 }
 
 std::set<std::string> PKB::getAllConstVals() {
-	return constTable.getAllEntities();
+	return constTable.getAllConstantValues();
 }
 
 int PKB::getFollowsLeaderNum(int followerNum) {
