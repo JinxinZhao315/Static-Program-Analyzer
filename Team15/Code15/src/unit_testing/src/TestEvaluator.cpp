@@ -16,6 +16,40 @@
 
 using namespace std;
 
+TEST_CASE("Tokeniser test 1") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { }", 1);
+    for(string c : *tokeniser->getProcedures()) {
+       cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 2") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { }", 1);
+    for(string c : *tokeniser->getVariables()) {
+        cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 3") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { }", 1);
+    for(string c : *tokeniser->getConstants()) {
+        cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 4") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { }", 1);
+    for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
+        for(int i : statements) {
+            cout << i << endl;
+        }
+    }
+}
+
 TEST_CASE("PQLEvaluator test 1") {
     try {
         PQLPreprocessor preprocessor;
