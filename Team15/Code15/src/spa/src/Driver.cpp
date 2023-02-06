@@ -23,6 +23,6 @@ string mainDriver(int argc, char* argv[]) {
 
     // TODO: add PQL calls
     string queryStr = "stmt s; Select s such that Follows(_,_)";
-    PQLDriver pqlDriver = PQLDriver();
+    //PQLDriver pqlDriver = PQLDriver();
     return "";
 }

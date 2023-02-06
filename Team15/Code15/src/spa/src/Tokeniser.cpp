@@ -5,6 +5,7 @@
 #include <map>
 #include <fstream>
 #include <set>
+#include <stack>
 
 using namespace std;
 using namespace Tokens;
@@ -302,6 +303,7 @@ map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>
         }
         cout << "]" << endl;
     }
+    return assigns;
 }
 
 int main(int argc, char* argv[]) {
