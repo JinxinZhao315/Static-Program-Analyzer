@@ -11,7 +11,8 @@ Tokens::Keyword TokenMap::getTokenByString(std::string token) {
 }
 
 bool TokenMap::findToken(std::string s) {
-    if(getTokenByString(s)) {
+    Tokens::Keyword token = getTokenByString(s);
+    if(token) {
         return true;
     } else {
         return false;

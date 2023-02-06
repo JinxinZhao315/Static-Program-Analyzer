@@ -3,16 +3,18 @@
 using namespace std;
 using namespace Tokens;
 
-
 //map<int, int> generateFollowsRS(map<int, int> nesting_level);
 //map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
 //map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>> parsed);
 //vector<string> convertToPostfix(vector<string> tokens, int startIndex);
 
-set<string> procedures;
-vector<string> constants;
-set<string> variables;
-map<Tokens::Keyword, vector<int>> statements;
+Tokeniser::Tokeniser() {
+    this->tokenMap = new TokenMap();
+    this->procedures = new set<string>();
+    this->variables = new set<string>();
+    this->constants = new vector<string>();
+    this->statements = new map<Tokens::Keyword, vector<int>>();
+}
 
 bool Tokeniser::emptyToken(std::string token) {
     if(token == "" || token == " ") {
@@ -39,39 +41,75 @@ bool Tokeniser::isNumeric(const std::string token) {
 }
 
 bool Tokeniser::isStatement(std::string token) {
-    return token == "read"
-        || token == "print"
-        || token == "call"
-        || token == "while"
-        || token == "if"
-        || token == "assign";
+    return token == this->tokenMap->getStringByToken(Tokens::Keyword::READ)
+        || token == this->tokenMap->getStringByToken(Tokens::Keyword::PRINT)
+        || token == this->tokenMap->getStringByToken(Tokens::Keyword::CALL)
+        || token == this->tokenMap->getStringByToken(Tokens::Keyword::WHILE)
+        || token == this->tokenMap->getStringByToken(Tokens::Keyword::IF);
 }
 
 Tokens::Keyword Tokeniser::getStatementType(std::string token) {
-    return tokenMap.getTokenByString(token);
+    return tokenMap->getTokenByString(token);
 }
 
 void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
     for(int i = 0; i < tokens.size(); ++i) {
         if(tokens[i] == "procedure") {
-            procedures.insert(tokens[i+1]);
+            this->procedures->insert(tokens[i+1]);
         } else if (isStatement(tokens[i])) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
-            statements[statementType].push_back(lineNumber);
+            this->statements->at(statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
-            constants.push_back(tokens[i]);
+            this->constants->push_back(tokens[i]);
         } else if (i > 0 && tokens[i-1] == "=") {
-            variables.insert(tokens[i]);
+            this->variables->insert(tokens[i]);
         }
     }
 }
 
+//std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
+//    vector<std::string> tokens;
+//    string currentToken = "";
+//    for(char c : line) {
+//        string s(1, c);
+//        if(this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::NOT
+//            || this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
+//            char* cp = &c;
+//            char* nextCp = cp++;
+//            char nextC = *nextCp;
+//            if(nextC == '=') {
+//                currentToken += c + nextC;
+//                cp = nextCp;
+//            }
+//        } else if(tokenMap->findToken(s)) {
+//            tokens = pushToken(tokens, currentToken);
+//            tokens = pushToken(tokens, s);
+//            currentToken = "";
+//        } else if (c == ' ') {
+//            tokens = pushToken(tokens, currentToken);
+//            currentToken = "";
+//        } else {
+//            currentToken += c;
+//        }
+//    }
+//    extract(tokens, lineNumber);
+//    return tokens;
+//}
+
 std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
     string currentToken = "";
-    for(char c : line) {
-        string s(1, c);
-        if(tokenMap.findToken(s)) {
+    for(int i; i < line.length(); i++) {
+        char c = line[i];
+        string s(1, line[i]);
+        if(this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::NOT
+            || this->tokenMap->getTokenByString(currentToken) == Tokens::Keyword::ASSIGN) {
+            char nextC = line[i+1];
+            if(nextC == '=') {
+                currentToken += nextC;
+                i++;
+            }
+        } else if(tokenMap->findToken(s)) {
             tokens = pushToken(tokens, currentToken);
             tokens = pushToken(tokens, s);
             currentToken = "";
@@ -226,7 +264,7 @@ vector<string> Tokeniser::convertToPostfix(vector<string> tokens, int startIndex
     stack<string> s;
     for (int i = startIndex; i < tokens.size(); i++) {
         string token = tokens[i];
-        if (variables.count(token)) {
+        if (variables->count(token)) {
             result.push_back(token);
         } else if (isOperator(tokens[i])) {
             while (!s.empty() && precedence(s.top()) >= precedence(token)) {
@@ -310,4 +348,5 @@ void Tokeniser::driver() {
 
 int Tokeniser::main() {
     driver();
+    return 0;
 }

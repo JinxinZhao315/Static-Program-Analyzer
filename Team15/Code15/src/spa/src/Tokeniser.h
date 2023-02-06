@@ -13,6 +13,7 @@ using namespace std;
 
 class Tokeniser {
 public:
+    Tokeniser();
     void driver();
     map<int, vector<string>> processFile(std::ifstream &file);
     map<int, int> generateFollowsRS(map<int, int> nesting_level);
@@ -34,6 +35,9 @@ public:
     int main();
 
 private:
-    TokenMap tokenMap;
-
+    TokenMap *tokenMap;
+    set<string> *procedures;
+    vector<string> *constants;
+    set<string> *variables;
+    map<Tokens::Keyword, vector<int>> *statements;
 };
