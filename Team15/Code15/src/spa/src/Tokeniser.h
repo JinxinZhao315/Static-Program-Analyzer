@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <stack>
 #include <string>
 #include <stdio.h>
 #include "Tokens.h"
