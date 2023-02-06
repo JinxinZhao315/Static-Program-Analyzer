@@ -35,7 +35,7 @@ TEST_CASE("PQLEvaluator test 1") {
 
 TEST_CASE("Overall test") {
     // Enter source of SIMPLE code
-    string filename = "../../../../Tests15/Sample_source.txt";
+    string filename = "../../../../Tests15/Sample_source2.txt";
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -82,6 +82,9 @@ TEST_CASE("Overall test") {
         pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
-    string queryStr = "stmt s; Select s such that Follows(_,_)";
+    string queryStr = "stmt s; Select s";
     PQLDriver pqlDriver = PQLDriver(pkb);
+    string result = pqlDriver.processPQL(queryStr);
+    cout << "result:" << result << endl;
+    //assert(result == "1,2");
 }
