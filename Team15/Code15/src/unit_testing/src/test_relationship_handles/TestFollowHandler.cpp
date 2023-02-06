@@ -32,12 +32,13 @@ TEST_CASE("Follows Handler test 1") {
 
 
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);// update resultTable and return the synonym name
+        multimap<string, string> varTable = query.getVarTable();
+        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);// update resultTable and return the synonym name
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         REQUIRE(selectedVarName == "s1");
@@ -74,8 +75,9 @@ TEST_CASE("Follows Handler WildCard Synonym test") {
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
+        multimap<string, string> varTable = query.getVarTable();
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, query.getVarTable());
+        Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
