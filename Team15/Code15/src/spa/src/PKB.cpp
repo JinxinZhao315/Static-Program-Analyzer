@@ -1,7 +1,5 @@
 #include "PKB.h"
 
-using namespace std;
-
 PKB::PKB() {
 	procTable = ProcedureTable();
 	stmtTable = StatementTable();
