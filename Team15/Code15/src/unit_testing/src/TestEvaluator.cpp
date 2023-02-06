@@ -89,6 +89,7 @@ TEST_CASE("Overall test") {
     std::set<std::string> *procedures = tokeniser->getProcedures();
     std::vector<std::string> *constants = tokeniser->getConstants();
     std::set<std::string> *variables = tokeniser->getVariables();
+
     std::map<Tokens::Keyword, std::vector<int>> *statements = tokeniser->getStatements();
 
     file.close();

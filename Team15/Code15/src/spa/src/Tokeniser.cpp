@@ -79,7 +79,10 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
             this->getProcedures()->insert(tokens[i+1]);
         } else if (isStatement(tokens[i])) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
-            this->getStatements()->at(statementType).push_back(lineNumber);
+            if (statements->count(statementType) == 0) {
+                statements->insert({statementType, vector<int>{}});
+            }
+            statements->operator[](statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
             this->getConstants()->push_back(tokens[i]);
         } else if (i > 0 && tokens[i+1] == "=") {
