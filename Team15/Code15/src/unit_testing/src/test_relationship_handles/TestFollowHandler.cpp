@@ -29,7 +29,8 @@ TEST_CASE("Follows Handler test 1") {
 
 
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);// update resultTable and return the synonym name
+        multimap<string, string> varTable = query.getVarTable();
+        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);// update resultTable and return the synonym name
 
         assert(selectedVarName == "r");
         std::set<std::string> result = resultTable.getValueFromKey("r");
