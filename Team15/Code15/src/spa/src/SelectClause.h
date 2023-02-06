@@ -5,17 +5,13 @@
 
 class SelectClause {
 private:
-	std::vector<std::string> selectVector;
+    std::string varName;
 public:
 	SelectClause();
 
-	SelectClause(std::string varName, std::string entity);
+	SelectClause(std::string varName);
 
 	~SelectClause();
 
-	std::pair <std::string, std::string> getVarEntityPair();
-
-	void ModifyFirst(std::string varName);
-
-	void ModifySecond(std::string entity);
+	std::string getVarName();
 };
