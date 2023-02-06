@@ -45,6 +45,7 @@ TEST_CASE("Overall test") {
 
     Tokeniser* tokeniser = new Tokeniser();
     // Tokeniser process
+    
     map<int, vector<string>> parsed = tokeniser->processFile(file);
     map<int, int> nesting_level = tokeniser->generateNestingLevel(parsed);
     map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
@@ -60,11 +61,25 @@ TEST_CASE("Overall test") {
 
     // TODO: add PKB calls
     PKB pkb = PKB();
-    for (auto const& [key, value] : follows) {
-        pkb.addFollows(key, value);
+    for (string p : procedures) {
+        pkb.addProc(p);
     }
-    for (auto const& [key, value] : follows_star) {
-        pkb.addFollowsStar(key, value);
+    for (string c : constants) {
+        pkb.addConst(c);
+    }
+    for (string v : variables) {
+        pkb.addVar(v);
+    }
+    for (auto pair : statements) {
+        for (int s : pair.second) {
+            pkb.addStmt(pair.first, s);
+        }
+    }
+    for (auto pair : follows) {
+        pkb.addFollows(pair.first, pair.second);
+    }
+    for (auto pair : follows_star) {
+        pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
     string queryStr = "stmt s; Select s such that Follows(_,_)";
