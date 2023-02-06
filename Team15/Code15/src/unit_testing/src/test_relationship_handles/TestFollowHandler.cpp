@@ -25,8 +25,8 @@
 //        SelectHandler selectHandler = SelectHandler(pkb);
 //        std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 //
-//        assert(retStr == "None");
-//        
+//       
+//
 //    }
 //    catch (exception e) {
 //        std::cout << "exception occured!";

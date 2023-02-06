@@ -19,7 +19,7 @@ public:
     void resultTableCheckAndAdd(string arg, ResultTable& resultTable, string DeType);
     PKB pkb;
 private:
-    void combine(std::string synonymName, std::set<std::string>synonymSet, ResultTable& resultTable);
+    void combine(std::string synonymName, std::set<std::string>& synonymSet, ResultTable& resultTable);
     template <typename T>
     std::set<T> convertVecToSet(std::vector<T> vec);
 

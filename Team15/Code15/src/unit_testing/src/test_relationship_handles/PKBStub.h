@@ -6,6 +6,8 @@
 
 class PKBStub : public PKB {
 public:
+	PKBStub(std::set<std::string> constSet, std::set<std::string> varNameSet,
+		std::set<int> stmtNumberByType, std::set<int> stmtNums);
 	std::set<std::string> constSet;
 	std::set<std::string> varNameSet;
 	std::set<int> stmtNumberByType;
