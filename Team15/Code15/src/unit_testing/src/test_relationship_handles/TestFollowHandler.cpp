@@ -351,12 +351,10 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
-<<<<<<< HEAD
-        std::set<std::string> expectedResult{ "1" , "23"};
-=======
+
         std::set<std::string> expectedResult{ "1"};
 
->>>>>>> 6ca8a5709465e0c2a21ed4a17e58775f31360937
+
         REQUIRE(result == expectedResult);
 
         std::cout << "select handler successful" << std::endl;
