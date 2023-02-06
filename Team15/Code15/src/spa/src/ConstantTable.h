@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-#include <iostream>
 #include <string>
 #include <set>
 
@@ -13,8 +11,8 @@ public:
 
 	void addConstantValue(std::string constantValue);
 
-	std::set<std::string > getAllConstantValues();
+	std::set<std::string> getAllConstantValues();
 
 private:
-	std::set<std::string > constantTable;
+	std::set<std::string> constantTable;
 };
