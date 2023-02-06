@@ -150,9 +150,8 @@ TEST_CASE("Overall test")
     //    cout << "Stmt Number" << endl;
     //    cout << leader << endl;
 
-    //    string queryStr = "stmt s; Select s";
-    //    PQLDriver pqlDriver = PQLDriver(pkb);
-    //    string result = pqlDriver.processPQL(queryStr);
-    //    cout << "result:" << result << endl;
-    //    //assert(result == "1,2");
+        string queryStr = "constant c; Select c";
+        PQLDriver pqlDriver = PQLDriver(pkb);
+        string result = pqlDriver.processPQL(queryStr);
+        cout << "result:" << result << endl;
 }
