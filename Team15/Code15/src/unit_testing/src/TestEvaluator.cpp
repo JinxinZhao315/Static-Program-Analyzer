@@ -11,13 +11,59 @@
 #include "relationship_handlers/FollowsHandler.h"
 #include "Tokeniser.h"
 #include "PQLDriver.h"
+#include "Tokens.h"
 
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("PQLEvaluator test 1") {
-    try {
+TEST_CASE("Tokeniser test 1")
+{
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { }", 1);
+    for (string c : *tokeniser->getProcedures())
+    {
+        cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 2")
+{
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+    for (string c : *tokeniser->getVariables())
+    {
+        cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 3")
+{
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+    for (string c : *tokeniser->getConstants())
+    {
+        cout << c << endl;
+    }
+}
+
+TEST_CASE("Tokeniser test 4")
+{
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example { x = 1; y = 2; read z;}", 1);
+    for (const auto &[keyword, statements] : *tokeniser->getStatements())
+    {
+        for (int i : statements)
+        {
+            cout << keyword << i << endl;
+        }
+    }
+}
+
+TEST_CASE("PQLEvaluator test 1")
+{
+    try
+    {
         PQLPreprocessor preprocessor;
         PKB pkb;
         PQLEvaluator evaluator = PQLEvaluator(pkb);
@@ -28,11 +74,13 @@ TEST_CASE("PQLEvaluator test 1") {
         string retStr = evaluator.evaluate(query);
         // To pass this set, set isFollowEmpty in FollowsHandler to true
         assert(retStr == "None");
-    } catch (exception e) {
-        std::cout<<"exception occured!";
     }
-   
+    catch (exception e)
+    {
+        std::cout << "exception occured!";
+    }
 }
+
 
 //TEST_CASE("Overall test") {
 //    // Enter source of SIMPLE code
@@ -90,3 +138,4 @@ TEST_CASE("PQLEvaluator test 1") {
 //    //assert(result == "1,2");
 //}
 
+}

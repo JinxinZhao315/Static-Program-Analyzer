@@ -39,6 +39,7 @@ public:
     set<string>* getVariables();
     vector<string>* getConstants();
     map<Tokens::Keyword, vector<int>>* getStatements();
+    TokenMap* getTokenMap();
 
 private:
     TokenMap *tokenMap;
