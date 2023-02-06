@@ -81,7 +81,7 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
             this->statements->at(statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
             this->constants->push_back(tokens[i]);
-        } else if (i > 0 && tokens[i-1] == "=") {
+        } else if (i > 0 && tokens[i+1] == "=") {
             this->variables->insert(tokens[i]);
         }
     }
