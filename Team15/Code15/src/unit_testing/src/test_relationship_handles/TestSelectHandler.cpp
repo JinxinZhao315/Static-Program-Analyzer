@@ -58,9 +58,6 @@ TEST_CASE("Select Handler test 1") {
 
         assert(selectedVarName == "r");
         std::set<std::string> result = resultTable.getValueFromKey("r");
-        for (auto s: result) {
-            std::cout << s << "\n" << endl;
-        }
 
         std::cout << "select handler successful" << std::endl;
     }
