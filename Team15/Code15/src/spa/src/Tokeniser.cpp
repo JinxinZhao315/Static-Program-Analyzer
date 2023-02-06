@@ -12,13 +12,13 @@ using namespace Tokens;
 void generateFollowsRS();
 void generateNestingLevel();
 void generateAssignmentRS();
-void convertToPostfix();
+std::vector<std::string> convertToPostfix(std::vector<std::string> tokens, int startIndex);
 
 map<int, vector<string>> parsed;
 map<int, int> nesting_level;
 map<int, int> follows;
-map<int, vector<int> > follows_star;
-map<string, vector<string>> assigns;
+map<int, set<int>> follows_star;
+map<string, vector<vector<string>>> assigns;
 
 set<string> procedures;
 vector<string> constants;
@@ -153,6 +153,14 @@ void generateNestingLevel() {
     cout << endl;
 }
 
+void addFollowsStarRelationship(int line_number, int follower_line_number) {
+    if (follows_star[line_number].empty()) {
+        set<int> new_set;
+        follows_star[line_number] = new_set;
+    }
+    follows_star[line_number].insert(follower_line_number);
+}
+
 void generateFollowsRS() {
     for (auto outer_it = nesting_level.begin(); outer_it != nesting_level.end(); ++outer_it) {
         for (auto inner_it = next(outer_it); inner_it != nesting_level.end(); ++inner_it) {
@@ -172,13 +180,7 @@ void generateFollowsRS() {
 
             // For follows* rs
             if (is_same_nesting_level) {
-                if (follows_star.count(first_line_number)) {
-                    follows_star[first_line_number].push_back(second_line_number);
-                } else {
-                    vector<int> new_vector;
-                    new_vector.push_back(second_line_number);
-                    follows_star.insert(make_pair(first_line_number, new_vector));
-                }
+                addFollowsStarRelationship(first_line_number, second_line_number);
             }
         }
     }
@@ -190,12 +192,12 @@ void generateFollowsRS() {
 
     // print out follows* relationship
     cout << "Follows* relationship" << endl;
-    for (auto it = follows_star.begin(); it != follows_star.end(); ++it) {
-        cout << it->first << ": [";
-        for (int i : it->second) {
-            cout << i << ", ";
+    for (const auto& [key, value] : follows_star) {
+        cout << key << ": { ";
+        for (const auto& element : value) {
+            cout << element << " ";
         }
-        cout << "]" << endl;
+        cout << "}" << endl;
     }
 }
 int precedence(string c) {
@@ -223,25 +225,25 @@ bool isNumber(string num) {
 }
 
 
-string convertToPostfix(vector<string> tokens, int startIndex) {
-    string result;
+vector<string> convertToPostfix(vector<string> tokens, int startIndex) {
+    vector<string> result;
     stack<string> s;
     for (int i = startIndex; i < tokens.size(); i++) {
         string token = tokens[i];
         if (variables.count(token)) {
-            result += token;
+            result.push_back(token);
         } else if (isOperator(tokens[i])) {
             while (!s.empty() && precedence(s.top()) >= precedence(token)) {
-                result += s.top();
+                result.push_back(s.top());
                 s.pop();
             }
             s.push(tokens[i]);
         } else if (isNumber(token)) {
-            result += token;
+            result.push_back(token);
         }
     }
     while (!s.empty()) {
-        result += s.top();
+        result.push_back(s.top());
         s.pop();
     }
     return result;
@@ -252,7 +254,7 @@ void generateAssignmentRS() {
         vector<string> tokens = it->second;
         string prev;
         string LHS;
-        string RHS;
+        vector<string> RHS;
         int startIndexForRHS;
         bool hasRHS = false;
         for (int i = 0; i < tokens.size(); i++) {
@@ -272,7 +274,7 @@ void generateAssignmentRS() {
         if (assigns.count(LHS)) {
             assigns[LHS].push_back(RHS);
         } else {
-            vector<string> new_vector;
+            vector<vector<string>> new_vector;
             new_vector.push_back(RHS);
             assigns.insert(make_pair(LHS, new_vector));
         }
@@ -280,8 +282,12 @@ void generateAssignmentRS() {
     cout << "Assigns relationship" << endl;
     for (auto it = assigns.begin(); it != assigns.end(); ++it) {
         cout << it->first << ": [";
-        for (string s : it->second) {
-            cout << s << ", ";
+        for (auto match : it->second) {
+            cout << "[";
+            for (auto s: match) {
+                cout << s << ", ";
+            }
+            cout << "]" << endl;
         }
         cout << "]" << endl;
     }

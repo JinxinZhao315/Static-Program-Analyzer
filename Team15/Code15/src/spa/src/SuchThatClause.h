@@ -5,18 +5,19 @@
 
 class SuchThatClause {
 private:
-	std::vector <std::string> suchThatVector;
+    std::string relationship;
+    std::string leftArg;
+    std::string rightArg;
 public:
 	SuchThatClause();
 
-	SuchThatClause(std::string relationship,
-		std::string leftType,  std::string leftArg, std::string rightType, std::string rightArg);
+	SuchThatClause(std::string relationship, std::string leftArg, std::string rightArg);
 
 	std::string getRelationShip();
 
-	std::pair <std::string, std::string> getLeftPair();
+	std::string getLeftArg();
 
-	std::pair <std::string, std::string> getRightPair();
+	std::string getRightArg();
 
 	~SuchThatClause();
 };
