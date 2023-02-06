@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <map>
+
+#include "Tokens.h"
 
 using namespace std;
 
@@ -13,11 +16,20 @@ public:
 
 	void addStatementNumber(int statementNumber);
 
+	void addStatementNumberByType(int statementNumber, Tokens::Keyword statementType);
+
 	std::set<int> getAllStatementNumbers();
 
-	size_t getTableSize();
+	std::set<int> StatementTable::getAllStatementNumbersByType(Tokens::Keyword statementType);
 
 private:
 	std::set<int> statementTable;
-	size_t tableSize = 0;
+	std::map<Tokens::Keyword, set<int>> statementByTypeTable = {
+		{Tokens::Keyword::READ, {}},
+		{Tokens::Keyword::PRINT, {}},
+		{Tokens::Keyword::ASSIGN, {}},
+		{Tokens::Keyword::CALL, {}},
+		{Tokens::Keyword::WHILE, {}},
+		{Tokens::Keyword::IF, {}}
+	};
 };

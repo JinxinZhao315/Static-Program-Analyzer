@@ -4,13 +4,16 @@ StatementTable::StatementTable() = default;
 
 void StatementTable::addStatementNumber(int statementNumber) {
 	statementTable.emplace(statementNumber);
-	tableSize++;
+}
+
+void StatementTable::addStatementNumberByType(int statementNumber, Tokens::Keyword statementType) {
+	statementByTypeTable[statementType].emplace(statementNumber);
 }
 
 std::set<int> StatementTable::getAllStatementNumbers() {
 	return statementTable;
 }
 
-size_t StatementTable::getTableSize() {
-	return tableSize;
+std::set<int> StatementTable::getAllStatementNumbersByType(Tokens::Keyword statementType) {
+	return statementByTypeTable[statementType];
 }
