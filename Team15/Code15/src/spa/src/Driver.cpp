@@ -1,6 +1,6 @@
 #include "Driver.h"
 
-int main(int argc, char* argv[]) {
+string mainDriver(int argc, char* argv[]) {
     // Enter source of SIMPLE code
     string filename = "Team15/Tests15/Sample_source.txt";
     ifstream file(filename);
@@ -22,5 +22,7 @@ int main(int argc, char* argv[]) {
     // TODO: add PKB calls
 
     // TODO: add PQL calls
-    return 0;
+    string queryStr = "stmt s; Select s such that Follows(_,_)";
+    PQLDriver pqlDriver = PQLDriver();
+    return "";
 }
