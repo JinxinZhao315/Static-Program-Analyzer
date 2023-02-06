@@ -9,6 +9,7 @@
 #include "Tokens.h"
 #include "TokenMap.h"
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
