@@ -10,9 +10,7 @@ class StatementTable {
 public:
 	StatementTable();
 
-	void addStatementNumber(int statementNumber);
-
-	void addStatementNumberByType(int statementNumber, Tokens::Keyword statementType);
+	void addStatementNumber(Tokens::Keyword statementType, int statementNumber);
 
 	std::set<int> getAllStatementNumbers();
 

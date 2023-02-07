@@ -2,11 +2,8 @@
 
 StatementTable::StatementTable() = default;
 
-void StatementTable::addStatementNumber(int statementNumber) {
+void StatementTable::addStatementNumber(Tokens::Keyword statementType, int statementNumber) {
 	statementTable.emplace(statementNumber);
-}
-
-void StatementTable::addStatementNumberByType(int statementNumber, Tokens::Keyword statementType) {
 	statementByTypeTable[statementType].emplace(statementNumber);
 }
 
