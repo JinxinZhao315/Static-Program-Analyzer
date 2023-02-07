@@ -29,13 +29,13 @@ TEST_CASE("FollowsHandler (_ , int) test 1") {
         pkb.addStmt(Tokens::READ, 5);
         query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,1)");
 
+        bool isStar = false;
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);
+        multimap<string, string> varTable = query.getVarTable();
+        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        multimap<string, string> varTable = query.getVarTable();
         Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
@@ -73,12 +73,13 @@ TEST_CASE("FollowsHandler (_ , int) test 2") {
         query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,3)");
 
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);
+        multimap<string, string> varTable = query.getVarTable();
+        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
         bool isStar = false;
         SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        multimap<string, string> varTable = query.getVarTable();
+
         Result followResult = followsHandler.evalFollowsStar(isStar, suchThatClause, resultTable, varTable);
         followsHandler.combineResult(resultTable, followResult);
 
