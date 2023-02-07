@@ -59,13 +59,14 @@ TEST_CASE("tokeniser constant extraction successful test") {
 TEST_CASE("tokeniser statement extraction successful test") {
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n read z;\n}", 1);
-    int s;
+    string statementsResults = "";
     for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
+        statementsResults += to_string(keyword) + ":";
         for(int i : statements) {
-            s = keyword + i;
+            statementsResults += to_string(i);
         }
     }
-    assert(s == 11);
+    assert(statementsResults == "9:1110:1");
 }
 
 TEST_CASE("tokeniser variable extraction with double equals successful test") {
