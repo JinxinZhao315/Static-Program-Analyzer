@@ -83,6 +83,9 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
             Tokens::Keyword statementType = getStatementType(tokens[i]);
             if (statements->count(statementType) == 0) {
                 statements->insert({statementType, vector<int>{}});
+                if(statementType == Tokens::Keyword::READ && nextTokenWithinBounds) {
+                    this->getVariables()->insert(tokens[i+1]);
+                }
             }
             statements->operator[](statementType).push_back(lineNumber);
         } else if (isNumeric(tokens[i])) {
@@ -101,7 +104,7 @@ std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
         char c = line[i];
         string currentToken = c + string();
         Tokens::Keyword tokenKeyword = this->getTokenMap()->getTokenByString(currentToken);
-        if (c == ' ') {
+        if (c == ' ' || c == '\n') {
             tokens = this->pushToken(tokens, tokenChunk);
             tokenChunk = "";
         } else if(tokenKeyword == Tokens::Keyword::NOT || tokenKeyword == Tokens::Keyword::ASSIGN) {
