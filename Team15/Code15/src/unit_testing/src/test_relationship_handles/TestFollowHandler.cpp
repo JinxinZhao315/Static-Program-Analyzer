@@ -27,7 +27,7 @@ TEST_CASE("FollowsHandler (_ , int) test 1") {
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,5)");
+        query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,1)");
 
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);
@@ -40,7 +40,13 @@ TEST_CASE("FollowsHandler (_ , int) test 1") {
         followsHandler.combineResult(resultTable, followResult);
 
         std::set<std::string> result = resultTable.getValueFromKey("s1");
-        std::set<std::string> expectedResult{ "1", "2", "3", "4", "5"};
+        if (!followResult.isResultTrue()) {
+            result = {};
+        }
+        for (auto s : result) {
+            std::cout << s << std::endl;
+        }
+        std::set<std::string> expectedResult{};
         REQUIRE(result == expectedResult);
 
         std::cout << "select handler successful" << std::endl;
@@ -64,7 +70,7 @@ TEST_CASE("FollowsHandler (_ , int) test 2") {
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,1)");
+        query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,3)");
 
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), query.getVarTable(), resultTable);
