@@ -11,7 +11,7 @@ Tokeniser::Tokeniser() {
     this->statements = new map<Tokens::Keyword, vector<int>>();
 }
 
-TokenMap* Tokeniser::getTokenMap() {
+TokenMap* Tokeniser::getTokenMap() { //TODO: remove if not needed
     return this->tokenMap;
 }
 
@@ -56,11 +56,11 @@ bool Tokeniser::isNumeric(const std::string token) {
 }
 
 bool Tokeniser::isStatement(std::string token) {
-    return token == this->getTokenMap()->getStringByToken(Tokens::Keyword::READ)
-        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::PRINT)
-        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::CALL)
-        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::WHILE)
-        || token == this->getTokenMap()->getStringByToken(Tokens::Keyword::IF);
+    return token == tokenMap->getStringByToken(Tokens::Keyword::READ)
+        || token == tokenMap->getStringByToken(Tokens::Keyword::PRINT)
+        || token == tokenMap->getStringByToken(Tokens::Keyword::CALL)
+        || token == tokenMap->getStringByToken(Tokens::Keyword::WHILE)
+        || token == tokenMap->getStringByToken(Tokens::Keyword::IF);
 }
 
 Tokens::Keyword Tokeniser::getStatementType(std::string token) {
@@ -94,11 +94,10 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
 std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     vector<std::string> tokens;
     string tokenChunk = "";
-    TokenMap* tokenMap = this->getTokenMap();
     for(int i = 0; i < line.length(); i++) {
         char c = line[i];
         string currentToken = c + string();
-        Tokens::Keyword tokenKeyword = this->getTokenMap()->getTokenByString(currentToken);
+        Tokens::Keyword tokenKeyword = tokenMap->getTokenByString(currentToken);
         if (c == ' ' || c == '\n') {
             tokens = this->pushToken(tokens, tokenChunk);
             tokenChunk = "";
