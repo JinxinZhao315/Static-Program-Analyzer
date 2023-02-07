@@ -23,7 +23,7 @@ public:
 	inline R getOneRight(L left) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
-			return nullptr;
+			return NULL;
 		}
 		return pair->second;
 	}
@@ -31,7 +31,7 @@ public:
 	inline L getOneLeft(R right) {
 		auto pair = rightToOneLeftMap.find(right);
 		if (pair == rightToOneLeftMap.end()) {
-			return nullptr;
+			return NULL;
 		}
 		return pair->second;
 	}
@@ -77,7 +77,16 @@ public:
 		return true;
 	}
 
+	inline bool isEmpty() {
+		return (leftToOneRightMap.empty() || leftToManyRightMap.empty());
+	}
+
 private:
+	std::map<L, R> leftToOneRightMap;
+	std::map<R, L> rightToOneLeftMap;
+	std::map<L, std::set<R>> leftToManyRightMap;
+	std::map<R, std::set<L>> rightToManyLeftMap;
+
 	inline void addLeftToOneRight(L left, R right) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
@@ -112,10 +121,5 @@ private:
 				pair->second.insert(left);
 			}
 		}
-	}
-	
-	std::map<L, R> leftToOneRightMap;
-	std::map<R, L> rightToOneLeftMap;
-	std::map<L, std::set<R>> leftToManyRightMap;
-	std::map<R, std::set<L>> rightToManyLeftMap;	
+	}	
 };
