@@ -3,18 +3,12 @@
 using namespace std;
 using namespace Tokens;
 
-//map<int, int> generateFollowsRS(map<int, int> nesting_level);
-//map<int, set<int>> generateFollowsStarRS(map<int, int> nesting_level);
-//map<string, vector<vector<string>>> generateAssignmentRS(map<int, vector<string>> parsed);
-//vector<string> convertToPostfix(vector<string> tokens, int startIndex);
-
 Tokeniser::Tokeniser() {
     this->tokenMap = new TokenMap();
     this->procedures = new set<string>();
     this->variables = new set<string>();
     this->constants = new vector<string>();
     this->statements = new map<Tokens::Keyword, vector<int>>();
-
 }
 
 TokenMap* Tokeniser::getTokenMap() {
