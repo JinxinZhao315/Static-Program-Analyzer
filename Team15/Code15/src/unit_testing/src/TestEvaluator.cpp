@@ -16,38 +16,86 @@
 
 using namespace std;
 
-TEST_CASE("Tokeniser test 1") {
+TEST_CASE("tokeniser single procedure extraction successful test") {
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example { }", 1);
+    string result = "";
     for(string c : *tokeniser->getProcedures()) {
-       cout << c << endl;
+       result += c;
     }
+    assert(result == "example");
 }
 
-TEST_CASE("Tokeniser test 2") {
+TEST_CASE("tokeniser multiple procedure extraction successful test") {
     Tokeniser *tokeniser = new Tokeniser();
-    vector<string> tokens =  tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
+    tokeniser->tokenise("procedure example1 { }\nprocedure example2 { }", 1);
+    string result = "";
+    for(string c : *tokeniser->getProcedures()) {
+        result += c + ", ";
+    }
+    assert(result == "example1, example2, ");
+}
+
+TEST_CASE("tokeniser variable extraction successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    vector<string> tokens =  tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n }", 1);
+    string result = "";
+    for(string c : *tokeniser->getVariables()) {
+        result += c + ", ";
+    }
+    assert(result == "x, y, ");
+}
+
+TEST_CASE("tokeniser constant extraction successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n }", 1);
+    string result = "";
+    for(string c : *tokeniser->getConstants()) {
+        result += c + ", ";
+    }
+    assert(result == "1, 2, ");
+}
+
+TEST_CASE("tokeniser statement extraction successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n read z;\n}", 1);
+    int s;
+    for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
+        for(int i : statements) {
+            s = keyword + i;
+        }
+    }
+    assert(s == 11);
+}
+
+TEST_CASE("tokeniser variable extraction with double equals successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2;}", 1);
+    string result = "";
+    for(string c : *tokeniser->getVariables()) {
+        result += c;
+    }
+    assert(result == "x");
+}
+
+TEST_CASE("tokeniser variable extraction with read keyword successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2; read z;}", 1);
+    string result = "";
+    for(string c : *tokeniser->getVariables()) {
+        result += c + ", ";
+    }
+    assert(result == "x, z, ");
+}
+
+TEST_CASE("tokeniser variable extraction with double equals and no spaces successful test") {
+    Tokeniser *tokeniser = new Tokeniser();
+    std::vector<std::string> tokens = tokeniser->tokenise(" {y==2;}", 1);
+    string result = "";
     for(string c : *tokeniser->getVariables()) {
         cout << c << endl;
     }
-}
-
-TEST_CASE("Tokeniser test 3") {
-    Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { x = 1; y = 2; }", 1);
-    for(string c : *tokeniser->getConstants()) {
-        cout << c << endl;
-    }
-}
-
-TEST_CASE("Tokeniser test 4") {
-    Tokeniser *tokeniser = new Tokeniser();
-    tokeniser->tokenise("procedure example { x = 1; y = 2; read z;}", 1);
-    for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
-        for(int i : statements) {
-            cout << keyword << i << endl;
-        }
-    }
+    assert(result == "");
 }
 
 TEST_CASE("PQLEvaluator test 1") {
