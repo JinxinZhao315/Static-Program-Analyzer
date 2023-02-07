@@ -8,7 +8,7 @@
 class Utility {
 public:
 	inline static const std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print",
-		"assign", "call", "while", "if" "variable", "constant" };
+		"assign", "call", "while", "if", "variable", "constant" };
 	inline static const std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";
 	inline static const std::string integerFormat = "[1-9][0-9]*";
 	inline static const std::string quotedIdentFormat = "\"[a-zA-Z][a-zA-Z0-9]*\"";

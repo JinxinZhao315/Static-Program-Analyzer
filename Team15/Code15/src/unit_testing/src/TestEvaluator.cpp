@@ -210,10 +210,10 @@ TEST_CASE("Overall test") {
         pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
-    string queryStr = "stmt s; Select s";
+    string queryStr = "variable s; Select s";
     PQLDriver pqlDriver = PQLDriver(pkb);
     string result = pqlDriver.processPQL(queryStr);
-    cout << "result:" << result << endl;
+    cout << "\n\n\nresult:" << result <<"\n\n\n"<< endl;
     //assert(result == "1,2");
 }
 
