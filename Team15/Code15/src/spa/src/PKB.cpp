@@ -62,6 +62,15 @@ void PKB::addUsesProc(std::string procName, std::set<std::string> varNames) {
 	usesProcTable.addOneToManyAbstraction(procName, varNames);
 }
 
+//SP modifies
+void PKB::addModifiesStmt(int stmtNum, std::set<std::string> varNames) {
+	modifiesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
+}
+
+void PKB::addModifiesProc(std::string procName, std::set<std::string> varNames) {
+	modifiesProcTable.addOneToManyAbstraction(procName, varNames);
+}
+
 //QPS procedure
 std::set<std::string> PKB::getAllProcNames() {
 	return procTable.getAllProcedureNames();
@@ -169,4 +178,29 @@ bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
 
 bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
 	return usesProcTable.inOneToManyRelationship(procName, varName);
+}
+
+//QPS modifies
+std::set<std::string> PKB::getModifiesVarsFromStmt(int stmtNum) {
+	return modifiesStmtTable.getManyRight(stmtNum);
+}
+
+std::set<int> PKB::getModifiesStmtsFromVar(std::string varName) {
+	return modifiesStmtTable.getManyLeft(varName);
+}
+
+std::set<std::string> PKB::getModifiesVarsFromProc(std::string procName) {
+	return modifiesProcTable.getManyRight(procName);
+}
+
+std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
+	return modifiesProcTable.getManyLeft(varName);
+}
+
+bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
+	return modifiesStmtTable.inOneToManyRelationship(stmtNum, varName);
+}
+
+bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
+	return modifiesProcTable.inOneToManyRelationship(procName, varName);
 }
