@@ -6,7 +6,7 @@
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "PKBStub.h"
-#include "Tokens.h"
+#include "source_processor/include/parser/Tokens.h"
 
 #include "catch.hpp"
 

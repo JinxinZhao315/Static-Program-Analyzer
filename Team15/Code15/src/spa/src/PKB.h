@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tokens.h"
+#include "source_processor/include/parser/Tokens.h"
 #include "ProcedureTable.h"
 #include "StatementTable.h"
 #include "VariableTable.h"

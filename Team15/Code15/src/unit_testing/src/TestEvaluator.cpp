@@ -5,7 +5,7 @@
 #include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
-#include "Tokeniser.h"
+#include "source_processor/include/parser/Tokeniser.h"
 #include "PQLDriver.h"
 #include "catch.hpp"
 
