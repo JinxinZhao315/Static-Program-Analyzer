@@ -31,7 +31,7 @@ map<Tokens::Keyword, vector<int>>* Tokeniser::getStatements() {
     return this->statements;
 };
 
-bool Tokeniser::emptyToken(std::string token) {
+bool Tokeniser::emptyToken(string token) {
     if(token == "" || token == " ") {
         return true;
     } else {
@@ -39,14 +39,14 @@ bool Tokeniser::emptyToken(std::string token) {
     }
 }
 
-std::vector<std::string> Tokeniser::pushToken(std::vector<std::string> tokens, std::string token) {
+vector<string> Tokeniser::pushToken(vector<string> tokens, string token) {
     if(!emptyToken(token)) {
         tokens.push_back(token);
     }
     return tokens;
 }
 
-bool Tokeniser::isNumeric(const std::string token) {
+bool Tokeniser::isNumeric(const string token) {
     for (char c : token) {
         if (!isdigit(c)) {
             return false;
@@ -55,7 +55,7 @@ bool Tokeniser::isNumeric(const std::string token) {
     return true;
 }
 
-bool Tokeniser::isStatement(std::string token) {
+bool Tokeniser::isStatement(string token) {
     return token == tokenMap->getStringByToken(Tokens::Keyword::READ)
         || token == tokenMap->getStringByToken(Tokens::Keyword::PRINT)
         || token == tokenMap->getStringByToken(Tokens::Keyword::CALL)
@@ -63,11 +63,11 @@ bool Tokeniser::isStatement(std::string token) {
         || token == tokenMap->getStringByToken(Tokens::Keyword::IF);
 }
 
-Tokens::Keyword Tokeniser::getStatementType(std::string token) {
+Tokens::Keyword Tokeniser::getStatementType(string token) {
     return tokenMap->getTokenByString(token);
 }
 
-void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
+void Tokeniser::extract(vector<string> tokens, int lineNumber) {
     for(int i = 0; i < tokens.size(); ++i) {
         bool nextTokenWithinBounds = i < tokens.size() - 1;
         string nextToken = nextTokenWithinBounds ? tokens[i + 1] : "";
@@ -91,8 +91,8 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
     }
 }
 
-std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
-    vector<std::string> tokens;
+vector<string> Tokeniser::tokenise(string line, int lineNumber) {
+    vector<string> tokens;
     string tokenChunk = "";
     for(int i = 0; i < line.length(); i++) {
         char c = line[i];
@@ -129,7 +129,7 @@ std::vector<std::string> Tokeniser::tokenise(std::string line, int lineNumber) {
     return tokens;
 }
 
-map<int, vector<string>> Tokeniser::processFile(std::ifstream &file) {
+map<int, vector<string>> Tokeniser::processFile(ifstream &file) {
     map<int, vector<string>> parsed;
     string curr_line;
     // Parse the SIMPLE program line by line
@@ -173,8 +173,9 @@ map<int, int> Tokeniser::generateNestingLevel(map<int, vector<string>> parsed) {
         nesting_level[line_number] = final_nesting_level;
 
     }
+    cout << "Nesting level";
     for (const auto &pair : nesting_level) {
-        std::cout << "Line number: " << pair.first << ", Nesting level: " << pair.second << std::endl;
+        cout << "Line: " << pair.first << "Level: " << pair.second << endl;
     }
     cout << endl;
     return nesting_level;
