@@ -91,6 +91,7 @@ void Tokeniser::extract(std::vector<std::string> tokens, int lineNumber) {
         } else if (isNumeric(tokens[i])) {
             this->getConstants()->push_back(tokens[i]);
         } else if (i > 0 && nextToken == "=") {
+            statements->operator[](Tokens::Keyword::ASSIGN).push_back(lineNumber);
             this->getVariables()->insert(tokens[i]);
         }
     }
