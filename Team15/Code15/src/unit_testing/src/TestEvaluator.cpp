@@ -213,5 +213,8 @@ TEST_CASE("Overall test") {
     cout << "\n\n\nresult:" << result <<"\n\n\n"<< endl;
     //assert(result == "1,2");
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d54c8469b4beb6a1aede62e86a93f7fa8618a823
