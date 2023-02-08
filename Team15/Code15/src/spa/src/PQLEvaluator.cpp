@@ -30,7 +30,31 @@ std::string PQLEvaluator::evaluate(Query query) {
                break;
            }
            followsHandler.combineResult(resultTable, result);
+       } 
+       if (relationship == "Parent" || relationship == "Parent*") {
+           ParentHandler parentHandler = ParentHandler(pkb);
+           bool isStar = relationship == "Parent" ? false : true;
+           Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, varTable);
+           if (result.isResultTrue() == false) {
+               resultTable.deleteKeyValuePair(selectedVarName);
+               resultTable.insertKeyValuePair(selectedVarName, {});
+               break;
+           }
+           parentHandler.combineResult(resultTable, result);
        }
+       if (relationship == "Modifies") {
+           ModifiesHandler modifiesHandler = ModifiesHandler(pkb);
+         
+           Result result = modifiesHandler.evalModifies(suchThatCl, resultTable, varTable);
+           if (result.isResultTrue() == false) {
+               resultTable.deleteKeyValuePair(selectedVarName);
+               resultTable.insertKeyValuePair(selectedVarName, {});
+               break;
+           }
+           modifiesHandler.combineResult(resultTable, result);
+       }
+
+
     }
 
     //   for (PatternClause patternCl: patternVec) {

@@ -7,7 +7,10 @@
 #include "relationship_handlers/ResultTable.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "relationship_handlers/FollowsHandler.h"
+// TODO: repetitive declaration?
 #include "relationship_handlers/FollowsHandler.h"
+#include "relationship_handlers/ParentHandler.h"
+#include "relationship_handlers/ModifiesHandler.h"
 #include <numeric>
 #include <string>
 #include <set>
