@@ -2,9 +2,16 @@
 
 using namespace std;
 
-void Parser::parseProgram() {
-    ifstream file(fileName);
+void Parser::printParsedProgram() {
+    cout << "Parsed file:" << endl;
+    for (const auto &line : parsedFile) {
+        std::cout << line << endl;
+    }
+    cout << "End of file:" << endl;
 
+}
+void Parser::parseProgram(string fileName) {
+    ifstream file(fileName);
     if (!file.is_open()) {
         cout << "Failed to open file: " << fileName << endl;
     }
@@ -12,14 +19,14 @@ void Parser::parseProgram() {
     string currLine;
     // Parse the SIMPLE program line by line
     while (getline(file, currLine)) {
-
+        Parser::removeWhiteSpaces(currLine);
         vector<string> newLines = separateLines(currLine);
         parsedFile.insert(parsedFile.end(),  newLines.begin(), newLines.end());
     }
     file.close();
 }
 
-void removeWhiteSpaces(string &str) {
+void Parser::removeWhiteSpaces(string &str) {
     str.erase (remove (str.begin(), str.end(), ' '), str.end());
 }
 
@@ -44,14 +51,4 @@ vector<string> Parser::separateLines(string str) {
 
 vector<string> Parser::getParsedProgram() {
     return this->parsedFile;
-}
-
-int main() {
-    Parser parser("Team15/Tests15/Sample_source.txt");
-    parser.parseProgram();
-    vector<string> result = parser.getParsedProgram();
-    for (const auto &line : result) {
-        std::cout << line << endl;
-    }
-    std::cout << std::endl;
 }

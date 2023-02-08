@@ -14,19 +14,12 @@ using namespace std;
 
 class Parser {
 public:
-    Parser(const std::string &fileName)
-            : fileName(fileName) { }
-    void parseProgram();
-    void removeWhiteSpaces(string &str);
+    Parser();
+    void parseProgram(string fileName);
+    void printParsedProgram();
     vector<string> getParsedProgram();
-    vector<string> separateLines(string str);
 private:
-    string fileName;
     vector<string> parsedFile;
+    vector<string> separateLines(string str);
+    void removeWhiteSpaces(string &str);
 };
-
-//    string toString() const {
-//        stringstream ss;
-//        ss << "Parser with fileName: " << fileName;
-//        return ss.str();
-//    }
