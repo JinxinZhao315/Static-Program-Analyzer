@@ -2,16 +2,17 @@
 
 PatternClause::PatternClause() {}
 
-PatternClause::PatternClause(std::string patternType, std::string patternSynonym,
+PatternClause::PatternClause(std::string patternSynonym,
     std::string leftArg, std::string rightArg) {
-    this->patternType = patternType;
     this->patternSynonym = patternSynonym;
     this->leftArg = leftArg;
     this->rightArg = rightArg;
 }
 
-std::pair <std::string, std::string> PatternClause::getPatternPair() {
-    return std::pair <std::string, std::string>(this->patternType, this->patternType);
+
+
+std::string PatternClause::getPatternSynonym() {
+    return this->patternSynonym;
 }
 
 std::string PatternClause::getLeftArg() {

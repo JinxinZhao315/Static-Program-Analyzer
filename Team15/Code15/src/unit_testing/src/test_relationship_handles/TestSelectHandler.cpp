@@ -75,7 +75,7 @@ TEST_CASE("Select Handler test 2") {
         query = preprocessor.preprocess(queryStr);
         SelectClause selectClause = query.getSelectClause();
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         ResultTable resultTable = ResultTable();
 
         //std::set<std::string> constSet{ "10", "11", "12", "13" };

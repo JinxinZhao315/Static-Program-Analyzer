@@ -12,91 +12,110 @@
 
 using namespace std;
 
-TEST_CASE("tokeniser single procedure extraction successful test") {
+TEST_CASE("tokeniser single procedure extraction successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example { }", 1);
     string result = "";
-    for(string c : *tokeniser->getProcedures()) {
-       result += c;
+    for (string c : *tokeniser->getProcedures())
+    {
+        result += c;
     }
     assert(result == "example");
 }
 
-TEST_CASE("tokeniser multiple procedure extraction successful test") {
+TEST_CASE("tokeniser multiple procedure extraction successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example1 { }\nprocedure example2 { }", 1);
     string result = "";
-    for(string c : *tokeniser->getProcedures()) {
+    for (string c : *tokeniser->getProcedures())
+    {
         result += c + ", ";
     }
     assert(result == "example1, example2, ");
 }
 
-TEST_CASE("tokeniser variable extraction successful test") {
+TEST_CASE("tokeniser variable extraction successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
-    vector<string> tokens =  tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n }", 1);
+    vector<string> tokens = tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n }", 1);
     string result = "";
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         result += c + ", ";
     }
     assert(result == "x, y, ");
 }
 
-TEST_CASE("tokeniser constant extraction successful test") {
+TEST_CASE("tokeniser constant extraction successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n }", 1);
     string result = "";
-    for(string c : *tokeniser->getConstants()) {
+    for (string c : *tokeniser->getConstants())
+    {
         result += c + ", ";
     }
     assert(result == "1, 2, ");
 }
 
-TEST_CASE("tokeniser statement extraction successful test") {
+TEST_CASE("tokeniser statement extraction successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     tokeniser->tokenise("procedure example {\n x = 1;\n y = 2;\n read z;\n}", 1);
     string statementsResults = "";
-    for (const auto& [keyword, statements] : *tokeniser->getStatements()) {
+    for (const auto &[keyword, statements] : *tokeniser->getStatements())
+    {
         statementsResults += to_string(keyword) + ":";
-        for(int i : statements) {
+        for (int i : statements)
+        {
             statementsResults += to_string(i);
         }
     }
     assert(statementsResults == "9:1110:1");
 }
 
-TEST_CASE("tokeniser variable extraction with double equals successful test") {
+TEST_CASE("tokeniser variable extraction with double equals successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2;}", 1);
     string result = "";
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         result += c;
     }
     assert(result == "x");
 }
 
-TEST_CASE("tokeniser variable extraction with read keyword successful test") {
+TEST_CASE("tokeniser variable extraction with read keyword successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2; read z;}", 1);
     string result = "";
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         result += c + ", ";
     }
     assert(result == "x, z, ");
 }
 
-TEST_CASE("tokeniser variable extraction with double equals and no spaces successful test") {
+TEST_CASE("tokeniser variable extraction with double equals and no spaces successful test")
+{
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise(" {y==2;}", 1);
     string result = "";
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         cout << c << endl;
     }
     assert(result == "");
 }
 
-TEST_CASE("PQLEvaluator test 1") {
-    try {
+TEST_CASE("PQLEvaluator test 1")
+{
+    try
+    {
         PQLPreprocessor preprocessor;
         PKB pkb;
         PQLEvaluator evaluator = PQLEvaluator(pkb);
@@ -107,41 +126,53 @@ TEST_CASE("PQLEvaluator test 1") {
         string retStr = evaluator.evaluate(query);
         // To pass this set, set isFollowEmpty in FollowsHandler to true
         assert(retStr == "None");
-    } catch (exception e) {
-        std::cout<<"exception occured!";
     }
-   
+    catch (exception e)
+    {
+        std::cout << "exception occured!";
+    }
 }
 
+<<<<<<< HEAD
 TEST_CASE("Tokeniser test 5") {
+=======
+TEST_CASE("Tokeniser test 5")
+{
+>>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2; read z;}", 1);
-    for(string s : tokens) {
+    for (string s : tokens)
+    {
         cout << s << endl;
     }
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         cout << c << endl;
     }
     std::vector<std::string> correct_res;
     correct_res.push_back("x");
-//    assert(tokens == correct_res);
+    //    assert(tokens == correct_res);
 }
 
-TEST_CASE("Tokeniser test 6") {
+TEST_CASE("Tokeniser test 6")
+{
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise(" {y==2;}", 1);
-    for(string s : tokens) {
+    for (string s : tokens)
+    {
         cout << s << endl;
     }
-    for(string c : *tokeniser->getVariables()) {
+    for (string c : *tokeniser->getVariables())
+    {
         cout << c << endl;
     }
     std::vector<std::string> correct_res;
     correct_res.push_back("x");
-//    assert(tokens == correct_res);
+    //    assert(tokens == correct_res);
 }
 
-TEST_CASE("Evaluator test 1") {
+TEST_CASE("Evaluator test 1")
+{
     PKB pkb;
     pkb.addFollows(4, 5);
     pkb.addFollows(2, 3);
@@ -160,17 +191,19 @@ TEST_CASE("Evaluator test 1") {
     REQUIRE(results == "1,2,3,4,5");
 }
 
-TEST_CASE("Overall test") {
+TEST_CASE("Overall test")
+{
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/Sample_source2.txt";
     ifstream file(filename);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cout << "Failed to open file: " << filename << endl;
     }
 
-    Tokeniser* tokeniser = new Tokeniser();
+    Tokeniser *tokeniser = new Tokeniser();
     // Tokeniser process
-    
+
     map<int, vector<string>> parsed = tokeniser->processFile(file);
     map<int, int> nesting_level = tokeniser->generateNestingLevel(parsed);
     map<int, int> follows = tokeniser->generateFollowsRS(nesting_level);
@@ -186,31 +219,42 @@ TEST_CASE("Overall test") {
 
     // TODO: add PKB calls
     PKB pkb = PKB();
-    for (string p : *procedures) {
+    for (string p : *procedures)
+    {
         pkb.addProc(p);
     }
-    for (string c : *constants) {
+    for (string c : *constants)
+    {
         pkb.addConst(c);
     }
-    for (string v : *variables) {
+    for (string v : *variables)
+    {
         pkb.addVar(v);
     }
-    for (auto pair : *statements) {
-        for (int s : pair.second) {
+    for (auto pair : *statements)
+    {
+        for (int s : pair.second)
+        {
             pkb.addStmt(pair.first, s);
         }
     }
-    for (auto pair : follows) {
+    for (auto pair : follows)
+    {
         pkb.addFollows(pair.first, pair.second);
     }
-    for (auto pair : follows_star) {
+    for (auto pair : follows_star)
+    {
         pkb.addFollowsStar(pair.first, pair.second);
     }
     // TODO: add PQL calls
     string queryStr = "variable s; Select s";
     PQLDriver pqlDriver = PQLDriver(pkb);
     string result = pqlDriver.processPQL(queryStr);
-    cout << "\n\n\nresult:" << result <<"\n\n\n"<< endl;
-    //assert(result == "1,2");
+    cout << "\n\n\nresult:" << result << "\n\n\n"
+         << endl;
+    // assert(result == "1,2");
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a

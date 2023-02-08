@@ -9,7 +9,7 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 }
 
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
-	std::multimap<std::string, std::string> varTable = query.getVarTable();
+	std::multimap<std::string, std::string> varTable = query.getSynonymTable();
 	SelectClause selectClause = query.getSelectClause();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();

@@ -1,23 +1,22 @@
-//
-// Created by Jinxin Zhao on 2/2/23.
-//
-
 #include "PQLEvaluator.h"
 
-PQLEvaluator::PQLEvaluator(PKB& pkb) {
+PQLEvaluator::PQLEvaluator(PKB &pkb)
+{
     this->pkb = pkb;
 }
 
-std::string PQLEvaluator::evaluate(Query query) {
+std::string PQLEvaluator::evaluate(Query query)
+{
     ResultTable resultTable = ResultTable();
 
-    std::multimap<std::string, std::string> varTable = query.getVarTable();
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);// update resultTable and return the synonym name
+    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
 
+<<<<<<< HEAD
     for (SuchThatClause suchThatCl: suchThatVec) {
        std::string relationship = suchThatCl.getRelationShip();
        if (relationship == "Follows" || relationship == "Follows*") {
@@ -55,26 +54,48 @@ std::string PQLEvaluator::evaluate(Query query) {
        //}
 
 
+=======
+    for (SuchThatClause suchThatCl : suchThatVec)
+    {
+        std::string relationship = suchThatCl.getRelationShip();
+        if (relationship == "Follows" || relationship == "Follows*")
+        {
+            FollowsHandler followsHandler = FollowsHandler(pkb);
+            bool isStar = relationship == "Follows" ? false : true;
+            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
+            if (result.isResultTrue() == false)
+            {
+                resultTable.deleteKeyValuePair(selectedVarName);
+                resultTable.insertKeyValuePair(selectedVarName, {});
+                break;
+            }
+            followsHandler.combineResult(resultTable, result);
+        }
+>>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a
     }
 
-       for (PatternClause patternCl: patternVec) {
-
-       }
+    for (PatternClause patternCl : patternVec)
+    {
+        PatternHandler patternHandler = PatternHandler(pkb);
+        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+        patternHandler.combineResult(resultTable, result);
+    }
 
     // return the values of the selected synonym in ResultTable
     std::string retStr;
     set<string> retSet = resultTable.getValueFromKey(selectedVarName);
-    if (retSet.empty()) {
+    if (retSet.empty())
+    {
         retStr = "None";
-    } else {
+    }
+    else
+    {
         retStr = std::accumulate(begin(retSet),
                                  end(retSet),
                                  string{},
-                                 [](const string& a, const string &b ) {
-                                     return a.empty() ? b: a + ',' + b; } );
+                                 [](const string &a, const string &b)
+                                 { return a.empty() ? b : a + ',' + b; });
     }
 
-
-   return retStr;
+    return retStr;
 }
-
