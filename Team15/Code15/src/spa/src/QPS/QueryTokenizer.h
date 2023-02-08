@@ -3,8 +3,8 @@
 #include <regex>
 #include <string>
 #include <utility>
-#include "SuchThatClause.h"
-#include "SelectClause.h"
+#include "QPS/SuchThatClause.h"
+#include "QPS/SelectClause.h"
 #include "PatternClause.h"
 #include "PQLSyntaxChecker.h"
 #include "exceptions/PQLSyntaxError.h"

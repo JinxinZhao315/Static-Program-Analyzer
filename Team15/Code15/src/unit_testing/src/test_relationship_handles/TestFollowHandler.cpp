@@ -1,11 +1,11 @@
 #include "PKB.h"
-#include "PQLEvaluator.h"
-#include "PQLPreprocessor.h"
-#include "relationship_handlers/Result.h"
-#include "relationship_handlers/ResultTable.h"
-#include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/SelectHandler.h"
-#include "relationship_handlers/ClauseHandler.h"
+#include "QPS/PQLEvaluator.h"
+#include "QPS/PQLPreprocessor.h"
+#include "QPS/relationship_handlers/Result.h"
+#include "QPS/relationship_handlers/ResultTable.h"
+#include "QPS/relationship_handlers/FollowsHandler.h"
+#include "QPS/relationship_handlers/SelectHandler.h"
+#include "QPS/relationship_handlers/ClauseHandler.h"
 
 #include "PKBStub.h"
 #include <assert.h>

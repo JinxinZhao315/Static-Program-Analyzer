@@ -1,7 +1,7 @@
 #include <map>
-#include "SelectClause.h"
+#include "QPS/SelectClause.h"
 #include "PatternClause.h"
-#include "SuchThatClause.h"
+#include "QPS/SuchThatClause.h"
 #pragma once
 
 class Query
