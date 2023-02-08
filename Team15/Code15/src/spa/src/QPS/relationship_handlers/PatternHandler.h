@@ -10,6 +10,7 @@ class PatternHandler:  public ClauseHandler {
 public:
     PatternHandler(PKB& pkb);
     Result evalPattern(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
+    set<string> findMatchingLines(set<pair<string, int>> allRHS, string strToMatch);
 
 };
 

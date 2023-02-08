@@ -19,26 +19,36 @@ std::string PQLEvaluator::evaluate(Query query)
     for (SuchThatClause suchThatCl : suchThatVec)
     {
         std::string relationship = suchThatCl.getRelationShip();
+        Result result;
         if (relationship == "Follows" || relationship == "Follows*")
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
-            if (result.isResultTrue() == false)
-            {
-                resultTable.deleteKeyValuePair(selectedVarName);
-                resultTable.insertKeyValuePair(selectedVarName, {});
-                break;
-            }
+            result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
             followsHandler.combineResult(resultTable, result);
+        }
+
+        if (result.isResultTrue() == false)
+        {
+            resultTable.deleteKeyValuePair(selectedVarName);
+            resultTable.insertKeyValuePair(selectedVarName, {});
+            break;
         }
     }
 
     for (PatternClause patternCl : patternVec)
     {
+        Result result;
         PatternHandler patternHandler = PatternHandler(pkb);
-        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+        result = patternHandler.evalPattern(patternCl, resultTable, varTable);
         patternHandler.combineResult(resultTable, result);
+
+        if (result.isResultTrue() == false)
+        {
+            resultTable.deleteKeyValuePair(selectedVarName);
+            resultTable.insertKeyValuePair(selectedVarName, {});
+            break;
+        }
     }
 
     // return the values of the selected synonym in ResultTable
