@@ -1,4 +1,4 @@
-#include "../include/tokeniser/Tokeniser.h"
+#include "../../include/tokeniser/Tokeniser.h"
 
 Tokeniser::Tokeniser() { }
 
