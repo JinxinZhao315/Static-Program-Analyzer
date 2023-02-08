@@ -4,7 +4,7 @@
 #include "ClauseHandler.h"
 #include "Result.h"
 #include "ResultTable.h"
-#include "SuchThatClause.h"
+#include "QPS/SuchThatClause.h"
 #include <map>
 #include <string>
 #include <set>

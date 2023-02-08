@@ -1,16 +1,12 @@
-//
-// Created by Jinxin Zhao on 5/2/23.
-//
-
 #include "PKB.h"
-#include "PQLEvaluator.h"
-#include "PQLPreprocessor.h"
-#include "relationship_handlers/Result.h"
-#include "relationship_handlers/ResultTable.h"
-#include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/FollowsHandler.h"
+#include "QPS/PQLEvaluator.h"
+#include "QPS/PQLPreprocessor.h"
+#include "QPS/relationship_handlers/Result.h"
+#include "QPS/relationship_handlers/ResultTable.h"
+#include "QPS/relationship_handlers/FollowsHandler.h"
+#include "QPS/relationship_handlers/FollowsHandler.h"
 #include "Tokeniser.h"
-#include "PQLDriver.h"
+#include "QPS/PQLDriver.h"
 
 #include "catch.hpp"
 
@@ -117,6 +113,7 @@ TEST_CASE("PQLEvaluator test 1") {
    
 }
 
+<<<<<<< HEAD
 TEST_CASE("Tokeniser test 5") {
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2; read z;}", 1);
@@ -218,3 +215,5 @@ TEST_CASE("Overall test") {
     //assert(result == "1,2");
 }
 
+=======
+>>>>>>> eac2749300d94599e06342a54ea04939e55d71cf
