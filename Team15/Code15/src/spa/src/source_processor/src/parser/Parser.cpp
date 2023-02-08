@@ -48,7 +48,6 @@ vector<string> Parser::separateLines(string str) {
     return lines;
 }
 
-
 vector<string> Parser::getParsedProgram() {
     return this->parsedFile;
 }
