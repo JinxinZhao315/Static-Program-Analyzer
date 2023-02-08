@@ -1,4 +1,4 @@
-#include "Query.h"
+#include "QPS/Query.h"
 #include "Utility.h"
 
 #pragma once

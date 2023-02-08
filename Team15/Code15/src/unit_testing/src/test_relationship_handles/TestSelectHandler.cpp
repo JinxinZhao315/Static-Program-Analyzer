@@ -1,10 +1,10 @@
 #include "PKB.h"
-#include "PQLEvaluator.h"
-#include "PQLPreprocessor.h"
-#include "relationship_handlers/Result.h"
-#include "relationship_handlers/ResultTable.h"
-#include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/SelectHandler.h"
+#include "QPS/PQLEvaluator.h"
+#include "QPS/PQLPreprocessor.h"
+#include "QPS/relationship_handlers/Result.h"
+#include "QPS/relationship_handlers/ResultTable.h"
+#include "QPS/relationship_handlers/FollowsHandler.h"
+#include "QPS/relationship_handlers/SelectHandler.h"
 #include "PKBStub.h"
 #include "Tokens.h"
 
@@ -75,7 +75,7 @@ TEST_CASE("Select Handler test 2") {
         query = preprocessor.preprocess(queryStr);
         SelectClause selectClause = query.getSelectClause();
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         ResultTable resultTable = ResultTable();
 
         //std::set<std::string> constSet{ "10", "11", "12", "13" };

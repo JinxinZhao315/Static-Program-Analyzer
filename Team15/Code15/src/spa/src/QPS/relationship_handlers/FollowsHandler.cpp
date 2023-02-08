@@ -1,7 +1,3 @@
-//
-// Created by Jinxin Zhao on 5/2/23.
-//
-
 #include "FollowsHandler.h"
 
 FollowsHandler::FollowsHandler(PKB& pkb) : ClauseHandler(pkb) {
@@ -42,7 +38,7 @@ bool FollowsHandler:: getIsFollowsFromPKB(bool isStar, string leftArg, string ri
     return ret;
 }
 
-Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) {
+Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -79,7 +75,7 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
         }
         // Synon - Wildcard/Int
     } else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
-        string synonDeType = varTable.find(leftArg)->second;
+        string synonDeType = synonymTable.find(leftArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::set<string> currSynonValues = resultTable.getValueFromKey(leftArg);
 
@@ -94,8 +90,8 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
             }
         } else if (rightType == Utility:: INTEGER) {
             for (string currSynonVal: currSynonValues) {
-                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
-                if (isRightFollowStarLeft) {
+                bool isRightFollowLeft = getIsFollowsFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
+                if (isRightFollowLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
@@ -108,7 +104,7 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
 
         // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
-        string synonDeType = varTable.find(rightArg)->second;
+        string synonDeType = synonymTable.find(rightArg)->second;
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::set<string> currSynonValues = resultTable.getValueFromKey(rightArg);
         std::set<string> resultSynonValues;
@@ -122,8 +118,8 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
             }
         } else if (leftType == Utility::INTEGER) {
             for (string currSynonVal: currSynonValues) {
-                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
-                if (isRightFollowStarLeft) {
+                bool isRightFollowLeft = getIsFollowsFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
+                if (isRightFollowLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
@@ -135,8 +131,8 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
         result.setRightArg(rightArg, resultSynonValues);
         // Synon - Synon
     } else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
-        string leftDeType = varTable.find(leftArg)->second;
-        string rightDeType = varTable.find(rightArg)->second;
+        string leftDeType = synonymTable.find(leftArg)->second;
+        string rightDeType = synonymTable.find(rightArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
         resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
         std::set<string> currLeftValues = resultTable.getValueFromKey(leftArg);
@@ -147,11 +143,12 @@ Result FollowsHandler::evalFollowsStar(bool isStar, SuchThatClause suchThatClaus
 
         for (string currLeftVal: currLeftValues) {
             for (string currRightVal: currRightValues) {
-                bool isRightFollowStarLeft = getIsFollowsFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
-                if (isRightFollowStarLeft) {
+                bool isRightFollowLeft = getIsFollowsFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
+                if (isRightFollowLeft) {
                     leftResultValues.insert(currLeftVal);
                     rightResultValues.insert(currRightVal);
                 }
+
             }
         }
 

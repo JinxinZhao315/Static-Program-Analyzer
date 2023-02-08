@@ -1,10 +1,7 @@
-//
-// Created by Jinxin Zhao on 5/2/23.
-//
 #include "ClauseHandler.h"
 #include "Result.h"
 #include "ResultTable.h"
-#include "SuchThatClause.h"
+#include "QPS/SuchThatClause.h"
 #include <map>
 #include <string>
 #include <set>
@@ -15,7 +12,7 @@
 class FollowsHandler : public ClauseHandler{
 public:
     FollowsHandler(PKB& pkb);
-    Result evalFollowsStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
+    Result evalFollows(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
     std::set<int> getFollowsFromPKB(bool isStar, string type, string arg);
     bool getIsFollowsFromPKB(bool isStar, string leftArg, string rightArg);
 private:

@@ -1,10 +1,10 @@
-#include "PQLPreprocessor.h"
-#include "PQLSyntaxChecker.h"
+#include "QPS/PQLPreprocessor.h"
+#include "QPS/PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
 #include <assert.h>
-#include "QueryTokenizer.h"
-#include "PQLSemanticCheck.h"
+#include "QPS/QueryTokenizer.h"
+#include "QPS/PQLSemanticCheck.h"
 
 #include "catch.hpp"
 
@@ -37,7 +37,7 @@ TEST_CASE("PQLPreprocessor test 2") {
     // Tokenize & syntax check
     std::pair<std::string, std::string> declarationClausePair = tokenizer.tokenizeQuery(input);
     varTable = tokenizer.tokenizeDeclaration(declarationClausePair.first);
-    query.addVarTable(varTable);
+    query.addSynonymTable(varTable);
     tokenizer.tokenizeClauses(declarationClausePair.second, selectClause, suchThatClause, patternClause);
     query.addSelectClause(selectClause);
     query.addSuchThatClause(suchThatClause);
@@ -183,7 +183,7 @@ TEST_CASE("PQLPreprocessor query object test 1") {
 
         query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("a")->second;
         assert(type == "assign");
 
@@ -207,14 +207,14 @@ TEST_CASE("PQLPreprocessor query object test 1") {
     }
 }
 
-TEST_CASE("PQLPreprocessor query object test 2") {
+TEST_CASE("PQLPreprocessor query object test follows*(synon,_)") {
     try {
         PQLPreprocessor preprocessor;
         Query query = Query();
 
         query = preprocessor.preprocess("stmt s1; Select s1 such that Follows*(s1,_)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("s1")->second;
         assert(type == "stmt");
         std::cout << "var table correct" << std::endl;
@@ -243,14 +243,14 @@ TEST_CASE("PQLPreprocessor query object test 2") {
     }
 }
 
-TEST_CASE("PQLPreprocessor query object test 3") {
+TEST_CASE("PQLPreprocessor query object test follows(_,_)") {
     try {
         PQLPreprocessor preprocessor;
         Query query = Query();
 
         query = preprocessor.preprocess("stmt s1; Select s1 such that Follows(_,_)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("s1")->second;
         assert(type == "stmt");
         std::cout << "var table correct" << std::endl;
@@ -273,6 +273,41 @@ TEST_CASE("PQLPreprocessor query object test 3") {
             std::cout << "rightArg correct" << std::endl;
         }
         std::cout << "syntax correct" << std::endl;
+    }
+    catch (PQLSyntaxError e) {
+        std::cout << "syntax should be correct, but syntax checker give error!" << std::endl;
+    }
+}
+
+TEST_CASE("PQLPreprocessor query object test with pattern 1") {
+    try {
+        PQLPreprocessor preprocessor;
+        Query query = Query();
+
+        query = preprocessor.preprocess("assign a; Select a pattern a (_,_\"x\"_)");
+
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+        string type = varTable.find("a")->second;
+        REQUIRE(type == "assign");
+        std::cout << "type: " << type << std::endl;
+
+        SelectClause selectClause = query.getSelectClause();
+        string varName = selectClause.getVarName();
+        REQUIRE(varName == "a");
+        std::cout << "varName: " << varName << std::endl;
+
+        vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+        for (PatternClause cl : patternClauseVec) {
+
+            std::cout << "pattern synon: " << cl.getPatternSynonym() << endl;
+            REQUIRE(cl.getPatternSynonym() == "a");
+
+            std::cout << "left arg " << cl.getLeftArg() << endl;
+            REQUIRE(cl.getLeftArg() == "_");
+
+            std::cout << "right arg " << cl.getRightArg() << endl;
+            REQUIRE(cl.getRightArg() == "_\"x\"_");
+        }
     }
     catch (PQLSyntaxError e) {
         std::cout << "syntax should be correct, but syntax checker give error!" << std::endl;
