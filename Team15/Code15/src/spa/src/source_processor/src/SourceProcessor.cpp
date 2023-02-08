@@ -3,14 +3,13 @@
 
 using namespace std;
 
-SourceProcessor::SourceProcessor() {}
-
-void SourceProcessor::print() {
-    cout << "test" << endl;
+SourceProcessor::SourceProcessor() {
+    tokeniser = new Tokeniser();
 }
 
 int main() {
     SourceProcessor *sourceProcessor = new SourceProcessor();
-    sourceProcessor->print();
+    Tokeniser* tokeniser = sourceProcessor->tokeniser;
+    tokeniser->tokenise();
     return 0;
 }

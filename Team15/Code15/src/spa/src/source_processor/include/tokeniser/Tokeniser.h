@@ -1,4 +1,4 @@
-#include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -7,5 +7,5 @@ private:
 
 public:
     Tokeniser();
-
+    void tokenise();
 };
