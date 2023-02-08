@@ -5,12 +5,12 @@
 #include "ClauseHandler.h"
 #include "Result.h"
 #include "ResultTable.h"
-#include "SuchThatClause.h"
+#include "../SuchThatClause.h"
 #include <map>
 #include <string>
 #include <set>
 #ifndef SPA_MODIFIESRHANDLER_H
-#define SPA_MODIFIESARHANDLER_H
+#define SPA_MODIFIESRHANDLER_H
 
 
 class ModifiesHandler : public ClauseHandler {

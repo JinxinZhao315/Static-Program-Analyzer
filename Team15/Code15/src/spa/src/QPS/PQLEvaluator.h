@@ -3,22 +3,12 @@
 //
 #include "QPS/Query.h"
 #include "PKB.h"
-<<<<<<< HEAD:Team15/Code15/src/spa/src/PQLEvaluator.h
-#include "relationship_handlers/Result.h"
-#include "relationship_handlers/ResultTable.h"
-#include "relationship_handlers/SelectHandler.h"
-#include "relationship_handlers/FollowsHandler.h"
-// TODO: repetitive declaration?
-#include "relationship_handlers/FollowsHandler.h"
-#include "relationship_handlers/ParentHandler.h"
-#include "relationship_handlers/ModifiesHandler.h"
-=======
 #include "QPS/relationship_handlers/Result.h"
 #include "QPS/relationship_handlers/ResultTable.h"
 #include "QPS/relationship_handlers/SelectHandler.h"
 #include "QPS/relationship_handlers/FollowsHandler.h"
-#include "QPS/relationship_handlers/FollowsHandler.h"
->>>>>>> eac2749300d94599e06342a54ea04939e55d71cf:Team15/Code15/src/spa/src/QPS/PQLEvaluator.h
+#include "QPS/relationship_handlers/ParentHandler.h"
+#include "QPS/relationship_handlers/ModifiesHandler.h"
 #include <numeric>
 #include <string>
 #include <set>
