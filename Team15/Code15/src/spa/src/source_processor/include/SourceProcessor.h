@@ -1,7 +1,8 @@
+#include "tokeniser/Tokeniser.h"
+
 class SourceProcessor {
 private:
-
 public:
     SourceProcessor();
-    void print();
+    Tokeniser *tokeniser;
 };
