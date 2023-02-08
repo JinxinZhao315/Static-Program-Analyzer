@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.24)
+project(SourceProcessor)
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/design_extractor/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/parser/*.cpp")
+add_library(source_processor ${SOURCE_FILES} include/SourceProcessor.h)
+target_include_directories(source_processor PUBLIC include)
+add_executable(${PROJECT_NAME} src/SourceProcessor.cpp include/SourceProcessor.h)
+target_link_libraries(source_processor)
