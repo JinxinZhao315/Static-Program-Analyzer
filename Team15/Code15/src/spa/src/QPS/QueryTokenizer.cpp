@@ -115,7 +115,7 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, SuchThatClause& 
 
 
 void QueryTokenizer::tokenizePatternClause(std::string& input, PatternClause& patternClause) {
-	std::string keyword = extractKeyword(input);
+	std::string synonym = extractKeyword(input);
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
@@ -125,14 +125,14 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, PatternClause& pa
 	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-	std::string relationship = trim(input.substr(0, nextLeftPar));
-	std::string leftArg = trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar));
-	std::string rightArg = trim(input.substr(nextComma + 1, nextRightPar - nextComma));
-	if (!syntaxChecker.validatePattern(keyword, leftArg, rightArg)) {
+//	std::string relationship = trim(input.substr(0, nextLeftPar));
+    std::string leftArg = trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1));
+    std::string rightArg = trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1));
+	if (!syntaxChecker.validatePattern(synonym, leftArg, rightArg)) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-	input = input.substr(nextRightPar);
-	patternClause = PatternClause("assign", keyword, leftArg, rightArg);
+	input = input.substr(nextRightPar + 1);
+	patternClause = PatternClause("assign", synonym, leftArg, rightArg);
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {

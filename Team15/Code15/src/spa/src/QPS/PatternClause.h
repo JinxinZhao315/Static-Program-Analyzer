@@ -16,7 +16,9 @@ public:
 	PatternClause(std::string patternType, std::string patternSynonym,
 		std::string leftArg, std::string rightArg);
 
-	std::pair <std::string, std::string> getPatternPair();
+    std::string getPatternType();
+
+    std::string getPatternSynonym();
 
 	std::string getLeftArg();
 
