@@ -1,13 +1,10 @@
-//
-// Created by Jinxin Zhao on 2/2/23.
-//
 #include "QPS/Query.h"
 #include "PKB.h"
 #include "QPS/relationship_handlers/Result.h"
 #include "QPS/relationship_handlers/ResultTable.h"
 #include "QPS/relationship_handlers/SelectHandler.h"
 #include "QPS/relationship_handlers/FollowsHandler.h"
-#include "QPS/relationship_handlers/FollowsHandler.h"
+#include "QPS/relationship_handlers/PatternHandler.h"
 #include <numeric>
 #include <string>
 #include <set>

@@ -12,7 +12,7 @@ std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string in
 	else {
 		std::string declaration = trim(input.substr(0, lastSemicolon + 1));
 		std::string remainingQuery = trim(input.substr(lastSemicolon + 1));
-		//varTable = tokenizeDeclaration(declaration);
+		//synonymTable = tokenizeDeclaration(declaration);
 		return std::make_pair(declaration, remainingQuery);
 	}
 }
@@ -132,7 +132,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, PatternClause& pa
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
 	input = input.substr(nextRightPar + 1);
-	patternClause = PatternClause("assign", synonym, leftArg, rightArg);
+	patternClause = PatternClause(synonym, leftArg, rightArg);
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {

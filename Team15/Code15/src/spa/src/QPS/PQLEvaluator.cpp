@@ -1,7 +1,3 @@
-//
-// Created by Jinxin Zhao on 2/2/23.
-//
-
 #include "PQLEvaluator.h"
 
 PQLEvaluator::PQLEvaluator(PKB& pkb) {
@@ -11,7 +7,7 @@ PQLEvaluator::PQLEvaluator(PKB& pkb) {
 std::string PQLEvaluator::evaluate(Query query) {
     ResultTable resultTable = ResultTable();
 
-    std::multimap<std::string, std::string> varTable = query.getVarTable();
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
     std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);// update resultTable and return the synonym name
 
@@ -23,13 +19,15 @@ std::string PQLEvaluator::evaluate(Query query) {
        if (relationship == "Follows" || relationship == "Follows*") {
            FollowsHandler followsHandler = FollowsHandler(pkb);
            bool isStar = relationship == "Follows" ? false : true;
-           Result result = followsHandler.evalFollowsStar(isStar, suchThatCl, resultTable, varTable);
+           Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
            followsHandler.combineResult(resultTable, result);
        }
     }
 
        for (PatternClause patternCl: patternVec) {
-
+           PatternHandler patternHandler = PatternHandler(pkb);
+           Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+           patternHandler.combineResult(resultTable, result);
        }
 
     // return the values of the selected synonym in ResultTable

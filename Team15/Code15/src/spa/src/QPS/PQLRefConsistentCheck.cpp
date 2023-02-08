@@ -7,7 +7,7 @@ PQLRefConsistentCheck::~PQLRefConsistentCheck() {}
 bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
-    std::multimap < std::string, std::string > varTable = query.getVarTable();
+    std::multimap < std::string, std::string > varTable = query.getSynonymTable();
     std::shared_ptr<PQLRefConsistentLogic> refConsistentLogic = std::make_shared<PQLRefConsistentLogic>();
 
     for (SuchThatClause suchThatClause : suchThatClauseVec) {

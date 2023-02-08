@@ -37,7 +37,7 @@ TEST_CASE("PQLPreprocessor test 2") {
     // Tokenize & syntax check
     std::pair<std::string, std::string> declarationClausePair = tokenizer.tokenizeQuery(input);
     varTable = tokenizer.tokenizeDeclaration(declarationClausePair.first);
-    query.addVarTable(varTable);
+    query.addSynonymTable(varTable);
     tokenizer.tokenizeClauses(declarationClausePair.second, selectClause, suchThatClause, patternClause);
     query.addSelectClause(selectClause);
     query.addSuchThatClause(suchThatClause);
@@ -183,7 +183,7 @@ TEST_CASE("PQLPreprocessor query object test 1") {
 
         query = preprocessor.preprocess("assign a; Select a such that Follows(a, 11)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("a")->second;
         assert(type == "assign");
 
@@ -214,7 +214,7 @@ TEST_CASE("PQLPreprocessor query object test follows*(synon,_)") {
 
         query = preprocessor.preprocess("stmt s1; Select s1 such that Follows*(s1,_)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("s1")->second;
         assert(type == "stmt");
         std::cout << "var table correct" << std::endl;
@@ -250,7 +250,7 @@ TEST_CASE("PQLPreprocessor query object test follows(_,_)") {
 
         query = preprocessor.preprocess("stmt s1; Select s1 such that Follows(_,_)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("s1")->second;
         assert(type == "stmt");
         std::cout << "var table correct" << std::endl;
@@ -286,7 +286,7 @@ TEST_CASE("PQLPreprocessor query object test with pattern 1") {
 
         query = preprocessor.preprocess("assign a; Select a pattern a (_,_\"x\"_)");
 
-        std::multimap<std::string, std::string> varTable = query.getVarTable();
+        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
         string type = varTable.find("a")->second;
         REQUIRE(type == "assign");
         std::cout << "type: " << type << std::endl;
@@ -298,8 +298,6 @@ TEST_CASE("PQLPreprocessor query object test with pattern 1") {
 
         vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
         for (PatternClause cl : patternClauseVec) {
-            std::cout << "pattern type: " << cl.getPatternType() << endl;
-            REQUIRE(cl.getPatternType() == "assign");
 
             std::cout << "pattern synon: " << cl.getPatternSynonym() << endl;
             REQUIRE(cl.getPatternSynonym() == "a");
