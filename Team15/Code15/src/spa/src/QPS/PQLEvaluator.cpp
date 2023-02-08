@@ -28,9 +28,9 @@ std::string PQLEvaluator::evaluate(Query query) {
        }
     }
 
-    //   for (PatternClause patternCl: patternVec) {
-    //
-    //   }
+       for (PatternClause patternCl: patternVec) {
+
+       }
 
     // return the values of the selected synonym in ResultTable
     std::string retStr;
