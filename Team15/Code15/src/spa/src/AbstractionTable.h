@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <set>
 
 using namespace std;
@@ -82,10 +82,10 @@ public:
 	}
 
 private:
-	std::map<L, R> leftToOneRightMap;
-	std::map<R, L> rightToOneLeftMap;
-	std::map<L, std::set<R>> leftToManyRightMap;
-	std::map<R, std::set<L>> rightToManyLeftMap;
+	std::unordered_map<L, R> leftToOneRightMap;
+	std::unordered_map<R, L> rightToOneLeftMap;
+	std::unordered_map<L, std::set<R>> leftToManyRightMap;
+	std::unordered_map<R, std::set<L>> rightToManyLeftMap;
 
 	inline void addLeftToOneRight(L left, R right) {
 		auto pair = leftToOneRightMap.find(left);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <set>
-#include <map>
+#include <unordered_map>
 #include "Tokens.h"
 
 using namespace std;
@@ -18,7 +18,7 @@ public:
 
 private:
 	std::set<int> statementTable;
-	std::map<Tokens::Keyword, std::set<int>> statementByTypeTable = {
+	std::unordered_map<Tokens::Keyword, std::set<int>> statementByTypeTable = {
 		{Tokens::Keyword::READ, {}},
 		{Tokens::Keyword::PRINT, {}},
 		{Tokens::Keyword::ASSIGN, {}},
