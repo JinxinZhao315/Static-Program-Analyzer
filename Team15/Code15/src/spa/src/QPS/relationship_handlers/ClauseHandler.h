@@ -21,8 +21,8 @@ public:
     PKB pkb;
 private:
     void combine(std::string synonymName, std::set<std::string>& synonymSet, ResultTable& resultTable);
-    template <typename T>
-    std::set<T> convertVecToSet(std::vector<T> vec);
+//    template <typename T>
+//    std::set<T> convertVecToSet(std::vector<T> vec);
 
 };
 

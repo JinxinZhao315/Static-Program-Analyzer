@@ -10,14 +10,14 @@ void ClauseHandler::combineResult(ResultTable& resultTable, Result& result) {
     std::string synonymName;
     std::set<std::string> synonymSet;
 
-    if (result.isLeftArgSynonym()) {
-        synonymName = result.getLeftArgName();
-        synonymSet = result.getLeftArgValue();
+    if (result.isFirstArgSynonym()) {
+        synonymName = result.getFirstArgName();
+        synonymSet = result.getFirstArgValue();
         combine(synonymName, synonymSet, resultTable);
     }
-    if (result.isRightArgSynonym()) {
-        synonymName = result.getRightArgName();
-        synonymSet = result.getRightArgValue();
+    if (result.isSecondArgSynonym()) {
+        synonymName = result.getSecondArgName();
+        synonymSet = result.getSecondArgValue();
         combine(synonymName, synonymSet, resultTable);
     }
    
