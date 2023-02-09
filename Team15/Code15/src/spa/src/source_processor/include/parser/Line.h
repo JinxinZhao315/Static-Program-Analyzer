@@ -8,9 +8,9 @@ using namespace std;
 class Line {
 private:
     int lineNumber;
-    vector<string> content;
+    vector<string> tokens;
 public:
-    Line(int lineNumber, vector<string> content);
+    Line(int lineNumber, vector<string> tokens);
     int getLineNumber();
-    vector<string> getContent();
+    vector<string> getTokens();
 };

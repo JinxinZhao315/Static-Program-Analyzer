@@ -16,7 +16,7 @@ set(headers ${headers}
         include/extractor/Extractor.h
         include/parser/Parser.h)
 
-add_library(source_processor ${srcs} ${headers} src/parser/Line.cpp include/parser/Line.h)
+add_library(source_processor ${srcs} ${headers} src/parser/Line.cpp include/parser/Line.h src/parser/StatementParser.cpp include/parser/StatementParser.h src/extractor/CFGNode.cpp include/extractor/CFGNode.h src/extractor/BasicCFGNode.cpp include/extractor/BasicCFGNode.h)
 add_executable(SourceProcessor ${srcs} ${headers})
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(source_processor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

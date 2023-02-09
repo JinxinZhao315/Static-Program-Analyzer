@@ -2,19 +2,16 @@
 #include <fstream>
 #include <vector>
 #include <map>
-#include <set>
-#include <stack>
 #include <string>
-#include <stdio.h>
 #include <iostream>
-#include <stack>
+#include <cstdio>
 #include <algorithm>
 
 using namespace std;
 
 class Parser {
 public:
-    Parser();
+    Parser() {}
     void parseProgram(string fileName);
     void printParsedProgram();
     vector<string> getParsedProgram();
