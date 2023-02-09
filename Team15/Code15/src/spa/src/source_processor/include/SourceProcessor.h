@@ -1,8 +1,13 @@
 #include "tokeniser/Tokeniser.h"
+#include "parser/Parser.h"
 
 class SourceProcessor {
 private:
+    Tokeniser *tokeniser;
+    Parser *parser;
 public:
     SourceProcessor();
-    Tokeniser *tokeniser;
+    void parseProgram(string fileName);
+    void printParsedProgram();
+    void storeDataInPKB();
 };

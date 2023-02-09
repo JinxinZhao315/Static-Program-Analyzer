@@ -13,6 +13,7 @@ private:
 
 public:
     Tokeniser();
+    void feedLines(string filename);
     vector<string>* keywords;
     vector<string>* tokenise(string line);
 };

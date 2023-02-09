@@ -40,6 +40,17 @@ Tokeniser::Tokeniser() {
     });
 }
 
+void Tokeniser::feedLines(string filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Failed to open file: " << filename << endl;
+    }
+    string line;
+    while(getline(file, line)) {
+        tokenise(line);
+    }
+}
+
 void pushToken(vector<string>* tokens, string token) {
     tokens->push_back(token);
 }
