@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.24)
 project(source_processor)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
-#
 set(srcs ${srcs}
         src/SourceProcessor.cpp
         src/tokeniser/Tokeniser.cpp
