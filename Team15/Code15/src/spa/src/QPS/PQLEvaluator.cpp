@@ -20,26 +20,22 @@ std::string PQLEvaluator::evaluate(Query query)
 
     for (SuchThatClause suchThatCl : suchThatVec)
     {
-        if (isEarlyExit) {
-            break;
-        }
         std::string relationship = suchThatCl.getRelationShip();
-        Result result;
         if (relationship == "Follows" || relationship == "Follows*")
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
+            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
+            if (result.isResultTrue() == false)
+            {
+                resultTable.deleteKeyValuePair(selectedVarName);
+                resultTable.insertKeyValuePair(selectedVarName, {});
+                isEarlyExit = true;
+                break;
+            }
             followsHandler.combineResult(resultTable, result);
         }
 
-        if (result.isResultTrue() == false)
-        {
-            resultTable.deleteKeyValuePair(selectedVarName);
-            resultTable.insertKeyValuePair(selectedVarName, {});
-            isEarlyExit = true;
-            break;
-        }
     }
 
     for (PatternClause patternCl : patternVec)
@@ -47,11 +43,8 @@ std::string PQLEvaluator::evaluate(Query query)
         if (isEarlyExit) {
             break;
         }
-        Result result;
         PatternHandler patternHandler = PatternHandler(pkb);
-        result = patternHandler.evalPattern(patternCl, resultTable, varTable);
-        patternHandler.combineResult(resultTable, result);
-
+        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
         if (result.isResultTrue() == false)
         {
             resultTable.deleteKeyValuePair(selectedVarName);
@@ -59,6 +52,7 @@ std::string PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
             break;
         }
+        patternHandler.combineResult(resultTable, result);
     }
 
     // return the values of the selected synonym in ResultTable
