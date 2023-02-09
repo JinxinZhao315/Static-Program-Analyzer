@@ -37,20 +37,23 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg,
 }
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-	return Utility::getReferenceType(input) == Utility::EXPR ||
-            Utility::getReferenceType(input) == Utility::UNDERSCORED_EXPR ||
-            Utility::getReferenceType(input) == Utility::UNDERSCORE;
+    std::string type = Utility::getReferenceType(input);
+	return type == Utility::EXPR ||
+            type == Utility::UNDERSCORED_EXPR ||
+            type == Utility::UNDERSCORE;
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-	return Utility::getReferenceType(input) == Utility::SYNONYM ||
-            Utility::getReferenceType(input) == Utility::INTEGER ||
-            Utility::getReferenceType(input) == Utility::UNDERSCORE;
+    std::string type = Utility::getReferenceType(input);
+	return type == Utility::SYNONYM ||
+            type == Utility::INTEGER ||
+            type == Utility::UNDERSCORE;
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
-	return Utility::getReferenceType(input) == Utility::SYNONYM ||
-            Utility::getReferenceType(input) == Utility::INTEGER ||
-            Utility::getReferenceType(input) == Utility::QUOTED_IDENT;
+    std::string type = Utility::getReferenceType(input);
+	return type == Utility::SYNONYM ||
+            type== Utility::UNDERSCORE ||
+            type == Utility::QUOTED_IDENT;
 }
 

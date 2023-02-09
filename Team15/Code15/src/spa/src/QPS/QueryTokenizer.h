@@ -3,11 +3,12 @@
 #include <regex>
 #include <string>
 #include <utility>
-#include "SuchThatClause.h"
-#include "SelectClause.h"
+#include "QPS/SuchThatClause.h"
+#include "QPS/SelectClause.h"
 #include "PatternClause.h"
 #include "PQLSyntaxChecker.h"
 #include "exceptions/PQLSyntaxError.h"
+#include "../Utility.h"
 
 #pragma once
 
@@ -27,7 +28,7 @@ public:
 
 private:
     PQLSyntaxChecker syntaxChecker;
-	std::string trim(std::string input);
+//	std::string trim(std::string input);
 	std::string extractKeyword(std::string &input);
     std::vector<std::string> tokenizeCsv(std::string);
 };

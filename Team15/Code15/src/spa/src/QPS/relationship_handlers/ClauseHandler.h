@@ -1,11 +1,12 @@
 //
 // Created by Jinxin Zhao on 3/2/23.
 //
-#include "../PKB.h"
+#include "../../PKB.h"
+#include "../../Tokens.h"
 #include "ResultTable.h"
 #include "Utility.h"
 #include "Result.h"
-#include "../Tokens.h"
+
 
 #ifndef SPA_CLAUSEHANDLER_H
 #define SPA_CLAUSEHANDLER_H
@@ -20,8 +21,8 @@ public:
     PKB pkb;
 private:
     void combine(std::string synonymName, std::set<std::string>& synonymSet, ResultTable& resultTable);
-    template <typename T>
-    std::set<T> convertVecToSet(std::vector<T> vec);
+//    template <typename T>
+//    std::set<T> convertVecToSet(std::vector<T> vec);
 
 };
 

@@ -21,6 +21,8 @@ public:
 
 	void addLeaders(int leader, std::set<int> followers);
 
+	bool isEmpty();
+
 private:
 	std::map<int, std::set<int>> leaderToFollowersMap;
 	std::map<int, std::set<int>> followerToLeadersMap;

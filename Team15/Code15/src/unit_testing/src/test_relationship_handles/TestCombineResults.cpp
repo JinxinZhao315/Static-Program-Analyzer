@@ -1,5 +1,5 @@
-#include "relationship_handlers/ClauseHandler.h"
-#include "relationship_handlers/Result.h"
+#include "QPS/relationship_handlers/ClauseHandler.h"
+#include "QPS/relationship_handlers/Result.h"
 #include <set>
 #include "catch.hpp"
 #include <assert.h>
@@ -35,7 +35,7 @@ TEST_CASE("Result with leftArg test") {
         set.emplace("2");
         set.emplace("6");
 
-        result.setLeftArg("a", set);
+        result.setFirstArg("a", set);
 
         clauseHandlerPtr->combineResult(resultTable, result);
 
@@ -62,8 +62,8 @@ TEST_CASE("Result with bothArg test") {
         rightSet.emplace("23");
         rightSet.emplace("63");
 
-        result.setLeftArg("a", leftSet);
-        result.setRightArg("b", rightSet);
+        result.setFirstArg("a", leftSet);
+        result.setSecondArg("b", rightSet);
 
         clauseHandlerPtr->combineResult(resultTable, result);
 
@@ -91,8 +91,8 @@ TEST_CASE("Result with intersection test") {
         rightSet.emplace("23");
         rightSet.emplace("63");
 
-        result.setLeftArg("a", leftSet);
-        result.setRightArg("b", rightSet);
+        result.setFirstArg("a", leftSet);
+        result.setSecondArg("b", rightSet);
 
         clauseHandlerPtr->combineResult(resultTable, result);
 
@@ -103,8 +103,8 @@ TEST_CASE("Result with intersection test") {
         set<string> newRightSet;
         newRightSet.emplace("23");
 
-        newResult.setLeftArg("a", newLeftSet);
-        newResult.setRightArg("b", newRightSet);
+        newResult.setFirstArg("a", newLeftSet);
+        newResult.setSecondArg("b", newRightSet);
 
         clauseHandlerPtr->combineResult(resultTable, newResult);
 
@@ -132,8 +132,8 @@ TEST_CASE("Result with empty intersection test") {
         rightSet.emplace("23");
         rightSet.emplace("63");
 
-        result.setLeftArg("a", leftSet);
-        result.setRightArg("b", rightSet);
+        result.setFirstArg("a", leftSet);
+        result.setSecondArg("b", rightSet);
 
         clauseHandlerPtr->combineResult(resultTable, result);
 
@@ -142,8 +142,8 @@ TEST_CASE("Result with empty intersection test") {
 
         set<string> newRightSet;
 
-        newResult.setLeftArg("a", newLeftSet);
-        newResult.setRightArg("b", newRightSet);
+        newResult.setFirstArg("a", newLeftSet);
+        newResult.setSecondArg("b", newRightSet);
 
         clauseHandlerPtr->combineResult(resultTable, newResult);
 

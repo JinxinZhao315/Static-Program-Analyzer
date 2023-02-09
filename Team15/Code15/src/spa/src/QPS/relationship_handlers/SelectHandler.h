@@ -1,7 +1,7 @@
 #include "ClauseHandler.h"
 #include "Result.h"
 #include "ResultTable.h"
-#include "SelectClause.h"
+#include "QPS/SelectClause.h"
 #include <string>
 #include <unordered_map>
 #include <map>

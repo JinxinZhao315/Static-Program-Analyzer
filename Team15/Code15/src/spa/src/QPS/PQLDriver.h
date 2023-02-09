@@ -1,4 +1,4 @@
-#include "Query.h"
+#include "QPS/Query.h"
 #include "PQLPreprocessor.h"
 #include "PQLEvaluator.h"
 #include "PKB.h"

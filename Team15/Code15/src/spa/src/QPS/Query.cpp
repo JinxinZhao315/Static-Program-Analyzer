@@ -4,8 +4,8 @@ Query::Query() {};
 
 Query:: ~Query() {};
 
-void Query::addVarTable(std::multimap<std::string, std::string> varTable) {
-	this->varTable = varTable;
+void Query::addSynonymTable(std::multimap<std::string, std::string> varTable) {
+	this->synonymTable = varTable;
 }
 
 void Query::addSelectClause(SelectClause selectClause) {
@@ -20,8 +20,8 @@ void Query::addSuchThatClause(SuchThatClause suchThatClause) {
 	this->suchThatClauseVec.push_back(suchThatClause);
 }
 
-std::multimap<std::string, std::string> Query::getVarTable() {
-	return varTable;
+std::multimap<std::string, std::string> Query::getSynonymTable() {
+	return synonymTable;
 }
 
 SelectClause Query::getSelectClause() {

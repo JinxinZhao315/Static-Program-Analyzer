@@ -1,9 +1,9 @@
 #include<utility>
 #include<string>
-#include"Query.h"
-#include"QueryTokenizer.h"
-#include"SelectClause.h"
-#include"SuchThatClause.h"
+#include"QPS/Query.h"
+#include"QPS/QueryTokenizer.h"
+#include"QPS/SelectClause.h"
+#include"QPS/SuchThatClause.h"
 #include"PatternClause.h"
 #include "PQLSemanticCheck.h"
 #include "exceptions/PQLSemanticError.h"
