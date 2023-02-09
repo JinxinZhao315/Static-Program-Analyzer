@@ -6,6 +6,7 @@
 #include "EntityTable.h"
 #include "StatementTable.h"
 #include "AbstractionTable.h"
+#include "PatternTable.h"
 
 using namespace std;
 
@@ -48,6 +49,9 @@ public:
 
 	//SP modifies procedure-variable
 	void addModifiesProc(std::string procName, std::set<std::string> varNames);
+
+	//SP pattern
+	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
 
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
@@ -123,6 +127,19 @@ public:
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
+	//QPS pattern
+	string getPatternVarFromStmt(int assignStmtNum);
+
+	set<int> getPatternStmtsFromVar(string lhsVarName);
+
+	set<vector<string>> getPatternPostfixesFromStmt(int assignStmtNum);
+
+	set<int> getPatternStmtsFromPostfix(vector<string> rhsPostfix);
+
+	set<vector<string>> getPatternPostfixesFromVar(string lhsVarName);
+
+	set<string> getPatternVarsFromPostfix(vector<string> rhsPostfix);
+
 private:
 	EntityTable<std::string> procTable;
 	EntityTable<std::string> varTable;
@@ -136,4 +153,5 @@ private:
 	AbstractionTable<std::string, std::string> usesProcTable;
 	AbstractionTable<int, std::string> modifiesStmtTable;
 	AbstractionTable<std::string, std::string> modifiesProcTable;
+	PatternTable patternTable;
 };

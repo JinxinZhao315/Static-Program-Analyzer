@@ -11,6 +11,7 @@ PKB::PKB() {
 	parentStarTable = AbstractionTable<int, int>();
 	usesStmtTable = AbstractionTable<int, std::string>();
 	usesProcTable = AbstractionTable<std::string, std::string>();
+	patternTable = PatternTable();
 }
 
 //SP procedure
@@ -71,6 +72,11 @@ void PKB::addModifiesStmt(int stmtNum, std::set<std::string> varNames) {
 //SP modifies procedure-variable
 void PKB::addModifiesProc(std::string procName, std::set<std::string> varNames) {
 	modifiesProcTable.addOneToManyAbstraction(procName, varNames);
+}
+
+//SP pattern
+void PKB::addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes) {
+	patternTable.addPattern(assignStmtNum, lhsVarName, rhsPostfixes);
 }
 
 //QPS procedure
@@ -207,4 +213,29 @@ std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
 
 bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
 	return modifiesProcTable.inOneToManyRelationship(procName, varName);
+}
+
+//QPS pattern
+string PKB::getPatternVarFromStmt(int assignStmtNum) {
+	return patternTable.getVarFromStmt(assignStmtNum);
+}
+
+set<int> PKB::getPatternStmtsFromVar(string lhsVarName) {
+	return patternTable.getStmtsFromVar(lhsVarName);
+}
+
+set<vector<string>> PKB::getPatternPostfixesFromStmt(int assignStmtNum) {
+	return patternTable.getPostfixesFromStmt(assignStmtNum);
+}
+
+set<int> PKB::getPatternStmtsFromPostfix(vector<string> rhsPostfix) {
+	return patternTable.getStmtsFromPostfix(rhsPostfix);
+}
+
+set<vector<string>> PKB::getPatternPostfixesFromVar(string lhsVarName) {
+	return patternTable.getPostfixesFromVar(lhsVarName);
+}
+
+set<string> PKB::getPatternVarsFromPostfix(vector<string> rhsPostfix) {
+	return patternTable.getVarsFromPostfix(rhsPostfix);
 }
