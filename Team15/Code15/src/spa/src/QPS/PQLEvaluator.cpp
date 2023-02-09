@@ -16,8 +16,13 @@ std::string PQLEvaluator::evaluate(Query query)
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
 
+    bool isEarlyExit = false;
+
     for (SuchThatClause suchThatCl : suchThatVec)
     {
+        if (isEarlyExit) {
+            break;
+        }
         std::string relationship = suchThatCl.getRelationShip();
         Result result;
         if (relationship == "Follows" || relationship == "Follows*")
@@ -32,12 +37,16 @@ std::string PQLEvaluator::evaluate(Query query)
         {
             resultTable.deleteKeyValuePair(selectedVarName);
             resultTable.insertKeyValuePair(selectedVarName, {});
+            isEarlyExit = true;
             break;
         }
     }
 
     for (PatternClause patternCl : patternVec)
     {
+        if (isEarlyExit) {
+            break;
+        }
         Result result;
         PatternHandler patternHandler = PatternHandler(pkb);
         result = patternHandler.evalPattern(patternCl, resultTable, varTable);
@@ -47,6 +56,7 @@ std::string PQLEvaluator::evaluate(Query query)
         {
             resultTable.deleteKeyValuePair(selectedVarName);
             resultTable.insertKeyValuePair(selectedVarName, {});
+            isEarlyExit = true;
             break;
         }
     }

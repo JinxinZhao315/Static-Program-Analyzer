@@ -13,35 +13,35 @@ void Result::setResultTrue(bool isTrueValue) {
 }
 
 //getter and setter for left arg
-std::string Result::getLeftArgName() {
-    return this->leftArgName;
+std::string Result::getFirstArgName() {
+    return this->firstArgName;
 };
-std::set<std::string> Result::getLeftArgValue() {
-    return this->leftArgValue;
+std::set<std::string> Result::getFirstArgValue() {
+    return this->firstArgValue;
 };
-void Result::setLeftArg(std::string name, std::set<std::string> value) {
-    this->leftArgName = name;
-    this->leftArgValue = value;
-    this->isLeftArgAvailable = true;
+void Result::setFirstArg(std::string name, std::set<std::string> value) {
+    this->firstArgName = name;
+    this->firstArgValue = value;
+    this->isfirstArgAvailable = true;
 }
 
-bool Result::isLeftArgSynonym() {
-    return this->isLeftArgAvailable;
+bool Result::isFirstArgSynonym() {
+    return this->isfirstArgAvailable;
 }
 
 //getter and setter for right arg
-std::string Result::getRightArgName() {
-    return this->rightArgName;
+std::string Result::getSecondArgName() {
+    return this->secondArgName;
 };
-std::set<std::string> Result::getRightArgValue() {
-    return this->rightArgValue;
+std::set<std::string> Result::getSecondArgValue() {
+    return this->secondArgValue;
 };
 
-void Result::setRightArg(std::string name, std::set<std::string> value) {
-    this->rightArgName = name;
-    this->rightArgValue = value;
-    this->isRightArgAvailable = true;
+void Result::setSecondArg(std::string name, std::set<std::string> value) {
+    this->secondArgName = name;
+    this->secondArgValue = value;
+    this->isSecondArgAvailable = true;
 }
-bool Result::isRightArgSynonym() {
-    return this->isRightArgAvailable;
+bool Result::isSecondArgSynonym() {
+    return this->isSecondArgAvailable;
 }

@@ -100,7 +100,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             result.setResultTrue(false);
             return result;
         }
-        result.setLeftArg(leftArg, resultSynonValues);
+        result.setFirstArg(leftArg, resultSynonValues);
 
         // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
@@ -128,7 +128,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             result.setResultTrue(false);
             return result;
         }
-        result.setRightArg(rightArg, resultSynonValues);
+        result.setSecondArg(rightArg, resultSynonValues);
         // Synon - Synon
     } else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
         string leftDeType = synonymTable.find(leftArg)->second;
@@ -157,8 +157,8 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             return result;
         }
 
-        result.setLeftArg(leftArg, leftResultValues);
-        result.setRightArg(rightArg, rightResultValues);
+        result.setFirstArg(leftArg, leftResultValues);
+        result.setSecondArg(rightArg, rightResultValues);
     } else {
         throw std::runtime_error("Unhandled left or right arg type in FollowsHandler");
     }

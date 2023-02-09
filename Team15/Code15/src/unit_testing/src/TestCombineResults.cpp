@@ -17,12 +17,12 @@
 //        Result emptyResult = new Result();
 //
 //        //Result() : isTrue(true),
-//        //    isLeftArgAvailable(false), isRightArgAvailable(false) {}
-//        //Result(bool isTrue, std::string leftArgName, std::set<std::string> leftArgValue) :
-//        //    isTrue(true), leftArgName(leftArgName), leftArgValue(leftArgValue), isLeftArgAvailable(true) {}
+//        //    isfirstArgAvailable(false), isSecondArgAvailable(false) {}
+//        //Result(bool isTrue, std::string leftArgName, std::set<std::string> firstArgValue) :
+//        //    isTrue(true), leftArgName(leftArgName), firstArgValue(firstArgValue), isfirstArgAvailable(true) {}
 //        //Result(bool isTrue,
-//        //    std::string leftArgName, std::set<std::string> leftArgValue,
-//        //    std::string rightArgName, std::set<std::string> rightArgValue) :
+//        //    std::string leftArgName, std::set<std::string> firstArgValue,
+//        //    std::string secondArgName, std::set<std::string> secondArgValue) :
 //       
 //        clauseHandlerPtr->combineResult(resultTable, emptyResult);
 //        REQUIRE(resultTable.sizeOfResultTable == 0);
@@ -31,7 +31,7 @@
 //        set.emplace("2");
 //        set.emplace("6");
 //
-//        emptyResult.setLeftArg("a", set);
+//        emptyResult.setFirstArg("a", set);
 //
 //        clauseHandlerPtr->combineResult(resultTable, emptyResult);
 //

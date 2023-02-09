@@ -15,6 +15,8 @@ public:
 	inline static const std::string underscoredExpr = "_\"[\\s\\S]*\"_";
 	inline static const std::string expr = "\"[\\s\\S]*\"";
 
+    inline static const std::string WHITESPACES = " \t\n";
+    inline static const std::string QUOTE = "\"";
 	inline static const std::string UNDERSCORE = "_";
     inline static const std::string EXPR = "expr";
     inline static const std::string UNDERSCORED_EXPR = "underscoredExpr";
@@ -56,4 +58,21 @@ public:
 			return INVALID;
 		}
 	};
+
+    inline static const std::string trim(std::string input, std::string exprToTrim) {
+        std::string trimmed = input;
+        std::size_t firstWhitespace = trimmed.find_first_not_of(exprToTrim);
+        // trim left
+        if (firstWhitespace != std::string::npos) {
+            trimmed = trimmed.substr(firstWhitespace);
+        }
+        // trim right
+        std::size_t lastWhitespace = trimmed.find_last_not_of(exprToTrim);
+        if (lastWhitespace != std::string::npos) {
+            trimmed = trimmed.substr(0, lastWhitespace + 1);
+        }
+        return trimmed;
+    };
 };
+
+

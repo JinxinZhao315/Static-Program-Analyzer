@@ -12,37 +12,37 @@ class Result {
 private:
     bool isTrue;
 
-    std::string leftArgName;
-    std::set<std::string> leftArgValue;
-    bool isLeftArgAvailable;
+    std::string firstArgName;
+    std::set<std::string> firstArgValue;
+    bool isfirstArgAvailable;
 
 
-    std::string rightArgName;
-    std::set<std::string> rightArgValue;
-    bool isRightArgAvailable;
+    std::string secondArgName;
+    std::set<std::string> secondArgValue;
+    bool isSecondArgAvailable;
 public:
     Result(): isTrue(true),
-        isLeftArgAvailable(false), isRightArgAvailable(false){}
-    Result(bool isTrue, std::string leftArgName, std::set<std::string> leftArgValue) :
-        isTrue(true), leftArgName(leftArgName), leftArgValue(leftArgValue), isLeftArgAvailable(true) {}
-    Result(bool isTrue, 
-        std::string leftArgName, std::set<std::string> leftArgValue,
-        std::string rightArgName, std::set<std::string> rightArgValue) :
-        isTrue(true), leftArgName(leftArgName), leftArgValue(leftArgValue), isLeftArgAvailable(true),
-        rightArgName(rightArgName), rightArgValue(rightArgValue), isRightArgAvailable(true) {}
+              isfirstArgAvailable(false), isSecondArgAvailable(false){}
+    Result(bool isTrue, std::string firstArgName, std::set<std::string> firstArgValue) :
+            isTrue(true), firstArgName(firstArgName), firstArgValue(firstArgValue), isfirstArgAvailable(true) {}
+    Result(bool isTrue,
+           std::string firstArgName, std::set<std::string> firstArgValue,
+           std::string secondArgName, std::set<std::string> secondArgValue) :
+            isTrue(true), firstArgName(firstArgName), firstArgValue(firstArgValue), isfirstArgAvailable(true),
+            secondArgName(secondArgName), secondArgValue(secondArgValue), isSecondArgAvailable(true) {}
 
     bool isResultTrue();
     void setResultTrue(bool isTrueValue);
 
-    std::string getLeftArgName();
-    std::set<std::string> getLeftArgValue();
-    void setLeftArg(std::string name, std::set<std::string> value);
-    bool isLeftArgSynonym();
+    std::string getFirstArgName();
+    std::set<std::string> getFirstArgValue();
+    void setFirstArg(std::string name, std::set<std::string> value);
+    bool isFirstArgSynonym();
 
-    std::string getRightArgName();
-    std::set<std::string> getRightArgValue();
-    void setRightArg(std::string name, std::set<std::string> value);
-    bool isRightArgSynonym();
+    std::string getSecondArgName();
+    std::set<std::string> getSecondArgValue();
+    void setSecondArg(std::string name, std::set<std::string> value);
+    bool isSecondArgSynonym();
 };
 
 
