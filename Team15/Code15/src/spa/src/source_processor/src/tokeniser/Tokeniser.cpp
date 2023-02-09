@@ -48,8 +48,7 @@ vector<vector<string>*>* Tokeniser::feedLines(string filename) {
     }
     string line;
     while(getline(file, line)) {
-        vector<string>* tokens = new vector<string>();
-        tokens = tokenise(line);
+        vector<string>* tokens = tokenise(line);
         tokenVector->push_back(tokens);
     }
     extractedTokens = tokenVector;
