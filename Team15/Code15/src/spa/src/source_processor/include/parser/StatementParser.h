@@ -15,4 +15,4 @@ public:
     virtual void parse() = 0;
     virtual void validateSyntax() = 0;
 
-}
+};

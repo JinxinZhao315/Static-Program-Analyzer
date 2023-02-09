@@ -1,5 +1,5 @@
 #include "../../include/parser/StatementParser.h"
 
-StatementParser::StatementParser() {
-
-}
+//StatementParser::StatementParser() {
+//
+//}

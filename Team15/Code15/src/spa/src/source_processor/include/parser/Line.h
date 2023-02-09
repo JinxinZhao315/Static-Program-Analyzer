@@ -18,7 +18,7 @@ public:
     Line(int lineNumber, vector<string> tokens, string type) {
         this->lineNumber = lineNumber;
         this->tokens = tokens;
-        this->type = type
+        this->type = type;
     }
 
     int getLineNumber();

@@ -5,7 +5,7 @@ void CFGNode::addIncomingEdge(CFGNode *node) {
 }
 
 void CFGNode::addOutgoingEdge(CFGNode *node) {
-    outgoingEdges.push_back(node)
+    outgoingEdges.push_back(node);
 }
 
 vector<CFGNode *> &CFGNode::getIncomingEdges() {
