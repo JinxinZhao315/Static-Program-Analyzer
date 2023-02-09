@@ -10,10 +10,11 @@ using namespace std;
 
 class Tokeniser {
 private:
-
+    vector<vector<string>*>* extractedTokens;
 public:
     Tokeniser();
-    void feedLines(string filename);
+    vector<vector<string>*>* feedLines(string filename);
     vector<string>* keywords;
     vector<string>* tokenise(string line);
+    void printTokens();
 };

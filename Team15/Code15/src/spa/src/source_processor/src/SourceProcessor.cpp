@@ -18,12 +18,15 @@ void SourceProcessor::storeDataInPKB() {
 }
 
 void SourceProcessor::printParsedProgram() {
+    cout << "Printing parsed program..." << endl;
     parser->printParsedProgram();
+    cout << endl << "Printing extracted tokens..." << endl;
+    tokeniser->printTokens();
 }
 
 int main() {
     cout << "Creating source processor" << endl;
-    string fileName = "Team15/Tests15/Sample_source.txt";
+    string fileName = "../../../../../../Tests15/Sample_source.txt";
 
     SourceProcessor *sourceProcessor = new SourceProcessor();
     sourceProcessor->parseProgram(fileName);

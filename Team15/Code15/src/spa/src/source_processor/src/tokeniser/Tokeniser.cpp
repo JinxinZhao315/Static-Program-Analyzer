@@ -40,14 +40,28 @@ Tokeniser::Tokeniser() {
     });
 }
 
-void Tokeniser::feedLines(string filename) {
+vector<vector<string>*>* Tokeniser::feedLines(string filename) {
+    vector<vector<string>*>* tokenVector = new vector<vector<string>*>();
     ifstream file(filename);
     if (!file.is_open()) {
         cout << "Failed to open file: " << filename << endl;
     }
     string line;
     while(getline(file, line)) {
-        tokenise(line);
+        vector<string>* tokens = new vector<string>();
+        tokens = tokenise(line);
+        tokenVector->push_back(tokens);
+    }
+    extractedTokens = tokenVector;
+    return tokenVector;
+}
+
+void Tokeniser::printTokens() {
+    for(vector<string>* line : *extractedTokens) {
+        for(string token : *line) {
+            cout << token << " ";
+        }
+        cout << endl;
     }
 }
 
