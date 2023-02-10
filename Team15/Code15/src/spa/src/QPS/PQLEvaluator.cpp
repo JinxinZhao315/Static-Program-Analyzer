@@ -16,12 +16,11 @@ std::string PQLEvaluator::evaluate(Query query)
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
 
-<<<<<<< HEAD
+
     //todo make clauseHandler.evaluate instead of if else branch
-=======
+
     bool isEarlyExit = false;
 
->>>>>>> d1466c83b0d47ae50662291bef2d25fe20465668
     for (SuchThatClause suchThatCl : suchThatVec)
     {
         std::string relationship = suchThatCl.getRelationShip();
@@ -32,18 +31,18 @@ std::string PQLEvaluator::evaluate(Query query)
             Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
             if (result.isResultTrue() == false)
             {
-<<<<<<< HEAD
+
                 resultTable.resetKeySetEmpty(selectedVarName);
-=======
+
                 resultTable.deleteKeyValuePair(selectedVarName);
                 resultTable.insertKeyValuePair(selectedVarName, {});
                 isEarlyExit = true;
->>>>>>> d1466c83b0d47ae50662291bef2d25fe20465668
+
                 break;
             }
             followsHandler.combineResult(resultTable, result);
         }
-<<<<<<< HEAD
+
         if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
@@ -69,10 +68,7 @@ std::string PQLEvaluator::evaluate(Query query)
                 modifiesSHandler = ModifiesSHandler(pkb);
                 result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
             }
-=======
 
-    }
->>>>>>> d1466c83b0d47ae50662291bef2d25fe20465668
 
             if (result.isResultTrue() == false) {
                 resultTable.resetKeySetEmpty(selectedVarName);
@@ -93,10 +89,9 @@ std::string PQLEvaluator::evaluate(Query query)
             break;
         }
         PatternHandler patternHandler = PatternHandler(pkb);
-<<<<<<< HEAD
+
         Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
-=======
-        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+
         if (result.isResultTrue() == false)
         {
             resultTable.deleteKeyValuePair(selectedVarName);
@@ -104,7 +99,7 @@ std::string PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
             break;
         }
->>>>>>> d1466c83b0d47ae50662291bef2d25fe20465668
+
         patternHandler.combineResult(resultTable, result);
     }
 
