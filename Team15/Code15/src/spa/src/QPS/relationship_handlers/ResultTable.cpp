@@ -30,3 +30,8 @@ int ResultTable::sizeOfResultTable() {
 void ResultTable::deleteKeyValuePair(std::string key) {
     this->resultTable.erase(key);
 }
+
+void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
+    deleteKeyValuePair(selectedVarName);
+    insertKeyValuePair(selectedVarName, {});
+}
