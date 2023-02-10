@@ -4,8 +4,8 @@ Query::Query() {};
 
 Query:: ~Query() {};
 
-void Query::addSynonymTable(std::multimap<std::string, std::string> varTable) {
-	this->synonymTable = varTable;
+void Query::addSynonymTable(std::multimap<std::string, std::string> synonymTable) {
+	this->synonymTable = synonymTable;
 }
 
 void Query::addSelectClause(SelectClause selectClause) {

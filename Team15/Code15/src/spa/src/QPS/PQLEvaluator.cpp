@@ -9,12 +9,15 @@ std::string PQLEvaluator::evaluate(Query query)
 {
     ResultTable resultTable = ResultTable();
 
-    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable); // update resultTable and return the synonym name
+    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
+
+
+    //todo make clauseHandler.evaluate instead of if else branch
 
     bool isEarlyExit = false;
 
@@ -25,26 +28,70 @@ std::string PQLEvaluator::evaluate(Query query)
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
+            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
             if (result.isResultTrue() == false)
             {
+
+                resultTable.resetKeySetEmpty(selectedVarName);
+
                 resultTable.deleteKeyValuePair(selectedVarName);
                 resultTable.insertKeyValuePair(selectedVarName, {});
                 isEarlyExit = true;
+
                 break;
             }
             followsHandler.combineResult(resultTable, result);
         }
 
-    }
+       /* if (relationship == "Parent" || relationship == "Parent*") {
+            ParentHandler parentHandler = ParentHandler(pkb);
+            bool isStar = relationship == "Parent" ? false : true;
+            Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
+            if (result.isResultTrue() == false) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+                break;
+            }
+            parentHandler.combineResult(resultTable, result);
+        }*/
+        //if (relationship == "Modifies") {
+        //    Result result;
+        //    std::string leftArg = suchThatCl.getLeftArg();
+        //    std::string leftType = Utility::getReferenceType(leftArg);
+        //    ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+        //    ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
 
+        //    if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+        //        modifiesPHandler = ModifiesPHandler(pkb);
+        //        result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+        //    }
+        //    else {
+        //        modifiesSHandler = ModifiesSHandler(pkb);
+        //        result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
+        //    }
+
+
+        //    if (result.isResultTrue() == false) {
+        //        resultTable.resetKeySetEmpty(selectedVarName);
+        //        break;
+        //    }
+        //    if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+        //        modifiesPHandler.combineResult(resultTable, result);
+        //    }
+        //    else {
+        //        modifiesSHandler.combineResult(resultTable, result);
+        //    }
+
+        //}
+    }
     for (PatternClause patternCl : patternVec)
     {
         if (isEarlyExit) {
             break;
         }
         PatternHandler patternHandler = PatternHandler(pkb);
-        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+
+        Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
+
         if (result.isResultTrue() == false)
         {
             resultTable.deleteKeyValuePair(selectedVarName);
@@ -52,6 +99,7 @@ std::string PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
             break;
         }
+
         patternHandler.combineResult(resultTable, result);
     }
 

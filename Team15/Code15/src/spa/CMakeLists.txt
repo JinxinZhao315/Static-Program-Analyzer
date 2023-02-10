@@ -10,7 +10,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/relationship_handlers/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 
-add_library(spa ${srcs} ${headers})
+add_library(spa ${srcs} ${headers} "src/QPS/relationship_handlers/ModifiesPHandler.h" "src/QPS/relationship_handlers/ModifiesPHandler.cpp")
+
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

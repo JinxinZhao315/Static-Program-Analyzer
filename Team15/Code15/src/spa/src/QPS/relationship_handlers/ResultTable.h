@@ -18,6 +18,7 @@ public:
     std::set<std::string> getValueFromKey(std::string key);
     int sizeOfResultTable();
     void deleteKeyValuePair(std::string key);
+    void resetKeySetEmpty(std::string);
 };
 
 

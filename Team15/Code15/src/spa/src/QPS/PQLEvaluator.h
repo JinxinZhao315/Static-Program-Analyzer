@@ -1,10 +1,15 @@
 #include "QPS/Query.h"
 #include "PKB.h"
+
 #include "QPS/relationship_handlers/Result.h"
 #include "QPS/relationship_handlers/ResultTable.h"
 #include "QPS/relationship_handlers/SelectHandler.h"
 #include "QPS/relationship_handlers/FollowsHandler.h"
+#include "QPS/relationship_handlers/ParentHandler.h"
+#include "QPS/relationship_handlers/ModifiesPHandler.h"
+#include "QPS/relationship_handlers/ModifiesSHandler.h"
 #include "QPS/relationship_handlers/PatternHandler.h"
+#include "Utility.h"
 #include <numeric>
 #include <string>
 #include <set>
