@@ -1,5 +1,14 @@
 #include "../../include/extractor/Extractor.h"
 
+Extractor::Extractor() {
+    statements["while"] = {};
+    statements["if"] = {};
+    statements["read"] = {};
+    statements["print"] = {};
+    statements["call"] = {};
+    statements["="] = {};
+}
+
 set<string> Extractor::getVariables() {
     return variables;
 }
@@ -45,10 +54,13 @@ void Extractor::extractProcedure(Line line) {
     procedures->insert(procedureName);
 }
 
-
-// FIX
 bool isNumeric(string token) {
-    return strspn( token.c_str(), "-.0123456789" ) == token.size();
+    try {
+        stoi(token);
+        return true;
+    } catch (exception) {
+        return false;
+    }
 }
 
 void Extractor::extractConstants(Line line) {
@@ -62,16 +74,9 @@ void Extractor::extractConstants(Line line) {
 }
 
 void insertLineNumber(map<string, vector<int>>* statements, string* type, int* lineNumber) {
-    if(statements->count(*type) == 0) {
-        vector<int>* lineNumbers = new vector<int>();
-        lineNumbers->push_back(*lineNumber);
-        pair statement = make_pair(*type, *lineNumber);
-        statements->insert(statement);
-    }
+    statements->at(*type).push_back(*lineNumber);
 }
 
-
-// FIX
 void Extractor::extractStatement(Line line) {
     vector<string> tokens = line.getTokens();
     string type = line.getType();
@@ -125,10 +130,10 @@ void Extractor::printEntities() {
     cout << endl << endl;
 
     cout << "Statements: " << endl;
-    for(auto statement = begin(this->statements); statement != end(this->statements); statement++) {
-        cout << "Statement type " << statement->first << " ";
-        for(int lineNumber : statement->second) {
-            cout << lineNumber << " ";
+    for(auto[key, value] : this->statements) {
+        cout << "Statement type " << key << ": ";
+        for(auto i : value) {
+            cout << i << " ";
         }
         cout << endl;
     }

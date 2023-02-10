@@ -16,7 +16,7 @@ using namespace std;
 
 class Extractor {
 public:
-    Extractor() {}
+    Extractor();
     void extractEntities(const vector<Line> &program);
     void extract(const vector<Line>& program);
     set<string> getVariables();
