@@ -1,4 +1,5 @@
 #include "../include/SourceProcessor.h"
+#include "../include/parser/Line.h"
 #include <iostream>
 
 using namespace std;
@@ -12,6 +13,8 @@ SourceProcessor::SourceProcessor() {
 void SourceProcessor::parseProgram(string fileName) {
     parser->parseProgram(fileName);
     tokeniser->feedLines(fileName);
+    vector<Line> extractedLines = tokeniser->getExtractedLines();
+    extract(extractedLines);
 }
 
 void SourceProcessor::storeDataInPKB() {
@@ -22,11 +25,12 @@ void SourceProcessor::printParsedProgram() {
     cout << "Printing parsed program..." << endl;
     parser->printParsedProgram();
     cout << endl << "Printing extracted tokens..." << endl;
-    tokeniser->printTokens();
+    tokeniser->printLines();
+    extractor->printEntities();
 }
 
-void SourceProcessor::extract() {
-//    extractor-> extract();
+void SourceProcessor::extract(const vector<Line>& program) {
+    extractor->extract(program);
 }
 
 int main() {

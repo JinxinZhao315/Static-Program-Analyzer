@@ -21,8 +21,14 @@ public:
         this->tokens = tokens;
         this->type = type;
     }
+    Line(vector<string> tokens, string type) {
+        this->lineNumber = -1;
+        this->tokens = tokens;
+        this->type = type;
+    }
 
     int getLineNumber();
     vector<string> getTokens();
     string getType();
+    void printLine();
 };

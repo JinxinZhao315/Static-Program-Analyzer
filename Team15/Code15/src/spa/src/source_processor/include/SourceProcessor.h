@@ -11,6 +11,6 @@ public:
     SourceProcessor();
     void parseProgram(string fileName);
     void printParsedProgram();
-    void extract();
+    void extract(const vector<Line>& program);
     void storeDataInPKB();
 };

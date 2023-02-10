@@ -40,7 +40,7 @@ Tokeniser::Tokeniser() {
     });
 }
 
-vector<vector<string>*>* Tokeniser::feedLines(string filename) {
+void Tokeniser::feedLines(string filename) {
     vector<vector<string>*>* tokenVector = new vector<vector<string>*>();
     ifstream file(filename);
     if (!file.is_open()) {
@@ -52,7 +52,7 @@ vector<vector<string>*>* Tokeniser::feedLines(string filename) {
         tokenVector->push_back(tokens);
     }
     extractedTokens = tokenVector;
-    return tokenVector;
+    generateLineObjects(extractedTokens);
 }
 
 void Tokeniser::printTokens() {
@@ -113,4 +113,59 @@ vector<string>* Tokeniser::tokenise(string line) {
         }
     }
     return tokens;
+}
+
+string findKeyword(vector<string>* line, vector<string>* keywords) {
+    bool extracted = false;
+    string extractedKeyword = "";
+    for(auto token : *line) {
+        for(auto keyword: *keywords) {
+            if(token == keyword) {
+                extracted = true;
+                extractedKeyword = keyword;
+                break;
+            }
+        }
+        if(extracted) {
+            break;
+        }
+    }
+    return extractedKeyword;
+}
+
+bool checkKeywordHasLineNumber(string keyword) {
+    if(keyword == "procedure" || keyword == "else") {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
+    int lineNumber = 1;
+    vector<Line> extractedLines;
+    for(auto line : *tokens) {
+        string keyword = findKeyword(line, keywords);
+        bool hasLineNumber = checkKeywordHasLineNumber(keyword);
+        Line* extractedLine;
+        if(hasLineNumber) {
+            extractedLine = new Line(lineNumber, *line, keyword);
+            lineNumber++;
+        } else {
+            extractedLine = new Line(*line, keyword);
+        }
+        extractedLines.push_back(*extractedLine);
+    }
+    this->extractedLines = extractedLines;
+}
+
+vector<Line> Tokeniser::getExtractedLines() {
+    return this->extractedLines;
+}
+
+void Tokeniser::printLines() {
+    for(auto line: extractedLines) {
+        line.printLine();
+    }
+    cout << endl;
 }

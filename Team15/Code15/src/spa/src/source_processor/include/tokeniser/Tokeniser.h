@@ -5,16 +5,21 @@
 #include <string>
 #include <regex>
 #include <algorithm>
+#include "../parser/Line.h"
 
 using namespace std;
 
 class Tokeniser {
 private:
     vector<vector<string>*>* extractedTokens;
+    vector<Line> extractedLines;
 public:
     Tokeniser();
-    vector<vector<string>*>* feedLines(string filename);
+    void feedLines(string filename);
     vector<string>* keywords;
     vector<string>* tokenise(string line);
     void printTokens();
+    void printLines();
+    void generateLineObjects(vector<vector<string>*>* tokens);
+    vector<Line> getExtractedLines();
 };
