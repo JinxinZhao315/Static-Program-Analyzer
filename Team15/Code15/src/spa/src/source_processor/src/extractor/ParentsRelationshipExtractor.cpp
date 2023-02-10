@@ -1,31 +1,33 @@
 #include "../../include/extractor/ParentsRelationshipExtractor.h"
 
-bool endsWith(const vector<string>& vec, const string& str) {
-    return !vec.empty() && vec.back() == str;
-}
-
-pair<map<int, int>, map<int, set<int> > > generateParentsRelationship(const vector<Line>& program) {
+tuple<map<int, int>, map<int, set<int> >> extractParentsRelationship(const vector<Line>& program) {
     map<int, int> parentsRS;
     map<int, set<int> > parentsStarRS;
     vector<int> parentStack;
 
-    for (Line line: program) { //TODO: iterate through procedures instead of program
+    for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         vector<string> tokens = line.getTokens();
-        if (currLineNumber < 0) continue; // no line number - procedure or else block //TODO: check by type of line
+        string lineType = line.getType();
+        if (lineType == "else") continue;
+        if (lineType == "procedure") parentStack.clear(); // new procedure - failsafe, might not be needed
         // Store parents relationship
         if (!parentStack.empty()) { // has parent
             int parent = parentStack.back();
-            parentsRS[parent, currLineNumber];
+            parentsRS[parent] = currLineNumber;
         }
         // Store parents* relationship
         set<int> ancestorsSet(parentStack.begin(), parentStack.end());
         parentsStarRS[currLineNumber] = ancestorsSet;
 
-
-        if (endsWith(tokens, "{")) { //TODO: check by type of line instead of ending char
-            parentStack.push_back(currLineNumber); // to keep track of nesting level
+        if (lineType == "if" || lineType == "while") {
+            parentStack.push_back(currLineNumber);
+            parentsRS[currLineNumber] = currLineNumber;
+        } else if (lineType == "}") {
+            if (!parentStack.empty()) {
+                parentStack.pop_back();
+            }
         }
     }
-    return make_pair(parentsRS, parentsStarRS);
+    return tuple(parentsRS, parentsStarRS);
 }

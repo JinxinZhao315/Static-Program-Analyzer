@@ -6,6 +6,7 @@ using namespace std;
 SourceProcessor::SourceProcessor() {
     tokeniser = new Tokeniser();
     parser = new Parser();
+    extractor = new Extractor();
 }
 
 void SourceProcessor::parseProgram(string fileName) {
@@ -22,6 +23,10 @@ void SourceProcessor::printParsedProgram() {
     parser->printParsedProgram();
     cout << endl << "Printing extracted tokens..." << endl;
     tokeniser->printTokens();
+}
+
+void SourceProcessor::extract() {
+//    extractor-> extract();
 }
 
 int main() {
