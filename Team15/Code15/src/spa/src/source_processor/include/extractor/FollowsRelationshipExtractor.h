@@ -2,4 +2,4 @@
 
 #include "Extractor.h"
 
-pair<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program);
+tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program, const map<int, int>& parentsRS);
