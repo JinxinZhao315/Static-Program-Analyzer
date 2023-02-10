@@ -35,6 +35,18 @@ std::string PQLEvaluator::evaluate(Query query)
             }
             followsHandler.combineResult(resultTable, result);
         }
+        /*else if (relationship == "Uses") 
+        {
+            UsesHandler usesHandler = UsesHandler(pkb);
+            Result result = usesHandler.evalUses(suchThatCl, resultTable, varTable);
+            if (result.isResultTrue() == false) {
+                resultTable.deleteKeyValuePair(selectedVarName);
+                resultTable.insertKeyValuePair(selectedVarName, {});
+                isEarlyExit = true;
+                break;
+            }
+            usesHandler.combineResult(resultTable, result);
+        }*/
 
     }
 

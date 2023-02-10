@@ -105,11 +105,11 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
                 if (!matchingLines.empty()) {
                     resultLeftSynonVals.insert(currLeftVal);
-                    std::set<std::string> intersection;
-                    std::insert_iterator<std::set<std::string>> intersectIterate(intersection, intersection.begin());
-                    set_intersection(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
-                                     matchingLines.begin(), matchingLines.end(), intersectIterate);
-                    resultPatternSynonVals = intersection;
+                    std::set<std::string> unions;
+                    std::insert_iterator<std::set<std::string>> unionIterator(unions, unions.begin());
+                    set_union(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
+                              matchingLines.begin(), matchingLines.end(), unionIterator);
+                    resultPatternSynonVals = unions;
                 }
 
             }
