@@ -1,5 +1,5 @@
-#include "QPS/relationship_handlers/ClauseHandler.h"
-#include "QPS/relationship_handlers/Result.h"
+#include "QPS/include/evaluator/ClauseHandler.h"
+#include "QPS/include/model/Result.h"
 #include <set>
 #include "catch.hpp"
 #include <assert.h>
