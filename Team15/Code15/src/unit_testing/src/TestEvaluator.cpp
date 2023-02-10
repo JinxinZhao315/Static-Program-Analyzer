@@ -133,12 +133,10 @@ TEST_CASE("PQLEvaluator test 1")
     }
 }
 
-<<<<<<< HEAD
-TEST_CASE("Tokeniser test 5") {
-=======
+
 TEST_CASE("Tokeniser test 5")
 {
->>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a
+
     Tokeniser *tokeniser = new Tokeniser();
     std::vector<std::string> tokens = tokeniser->tokenise("procedure example { x = 1; y == 2; read z;}", 1);
     for (string s : tokens)
@@ -254,7 +252,3 @@ TEST_CASE("Overall test")
          << endl;
     // assert(result == "1,2");
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a

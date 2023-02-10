@@ -10,8 +10,8 @@ class Query
 {
 
 private:
+    //Todo: SynonymTable synonymTable;
 	std::multimap<std::string, std::string> synonymTable;
-    //SynonymTable synonymTable;
     SelectClause selectClause;
     std::vector<PatternClause> patternClauseVec;
 	std::vector<SuchThatClause> suchThatClauseVec;
@@ -19,7 +19,7 @@ private:
 public:
 	Query();
 	~Query();
-	void addSynonymTable(std::multimap<std::string, std::string> varTable);
+	void addSynonymTable(std::multimap<std::string, std::string> synonymTable);
 	void addSelectClause(SelectClause selectClause);
 	void addPatternClause(PatternClause patternClause);
 	void addSuchThatClause(SuchThatClause suchThatClause);

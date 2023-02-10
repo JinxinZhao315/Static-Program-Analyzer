@@ -9,52 +9,14 @@ std::string PQLEvaluator::evaluate(Query query)
 {
     ResultTable resultTable = ResultTable();
 
-    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable); // update resultTable and return the synonym name
+    std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
 
-<<<<<<< HEAD
-    for (SuchThatClause suchThatCl: suchThatVec) {
-       std::string relationship = suchThatCl.getRelationShip();
-       if (relationship == "Follows" || relationship == "Follows*") {
-           FollowsHandler followsHandler = FollowsHandler(pkb);
-           bool isStar = relationship == "Follows" ? false : true;
-           Result result = followsHandler.evalFollowsStar(isStar, suchThatCl, resultTable, varTable);
-           if (result.isResultTrue() == false) {
-               resultTable.deleteKeyValuePair(selectedVarName);
-               resultTable.insertKeyValuePair(selectedVarName, {});
-               break;
-           }
-           followsHandler.combineResult(resultTable, result);
-       } 
-       //if (relationship == "Parent" || relationship == "Parent*") {
-       //    ParentHandler parentHandler = ParentHandler(pkb);
-       //    bool isStar = relationship == "Parent" ? false : true;
-       //    Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, varTable);
-       //    if (result.isResultTrue() == false) {
-       //        resultTable.deleteKeyValuePair(selectedVarName);
-       //        resultTable.insertKeyValuePair(selectedVarName, {});
-       //        break;
-       //    }
-       //    parentHandler.combineResult(resultTable, result);
-       //}
-       //if (relationship == "Modifies") {
-       //    ModifiesHandler modifiesHandler = ModifiesHandler(pkb);
-       //  
-       //    Result result = modifiesHandler.evalModifies(suchThatCl, resultTable, varTable);
-       //    if (result.isResultTrue() == false) {
-       //        resultTable.deleteKeyValuePair(selectedVarName);
-       //        resultTable.insertKeyValuePair(selectedVarName, {});
-       //        break;
-       //    }
-       //    modifiesHandler.combineResult(resultTable, result);
-       //}
-
-
-=======
+    //todo make clauseHandler.evaluate instead of if else branch
     for (SuchThatClause suchThatCl : suchThatVec)
     {
         std::string relationship = suchThatCl.getRelationShip();
@@ -62,22 +24,57 @@ std::string PQLEvaluator::evaluate(Query query)
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, varTable);
+            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
             if (result.isResultTrue() == false)
             {
-                resultTable.deleteKeyValuePair(selectedVarName);
-                resultTable.insertKeyValuePair(selectedVarName, {});
+                resultTable.resetKeySetEmpty(selectedVarName);
                 break;
             }
             followsHandler.combineResult(resultTable, result);
         }
->>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a
-    }
+        if (relationship == "Parent" || relationship == "Parent*") {
+            ParentHandler parentHandler = ParentHandler(pkb);
+            bool isStar = relationship == "Parent" ? false : true;
+            Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
+            if (result.isResultTrue() == false) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+                break;
+            }
+            parentHandler.combineResult(resultTable, result);
+        }
+        if (relationship == "Modifies") {
+            Result result;
+            std::string leftArg = suchThatCl.getLeftArg();
+            std::string leftType = Utility::getReferenceType(leftArg);
+            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
 
+            if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+                modifiesPHandler = ModifiesPHandler(pkb);
+                result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+            }
+            else {
+                modifiesSHandler = ModifiesSHandler(pkb);
+                result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
+            }
+
+            if (result.isResultTrue() == false) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+                break;
+            }
+            if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+                modifiesPHandler.combineResult(resultTable, result);
+            }
+            else {
+                modifiesSHandler.combineResult(resultTable, result);
+            }
+
+        }
+    }
     for (PatternClause patternCl : patternVec)
     {
         PatternHandler patternHandler = PatternHandler(pkb);
-        Result result = patternHandler.evalPattern(patternCl, resultTable, varTable);
+        Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
         patternHandler.combineResult(resultTable, result);
     }
 

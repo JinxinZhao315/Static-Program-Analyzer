@@ -5,12 +5,11 @@
 #include "QPS/relationship_handlers/ResultTable.h"
 #include "QPS/relationship_handlers/SelectHandler.h"
 #include "QPS/relationship_handlers/FollowsHandler.h"
-<<<<<<< HEAD
 #include "QPS/relationship_handlers/ParentHandler.h"
-#include "QPS/relationship_handlers/ModifiesHandler.h"
-=======
+#include "QPS/relationship_handlers/ModifiesPHandler.h"
+#include "QPS/relationship_handlers/ModifiesSHandler.h"
 #include "QPS/relationship_handlers/PatternHandler.h"
->>>>>>> cd82861228a2c29d3096e62ca16791ce3140d74a
+#include "Utility.h"
 #include <numeric>
 #include <string>
 #include <set>
