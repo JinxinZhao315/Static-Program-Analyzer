@@ -1,10 +1,10 @@
-#include "QPS/PQLPreprocessor.h"
-#include "QPS/PQLSyntaxChecker.h"
+#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "QPS/include/tokenizer/PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
 #include <assert.h>
-#include "QPS/QueryTokenizer.h"
-#include "QPS/PQLSemanticCheck.h"
+#include "QPS/include/tokenizer/QueryTokenizer.h"
+#include "QPS/include/tokenizer/PQLSemanticCheck.h"
 
 #include "catch.hpp"
 

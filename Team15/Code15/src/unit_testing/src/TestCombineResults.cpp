@@ -1,5 +1,5 @@
-//#include "relationship_handlers/ClauseHandler.h"
-//#include "relationship_handlers/Result.h"
+//#include "evaluator/ClauseHandler.h"
+//#include "evaluator/Result.h"
 //#include <set>
 //#include "catch.hpp"
 //

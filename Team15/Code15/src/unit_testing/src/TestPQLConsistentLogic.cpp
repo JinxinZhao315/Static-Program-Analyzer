@@ -1,5 +1,5 @@
-#include "QPS/PQLRefConsistentLogic.h"
-#include "QPS/Query.h"
+#include "QPS/include/tokenizer/PQLRefConsistentLogic.h"
+#include "QPS/include/model/Query.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "exceptions/PQLSemanticError.h"
 
