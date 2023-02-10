@@ -26,7 +26,7 @@ void SourceProcessor::printParsedProgram() {
 }
 
 void SourceProcessor::extract() {
-    extractor-> extract();
+//    extractor-> extract();
 }
 
 int main() {

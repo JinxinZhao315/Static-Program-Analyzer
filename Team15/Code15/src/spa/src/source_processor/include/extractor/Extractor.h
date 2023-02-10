@@ -19,10 +19,10 @@ public:
     void extract(const vector<Line>& program);
 
 private:
-    map<int, int> nestingLevel;
-    map<int, int> followsRS;
     map<int, int> parentsRS;
-
-    map<int, set<int> > followsStar;
     map<int, set<int> > parentsStarRS;
+
+    map<int, int> followsRS;
+    map<int, set<int> > followsStarRS;
+
 };
