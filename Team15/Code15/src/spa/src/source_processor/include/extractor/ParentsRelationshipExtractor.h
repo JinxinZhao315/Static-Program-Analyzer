@@ -2,4 +2,4 @@
 
 #include "Extractor.h"
 
-pair<map<int, int>, map<int, set<int> > > generateParentsRelationship(const vector<Line>& program);
+tuple<map<int, int>, map<int, set<int> >> extractParentsRelationship(const vector<Line>& program);

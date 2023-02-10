@@ -1,10 +1,11 @@
 #include "../../include/extractor/Extractor.h"
 
 void Extractor::extract(const vector<Line> &program) {
-    // call and get results of extraction
-    void generateParentsRelationship(program);
-
-    // TODO: set results here
+    // Call and get results of extraction
+    auto [parentsRS, parentsStarRS] = extractParentsRelationship(program);
+    auto [followsRS, followsStarRS] = extractFollowsRelationship(program, parentsRS);
+    // Set results here
     this->parentsRS = parentsRS;
-    this->parentsStar = parentsStarRS;
+    this->parentsStarRS = parentsStarRS;
+    this->nestingLevel = nestingLevel;
 }

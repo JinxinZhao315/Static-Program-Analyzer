@@ -1,11 +1,9 @@
 #include "../../include/extractor/ParentsRelationshipExtractor.h"
 
-void extractParentsRelationship(const vector<Line>& program) {
+tuple<map<int, int>, map<int, set<int> >> extractParentsRelationship(const vector<Line>& program) {
     map<int, int> parentsRS;
     map<int, set<int> > parentsStarRS;
     vector<int> parentStack;
-    int currNestingLevel = 0;
-    map<int, int> nestingLevel;
 
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
@@ -16,20 +14,20 @@ void extractParentsRelationship(const vector<Line>& program) {
         // Store parents relationship
         if (!parentStack.empty()) { // has parent
             int parent = parentStack.back();
-            parentsRS[parent, currLineNumber];
+            parentsRS[parent] = currLineNumber;
         }
         // Store parents* relationship
         set<int> ancestorsSet(parentStack.begin(), parentStack.end());
         parentsStarRS[currLineNumber] = ancestorsSet;
 
         if (lineType == "if" || lineType == "while") {
-            parentStack.push_back(currLineNumber); // to keep track of nesting level
-            nestingLevel[currLineNumber] = ++currNestingLevel;
+            parentStack.push_back(currLineNumber);
+            parentsRS[currLineNumber] = currLineNumber;
         } else if (lineType == "}") {
             if (!parentStack.empty()) {
                 parentStack.pop_back();
             }
-            nestingLevel[currLineNumber] = ++currNestingLevel;
         }
     }
+    return tuple(parentsRS, parentsStarRS);
 }

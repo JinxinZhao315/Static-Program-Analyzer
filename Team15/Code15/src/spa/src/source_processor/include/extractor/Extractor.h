@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <stack>
 #include <stdio.h>
 #include <iostream>
 #include "../parser/Line.h"
@@ -23,5 +24,5 @@ private:
     map<int, int> parentsRS;
 
     map<int, set<int> > followsStar;
-    map<int, set<int> > parentsStar;
+    map<int, set<int> > parentsStarRS;
 };
