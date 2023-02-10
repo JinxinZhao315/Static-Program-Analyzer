@@ -1,9 +1,6 @@
 #include "../../include/extractor/FollowsRelationshipExtractor.h"
 
-tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program, const map<int, int>& parentsRS) {
-    map<int, int> nestingLevel;
-    int currNestingLevel;
-
+tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program) {
     int startOfBlock = 0;
     stack<int> stack;
     map<int, int> startOfBlockRS;
@@ -11,15 +8,6 @@ tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vect
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         string lineType = line.getType();
-
-        // nesting logic
-        if (lineType == "if" || lineType == "while") {
-            nestingLevel[currLineNumber] = currNestingLevel++; //increment after assigning
-        } else if (lineType == "}") { // this type of line has no line number
-            currNestingLevel--; //decrement before assigning
-        } else {
-            nestingLevel[currLineNumber] = currNestingLevel;
-        }
 
         // start of block logic
         if (lineType == "if" || lineType == "while" || lineType == "else") { //start of new block
@@ -37,21 +25,18 @@ tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vect
 
     map<int, int> followsRS;
     map<int, set<int> > followsStarRS;
+    for (int i = 0; i < program.size(); i++) {
+        Line firstLine = program[i];
+        int firstLineNumber = firstLine.getLineNumber();
+        for (int j = i + 1; j < program.size() - 1; j++) {
+            Line secondLine = program[j];
+            int secondLineNumber = secondLine.getLineNumber();
 
-    for (auto outer_it = nestingLevel.begin(); outer_it != nestingLevel.end(); ++outer_it) {
-        for (auto inner_it = next(outer_it); inner_it != nestingLevel.end(); ++inner_it) {
-            int firstLine = outer_it->first;
-            int secondLine = inner_it->first;
-            int firstNesting = outer_it->second;
-            int secondNesting = inner_it->second;
-            bool isSameNesting = firstNesting == secondNesting;
-            bool isSameBlock = startOfBlockRS[firstLine] == startOfBlock[secondLine];
-            if (isSameNesting && isSameBlock) {
-                followsRS[firstLine] = secondLine;
-            }
+            bool isSameBlock = startOfBlockRS[firstLineNumber] == startOfBlockRS[secondLineNumber];
+            bool isLineAfter = firstLineNumber + 1 == secondLineNumber;
+            if (isLineAfter && isSameBlock) followsRS[firstLineNumber] = secondLineNumber;
+            if (isSameBlock) followsStarRS[firstLineNumber].insert(secondLineNumber);
         }
     }
-
-
-    return tuple(followsRS, followsStarRS)
+    return tuple(followsRS, followsStarRS);
 }
