@@ -1,22 +1,18 @@
 #pragma once
 
+#include <string>
 #include <set>
 
 using namespace std;
 
-template <typename E>
 class EntityStorage {
 public:
-	inline EntityStorage() = default;
+	EntityStorage();
 
-	inline void addEntity(E entity) {
-		entityStorage.emplace(entity);
-	}
+	void addEntity(std::string entity);
 
-	inline std::set<E> getAllEntities() {
-		return entityStorage;
-	}
+	std::set<std::string> getAllEntities();
 
 private:
-	std::set<E> entityStorage;
+	std::set<std::string> entityStorage;
 };
