@@ -40,117 +40,117 @@ string PatternHandler::convertToPostfix(string input) {
 Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
                                    std::multimap<std::string, std::string> &synonymTable) {
 
-    string patternSynon = patternClause.getPatternSynonym();
-    string leftArg = patternClause.getLeftArg();
-    string rightArg = patternClause.getRightArg();
-    string leftType = Utility::getReferenceType(leftArg);
-    string rightType = Utility::getReferenceType(rightArg);
+    //string patternSynon = patternClause.getPatternSynonym();
+    //string leftArg = patternClause.getLeftArg();
+    //string rightArg = patternClause.getRightArg();
+    //string leftType = Utility::getReferenceType(leftArg);
+    //string rightType = Utility::getReferenceType(rightArg);
     Result result;
-    string patternType = synonymTable.find(patternSynon)->second;
+    //string patternType = synonymTable.find(patternSynon)->second;
 
-    resultTableCheckAndAdd(patternSynon, resultTable, patternType);
+    //resultTableCheckAndAdd(patternSynon, resultTable, patternType);
 
-    // Does the Design Entity represented by the pattern synon exist in PKB?
-    // If not, set result to false
-    if (resultTable.getValueFromKey(patternSynon).empty()) {
-        result.setResultTrue(false);
-        return result;
-    }
+    //// Does the Design Entity represented by the pattern synon exist in PKB?
+    //// If not, set result to false
+    //if (resultTable.getValueFromKey(patternSynon).empty()) {
+    //    result.setResultTrue(false);
+    //    return result;
+    //}
 
 
-    if (leftType == Utility::UNDERSCORE) {
+    //if (leftType == Utility::UNDERSCORE) {
 
-        if (rightType == Utility::UNDERSCORE) {
+    //    if (rightType == Utility::UNDERSCORE) {
 
-            // result maintains current values of patternSynon
-            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
+    //        // result maintains current values of patternSynon
+    //        result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
+    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
-            set<pair<string, int>> allRHS; // = pkb.getAllPatternRHS()
-            set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
-            if (matchingLines.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
-            result.setFirstArg(patternSynon, matchingLines);
+    //        set<pair<string, int>> allRHS; // = pkb.getAllPatternRHS()
+    //        set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
+    //        if (matchingLines.empty()) {
+    //            result.setResultTrue(false);
+    //            return result;
+    //        }
+    //        result.setFirstArg(patternSynon, matchingLines);
 
-        }
+    //    }
 
-    } else if (leftType == Utility::SYNONYM) {
+    //} else if (leftType == Utility::SYNONYM) {
 
-        string leftDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        std::set<string> currLeftSynonValues = resultTable.getValueFromKey(leftArg);
+    //    string leftDeType = synonymTable.find(leftArg)->second;
+    //    resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
+    //    std::set<string> currLeftSynonValues = resultTable.getValueFromKey(leftArg);
 
-        // Does the Design Entity type represented by left synonym exist in PKB?
-        // If not, set result to false
-        if (currLeftSynonValues.empty()) {
-            result.setResultTrue(false);
-            return result;
-        }
+    //    // Does the Design Entity type represented by left synonym exist in PKB?
+    //    // If not, set result to false
+    //    if (currLeftSynonValues.empty()) {
+    //        result.setResultTrue(false);
+    //        return result;
+    //    }
 
-        if (rightType == Utility::UNDERSCORE) {
+    //    if (rightType == Utility::UNDERSCORE) {
 
-            // result maintains current values of patternSynon and leftArg
-            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
-            result.setSecondArg(leftArg, resultTable.getValueFromKey(leftArg));
+    //        // result maintains current values of patternSynon and leftArg
+    //        result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
+    //        result.setSecondArg(leftArg, resultTable.getValueFromKey(leftArg));
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
-            std::set<string> resultPatternSynonVals;
-            std::set<string> resultLeftSynonVals;
+    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
+    //        std::set<string> resultPatternSynonVals;
+    //        std::set<string> resultLeftSynonVals;
 
-            for (string currLeftVal: currLeftSynonValues) {
-                set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(currLeftVal)
-                set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-                if (!matchingLines.empty()) {
-                    resultLeftSynonVals.insert(currLeftVal);
-                    std::set<std::string> unions;
-                    std::insert_iterator<std::set<std::string>> unionIterator(unions, unions.begin());
-                    set_union(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
-                              matchingLines.begin(), matchingLines.end(), unionIterator);
-                    resultPatternSynonVals = unions;
-                }
+    //        for (string currLeftVal: currLeftSynonValues) {
+    //            set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(currLeftVal)
+    //            set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+    //            if (!matchingLines.empty()) {
+    //                resultLeftSynonVals.insert(currLeftVal);
+    //                std::set<std::string> unions;
+    //                std::insert_iterator<std::set<std::string>> unionIterator(unions, unions.begin());
+    //                set_union(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
+    //                          matchingLines.begin(), matchingLines.end(), unionIterator);
+    //                resultPatternSynonVals = unions;
+    //            }
 
-            }
+    //        }
 
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
-            result.setSecondArg(leftArg, resultLeftSynonVals);
-        }
+    //        result.setFirstArg(patternSynon, resultPatternSynonVals);
+    //        result.setSecondArg(leftArg, resultLeftSynonVals);
+    //    }
 
-    } else if (leftType == Utility::QUOTED_IDENT) {
+    //} else if (leftType == Utility::QUOTED_IDENT) {
 
-        // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
-        // If not, set result to false
-        set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(leftArg)
+    //    // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
+    //    // If not, set result to false
+    //    set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(leftArg)
 
-        if (matchingRHS.empty()) {
-            result.setResultTrue(false);
-            return result;
-        }
+    //    if (matchingRHS.empty()) {
+    //        result.setResultTrue(false);
+    //        return result;
+    //    }
 
-        if (rightType == Utility::UNDERSCORE) {
-            std::set<string> resultPatternSynonVals;
-            for (pair<string, int> retPair : matchingRHS) {
-                resultPatternSynonVals.insert(to_string(retPair.second));
-            }
+    //    if (rightType == Utility::UNDERSCORE) {
+    //        std::set<string> resultPatternSynonVals;
+    //        for (pair<string, int> retPair : matchingRHS) {
+    //            resultPatternSynonVals.insert(to_string(retPair.second));
+    //        }
 
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
+    //        result.setFirstArg(patternSynon, resultPatternSynonVals);
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
-            set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-            if (matchingLines.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
+    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
+    //        set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+    //        if (matchingLines.empty()) {
+    //            result.setResultTrue(false);
+    //            return result;
+    //        }
 
-            result.setFirstArg(patternSynon, matchingLines);
+    //        result.setFirstArg(patternSynon, matchingLines);
 
-        }
+    //    }
 
-    } else {
-        throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
-    }
+    //} else {
+    //    throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
+    //}
 
     return result;
 }

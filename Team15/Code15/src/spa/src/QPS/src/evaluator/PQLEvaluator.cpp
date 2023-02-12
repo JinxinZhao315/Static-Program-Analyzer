@@ -8,9 +8,10 @@ PQLEvaluator::PQLEvaluator(PKB &pkb)
 std::string PQLEvaluator::evaluate(Query query)
 {
     ResultTable resultTable = ResultTable();
-
     std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
+
+
     std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
@@ -29,17 +30,17 @@ std::string PQLEvaluator::evaluate(Query query)
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
             Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
-            if (result.isResultTrue() == false)
-            {
+            //if (result.isResultTrue() == false)
+            //{
 
-                resultTable.resetKeySetEmpty(selectedVarName);
+            //    resultTable.resetKeySetEmpty(selectedVarName);
 
-                resultTable.deleteKeyValuePair(selectedVarName);
-                resultTable.insertKeyValuePair(selectedVarName, {});
-                isEarlyExit = true;
+            //    resultTable.deleteKeyValuePair(selectedVarName);
+            //    resultTable.insertKeyValuePair(selectedVarName, {});
+            //    isEarlyExit = true;
 
-                break;
-            }
+            //    break;
+            //}
             followsHandler.combineResult(resultTable, result);
         }
         /*else if (relationship == "Uses") 
@@ -95,29 +96,29 @@ std::string PQLEvaluator::evaluate(Query query)
 
         //}
     }
-    for (PatternClause patternCl : patternVec)
-    {
-        if (isEarlyExit) {
-            break;
-        }
-        PatternHandler patternHandler = PatternHandler(pkb);
+    //for (PatternClause patternCl : patternVec)
+    //{
+    //    if (isEarlyExit) {
+    //        break;
+    //    }
+    //    PatternHandler patternHandler = PatternHandler(pkb);
 
-        Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
+    //    Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
 
-        if (result.isResultTrue() == false)
-        {
-            resultTable.deleteKeyValuePair(selectedVarName);
-            resultTable.insertKeyValuePair(selectedVarName, {});
-            isEarlyExit = true;
-            break;
-        }
+    //    if (result.isResultTrue() == false)
+    //    {
+    //        resultTable.deleteKeyValuePair(selectedVarName);
+    //        resultTable.insertKeyValuePair(selectedVarName, {});
+    //        isEarlyExit = true;
+    //        break;
+    //    }
 
-        patternHandler.combineResult(resultTable, result);
-    }
+    //    patternHandler.combineResult(resultTable, result);
+    //}
 
     // return the values of the selected synonym in ResultTable
     std::string retStr;
-    set<string> retSet = resultTable.getValueFromKey(selectedVarName);
+    set<string> retSet = resultTable.getStringSetFromKey(selectedVarName);
     if (retSet.empty())
     {
         retStr = "None";
