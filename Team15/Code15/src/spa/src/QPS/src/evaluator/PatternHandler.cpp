@@ -78,16 +78,17 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
+            std::set<string> resultPatternSynonVals;
             set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
             for (int assignLineNum : allAssignLineNums) {
-                set<vector<string>>  allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
+                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
                 set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
-                if (matchingLines.empty()) {
-                    result.setResultTrue(false);
-                    return result;
+                if (!matchingLines.empty()) {
+                    resultPatternSynonVals.insert(to_string(assignLineNum));
                 }
-                result.setFirstArg(patternSynon, matchingLines);
             }
+
+            result.setFirstArg(patternSynon, resultPatternSynonVals);
 
         }
 
@@ -105,6 +106,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         }
 
         if (rightType == Utility::UNDERSCORE) {
+            std::set<string> resultPatternSynonVals;
             set<string> resultLeftSynonVals;
             for (string currLeftVal: currLeftSynonValues) {
                 set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
@@ -112,10 +114,15 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 if (!matchingRHS.empty()) {
                     // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
                     resultLeftSynonVals.insert(currLeftVal);
+                    set<int> lineNumSet = pkb.getPatternStmtsFromVar(currLeftVal);
+                    for (int num : lineNumSet) {
+                        resultPatternSynonVals.insert(to_string(num));
+                    }
+
                 }
             }
 
-            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
+            result.setFirstArg(patternSynon, resultPatternSynonVals);
             result.setSecondArg(leftArg, resultLeftSynonVals);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
@@ -142,7 +149,8 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
         // If not, set result to false
-        set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArg);
+        string leftArgTrimmed = trimUnderscoreQuotes(leftArg).second;
+        set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArgTrimmed);
 
         if (matchingRHS.empty()) {
             result.setResultTrue(false);
@@ -151,11 +159,10 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         if (rightType == Utility::UNDERSCORE) {
             std::set<string> resultPatternSynonVals;
-            for (vector<string> rhsPostfix : matchingRHS) {
-                set<int> lineNumSet = pkb.getPatternStmtsFromPostfix(rhsPostfix);
-                for (int num : lineNumSet) {
-                    resultPatternSynonVals.insert(to_string(num));
-                }
+
+            set<int> lineNumSet = pkb.getPatternStmtsFromVar(leftArgTrimmed);
+            for (int num : lineNumSet) {
+                resultPatternSynonVals.insert(to_string(num));
             }
 
             result.setFirstArg(patternSynon, resultPatternSynonVals);
