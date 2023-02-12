@@ -64,17 +64,18 @@ std::string PQLEvaluator::evaluate(Query query)
         }
         if (relationship == "Modifies") {
             Result result;
+
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
             //ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
             ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
 
-            if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure") ) {
                 //modifiesPHandler = ModifiesPHandler(pkb);
                 //result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
             }
             else {
-                modifiesSHandler = ModifiesSHandler(pkb);
+ 
                 result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
             }
 
@@ -83,7 +84,7 @@ std::string PQLEvaluator::evaluate(Query query)
                 resultTable.resetKeySetEmpty(selectedVarName);
                 break;
             }
-            if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
+            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
                 //modifiesPHandler.combineResult(resultTable, result);
             }
             else {
