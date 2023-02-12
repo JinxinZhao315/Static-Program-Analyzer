@@ -30,21 +30,36 @@ TEST_CASE("PatternHandler a(_,_) test filled pkb") {
     set<vector<string>> rhsSet = {rhs};
     pkb.addPattern(1, "k", rhsSet);
 
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addVar("m");
+    vector<string> rhs2 = {"1", "2", "+"};
+    set<vector<string>> rhsSet2 = {rhs2};
+    pkb.addPattern(2, "m", rhsSet2);
+
     // Line1: k = x + y
+    // Line 2: m = 1 + 2;
 
     string retStr = testPattern("assign a; Select a pattern a (_,_)", pkb);
     cout << retStr << endl;
-    REQUIRE(retStr == "1");
+    REQUIRE(retStr == "1,2");
 }
 
-TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test 1") {
+TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
     PKB pkb;
     pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+
     vector<string> rhs = {"x", "y", "+"};
     set<vector<string>> rhsSet = {rhs};
     pkb.addPattern(1, "k", rhsSet);
 
+    pkb.addVar("m");
+    vector<string> rhs2 = {"1", "2", "+"};
+    set<vector<string>> rhsSet2 = {rhs2};
+    pkb.addPattern(2, "m", rhsSet2);
+
     // Line1: k = x + y
+    // Line 2: m = 1 + 2;
 
     string retStr1 = testPattern("assign a; Select a pattern a (_,_\"x\"_)", pkb);
     cout << retStr1 << endl;
@@ -53,6 +68,10 @@ TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test 1") {
     string retStr2 = testPattern("assign a; Select a pattern a (_,_\"t\"_)", pkb);
     cout << retStr2 << endl;
     REQUIRE(retStr2 == "None");
+
+    string retStr3 = testPattern("assign a; Select a pattern a (_,_\"2\"_)", pkb);
+    cout << retStr3 << endl;
+    REQUIRE(retStr3 == "2");
 }
 
 
