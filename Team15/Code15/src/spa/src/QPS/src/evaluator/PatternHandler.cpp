@@ -19,8 +19,19 @@ set<string> PatternHandler::findMatchingLineNums(set<vector<string>> allRHS, str
 
 }
 
-vector<string> PatternHandler::tokenise(string input) {}
-vector<string> PatternHandler::convertToPostfix(vector<string> input, int startIndex) {}
+
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::tokenise(string input) {
+    vector<string> ret;
+    ret.push_back(input);
+    return ret;
+
+}
+
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int startIndex) {
+    return inputVec;
+}
 
 
 bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMatch) {
@@ -94,10 +105,18 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         }
 
         if (rightType == Utility::UNDERSCORE) {
+            set<string> resultLeftSynonVals;
+            for (string currLeftVal: currLeftSynonValues) {
+                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
+                // If right Arg is wildcard, every RHS in matchingRHS is a match.
+                if (!matchingRHS.empty()) {
+                    // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
+                    resultLeftSynonVals.insert(currLeftVal);
+                }
+            }
 
-            // result maintains current values of patternSynon and leftArg
             result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
-            result.setSecondArg(leftArg, resultTable.getValueFromKey(leftArg));
+            result.setSecondArg(leftArg, resultLeftSynonVals);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
             std::set<string> resultPatternSynonVals;
