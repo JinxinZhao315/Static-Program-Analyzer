@@ -124,7 +124,7 @@ void ClauseHandler::mergeResultToTable(std::string synonymName, std::unordered_m
 void ClauseHandler::deleteSynTableEntry(std::string synonymName, std::string synonymInstance, ResultTable& resultTable) {
     std::unordered_map<std::string, std::set<std::string>> linkageMap = resultTable.getSynonymEntry(synonymName).find(synonymInstance)->second.getLinkageMap();
     
-    for (auto linkedSynonymKey : linkageMap) {
+    for (auto linkedSynonymKey : resultTable.getSynonymEntry(synonymName).find(synonymInstance)->second.getLinkageMap()) {
         for (auto linkedSynonymInstance : linkedSynonymKey.second) {
             deleteLinkage(linkedSynonymKey.first, linkedSynonymInstance, synonymName, synonymInstance, resultTable);
         }
