@@ -33,10 +33,11 @@ std::string PQLEvaluator::evaluate(Query query)
             if (result.isResultTrue() == false)
             {
 
-            //    resultTable.resetKeySetEmpty(selectedVarName);
 
-            //    resultTable.deleteKeyValuePair(selectedVarName);
-            //    resultTable.insertKeyValuePair(selectedVarName, {});
+//                resultTable.resetKeySetEmpty(selectedVarName);
+//
+//                resultTable.deleteKeyValuePair(selectedVarName);
+//                resultTable.insertKeyValuePair(selectedVarName, {});
                 isEarlyExit = true;
 
                 break;
@@ -107,8 +108,8 @@ std::string PQLEvaluator::evaluate(Query query)
 
         if (result.isResultTrue() == false)
         {
-           /* resultTable.deleteKeyValuePair(selectedVarName);
-            resultTable.insertKeyValuePair(selectedVarName, {});*/
+//            resultTable.deleteKeyValuePair(selectedVarName);
+//            resultTable.insertKeyValuePair(selectedVarName, {});
             isEarlyExit = true;
             break;
         }
