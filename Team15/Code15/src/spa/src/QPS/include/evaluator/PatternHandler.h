@@ -2,6 +2,7 @@
 #include "QPS/include/model/Result.h"
 #include "Utility.h"
 #include "QPS/include/model/PatternClause.h"
+#include <stack>
 
 #ifndef SPA_PATTERNHANDLER_H
 #define SPA_PATTERNHANDLER_H
@@ -11,10 +12,14 @@ class PatternHandler:  public ClauseHandler {
 public:
     PatternHandler(PKB& pkb);
     Result evalPattern(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
-    set<string> findMatchingLineNums(set<pair<string, int>> allRHS, string substrToMatch);
-    bool findIsMatch(string fullStr, string substrToMatch);
+    set<string> findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch);
+    bool findIsMatch(vector<string> rhsTokensVec, string substrToMatch);
     pair<bool,string> trimUnderscoreQuotes(string input);
-    string convertToPostfix(string input);
+
+    // TODO: These functions should be in common file
+    vector<string>  convertToPostfix(vector<string> input, int startIndex);
+    vector<string> tokenise(string input); // Need the same function as in SP but without the "extract" line
+
 };
 
 

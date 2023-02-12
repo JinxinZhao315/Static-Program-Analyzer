@@ -1,166 +1,218 @@
 
 #include "QPS/include/evaluator/PatternHandler.h"
 
-PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
+PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb) {}
 
-
-set<string> PatternHandler::findMatchingLineNums(set<pair<string, int>> allRHS, string substrToMatch) {
-    set <string> ret;
-    for (pair<string, int> retPair : allRHS) {
-        string RHSStr = retPair.first;
-        int lineNum = retPair.second;
-        bool isMatch = findIsMatch(RHSStr, substrToMatch);
-        if (isMatch) {
-            ret.insert(to_string(lineNum));
+set<string> PatternHandler::findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch)
+{
+    set<string> ret;
+    for (vector<string> rhsPostfix : allRHS)
+    {
+        bool isMatch = findIsMatch(rhsPostfix, substrToMatch);
+        if (isMatch)
+        {
+            set<int> lineNumSet = pkb.getPatternStmtsFromPostfix(rhsPostfix);
+            for (int num : lineNumSet)
+            {
+                ret.insert(to_string(num));
+            }
         }
     }
     return ret;
-
 }
 
-bool PatternHandler::findIsMatch(string fullStr, string substrToMatch) {
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::tokenise(string input)
+{
+    vector<string> ret;
+    ret.push_back(input);
+    return ret;
+}
+
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int startIndex)
+{
+    return inputVec;
+}
+
+bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMatch)
+{
     pair<bool, string> trimmedPair = trimUnderscoreQuotes(substrToMatch);
     bool isPartialMatch = trimmedPair.first;
-    string substrPostfix = convertToPostfix(trimmedPair.second);
-    if (!isPartialMatch) {
-        return fullStr == substrPostfix;
-    } else {
-        if (fullStr.find(substrPostfix) != std::string::npos) {
-            return true;
-        } else {
-            return false;
-        }
+    vector<string> substrTokens = tokenise(trimmedPair.second);
+    vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
+    if (!isPartialMatch)
+    {
+        return rhsTokensVec == substrTokens;
+    }
+    else
+    {
+        return includes(rhsTokensVec.begin(), rhsTokensVec.end(),
+                        substrPostfix.begin(), substrPostfix.end());
     }
 }
 
-string PatternHandler::convertToPostfix(string input) {
-    return "";
-}
-
 Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
-                                   std::multimap<std::string, std::string> &synonymTable) {
+                                   std::multimap<std::string, std::string> &synonymTable)
+{
 
-    //string patternSynon = patternClause.getPatternSynonym();
-    //string leftArg = patternClause.getLeftArg();
-    //string rightArg = patternClause.getRightArg();
-    //string leftType = Utility::getReferenceType(leftArg);
-    //string rightType = Utility::getReferenceType(rightArg);
-    Result result;
-    //string patternType = synonymTable.find(patternSynon)->second;
-
-    //resultTableCheckAndAdd(patternSynon, resultTable, patternType);
-
-    //// Does the Design Entity represented by the pattern synon exist in PKB?
-    //// If not, set result to false
-    //if (resultTable.getValueFromKey(patternSynon).empty()) {
-    //    result.setResultTrue(false);
-    //    return result;
-    //}
-
-
-    //if (leftType == Utility::UNDERSCORE) {
-
-    //    if (rightType == Utility::UNDERSCORE) {
-
-    //        // result maintains current values of patternSynon
-    //        result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
-
-    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
-
-    //        set<pair<string, int>> allRHS; // = pkb.getAllPatternRHS()
-    //        set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
-    //        if (matchingLines.empty()) {
-    //            result.setResultTrue(false);
-    //            return result;
-    //        }
-    //        result.setFirstArg(patternSynon, matchingLines);
-
-    //    }
-
-    //} else if (leftType == Utility::SYNONYM) {
-
-    //    string leftDeType = synonymTable.find(leftArg)->second;
-    //    resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-    //    std::set<string> currLeftSynonValues = resultTable.getValueFromKey(leftArg);
-
-    //    // Does the Design Entity type represented by left synonym exist in PKB?
-    //    // If not, set result to false
-    //    if (currLeftSynonValues.empty()) {
-    //        result.setResultTrue(false);
-    //        return result;
-    //    }
-
-    //    if (rightType == Utility::UNDERSCORE) {
-
-    //        // result maintains current values of patternSynon and leftArg
-    //        result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
-    //        result.setSecondArg(leftArg, resultTable.getValueFromKey(leftArg));
-
-    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
-    //        std::set<string> resultPatternSynonVals;
-    //        std::set<string> resultLeftSynonVals;
-
-    //        for (string currLeftVal: currLeftSynonValues) {
-    //            set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(currLeftVal)
-    //            set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-    //            if (!matchingLines.empty()) {
-    //                resultLeftSynonVals.insert(currLeftVal);
-    //                std::set<std::string> unions;
-    //                std::insert_iterator<std::set<std::string>> unionIterator(unions, unions.begin());
-    //                set_union(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
-    //                          matchingLines.begin(), matchingLines.end(), unionIterator);
-    //                resultPatternSynonVals = unions;
-    //            }
-
-    //        }
-
-    //        result.setFirstArg(patternSynon, resultPatternSynonVals);
-    //        result.setSecondArg(leftArg, resultLeftSynonVals);
-    //    }
-
-    //} else if (leftType == Utility::QUOTED_IDENT) {
-
-    //    // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
-    //    // If not, set result to false
-    //    set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(leftArg)
-
-    //    if (matchingRHS.empty()) {
-    //        result.setResultTrue(false);
-    //        return result;
-    //    }
-
-    //    if (rightType == Utility::UNDERSCORE) {
-    //        std::set<string> resultPatternSynonVals;
-    //        for (pair<string, int> retPair : matchingRHS) {
-    //            resultPatternSynonVals.insert(to_string(retPair.second));
-    //        }
-
-    //        result.setFirstArg(patternSynon, resultPatternSynonVals);
-
-    //    } else if (rightType == Utility::UNDERSCORED_EXPR) {
-    //        set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-    //        if (matchingLines.empty()) {
-    //            result.setResultTrue(false);
-    //            return result;
-    //        }
-
-    //        result.setFirstArg(patternSynon, matchingLines);
-
-    //    }
-
-    //} else {
-    //    throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
-    //}
-
-    return result;
+//    string patternSynon = patternClause.getPatternSynonym();
+//    string leftArg = patternClause.getLeftArg();
+//    string rightArg = patternClause.getRightArg();
+//    string leftType = Utility::getReferenceType(leftArg);
+//    string rightType = Utility::getReferenceType(rightArg);
+//    Result result;
+//    string patternType = synonymTable.find(patternSynon)->second;
+//
+//    resultTableCheckAndAdd(patternSynon, resultTable, patternType);
+//
+//    // Does the Design Entity represented by the pattern synon exist in PKB?
+//    // If not, set result to false
+//    if (resultTable.getValueFromKey(patternSynon).empty())
+//    {
+//        result.setResultTrue(false);
+//        return result;
+//    }
+//
+//    if (leftType == Utility::UNDERSCORE)
+//    {
+//
+//        if (rightType == Utility::UNDERSCORE)
+//        {
+//
+//            // result maintains current values of patternSynon
+//            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
+//        }
+//        else if (rightType == Utility::UNDERSCORED_EXPR)
+//        {
+//
+//            std::set<string> resultPatternSynonVals;
+//            set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
+//            for (int assignLineNum : allAssignLineNums)
+//            {
+//                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
+//                set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
+//                if (!matchingLines.empty())
+//                {
+//                    resultPatternSynonVals.insert(to_string(assignLineNum));
+//                }
+//            }
+//
+//            result.setFirstArg(patternSynon, resultPatternSynonVals);
+//        }
+//    }
+//    else if (leftType == Utility::SYNONYM)
+//    {
+//
+//        string leftDeType = synonymTable.find(leftArg)->second;
+//        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
+//        std::set<string> currLeftSynonValues = resultTable.getValueFromKey(leftArg);
+//
+//        // Does the Design Entity type represented by left synonym exist in PKB?
+//        // If not, set result to false
+//        if (currLeftSynonValues.empty())
+//        {
+//            result.setResultTrue(false);
+//            return result;
+//        }
+//
+//        if (rightType == Utility::UNDERSCORE)
+//        {
+//            std::set<string> resultPatternSynonVals;
+//            set<string> resultLeftSynonVals;
+//            for (string currLeftVal : currLeftSynonValues)
+//            {
+//                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
+//                // If right Arg is wildcard, every RHS in matchingRHS is a match.
+//                if (!matchingRHS.empty())
+//                {
+//                    // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
+//                    resultLeftSynonVals.insert(currLeftVal);
+//                    set<int> lineNumSet = pkb.getPatternStmtsFromVar(currLeftVal);
+//                    for (int num : lineNumSet)
+//                    {
+//                        resultPatternSynonVals.insert(to_string(num));
+//                    }
+//                }
+//            }
+//
+//            result.setFirstArg(patternSynon, resultPatternSynonVals);
+//            result.setSecondArg(leftArg, resultLeftSynonVals);
+//        }
+//        else if (rightType == Utility::UNDERSCORED_EXPR)
+//        {
+//            std::set<string> resultPatternSynonVals;
+//            std::set<string> resultLeftSynonVals;
+//
+//            for (string currLeftVal : currLeftSynonValues)
+//            {
+//                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
+//                set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+//
+//                if (!matchingLines.empty())
+//                {
+//                    resultLeftSynonVals.insert(currLeftVal);
+//                    for (string lineStr : matchingLines)
+//                    {
+//                        resultPatternSynonVals.insert(lineStr);
+//                    }
+//                }
+//            }
+//
+//            result.setFirstArg(patternSynon, resultPatternSynonVals);
+//            result.setSecondArg(leftArg, resultLeftSynonVals);
+//        }
+//    }
+//    else if (leftType == Utility::QUOTED_IDENT)
+//    {
+//
+//        // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
+//        // If not, set result to false
+//        string leftArgTrimmed = trimUnderscoreQuotes(leftArg).second;
+//        set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArgTrimmed);
+//
+//        if (matchingRHS.empty())
+//        {
+//            result.setResultTrue(false);
+//            return result;
+//        }
+//
+//        if (rightType == Utility::UNDERSCORE)
+//        {
+//            std::set<string> resultPatternSynonVals;
+//            for (pair<string, int> retPair : matchingRHS)
+//            {
+//                resultPatternSynonVals.insert(to_string(retPair.second));
+//            }
+//
+//            result.setFirstArg(patternSynon, resultPatternSynonVals);
+//        }
+//        else if (rightType == Utility::UNDERSCORED_EXPR)
+//        {
+//
+//            set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+//            if (matchingLines.empty())
+//            {
+//                result.setResultTrue(false);
+//                return result;
+//            }
+//
+//            result.setFirstArg(patternSynon, matchingLines);
+//        }
+//    }
+//    else
+//    {
+//        throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
+//    }
+//
+//    return result;
 }
-
-
 
 // Return a pair, where first element boolean = true if input is asking for partial match (e.g. _"x"_)
 //, and false if input is aksing for full match (e.g. "x")
 // Second element string is input trimmed of underscore and quotes
-pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
+pair<bool, string> PatternHandler::trimUnderscoreQuotes(string input)
+{
     std::string trimmed = input;
 
     // Trim underscore
@@ -169,20 +221,23 @@ pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
     bool isRightUnderscore = false;
 
     // trim left
-    if (firstUnderscore != std::string::npos) {
+    if (firstUnderscore != std::string::npos)
+    {
         trimmed = trimmed.substr(firstUnderscore);
         isLeftUnderscore = true;
     }
     // trim right
     std::size_t lastUnderscore = trimmed.find_last_not_of(Utility::UNDERSCORE);
-    if (lastUnderscore != std::string::npos) {
+    if (lastUnderscore != std::string::npos)
+    {
         trimmed = trimmed.substr(0, lastUnderscore + 1);
         isRightUnderscore = true;
     }
 
     // XOR of isLeftUnderscore and isRightUnderscore
     // This should never trigger if syntax checking works correctly
-    if (!isLeftUnderscore != !isRightUnderscore) {
+    if (!isLeftUnderscore != !isRightUnderscore)
+    {
         throw PQLSyntaxError("PQL syntax error: Incorrect partial matching format in pattern clause");
     }
 
@@ -192,5 +247,4 @@ pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
     trimmed = Utility::trim(trimmed, Utility::QUOTE);
 
     return make_pair(isPartialMatch, trimmed);
-
 }
