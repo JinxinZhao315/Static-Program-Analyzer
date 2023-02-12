@@ -5,13 +5,18 @@
 
 using namespace std;
 
+template <typename E>
 class EntityTable {
 public:
-	EntityTable();
+	inline EntityTable() = default;
 
-	void addEntity(std::string entity);
+	inline void addEntity(E entity) {
+		entityTable.emplace(entity);
+	}
 
-	std::set<std::string> getAllEntities();
+	inline std::set<E> getAllEntities() {
+		return entityTable;
+	}
 
 private:
 	std::set<std::string> entityTable;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <set>
 
 using namespace std;
@@ -24,6 +24,6 @@ public:
 	bool isEmpty();
 
 private:
-	std::map<int, std::set<int>> leaderToFollowersMap;
-	std::map<int, std::set<int>> followerToLeadersMap;
+	std::unordered_map<int, std::set<int>> leaderToFollowersMap;
+	std::unordered_map<int, std::set<int>> followerToLeadersMap;
 };

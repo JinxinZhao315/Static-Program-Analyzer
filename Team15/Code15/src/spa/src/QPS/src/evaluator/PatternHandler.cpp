@@ -4,38 +4,49 @@
 PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
 
-set<string> PatternHandler::findMatchingLineNums(set<pair<string, int>> allRHS, string substrToMatch) {
+set<string> PatternHandler::findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch) {
     set <string> ret;
-    for (pair<string, int> retPair : allRHS) {
-        string RHSStr = retPair.first;
-        int lineNum = retPair.second;
-        bool isMatch = findIsMatch(RHSStr, substrToMatch);
+    for (vector<string> rhsPostfix : allRHS) {
+        bool isMatch = findIsMatch(rhsPostfix, substrToMatch);
         if (isMatch) {
-            ret.insert(to_string(lineNum));
+            set<int> lineNumSet = pkb.getPatternStmtsFromPostfix(rhsPostfix);
+            for (int num : lineNumSet) {
+                ret.insert(to_string(num));
+            }
         }
     }
     return ret;
 
 }
 
-bool PatternHandler::findIsMatch(string fullStr, string substrToMatch) {
+
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::tokenise(string input) {
+    vector<string> ret;
+    ret.push_back(input);
+    return ret;
+
+}
+
+// This implementation is only for MS1 since there's no operators in pattern right arg
+vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int startIndex) {
+    return inputVec;
+}
+
+
+bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMatch) {
     pair<bool, string> trimmedPair = trimUnderscoreQuotes(substrToMatch);
     bool isPartialMatch = trimmedPair.first;
-    string substrPostfix = convertToPostfix(trimmedPair.second);
+    vector<string> substrTokens = tokenise(trimmedPair.second);
+    vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
     if (!isPartialMatch) {
-        return fullStr == substrPostfix;
+        return rhsTokensVec == substrTokens;
     } else {
-        if (fullStr.find(substrPostfix) != std::string::npos) {
-            return true;
-        } else {
-            return false;
-        }
+        return includes(rhsTokensVec.begin(), rhsTokensVec.end(),
+                        substrPostfix.begin(), substrPostfix.end());
     }
 }
 
-string PatternHandler::convertToPostfix(string input) {
-    return "";
-}
 
 Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
                                    std::multimap<std::string, std::string> &synonymTable) {
@@ -67,13 +78,17 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
-            set<pair<string, int>> allRHS; // = pkb.getAllPatternRHS()
-            set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
-            if (matchingLines.empty()) {
-                result.setResultTrue(false);
-                return result;
+            std::set<string> resultPatternSynonVals;
+            set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
+            for (int assignLineNum : allAssignLineNums) {
+                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
+                set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
+                if (!matchingLines.empty()) {
+                    resultPatternSynonVals.insert(to_string(assignLineNum));
+                }
             }
-            result.setFirstArg(patternSynon, matchingLines);
+
+            result.setFirstArg(patternSynon, resultPatternSynonVals);
 
         }
 
@@ -91,27 +106,39 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         }
 
         if (rightType == Utility::UNDERSCORE) {
+            std::set<string> resultPatternSynonVals;
+            set<string> resultLeftSynonVals;
+            for (string currLeftVal: currLeftSynonValues) {
+                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
+                // If right Arg is wildcard, every RHS in matchingRHS is a match.
+                if (!matchingRHS.empty()) {
+                    // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
+                    resultLeftSynonVals.insert(currLeftVal);
+                    set<int> lineNumSet = pkb.getPatternStmtsFromVar(currLeftVal);
+                    for (int num : lineNumSet) {
+                        resultPatternSynonVals.insert(to_string(num));
+                    }
 
-            // result maintains current values of patternSynon and leftArg
-            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
-            result.setSecondArg(leftArg, resultTable.getValueFromKey(leftArg));
+                }
+            }
+
+            result.setFirstArg(patternSynon, resultPatternSynonVals);
+            result.setSecondArg(leftArg, resultLeftSynonVals);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
             std::set<string> resultPatternSynonVals;
             std::set<string> resultLeftSynonVals;
 
             for (string currLeftVal: currLeftSynonValues) {
-                set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(currLeftVal)
+                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
                 set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+
                 if (!matchingLines.empty()) {
                     resultLeftSynonVals.insert(currLeftVal);
-                    std::set<std::string> unions;
-                    std::insert_iterator<std::set<std::string>> unionIterator(unions, unions.begin());
-                    set_union(resultPatternSynonVals.begin(), resultPatternSynonVals.end(),
-                              matchingLines.begin(), matchingLines.end(), unionIterator);
-                    resultPatternSynonVals = unions;
+                    for (string lineStr : matchingLines) {
+                        resultPatternSynonVals.insert(lineStr);
+                    }
                 }
-
             }
 
             result.setFirstArg(patternSynon, resultPatternSynonVals);
@@ -122,7 +149,8 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
         // If not, set result to false
-        set<pair<string, int>> matchingRHS; // = pkb.getPatternRHS(leftArg)
+        string leftArgTrimmed = trimUnderscoreQuotes(leftArg).second;
+        set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArgTrimmed);
 
         if (matchingRHS.empty()) {
             result.setResultTrue(false);
@@ -131,13 +159,16 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         if (rightType == Utility::UNDERSCORE) {
             std::set<string> resultPatternSynonVals;
-            for (pair<string, int> retPair : matchingRHS) {
-                resultPatternSynonVals.insert(to_string(retPair.second));
+
+            set<int> lineNumSet = pkb.getPatternStmtsFromVar(leftArgTrimmed);
+            for (int num : lineNumSet) {
+                resultPatternSynonVals.insert(to_string(num));
             }
 
             result.setFirstArg(patternSynon, resultPatternSynonVals);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
+
             set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
             if (matchingLines.empty()) {
                 result.setResultTrue(false);
@@ -194,3 +225,5 @@ pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
     return make_pair(isPartialMatch, trimmed);
 
 }
+
+
