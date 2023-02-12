@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -23,6 +23,6 @@ public:
 	bool isEmpty();
 
 private:
-	std::map<int, int> leaderToFollowerMap;
-	std::map<int, int> followerToLeaderMap;
+	std::unordered_map<int, int> leaderToFollowerMap;
+	std::unordered_map<int, int> followerToLeaderMap;
 };
