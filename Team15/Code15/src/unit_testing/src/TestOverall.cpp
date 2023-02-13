@@ -63,5 +63,5 @@ TEST_CASE("Overall test") {
     PQLDriver pqlDriver = PQLDriver(pkb);
     string result = pqlDriver.processPQL(queryStr);
     cout << "result:" << result << endl;
-    //assert(result == "1,2");
+    REQUIRE(result == "2,3,5");
 }

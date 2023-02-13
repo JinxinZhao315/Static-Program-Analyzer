@@ -4,20 +4,20 @@ Query::Query() {};
 
 Query:: ~Query() {};
 
-void Query::addSynonymTable(std::multimap<std::string, std::string> synonymTable) {
+void Query::setSynonymTable(std::multimap<std::string, std::string> synonymTable) {
 	this->synonymTable = synonymTable;
 }
 
-void Query::addSelectClause(SelectClause selectClause) {
+void Query::setSelectClause(SelectClause selectClause) {
 	this->selectClause = selectClause;
 }
 
-void Query::addPatternClause(PatternClause patternClause) {
-	this->patternClauseVec.push_back(patternClause);
+void Query::setPatternClauseVec(std::vector<PatternClause> patternClauseVec) {
+	this->patternClauseVec = patternClauseVec;
 }
 
-void Query::addSuchThatClause(SuchThatClause suchThatClause) {
-	this->suchThatClauseVec.push_back(suchThatClause);
+void Query::setSuchThatClauseVec(std::vector<SuchThatClause> suchThatClauseVec) {
+	this->suchThatClauseVec = suchThatClauseVec;
 }
 
 std::multimap<std::string, std::string> Query::getSynonymTable() {

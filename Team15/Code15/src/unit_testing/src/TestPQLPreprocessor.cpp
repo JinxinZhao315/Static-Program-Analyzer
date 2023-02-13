@@ -1,11 +1,10 @@
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "QPS/include/tokenizer/PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
-#include <assert.h>
 #include "QPS/include/tokenizer/QueryTokenizer.h"
 #include "QPS/include/tokenizer/PQLSemanticCheck.h"
 
+#include <assert.h>
 #include "catch.hpp"
 
 using namespace std;
@@ -25,24 +24,15 @@ TEST_CASE("PQLPreprocessor test syntax cheker 1") {
 }
 
 TEST_CASE("PQLPreprocessor test 2") {
-    Query query = Query();
+
     std::multimap<std::string, std::string> varTable;
-    SelectClause selectClause;
-    SuchThatClause suchThatClause;
-    PatternClause patternClause;
-    QueryTokenizer tokenizer;
+    PQLPreprocessor preprocessor;
     PQLSemanticCheck semanticChecker;
 
     string input = "constant c; Select c";
     // Tokenize & syntax check
-    std::pair<std::string, std::string> declarationClausePair = tokenizer.tokenizeQuery(input);
-    varTable = tokenizer.tokenizeDeclaration(declarationClausePair.first);
-    query.addSynonymTable(varTable);
-    tokenizer.tokenizeClauses(declarationClausePair.second, selectClause, suchThatClause, patternClause);
-    query.addSelectClause(selectClause);
-    query.addSuchThatClause(suchThatClause);
-    query.addPatternClause(patternClause);
 
+    Query query = preprocessor.preprocess(input);
     // semantic check
     std::pair<bool,std::string> semanticCheckPair = semanticChecker.checkSemantics(query);
     bool isSemanticValid = semanticCheckPair.first;
