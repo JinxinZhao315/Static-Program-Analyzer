@@ -6,8 +6,16 @@ std::string SelectHandler::evalSelect(SelectClause selectClause, std::multimap<s
     std::string varName = selectClause.getVarName();
     std::string varType = varTable.find(varName)->second;
     Result result;
-    result.setFirstArg(varName, ClauseHandler::getResultFromPKB(this->pkb, varType));
-    ClauseHandler::combineResult(resultTable, result);
+    resultTableCheckAndAdd(varName, resultTable, varType);
+    
+    //std::set<std::string> resultSet = ClauseHandler::getResultFromPKB(this->pkb, varType);
+    //std::unordered_map<std::string, SynonymLinkageMap> intermediateResult;
+    //for (std::string key : resultSet) {
+    //    intermediateResult.insert(std::make_pair<>(key, SynonymLinkageMap()));
+    //}
+    //result.setFirstArg(varName, intermediateResult);
+
+    //ClauseHandler::combineResult(resultTable, result);
 
     // Put every variable name selected in selectClause into ResultTable keys,
     // and add full set of possible values of that variable into ResultTable values.

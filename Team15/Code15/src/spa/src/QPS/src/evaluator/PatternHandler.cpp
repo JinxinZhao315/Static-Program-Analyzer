@@ -61,9 +61,9 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
     resultTableCheckAndAdd(patternSynon, resultTable, patternType);
 
-    // Does the Design Entity represented by the pattern synon exist in PKB?
-    // If not, set result to false
-    if (resultTable.getValueFromKey(patternSynon).empty()) {
+    // Is the values of patternSynon in result table empty?
+    // If yes, set result to false
+    if (!resultTable.isSynonymPresent(patternSynon)) {
         result.setResultTrue(false);
         return result;
     }
@@ -71,32 +71,35 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
     if (leftType == Utility::UNDERSCORE) {
 
+        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
+
         if (rightType == Utility::UNDERSCORE) {
 
             // result maintains current values of patternSynon
-            result.setFirstArg(patternSynon, resultTable.getValueFromKey(patternSynon));
+            patternSynonVals = resultTable.getSynonymEntry(patternSynon);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
-            std::set<string> resultPatternSynonVals;
             set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
+
             for (int assignLineNum : allAssignLineNums) {
                 set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
                 set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
                 if (!matchingLines.empty()) {
-                    resultPatternSynonVals.insert(to_string(assignLineNum));
+                    patternSynonVals.insert(make_pair(
+                            to_string(assignLineNum),
+                            SynonymLinkageMap()));
                 }
             }
-
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
-
         }
+
+        result.setFirstArg(patternSynon, patternSynonVals);
 
     } else if (leftType == Utility::SYNONYM) {
 
         string leftDeType = synonymTable.find(leftArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        std::set<string> currLeftSynonValues = resultTable.getValueFromKey(leftArg);
+        std::set<string> currLeftSynonValues = resultTable.getStringSetFromKey(leftArg);
 
         // Does the Design Entity type represented by left synonym exist in PKB?
         // If not, set result to false
@@ -105,45 +108,60 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             return result;
         }
 
+        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
+        std::unordered_map<std::string, SynonymLinkageMap> leftSynonVals;
+
         if (rightType == Utility::UNDERSCORE) {
-            std::set<string> resultPatternSynonVals;
-            set<string> resultLeftSynonVals;
+
             for (string currLeftVal: currLeftSynonValues) {
                 set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
-                // If right Arg is wildcard, every RHS in matchingRHS is a match.
+                // If right Arg is wildcard, every RHS in matchingRHS is a match. So no need to call findMatchingLines function.
+                // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
                 if (!matchingRHS.empty()) {
-                    // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
-                    resultLeftSynonVals.insert(currLeftVal);
+                    if (leftSynonVals.find(currLeftVal) == leftSynonVals.end()) {
+                        leftSynonVals.insert(make_pair(currLeftVal, SynonymLinkageMap()));
+                    }
                     set<int> lineNumSet = pkb.getPatternStmtsFromVar(currLeftVal);
                     for (int num : lineNumSet) {
-                        resultPatternSynonVals.insert(to_string(num));
+                        string numStr = to_string(num);
+                        if (patternSynonVals.find(numStr) == patternSynonVals.end()) {
+                            patternSynonVals.insert(make_pair(numStr, SynonymLinkageMap()));
+                        }
+                        patternSynonVals.find(numStr)->second.insertLinkage(leftArg, currLeftVal);
+                        leftSynonVals.find(currLeftVal)->second.insertLinkage(patternSynon, numStr);
+                        //leftSynonVals.insert(currLeftVal);
+                        //patternSynonVals.insert(to_string(num));
                     }
 
                 }
             }
 
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
-            result.setSecondArg(leftArg, resultLeftSynonVals);
-
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
-            std::set<string> resultPatternSynonVals;
-            std::set<string> resultLeftSynonVals;
 
             for (string currLeftVal: currLeftSynonValues) {
                 set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
                 set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-
                 if (!matchingLines.empty()) {
-                    resultLeftSynonVals.insert(currLeftVal);
-                    for (string lineStr : matchingLines) {
-                        resultPatternSynonVals.insert(lineStr);
+
+                    if (leftSynonVals.find(currLeftVal) == leftSynonVals.end()) {
+                        leftSynonVals.insert(make_pair(currLeftVal, SynonymLinkageMap()));
                     }
+                    for (string lineStr : matchingLines) {
+                        if (patternSynonVals.find(lineStr) == patternSynonVals.end()) {
+                            patternSynonVals.insert(make_pair(lineStr, SynonymLinkageMap()));
+                        }
+                        patternSynonVals.find(lineStr)->second.insertLinkage(leftArg, currLeftVal);
+                        leftSynonVals.find(currLeftVal)->second.insertLinkage(patternSynon, lineStr);
+                        //leftSynonVals.insert(currLeftVal);
+                        //patternSynonVals.insert(lineStr);
+                    }
+
                 }
             }
-
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
-            result.setSecondArg(leftArg, resultLeftSynonVals);
         }
+
+        result.setFirstArg(patternSynon, patternSynonVals);
+        result.setSecondArg(leftArg, leftSynonVals);
 
     } else if (leftType == Utility::QUOTED_IDENT) {
 
@@ -157,15 +175,17 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             return result;
         }
 
+        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
+
         if (rightType == Utility::UNDERSCORE) {
-            std::set<string> resultPatternSynonVals;
 
             set<int> lineNumSet = pkb.getPatternStmtsFromVar(leftArgTrimmed);
             for (int num : lineNumSet) {
-                resultPatternSynonVals.insert(to_string(num));
+                patternSynonVals.insert(make_pair(
+                        to_string(num),
+                        SynonymLinkageMap()
+                        ));
             }
-
-            result.setFirstArg(patternSynon, resultPatternSynonVals);
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
@@ -173,11 +193,17 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             if (matchingLines.empty()) {
                 result.setResultTrue(false);
                 return result;
+            } else {
+                for (string lineStr : matchingLines) {
+                    patternSynonVals.insert(make_pair(
+                            lineStr,
+                            SynonymLinkageMap()
+                    ));
+                }
             }
-
-            result.setFirstArg(patternSynon, matchingLines);
-
         }
+
+        result.setFirstArg(patternSynon, patternSynonVals);
 
     } else {
         throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
