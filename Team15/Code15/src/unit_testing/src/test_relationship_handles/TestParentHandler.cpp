@@ -396,7 +396,7 @@ TEST_CASE("Parent Synonym Synonym test") {
     cout << retStr6 << endl;
     REQUIRE(retStr6 == "1");
 
-    string retStr7 = testParent("assign a; read r; while w1, w2; Select r such that Parent(r, w)", pkb);
+    string retStr7 = testParent("assign a; read r; while w1, w2; Select r such that Parent(r, w1)", pkb);
     cout << retStr7 << endl;
     REQUIRE(retStr7 == "None");
 }
