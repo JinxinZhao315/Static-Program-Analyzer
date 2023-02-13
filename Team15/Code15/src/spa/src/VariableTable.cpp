@@ -3,7 +3,7 @@
 VariableTable::VariableTable() = default;
 
 void VariableTable::addVariableName(std::string variableName) {
-	variableTable.emplace(variableName);
+	variableTable.insert(variableName);
 }
 
 std::set<std::string> VariableTable::getAllVariableNames() {

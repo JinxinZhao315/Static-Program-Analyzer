@@ -69,7 +69,7 @@ void PatternTable::mapVarToStmts(string lhsVarName, int assignStmtNum) {
 		varToStmtsMap[lhsVarName] = { assignStmtNum };
 	}
 	else {
-		pair->second.emplace(assignStmtNum);
+		pair->second.insert(assignStmtNum);
 	}
 }
 
@@ -90,7 +90,7 @@ void PatternTable::mapPostfixToStmts(set<vector<string>> rhsPostfixes, int assig
 			postfixToStmtsMap[postfix] = { assignStmtNum };
 		}
 		else {
-			pair->second.emplace(assignStmtNum);
+			pair->second.insert(assignStmtNum);
 		}
 	}
 }
@@ -112,7 +112,7 @@ void PatternTable::mapPostfixToVars(set<vector<string>> rhsPostfixes, string lhs
 			postfixToVarsMap[postfix] = { lhsVarName };
 		}
 		else {
-			pair->second.emplace(lhsVarName);
+			pair->second.insert(lhsVarName);
 		}
 	}
 }

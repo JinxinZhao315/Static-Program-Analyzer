@@ -3,7 +3,7 @@
 ProcedureTable::ProcedureTable() = default;
 
 void ProcedureTable::addProcedureName(std::string procedureName) {
-	procedureTable.emplace(procedureName);
+	procedureTable.insert(procedureName);
 }
 
 std::set<std::string> ProcedureTable::getAllProcedureNames() {
