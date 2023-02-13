@@ -6,15 +6,22 @@ ClauseHandler::ClauseHandler(PKB& pkb) {
 
 
 void ClauseHandler::combineResult(ResultTable& resultTable, Result& result) {
+    std::unordered_map<std::string, SynonymLinkageMap> firstValues;
+    std::unordered_map<std::string, SynonymLinkageMap> secondValues;
+
     if (result.isFirstArgSynonym() && result.isSecondArgSynonym()) {
-        combineTwoSynResult(result.getFirstArgName(), result.getFirstArgValue(), result.getSecondArgName(), result.getSecondArgValue(), resultTable);
+        firstValues = result.getFirstArgValue();
+        secondValues = result.getSecondArgValue();
+        combineTwoSynResult(result.getFirstArgName(), firstValues, result.getSecondArgName(), secondValues, resultTable);
     }
     else if (result.isFirstArgSynonym()) {
         //std::unordered_map<std::string, SynonymLinkageMap> firstArgVal = result.getFirstArgValue();
-        combineOneSynResult(result.getFirstArgName(), result.getFirstArgValue(), resultTable);
+        firstValues = result.getFirstArgValue();
+        combineOneSynResult(result.getFirstArgName(), firstValues, resultTable);
     }
     else if (result.isSecondArgSynonym()) {
-        combineOneSynResult(result.getSecondArgName(), result.getSecondArgValue(), resultTable);
+        secondValues = result.getSecondArgValue();
+        combineOneSynResult(result.getSecondArgName(), secondValues, resultTable);
     } 
 }
 
@@ -191,7 +198,7 @@ std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, string DeType) {
 //}
 
 void ClauseHandler::resultTableCheckAndAdd(string synonymName, ResultTable& resultTable, string DeType) {
-    if (!resultTable.isKeyPresent(synonymName)) {
+    if (!resultTable.isSynonymPresent(synonymName)) {
         Result result;
         std::set<string> synonymInstanceStrSet = getResultFromPKB(pkb, DeType);
         std::unordered_map<std::string, SynonymLinkageMap> synonymInstanceCollection;

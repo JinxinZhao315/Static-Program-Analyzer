@@ -40,14 +40,14 @@ std::set<std::string> ResultTable::getStringSetFromKey(std::string synonymName) 
 int ResultTable::sizeOfResultTable() {
     return resultTable.size();
 } 
-bool ResultTable::isKeyPresent(std::string key) {
-    if (this->resultTable.find(key) == this->resultTable.end()) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
+//bool ResultTable::isKeyPresent(std::string key) {
+//    if (this->resultTable.find(key) == this->resultTable.end()) {
+//        return false;
+//    }
+//    else {
+//        return true;
+//    }
+//}
 //
 //void ResultTable::deleteKeyValuePair(std::string key) {
 //    this->resultTable.erase(key);

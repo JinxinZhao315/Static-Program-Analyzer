@@ -12,8 +12,6 @@ Query PQLPreprocessor::preprocess(std::string input) {
 //    SuchThatClause suchThatClause;
 //    PatternClause patternClause;
 
-    // TODO: Set these vectors in tokenizer.tokenizeClauses.
-
     std::vector<SuchThatClause> suchThatClauseVec;
     std::vector<PatternClause> patternClauseVec;
 

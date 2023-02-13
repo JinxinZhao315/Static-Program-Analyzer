@@ -12,8 +12,8 @@ public:
 	/*SynonymLinkageMap(std::string key,
 		std::unordered_map<std::string, std::set<std::string>> linkageMap);*/
 	bool isEmpty();
-	void SynonymLinkageMap::insertLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
-	void SynonymLinkageMap::deleteLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
+	void insertLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
+	void deleteLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
 	std::unordered_map <std::string, std::set<std::string>> getLinkageMap();
 	bool isEmptyLinkageSet(std::string synonymName);
 };
