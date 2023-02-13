@@ -156,7 +156,7 @@ std::set<int> PKB::getParentStarParentNums(int child) {
 }
 
 std::set<int> PKB::getParentStarChildNums(int parent) {
-	return parentStarTable.getManyLeft(parent);
+	return parentStarTable.getManyRight(parent);
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
