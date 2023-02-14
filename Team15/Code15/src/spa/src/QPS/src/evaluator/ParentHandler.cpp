@@ -51,6 +51,8 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
 
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
+        //std::unordered_map<std::string, SynonymLinkageMap> parentSynonVals;
+
         bool isParentEmpty = pkb.isParentEmpty(); //
         if (isParentEmpty) {
             result.setResultTrue(false);
@@ -89,21 +91,20 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
     else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
         string synonDeType = varTable.find(leftArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
-        std::set<string> currSynonValues = resultTable.getValueFromKey(leftArg);
-
-        std::set<string> resultSynonValues;
+        std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(leftArg);
+        std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
-            for (string currSynonVal : currSynonValues) {
-                std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, currSynonVal); //=pkb.getFollowsStarFollowerNums(stoi(currSynonVal))
+            for (auto currSynonVal : currSynonValues) {
+                std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, currSynonVal.first); //=pkb.getFollowsStarFollowerNums(stoi(currSynonVal))
                 if (!childSet.empty()) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
         }
         else if (rightType == Utility::INTEGER) {
-            for (string currSynonVal : currSynonValues) {
-                bool isRightParentStarLeft = getIsParentFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
+            for (auto currSynonVal : currSynonValues) {
+                bool isRightParentStarLeft = getIsParentFromPKB(isStar, currSynonVal.first, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
                 if (isRightParentStarLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
@@ -120,20 +121,20 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
     else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
         string synonDeType = varTable.find(rightArg)->second;
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
-        std::set<string> currSynonValues = resultTable.getValueFromKey(rightArg);
-        std::set<string> resultSynonValues;
+        std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(rightArg);
+        std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
-            for (string currSynonVal : currSynonValues) {
-                std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, currSynonVal); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
+            for (auto currSynonVal : currSynonValues) {
+                std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, currSynonVal.first); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
                 if (!parentSet.empty()) {
                     resultSynonValues.insert(currSynonVal);
                 }
             }
         }
         else if (leftType == Utility::INTEGER) {
-            for (string currSynonVal : currSynonValues) {
-                bool isRightParentStarLeft = getIsParentFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
+            for (auto currSynonVal : currSynonValues) {
+                bool isRightParentStarLeft = getIsParentFromPKB(isStar, leftArg, currSynonVal.first); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
                 if (isRightParentStarLeft) {
                     resultSynonValues.insert(currSynonVal);
                 }
@@ -151,18 +152,36 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         string rightDeType = varTable.find(rightArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
         resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
-        std::set<string> currLeftValues = resultTable.getValueFromKey(leftArg);
-        std::set<string> currRightValues = resultTable.getValueFromKey(rightArg);
 
-        std::set<string> leftResultValues;
-        std::set<string> rightResultValues;
+        set<string> currLeftValues = resultTable.getStringSetFromKey(leftArg);
+        set<string> currRightValues = resultTable.getStringSetFromKey(rightArg);
+        std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
+        std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
+
 
         for (string currLeftVal : currLeftValues) {
             for (string currRightVal : currRightValues) {
                 bool isRightParentStarLeft = getIsParentFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
                 if (isRightParentStarLeft) {
-                    leftResultValues.insert(currLeftVal);
-                    rightResultValues.insert(currRightVal);
+                    if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
+                        SynonymLinkageMap leftLinkedSynonymCollection;
+                        leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
+                        leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
+                    }
+                    else {
+                        leftResultValues.find(currLeftVal)->second
+                            .insertLinkage(rightArg, currRightVal);
+                    }
+
+                    if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
+                        SynonymLinkageMap rightLinkedSynonymCollection;
+                        rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
+                        rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
+                    }
+                    else {
+                        rightResultValues.find(currRightVal)->second
+                            .insertLinkage(leftArg, currLeftVal);
+                    }
                 }
             }
         }
