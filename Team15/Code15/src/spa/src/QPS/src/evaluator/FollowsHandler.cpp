@@ -9,12 +9,12 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
     if (!isStar) {
         if (type == GET_LEADER) {
             int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
-            if (leader != NULL) {
+            if (leader != -1) {
                 ret.insert(leader);
             }
         } else { //if (type == GET_FOLLOWER)
             int follower = pkb.getFollowsFollowerNum(stoi(arg));//
-            if (follower != NULL) {
+            if (follower != -1) {
                 ret.insert(follower);
             }
         }
