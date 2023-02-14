@@ -11,8 +11,6 @@ set(srcs ${srcs}
         src/parser/Parser.cpp
         src/parser/Line.cpp
         src/parser/StatementParser.cpp
-        src/extractor/CFGNode.cpp
-        src/extractor/BasicCFGNode.cpp
         src/extractor/FollowsRelationshipExtractor.cpp
         src/extractor/ParentsRelationshipExtractor.cpp)
 
@@ -23,12 +21,10 @@ set(headers ${headers}
         include/parser/Parser.h
         include/parser/Line.h
         include/parser/StatementParser.h
-        include/extractor/CFGNode.h
-        include/extractor/BasicCFGNode.h
         include/extractor/FollowsRelationshipExtractor.h
         include/extractor/ParentsRelationshipExtractor.h)
 
-add_library(source_processor ${srcs} ${headers})
+add_library(source_processor ${srcs} ${headers} src/extractor/AssignsRelationshipExtractor.cpp include/extractor/AssignsRelationshipExtractor.h src/extractor/ModifiesRelationshipExtractor.cpp include/extractor/ModifiesRelationshipExtractor.h src/util/StringOperations.cpp include/util/StringOperations.h)
 add_executable(SourceProcessor ${srcs} ${headers})
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(source_processor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
