@@ -51,6 +51,8 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
 
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
+        //std::unordered_map<std::string, SynonymLinkageMap> parentSynonVals;
+
         bool isParentEmpty = pkb.isParentEmpty(); //
         if (isParentEmpty) {
             result.setResultTrue(false);
