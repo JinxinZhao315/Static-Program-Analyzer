@@ -6,8 +6,10 @@
 ResultTable::ResultTable() {}
 
 void ResultTable::insertSynonymEntry(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap> synonymInstanceCollection) {
-    assert(resultTable.find(synonymName) == resultTable.end());
-    this->resultTable.insert(std::make_pair<>(synonymName, synonymInstanceCollection));
+    if(resultTable.find(synonymName) == resultTable.end()) {
+        this->resultTable.insert(std::make_pair<>(synonymName, synonymInstanceCollection));
+    };
+
 }
 
 bool ResultTable::isSynonymPresent(std::string key) {
@@ -30,14 +32,14 @@ std::set<std::string> ResultTable::getStringSetFromKey(std::string synonymName) 
     }
     return synonymStringSet;
 }
-//
-//
-//
+
+
+
 //void ResultTable::insertKeyValuePair(std::string key, std::set<std::string> value) {
 //    this->resultTable.insert({key, value});
 //}
-//
-int ResultTable::sizeOfResultTable() {
+
+int ResultTable::getSizeOfResultTable() {
     return resultTable.size();
 } 
 //bool ResultTable::isKeyPresent(std::string key) {
@@ -48,12 +50,12 @@ int ResultTable::sizeOfResultTable() {
 //        return true;
 //    }
 //}
-//
-//void ResultTable::deleteKeyValuePair(std::string key) {
-//    this->resultTable.erase(key);
-//}
-//
-//void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
-//    deleteKeyValuePair(selectedVarName);
-//    insertKeyValuePair(selectedVarName, {});
-//}
+
+void ResultTable::deleteKeyValuePair(std::string key) {
+    this->resultTable.erase(key);
+}
+
+void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
+    deleteKeyValuePair(selectedVarName);
+    insertSynonymEntry(selectedVarName, {});
+}

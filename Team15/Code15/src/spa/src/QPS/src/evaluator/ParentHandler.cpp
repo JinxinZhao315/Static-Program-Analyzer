@@ -9,13 +9,13 @@ std::set<int> ParentHandler::getParentFromPKB(bool isStar, string type, string a
     if (!isStar) {
         if (type == GET_PARENT) {
             int parent = pkb.getParentParentNum(stoi(arg)); //
-            if (parent != NULL) {
+            if (parent != -1) {
                 ret.insert(parent);
             }
         }
         else { //if (type == GET_CHILD)
             int child = pkb.getParentChildNum(stoi(arg));//
-            if (child != NULL) {
+            if (child != -1) {
                 ret.insert(child);
             }
         }
