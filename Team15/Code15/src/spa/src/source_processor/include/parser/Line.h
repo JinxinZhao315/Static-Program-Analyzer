@@ -31,4 +31,8 @@ public:
     vector<string> getTokens();
     string getType();
     void printLine();
+
+    bool operator<(const Line& l) const { // necessary to create set<Line>
+        return lineNumber < l.lineNumber;
+    }
 };

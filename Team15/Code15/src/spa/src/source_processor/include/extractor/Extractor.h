@@ -10,8 +10,11 @@
 #include <iostream>
 #include <utility>
 #include "../parser/Line.h"
+#include "../util/StringOperations.h"
 #include "FollowsRelationshipExtractor.h"
 #include "ParentsRelationshipExtractor.h"
+#include "ModifiesRelationshipExtractor.h"
+#include "AssignsRelationshipExtractor.h"
 
 using namespace std;
 
