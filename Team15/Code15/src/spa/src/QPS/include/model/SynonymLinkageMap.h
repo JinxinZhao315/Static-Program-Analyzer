@@ -5,9 +5,9 @@
 
 class SynonymLinkageMap {
 private:
-	
-public:
 	std::unordered_map<std::string, std::set<std::string>> linkageMap;
+public:
+	
 	SynonymLinkageMap();
 	/*SynonymLinkageMap(std::string key,
 		std::unordered_map<std::string, std::set<std::string>> linkageMap);*/
