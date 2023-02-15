@@ -7,6 +7,11 @@ void ModifiesProcedureTable::addModifiesProcedure(std::string procedure, std::se
 	addProcedures(procedure, variables);
 }
 
+void ModifiesProcedureTable::addAllModifiesProcedure(std::unordered_map<std::string, std::set<std::string>> procedureToVariables) {
+	procedureToVariablesMap = procedureToVariables;
+	flipProcedureToVariables(procedureToVariables);
+}
+
 std::set<std::string> ModifiesProcedureTable::getVariables(std::string procedure) {
 	auto pair = procedureToVariablesMap.find(procedure);
 	if (pair == procedureToVariablesMap.end()) {
@@ -59,6 +64,20 @@ void ModifiesProcedureTable::addProcedures(std::string procedure, std::set<std::
 		}
 		else {
 			pair->second.insert(procedure);
+		}
+	}
+}
+
+void ModifiesProcedureTable::flipProcedureToVariables(std::unordered_map<std::string, std::set<std::string>> procedureToVariables) {
+	for (const auto& [key, values] : procedureToVariables) {
+		for (std::string value : values) {
+			auto pair = variableToProceduresMap.find(value);
+			if (pair == variableToProceduresMap.end()) {
+				variableToProceduresMap[value] = { key };
+			}
+			else {
+				pair->second.insert(key);
+			}
 		}
 	}
 }
