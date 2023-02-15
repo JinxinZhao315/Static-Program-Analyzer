@@ -7,6 +7,11 @@ void UsesStatementTable::addUsesStatement(int statement, std::set<std::string> v
 	addStatements(statement, variables);
 }
 
+void UsesStatementTable::addAllUsesStatement(std::unordered_map<int, std::set<std::string>> statementToVariables) {
+	statementToVariablesMap = statementToVariables;
+	flipStatementToVariables(statementToVariables);
+}
+
 std::set<std::string> UsesStatementTable::getVariables(int statement) {
 	auto pair = statementToVariablesMap.find(statement);
 	if (pair == statementToVariablesMap.end()) {
@@ -59,6 +64,20 @@ void UsesStatementTable::addStatements(int statement, std::set<std::string> vari
 		}
 		else {
 			pair->second.insert(statement);
+		}
+	}
+}
+
+void UsesStatementTable::flipStatementToVariables(std::unordered_map<int, std::set<std::string>> statementToVariables) {
+	for (const auto& [key, values] : statementToVariables) {
+		for (std::string value : values) {
+			auto pair = variableToStatementsMap.find(value);
+			if (pair == variableToStatementsMap.end()) {
+				variableToStatementsMap[value] = { key };
+			}
+			else {
+				pair->second.insert(key);
+			}
 		}
 	}
 }
