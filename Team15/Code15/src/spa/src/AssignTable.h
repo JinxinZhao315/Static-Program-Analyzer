@@ -10,6 +10,8 @@ public:
 
 	void addAssignNumber(int assignNumber);
 
+	void addAllAssignNumbers(std::set<int> assignNumbers);
+
 	std::set<int> getAllAssignNumbers();
 
 private:
