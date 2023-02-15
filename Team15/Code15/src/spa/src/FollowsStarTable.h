@@ -11,6 +11,8 @@ public:
 
 	void addFollowsStar(int leader, std::set<int> followers);
 
+	void addAllFollowsStar(std::unordered_map<int, std::set<int>> leaderToFollowers);
+
 	std::set<int> getFollowers(int leader);
 
 	std::set<int> getLeaders(int follower);
@@ -22,6 +24,8 @@ public:
 	void addFollowers(int leader, std::set<int> followers);
 
 	void addLeaders(int leader, std::set<int> followers);
+
+	void flipLeaderToFollowers(std::unordered_map<int, std::set<int>> leaderToFollowers);
 
 private:
 	std::unordered_map<int, std::set<int>> leaderToFollowersMap;

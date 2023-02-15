@@ -7,6 +7,11 @@ void FollowsStarTable::addFollowsStar(int leader, set<int> followers) {
 	addLeaders(leader, followers);
 }
 
+void FollowsStarTable::addAllFollowsStar(std::unordered_map<int, std::set<int>> leaderToFollowers) {
+	leaderToFollowersMap = leaderToFollowers;
+	flipLeaderToFollowers(leaderToFollowers);
+}
+
 std::set<int> FollowsStarTable::getFollowers(int leader) {
 	auto pair = leaderToFollowersMap.find(leader);
 	if (pair == leaderToFollowersMap.end()) {
@@ -59,6 +64,20 @@ void FollowsStarTable::addLeaders(int leader, set<int> followers) {
 		}
 		else {
 			pair->second.insert(leader);
+		}
+	}
+}
+
+void FollowsStarTable::flipLeaderToFollowers(std::unordered_map<int, std::set<int>> leaderToFollowers) {
+	for (const auto& [key, values] : leaderToFollowers) {
+		for (int value : values) {
+			auto pair = followerToLeadersMap.find(value);
+			if (pair == followerToLeadersMap.end()) {
+				followerToLeadersMap[value] = { key };
+			}
+			else {
+				pair->second.insert(key);
+			}
 		}
 	}
 }
