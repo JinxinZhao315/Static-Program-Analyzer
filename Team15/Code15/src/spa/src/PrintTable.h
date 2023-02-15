@@ -10,6 +10,8 @@ public:
 
 	void addPrintNumber(int printNumber);
 
+	void addAllPrintNumbers(std::set<int> printNumbers);
+
 	std::set<int> getAllPrintNumbers();
 
 private:
