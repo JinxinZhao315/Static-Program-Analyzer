@@ -105,6 +105,11 @@ void ClauseHandler::filterOneSynLinkageSet(std::string firstSynName, std::unorde
                 }
             }
         }
+        else if (resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).isEmptyLinkageSet(secondSynName)
+            && !currSynonymInstance.second.isEmptyLinkageSet(secondSynName)) {
+            resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).getLinkageMap().insert({ secondSynName, currSynonymInstance.second.getLinkageMap().at(secondSynName) });
+
+        }
     }
 }
 
@@ -160,6 +165,12 @@ void ClauseHandler::filterCurrResultLinkageSet(std::string firstSynName, std::un
                     }
                 }
             }
+        }
+        //table is enmpty but currResult is not
+        else if(resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).isEmptyLinkageSet(secondSynName)
+            && !currSynonymInstance.second.isEmptyLinkageSet(secondSynName)){
+            resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).getLinkageMap().insert({ secondSynName, currSynonymInstance.second.getLinkageMap().at(secondSynName) });
+
         }
     }
 }
