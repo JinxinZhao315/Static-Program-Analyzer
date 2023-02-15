@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Tokens.h"
 #include "EntityTable.h"
 #include "StatementTable.h"
@@ -17,38 +15,64 @@ public:
 	//SP procedure
 	void addProc(std::string procName);
 
+	void addAllProcs(std::set<std::string> procNames);
+
 	//SP variable
 	void addVar(std::string varName);
+
+	void addAllVars(std::set<std::string> varNames);
 
 	//SP constant
 	void addConst(std::string constVal);
 
+	void addAllConsts(std::set<std::string> constVals);
+
 	//SP statement
 	void addStmt(Tokens::Keyword stmtType, int stmtNum);
+
+	void addAllStmts(std::set<int> stmtNums);
+
+	void addAllStmtsByType(std::unordered_map<Tokens::Keyword, std::set<int>> stmtNumsByType);
 
 	//SP follows
 	void addFollows(int leaderNum, int followerNum);
 
+	void addAllFollows(std::unordered_map<int, int> allLeaderToFollower);
+
 	//SP follows*
 	void addFollowsStar(int leaderNum, std::set<int> followerNums);
+
+	void addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers);
 
 	//SP parent
 	void addParent(int parentNum, int childNum);
 
+	void addAllParent(std::unordered_map<int, int> allParentToChild);
+
 	//SP parent*
 	void addParentStar(int parentNum, std::set<int> childrenNums);
+
+	void addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren);
 
 	//SP uses statement-variable
 	void addUsesStmt(int stmtNum, std::set<std::string> varNames);
 
+	void addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars);
+
 	//SP uses procedure-variable
 	void addUsesProc(std::string procName, std::set<std::string> varNames);
+
+	void addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
 	//SP modifies statement-variable
 	void addModifiesStmt(int stmtNum, std::set<std::string> varNames);
 
+	void addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars);
+
 	//SP modifies procedure-variable
 	void addModifiesProc(std::string procName, std::set<std::string> varNames);
+
+	void addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
 	//SP pattern
 	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
