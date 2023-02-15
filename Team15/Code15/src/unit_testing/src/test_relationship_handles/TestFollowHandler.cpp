@@ -13,454 +13,84 @@
 
 using namespace std;
 
-TEST_CASE("FollowsHandler (_ , int) test 1")
+string testFollows(string queryStr, PKB& pkb);
+
+string testFollows(string queryStr, PKB& pkb) {
+    PQLPreprocessor preprocessor;
+    PQLEvaluator evaluator = PQLEvaluator(pkb);
+    Query query = preprocessor.preprocess(queryStr);
+    string retStr = evaluator.evaluate(query);
+    return retStr;
+}
+
+TEST_CASE("Follows* test")
 {
     try
     {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
         PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
 
-        Query query = Query();
-        pkb.addFollows(1, 5);
-        pkb.addFollows(2, 5);
-        pkb.addFollows(3, 5);
-        pkb.addFollows(4, 5);
         pkb.addStmt(Tokens::READ, 1);
         pkb.addStmt(Tokens::READ, 2);
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows*(s1, 5)");
 
-        bool isStar = false;
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        if (!followResult.isResultTrue())
-        {
-            result = {};
-        }
-        std::unordered_map<std::string, SynonymLinkageMap> expectedResult = { 
-            {"1", SynonymLinkageMap()}, 
-            {"2", SynonymLinkageMap()},
-            {"3", SynonymLinkageMap()},
-            {"4", SynonymLinkageMap()}
-        };
-        REQUIRE(result.size() == 4);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("2") == 1);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("FollowsHandler (_ , int) test 2")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(_,3)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        if (!followResult.isResultTrue())
-        {
-            result = {};
-        }
-
-        REQUIRE(result.size() == 5);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("2") == 1);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
-        
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("FollowsHandler (int , _) test 1")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(4, _)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 5);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("2") == 1);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("FollowsHandler (int , _) test 2")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(5, _)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        if (!followResult.isResultTrue())
-        {
-            result = {};
-        }
-        REQUIRE(result.size() == 0);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("FollowsHandler (int , int) test 1")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(4, 5)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        if (!followResult.isResultTrue())
-        {
-            result = {};
-        }
-        REQUIRE(result.size() == 5);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("2") == 1);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
-
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("FollowsHandler (int , int) test 2")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(5, 4)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        if (!followResult.isResultTrue())
-        {
-            result = {};
-        }
-        REQUIRE(result.size() == 0);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("Follows Handler Synonym Integer test")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(s1,5)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        std::set<std::string> expectedResult{"4"};
-        REQUIRE(result.size() == 1);
-        REQUIRE(result.count("4") == 1);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("Follows Handler Integer Synonym test")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
         pkb.addFollows(1, 2);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; Select s1 such that Follows(1,s1)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-        
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        std::set<std::string> expectedResult{"2"};
-        REQUIRE(result.size() == 1);
-        REQUIRE(result.count("2") == 1);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("Follows Handler Synonym Synonym test")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
         pkb.addFollows(2, 3);
-        pkb.addFollows(1, 2);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(c1,s1)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-        
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 1);
-        REQUIRE(result.count("3") == 1);
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("Follows Handler WildCard Synonym test")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(2, 3);
-        pkb.addFollows(1, 2);
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,s1)");
+        pkb.addFollowsStar(1, set<int>({2,3,4,5}));
+        pkb.addFollowsStar(2, set<int>({3,4,5}));
+        pkb.addFollowsStar(3, set<int>({4,5}));
+        pkb.addFollowsStar(4, set<int>({5}));
 
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
+        // Synon-int
+        string retStr = testFollows("read s1; Select s1 such that Follows*(s1, 5)", pkb);
+        std::cout << retStr << std::endl;
+        REQUIRE(retStr == "1,2,3,4");
 
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
+        // Int-synon
+        string retStr1 = testFollows("read s1; Select s1 such that Follows*(1,s1)", pkb);
+        std::cout << retStr1 << std::endl;
+        REQUIRE(retStr1 == "2,3,4,5");
 
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 3);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
+        // (int,_)
+        string retStr2 = testFollows("read s1; Select s1 such that Follows*(4, _)", pkb);
+        std::cout << retStr2 << std::endl;
+        REQUIRE(retStr2 == "1,2,3,4,5");
 
-        std::cout << "select handler successful" << std::endl;
+        string retStr3 = testFollows("read s1; Select s1 such that Follows*(5, _)", pkb);
+        std::cout << retStr3 << std::endl;
+        REQUIRE(retStr3 == "None");
+
+        //(int, int)
+        string retStr4 = testFollows("read s1; Select s1 such that Follows*(4, 5)", pkb);
+        std::cout << retStr4 << std::endl;
+        REQUIRE(retStr4 == "1,2,3,4,5");
+
+        string retStr5 = testFollows("read s1; Select s1 such that Follows*(5,4)", pkb);
+        std::cout << retStr5 << std::endl;
+        REQUIRE(retStr5 == "None");
+
+        //WC-Synon
+        string retStr6 = testFollows("read s1; call c1; Select s1 such that Follows*(_,s1)", pkb);
+        std::cout << retStr6 << std::endl;
+        REQUIRE(retStr6 == "2,3,4,5");
+
+        string retStr7 = testFollows("read s1; call c1; Select s1 such that Follows*(s1,_)", pkb);
+        std::cout << retStr7 << std::endl;
+        REQUIRE(retStr7 == "1,2,3,4");
+
+        // Synon-Synon
+        string retStr8 = testFollows("read s1, s2; Select s1 such that Follows*(s1,s2)", pkb);
+        std::cout << retStr8 << std::endl;
+        REQUIRE(retStr8 == "1,2,3,4");
+
+        string retStr9 = testFollows("read s1, s2; Select s2 such that Follows*(s1,s2)", pkb);
+        std::cout << retStr9 << std::endl;
+        REQUIRE(retStr9 == "2,3,4,5");
+
     }
     catch (exception e)
     {
@@ -468,47 +98,65 @@ TEST_CASE("Follows Handler WildCard Synonym test")
     }
 }
 
-TEST_CASE("Follows Handler Synonym WildCard test")
+TEST_CASE("Follows test 1")
 {
     try
     {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
 
-        Query query = Query();
-        pkb.addFollows(2, 3);
-        pkb.addFollows(1, 2);
-        pkb.addFollows(3, 4);
-        pkb.addFollows(4, 5);
+        PKB pkb;
 
         pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
+        pkb.addStmt(Tokens::READ, 2);
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
 
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(s1,_)");
+        pkb.addFollows(1, 2);
+        pkb.addFollows(2, 3);
+        pkb.addFollows(3, 4);
+        pkb.addFollows(4, 5);
 
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
+        // (_, int)
+        string retStr1 = testFollows("read s1; Select s1 such that Follows(_,3)", pkb);
+        std::cout << retStr1 << std::endl;
+        REQUIRE(retStr1 == "1,2,3,4,5");
 
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
+        // (int,_)
+        string retStr2 = testFollows("read s1; Select s1 such that Follows(4, _)", pkb);
+        std::cout << retStr2 << std::endl;
+        REQUIRE(retStr2 == "1,2,3,4,5");
 
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 3);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("3") == 1);
+        string retStr3 = testFollows("read s1; Select s1 such that Follows(5, _)", pkb);
+        std::cout << retStr3 << std::endl;
+        REQUIRE(retStr3 == "None");
 
+        //(int, int)
+        string retStr4 = testFollows("read s1; Select s1 such that Follows(4, 5)", pkb);
+        std::cout << retStr4 << std::endl;
+        REQUIRE(retStr4 == "1,2,3,4,5");
 
-        std::cout << "select handler successful" << std::endl;
+        string retStr5 = testFollows("read s1; Select s1 such that Follows(5,4)", pkb);
+        std::cout << retStr5 << std::endl;
+        REQUIRE(retStr5 == "None");
+
+        //Synon-int
+        string retStr6 = testFollows("read s1; Select s1 such that Follows(s1,5)", pkb);
+        std::cout << retStr6 << std::endl;
+        REQUIRE(retStr6 == "4");
+
+        string retStr7 = testFollows("read s1; Select s1 such that Follows(1,s1)", pkb);
+        std::cout << retStr7 << std::endl;
+        REQUIRE(retStr7 == "2");
+
+        // Synon-Synon
+        string retStr8 = testFollows("read s1, s2; Select s1 such that Follows(s1,s2)", pkb);
+        std::cout << retStr8 << std::endl;
+        REQUIRE(retStr8 == "1,2,3,4");
+
+        string retStr9 = testFollows("read s1, s2; Select s2 such that Follows(s1,s2)", pkb);
+        std::cout << retStr9 << std::endl;
+        REQUIRE(retStr9 == "2,3,4,5");
+
     }
     catch (exception e)
     {
@@ -516,143 +164,49 @@ TEST_CASE("Follows Handler Synonym WildCard test")
     }
 }
 
-TEST_CASE("Follows Handler Integer WildCard test")
+
+
+TEST_CASE("Follows test 2")
 {
     try
     {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
 
-        Query query = Query();
-        pkb.addFollows(2, 3);
+        PKB pkb;
+
         pkb.addFollows(1, 2);
+        pkb.addFollows(2, 3);
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
-
         pkb.addStmt(Tokens::READ, 1);
         pkb.addStmt(Tokens::CALL, 2);
         pkb.addStmt(Tokens::READ, 3);
         pkb.addStmt(Tokens::READ, 4);
         pkb.addStmt(Tokens::READ, 5);
 
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(1,_)");
+        //WC-Synon
+        string retStr = testFollows("read s1; call c1; Select s1 such that Follows(_,s1)", pkb);
+        std::cout << retStr << std::endl;
+        REQUIRE(retStr == "3,4,5");
 
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
+        string retStr3 = testFollows("read s1; call c1; Select s1 such that Follows(s1,_)", pkb);
+        std::cout << retStr3 << std::endl;
+        REQUIRE(retStr3 == "1,3,4");
 
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 4);
-        REQUIRE(result.count("1") == 1);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
+        // Synon-Synon
+        string retStr2 = testFollows("read s1; call c1; Select s1 such that Follows(c1,s1)", pkb);
+        std::cout << retStr2 << std::endl;
+        REQUIRE(retStr2 == "3");
 
 
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
+        //Int-WC
+        string retStr4 = testFollows("read s1; call c1; Select s1 such that Follows(1,_)", pkb);
+        std::cout << retStr4 << std::endl;
+        REQUIRE(retStr4 == "1,3,4,5");
 
-TEST_CASE("Follows Handler WildCard Integer test")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
+        string retStr5 = testFollows("read s1; call c1; Select s1 such that Follows(_,1)", pkb);
+        std::cout << retStr5 << std::endl;
+        REQUIRE(retStr5 == "None");
 
-        Query query = Query();
-
-        pkb.addFollows(2, 3);
-        pkb.addFollows(1, 2);
-        pkb.addFollows(3, 4);
-        pkb.addFollows(4, 5);
-
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,1)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-
-        followsHandler.combineResult(resultTable, followResult);
-
-        set<std::string> result = resultTable.getStringSetFromKey("s1");
-
-        REQUIRE(result.size() == 0);
-
-
-        std::cout << "select handler successful" << std::endl;
-    }
-    catch (exception e)
-    {
-        std::cout << "exception occured!";
-    }
-}
-
-TEST_CASE("Follows Handler WildCard Synonym test 2")
-{
-    try
-    {
-        ResultTable resultTable = ResultTable();
-        PQLPreprocessor preprocessor;
-        PKB pkb;
-        PQLEvaluator evaluator = PQLEvaluator(pkb);
-
-        Query query = Query();
-        pkb.addFollows(2, 3);
-        pkb.addFollows(1, 2);
-        pkb.addFollows(3, 4);
-        pkb.addFollows(4, 5);
-
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
-        query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,s1)");
-
-        SelectHandler selectHandler = SelectHandler(pkb);
-        multimap<string, string> varTable = query.getSynonymTable();
-        std::string selectedVarName = selectHandler.evalSelect(query.getSelectClause(), varTable, resultTable);
-
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        bool isStar = false;
-        SuchThatClause suchThatClause = query.getSuchThatClauseVec()[0];
-        Result followResult = followsHandler.evalFollows(isStar, suchThatClause, resultTable, varTable);
-        followsHandler.combineResult(resultTable, followResult);
-
-        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
-        REQUIRE(result.size() == 3);
-        REQUIRE(result.count("3") == 1);
-        REQUIRE(result.count("4") == 1);
-        REQUIRE(result.count("5") == 1);
-
-
-        std::cout << "select handler successful" << std::endl;
     }
     catch (exception e)
     {

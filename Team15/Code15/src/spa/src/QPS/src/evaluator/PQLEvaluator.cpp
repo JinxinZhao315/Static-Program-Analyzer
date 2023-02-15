@@ -117,8 +117,7 @@ std::string PQLEvaluator::evaluate(Query query)
 
         if (result.isResultTrue() == false)
         {
-//            resultTable.deleteKeyValuePair(selectedVarName);
-//            resultTable.insertKeyValuePair(selectedVarName, {});
+            resultTable.resetKeySetEmpty(selectedVarName);
             isEarlyExit = true;
             break;
         }
