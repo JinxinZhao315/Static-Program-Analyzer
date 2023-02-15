@@ -9,12 +9,13 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
     if (!isStar) {
         if (type == GET_LEADER) {
             int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
-            if (leader != -1) {
+            //if return null, leader == 0 but not -1
+            if (leader != 0) {
                 ret.insert(leader);
             }
         } else { //if (type == GET_FOLLOWER)
             int follower = pkb.getFollowsFollowerNum(stoi(arg));//
-            if (follower != -1) {
+            if (follower != 0) {
                 ret.insert(follower);
             }
         }
@@ -147,22 +148,22 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
                 if (isRightFollowLeft) {
                     if (leftResultValues.find(currLeftVal.first) == leftResultValues.end()) {
                         SynonymLinkageMap leftLinkedSynonymCollection;
-                        leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal.first);
+                        leftLinkedSynonymCollection.insertLinkage(rightArg, std::set<std::string>({ currRightVal.first }));
                         leftResultValues.insert(std::make_pair<>(currLeftVal.first, leftLinkedSynonymCollection));
                     }
                     else {
                         leftResultValues.find(currLeftVal.first)->second
-                            .insertLinkage(rightArg, currRightVal.first);
+                            .insertLinkage(rightArg, std::set<std::string>({ currRightVal.first }));
                     }
 
                     if (rightResultValues.find(currRightVal.first) == rightResultValues.end()) {
                         SynonymLinkageMap rightLinkedSynonymCollection;
-                        rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal.first);
+                        rightLinkedSynonymCollection.insertLinkage(leftArg, { currLeftVal.first });
                         rightResultValues.insert(std::make_pair<>(currRightVal.first, rightLinkedSynonymCollection));
                     }
                     else {
                         rightResultValues.find(currRightVal.first)->second
-                            .insertLinkage(leftArg, currLeftVal.first);
+                            .insertLinkage(leftArg, { currLeftVal.first });
                     }
                     
                     //leftResultValues.insert(currLeftVal);

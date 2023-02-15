@@ -2,18 +2,22 @@
 #include <unordered_map>
 #include <string>
 #include <set>
+#include <algorithm>
+#include <iterator>
+#include "Utility.h"
 
 class SynonymLinkageMap {
 private:
-	
-public:
 	std::unordered_map<std::string, std::set<std::string>> linkageMap;
+public:
 	SynonymLinkageMap();
+	SynonymLinkageMap(std::unordered_map<std::string, std::set<std::string>> linkageMap);
 	/*SynonymLinkageMap(std::string key,
 		std::unordered_map<std::string, std::set<std::string>> linkageMap);*/
 	bool isEmpty();
-	void SynonymLinkageMap::insertLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
+	bool isEmptyLinkageSet(std::string linkedSynonymName);
+	bool containsKey(std::string linkedSynonymName);
+	void SynonymLinkageMap::insertLinkage(std::string linkedSynonymName, std::set<std::string> linkedSynonymInstanceSet);
 	void SynonymLinkageMap::deleteLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance);
-	std::unordered_map <std::string, std::set<std::string>> getLinkageMap();
-	bool isEmptyLinkageSet(std::string synonymName);
+	std::unordered_map <std::string, std::set<std::string>>& getLinkageMap();
 };

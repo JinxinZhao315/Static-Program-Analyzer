@@ -1,6 +1,9 @@
 #include<string>
 #include<regex>
 #include<unordered_set>
+#include <algorithm>
+#include <iterator>
+#include <set>
 #include"exceptions/PQLSyntaxError.h"
 
 #pragma once
@@ -73,6 +76,14 @@ public:
         }
         return trimmed;
     };
+
+	inline static const std::set<std::string> getSetIntersection(std::set<std::string> firstSet, std::set<std::string> secondSet) {
+		std::set<std::string> resultSet;
+		std::set_intersection(firstSet.begin(), firstSet.end(),
+			secondSet.begin(), secondSet.end(),
+			std::inserter(resultSet, resultSet.begin()));
+		return resultSet;
+	}
 };
 
 

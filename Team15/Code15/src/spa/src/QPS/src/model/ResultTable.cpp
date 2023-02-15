@@ -4,6 +4,9 @@
 
 #include "QPS/include/model/ResultTable.h"
 ResultTable::ResultTable() {}
+ResultTable::ResultTable(std::unordered_map<std::string, std::unordered_map<std::string, SynonymLinkageMap>> resultTable) {
+    this->resultTable = resultTable;
+}
 
 void ResultTable::insertSynonymEntry(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap> synonymInstanceCollection) {
     assert(resultTable.find(synonymName) == resultTable.end());
@@ -18,8 +21,8 @@ bool ResultTable::isSynonymPresent(std::string key) {
     }
 }
 //
-std::unordered_map<std::string, SynonymLinkageMap> ResultTable::getSynonymEntry(std::string key) {
-    return this->resultTable.at(key);
+std::unordered_map<std::string, SynonymLinkageMap>& ResultTable::getSynonymEntry(std::string key) {
+    return this->resultTable.find(key)->second;
 }
 
 std::set<std::string> ResultTable::getStringSetFromKey(std::string synonymName) {
@@ -47,6 +50,9 @@ bool ResultTable::isKeyPresent(std::string key) {
     else {
         return true;
     }
+}
+void ResultTable::deleteSynonymInstance(std::string synonymName, std::string synonymInstance) {
+    this->resultTable.find(synonymName)->second.erase(synonymInstance);
 }
 //
 //void ResultTable::deleteKeyValuePair(std::string key) {
