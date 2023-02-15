@@ -90,4 +90,61 @@ TEST_CASE("Follows/Follow* and pattern test") {
     cout << retStr8 << endl;
     REQUIRE(retStr8 == "2");
 
+
+
+}
+
+TEST_CASE("Follows/Follow* and pattern test 2") {
+    PKB pkb;
+
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
+    pkb.addVar("x");
+    pkb.addVar("y");
+    pkb.addVar("k");
+    vector<string> rhs1 = {"x", "y", "+"};
+    set<vector<string>> rhsSet1 = {rhs1};
+    pkb.addPattern(1, "k", rhsSet1);
+
+
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addVar("m");
+    vector<string> rhs2 = {"1", "2", "+"};
+    set<vector<string>> rhsSet2 = {rhs2};
+    pkb.addPattern(2, "m", rhsSet2);
+
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 3);
+    pkb.addVar("n");
+    vector<string> rhs3 = {"2", "3", "+"};
+    set<vector<string>> rhsSet3 = {rhs3};
+    pkb.addPattern(2, "n", rhsSet3);
+
+    pkb.addFollows(1, 2);
+    pkb.addFollows(2, 3);
+
+    pkb.addFollowsStar(1, set<int>({2,3}));
+    pkb.addFollowsStar(2, set<int>({3}));
+
+
+    // Line 1: k = x + y;
+    // Line 2: m = 1 + 2;
+    // Line 3: n = 2 + 3;
+
+//    string retStr1 = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2)", pkb);
+//    cout << retStr1 << endl;
+//    REQUIRE(retStr1 == "1,2");
+//
+//    string retStr2 = testDriver("assign a1, a2; Select a2 such that Follows(a1,a2)", pkb);
+//    cout << retStr2 << endl;
+//    REQUIRE(retStr2 == "2,3");
+//
+//    string retStr3 = testDriver("assign a1, a2; Select a2 pattern a2 (\"m\",_)", pkb);
+//    cout << retStr3 << endl;
+//    REQUIRE(retStr3 == "2");
+
+    string retStr = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2) pattern a2 (\"m\",_)", pkb);
+    // Follows: a1: 1,2
+    //          a2: 2,3
+    // pattern: a2: 2
+    cout << retStr << endl;
+    REQUIRE(retStr == "1");
 }

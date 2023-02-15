@@ -54,7 +54,7 @@ std::string PQLEvaluator::evaluate(Query query)
             usesHandler.combineResult(resultTable, result);
         }*/
 
-       if (relationship == "Parent" || relationship == "Parent*") {
+       else if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
             Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
@@ -69,7 +69,7 @@ std::string PQLEvaluator::evaluate(Query query)
             }
             parentHandler.combineResult(resultTable, result);
         }
-        if (relationship == "Modifies") {
+        else if (relationship == "Modifies") {
             Result result;
 
             std::string leftArg = suchThatCl.getLeftArg();
