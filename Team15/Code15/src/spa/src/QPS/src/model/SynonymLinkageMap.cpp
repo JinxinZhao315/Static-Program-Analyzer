@@ -13,13 +13,14 @@ bool SynonymLinkageMap::isEmptyLinkageSet(std::string synonymName) {
 	return linkageMap.find(synonymName) == linkageMap.end() || linkageMap.find(synonymName)->second.size() == 0;
 }
 
-void SynonymLinkageMap::insertLinkage(std::string linkedSynonymName, std::set<std::string> linkedSynonymInstanceSet) {
+void SynonymLinkageMap::insertLinkage(std::string linkedSynonymName, std::string linkedSynonymInstance) {
 	if (linkageMap.find(linkedSynonymName) == linkageMap.end()) {
-		linkageMap.insert(std::make_pair<>(linkedSynonymName, linkedSynonymInstanceSet));
+		std::set<std::string> linkedSynInstanceSet;
+		linkedSynInstanceSet.insert(linkedSynonymInstance);
+		linkageMap.insert(std::make_pair<>(linkedSynonymName, linkedSynInstanceSet));
 	}
 	else {//intersect linked synonym instance list
-		linkageMap.find(linkedSynonymName)->second =
-			Utility::getSetIntersection(linkageMap.find(linkedSynonymName)->second, linkedSynonymInstanceSet);
+		linkageMap.find(linkedSynonymName)->second.insert(linkedSynonymInstance);
 	}
 }
 

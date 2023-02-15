@@ -148,22 +148,22 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
                 if (isRightFollowLeft) {
                     if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
                         SynonymLinkageMap leftLinkedSynonymCollection;
-                        leftLinkedSynonymCollection.insertLinkage(rightArg, std::set<std::string>({ currRightVal }));
+                        leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
                         leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
                     }
                     else {
                         leftResultValues.find(currLeftVal)->second
-                            .insertLinkage(rightArg, std::set<std::string>({ currRightVal }));
+                            .insertLinkage(rightArg, currRightVal);
                     }
 
                     if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
                         SynonymLinkageMap rightLinkedSynonymCollection;
-                        rightLinkedSynonymCollection.insertLinkage(leftArg, { currLeftVal });
+                        rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
                         rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
                     }
                     else {
                         rightResultValues.find(currRightVal)->second
-                            .insertLinkage(leftArg, { currLeftVal });
+                            .insertLinkage(leftArg, currLeftVal);
                     }
                     
                     //leftResultValues.insert(currLeftVal);

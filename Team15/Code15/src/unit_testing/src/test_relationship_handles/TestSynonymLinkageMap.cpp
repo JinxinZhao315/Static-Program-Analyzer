@@ -10,7 +10,7 @@ TEST_CASE("Test isEmpty function") {
 	}
 	SECTION("return false") {
 		SynonymLinkageMap map;
-		map.insertLinkage("synon1", { "11" });
+		map.insertLinkage("synon1", "11" );
 		REQUIRE(map.isEmpty() == false);
 	}
 }
@@ -18,7 +18,7 @@ TEST_CASE("Test isEmpty function") {
 TEST_CASE("Test isEmptyLinkageSet function") {
 	SECTION("return true") {
 		SynonymLinkageMap map;
-		map.insertLinkage("synon1", { "11" });
+		map.insertLinkage("synon1",  "11" );
 		REQUIRE(map.isEmptyLinkageSet("synon1") == false);
 	}
 	SECTION("return false") {
@@ -31,11 +31,12 @@ TEST_CASE("Test isEmptyLinkageSet function") {
 TEST_CASE("Test insertLinkage function") {
 	SynonymLinkageMap map;
 
-	map.insertLinkage("synon1", { "11" });
-	std::set<std::string> expectedSet = { "11" };
+	map.insertLinkage("synon1", "11");
+	std::set<std::string> expectedSet = { "11"};
 	REQUIRE(map.getLinkageMap().find("synon1")->second == expectedSet);
 
-	map.insertLinkage("synon1", { "11", "13"});
+	map.insertLinkage("synon1", "11");
+	map.insertLinkage("synon1", "13");
 	//keep only the intersection
 	REQUIRE(map.getLinkageMap().find("synon1")->second == expectedSet);
 }
@@ -43,7 +44,8 @@ TEST_CASE("Test insertLinkage function") {
 TEST_CASE("Test deleteLinkage") {
 	SynonymLinkageMap map;
 
-	map.insertLinkage("synon1", { "11", "12"});
+	map.insertLinkage("synon1", "11");
+	map.insertLinkage("synon1", "12");
 	std::set<std::string> expectedSet = { "11", "12" };
 	REQUIRE(map.getLinkageMap().find("synon1")->second == expectedSet);
 

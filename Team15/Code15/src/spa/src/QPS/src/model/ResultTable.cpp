@@ -63,11 +63,11 @@ void ResultTable::deleteSynonymInstance(std::string synonymName, std::string syn
 
 //}
 
-void ResultTable::deleteKeyValuePair(std::string key) {
-    this->resultTable.erase(key);
-}
-
-void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
-    deleteKeyValuePair(selectedVarName);
-    insertSynonymEntry(selectedVarName, {});
-}
+//void ResultTable::deleteKeyValuePair(std::string key) {
+//    this->resultTable.erase(key);
+//}
+//
+//void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
+//    deleteKeyValuePair(selectedVarName);
+//    insertSynonymEntry(selectedVarName, {});
+//}
