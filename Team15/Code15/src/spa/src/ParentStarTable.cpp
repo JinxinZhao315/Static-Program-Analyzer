@@ -7,6 +7,11 @@ void ParentStarTable::addParentStar(int parent, set<int> children) {
 	addParents(parent, children);
 }
 
+void ParentStarTable::addAllParentStar(std::unordered_map<int, std::set<int>> parentToChildren) {
+	parentToChildrenMap = parentToChildren;
+	flipParentToChildren(parentToChildren);
+}
+
 std::set<int> ParentStarTable::getChildren(int parent) {
 	auto pair = parentToChildrenMap.find(parent);
 	if (pair == parentToChildrenMap.end()) {
@@ -59,6 +64,20 @@ void ParentStarTable::addParents(int parent, set<int> children) {
 		}
 		else {
 			pair->second.insert(parent);
+		}
+	}
+}
+
+void ParentStarTable::flipParentToChildren(std::unordered_map<int, std::set<int>> parentToChildren) {
+	for (const auto& [key, values] : parentToChildren) {
+		for (int value : values) {
+			auto pair = childToParentsMap.find(value);
+			if (pair == childToParentsMap.end()) {
+				childToParentsMap[value] = { key };
+			}
+			else {
+				pair->second.insert(key);
+			}
 		}
 	}
 }
