@@ -3,6 +3,7 @@
 #include <regex>
 #include <string>
 #include <utility>
+#include <vector>
 #include "QPS/include/model/SuchThatClause.h"
 #include "QPS/include/model/SelectClause.h"
 #include "QPS/include/model/PatternClause.h"
@@ -19,12 +20,12 @@ public:
 	std::pair<std::string, std::string> tokenizeQuery(std::string input);
 	void tokenizeClauses(std::string input,
 		SelectClause& selectClause,
-		SuchThatClause& suchThatClause,
-		PatternClause& patternClause);
+		std::vector<SuchThatClause>& suchThatClauseVec,
+		std::vector<PatternClause>& patternClauseVec);
 	std::multimap<std::string, std::string> tokenizeDeclaration(std::string declaration);
 	void tokenizeSelectClause(std::string& input, SelectClause& selectClause);
-	void tokenizeSuchThatClause(std::string& input, SuchThatClause& suchThatClause);
-	void tokenizePatternClause(std::string& input, PatternClause& patternClause);
+	void tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec);
+	void tokenizePatternClause(std::string& input, std::vector<PatternClause>& patternClauseVec);
 
 private:
     PQLSyntaxChecker syntaxChecker;

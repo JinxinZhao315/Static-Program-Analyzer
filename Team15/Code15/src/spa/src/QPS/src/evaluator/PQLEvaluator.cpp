@@ -33,11 +33,8 @@ std::string PQLEvaluator::evaluate(Query query)
             if (result.isResultTrue() == false)
             {
 
+  //              resultTable.resetKeySetEmpty(selectedVarName);
 
-//                resultTable.resetKeySetEmpty(selectedVarName);
-//
-//                resultTable.deleteKeyValuePair(selectedVarName);
-//                resultTable.insertKeyValuePair(selectedVarName, {});
                 isEarlyExit = true;
 
                 break;
@@ -57,7 +54,7 @@ std::string PQLEvaluator::evaluate(Query query)
             usesHandler.combineResult(resultTable, result);
         }*/
 
-       /* if (relationship == "Parent" || relationship == "Parent*") {
+       if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
             Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
@@ -66,36 +63,37 @@ std::string PQLEvaluator::evaluate(Query query)
                 break;
             }
             parentHandler.combineResult(resultTable, result);
-        }*/
-        //if (relationship == "Modifies") {
-        //    Result result;
-        //    std::string leftArg = suchThatCl.getLeftArg();
-        //    std::string leftType = Utility::getReferenceType(leftArg);
-        //    ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
-        //    ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
+        }
+        if (relationship == "Modifies") {
+            Result result;
 
-        //    if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
-        //        modifiesPHandler = ModifiesPHandler(pkb);
-        //        result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
-        //    }
-        //    else {
-        //        modifiesSHandler = ModifiesSHandler(pkb);
-        //        result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
-        //    }
+            std::string leftArg = suchThatCl.getLeftArg();
+            std::string leftType = Utility::getReferenceType(leftArg);
+            //ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
+
+            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure") ) {
+                //modifiesPHandler = ModifiesPHandler(pkb);
+                //result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+            }
+            else {
+ 
+                result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
+            }
 
 
-        //    if (result.isResultTrue() == false) {
-        //        resultTable.resetKeySetEmpty(selectedVarName);
-        //        break;
-        //    }
-        //    if (leftType == Utility::QUOTED_IDENT || synonymTable.find(leftArg)->second == "procedure") {
-        //        modifiesPHandler.combineResult(resultTable, result);
-        //    }
-        //    else {
-        //        modifiesSHandler.combineResult(resultTable, result);
-        //    }
+            if (result.isResultTrue() == false) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+                break;
+            }
+            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+                //modifiesPHandler.combineResult(resultTable, result);
+            }
+            else {
+                modifiesSHandler.combineResult(resultTable, result);
+            }
 
-        //}
+        }
     }
     for (PatternClause patternCl : patternVec)
     {
