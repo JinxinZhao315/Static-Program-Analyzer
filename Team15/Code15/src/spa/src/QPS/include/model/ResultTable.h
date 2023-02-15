@@ -28,8 +28,8 @@ public:
     //void insertKeyValuePair(std::string key, std::set<std::string> value);
     std::unordered_map<std::string, SynonymLinkageMap>& getSynonymEntry(std::string key);
     int getSizeOfResultTable();
-    //void deleteKeyValuePair(std::string key);
-    //void resetKeySetEmpty(std::string);
+    void deleteKeyValuePair(std::string key);
+    void resetKeySetEmpty(std::string);
     bool isKeyPresent(std::string key);
 
     std::set<std::string> getStringSetFromKey(std::string synonymName);
