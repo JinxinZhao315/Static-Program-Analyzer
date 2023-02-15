@@ -24,7 +24,7 @@ set(headers ${headers}
         include/extractor/FollowsRelationshipExtractor.h
         include/extractor/ParentsRelationshipExtractor.h)
 
-add_library(source_processor ${srcs} ${headers} src/extractor/AssignsRelationshipExtractor.cpp include/extractor/AssignsRelationshipExtractor.h src/extractor/ModifiesRelationshipExtractor.cpp include/extractor/ModifiesRelationshipExtractor.h src/util/StringOperations.cpp include/util/StringOperations.h)
+add_library(source_processor ${srcs} ${headers} src/extractor/AssignsRelationshipExtractor.cpp include/extractor/AssignsRelationshipExtractor.h src/extractor/ModifiesRelationshipExtractor.cpp include/extractor/ModifiesRelationshipExtractor.h src/util/StringOperations.cpp include/util/StringOperations.h src/extractor/UsesRelationshipExtractor.cpp include/extractor/UsesRelationshipExtractor.h)
 add_executable(SourceProcessor ${srcs} ${headers})
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(source_processor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

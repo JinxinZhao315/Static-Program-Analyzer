@@ -1,11 +1,10 @@
-#include "../../include/extractor/ModifiesRelationshipExtractor.h"
-#include "../../include/util/StringOperations.h"
+#include "../../include/extractor/UsesRelationshipExtractor.h"
 
 /**
  * Goes through each line of the program and checks if the line is a read, assign or is a container where modifies holds
  */
-unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program, const set<string>& variables) {
-    unordered_map<int, set<string>> modifiesRS;
+unordered_map<int, set<string>> extractUsesRS(const vector<Line>& program, const set<string>& variables) {
+    unordered_map<int, set<string>> usesRS;
     vector<int> stmtContainerStack;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
@@ -25,17 +24,19 @@ unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program, c
             }
         }
 
-        string varName;
+        set<string> varNames;
         if (lineType == "=") {
             auto [LHS, RHS] = getLHSandRHSofAssignStatement(tokens);
-            varName = LHS[0];
-        } else if (lineType == "read") { // check if modifies(r, v)
-            varName = getVarNameFromReadStatement(tokens);
+            varNames = getVariablesFromStatement(RHS, variables);
+        } else if (lineType == "print") {
+            varNames.insert(getVarNameFromPrintStatement(tokens));
+        } else if (lineType == "if" || lineType == "while") {
+            varNames = getVariablesFromStatement(tokens, variables);
         }
-        modifiesRS[currLineNumber].insert(varName); // for current line
+        usesRS[currLineNumber].insert(varNames.begin(), varNames.end()); // for current line
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
             int stmtContainerLine = stmtContainerStack.back();
-            modifiesRS[stmtContainerLine].insert(varName);
+            usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
         }
     }
 }

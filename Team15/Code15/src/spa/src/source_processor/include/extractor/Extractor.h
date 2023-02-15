@@ -15,6 +15,7 @@
 #include "ParentsRelationshipExtractor.h"
 #include "ModifiesRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
+#include "UsesRelationshipExtractor.h"
 
 using namespace std;
 

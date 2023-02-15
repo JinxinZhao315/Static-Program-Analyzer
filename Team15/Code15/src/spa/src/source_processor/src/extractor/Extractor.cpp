@@ -145,9 +145,10 @@ void Extractor::extract(const vector<Line> &program) {
     // Call and get results of extraction
     auto [parentsRS, parentsStarRS] = extractParentsRelationship(program);
     auto [followsRS, followsStarRS] = extractFollowsRelationship(program);
-    unordered_map<int, set<string>> modifiesRS = extractModifiesRS(program);
-    //TODO: ensure variables are defined before calling extractAssignmentRS
-    unordered_map<string, set<Line> > assignsRS = extractAssignmentRS(program, variables);
+    auto modifiesRS = extractModifiesRS(program);
+    //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
+    auto assignsRS = extractAssignmentRS(program, variables);
+    auto usesRS = extractUsesRS(program, variables);
     // Set results here
     this->parentsRS = parentsRS;
     this->parentsStarRS = parentsStarRS;

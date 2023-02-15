@@ -11,5 +11,23 @@ pair<vector<string>, vector<string>> getLHSandRHSofAssignStatement(vector<string
 }
 
 string getVarNameFromReadStatement(vector<string> tokens) {
+    return getSecondToken(tokens);
+}
+
+string getVarNameFromPrintStatement(vector<string> tokens) {
+    return getSecondToken(tokens);
+}
+
+string getSecondToken(vector<string> tokens) {
     return tokens[1];
+}
+
+set<string> getVariablesFromStatement(vector<string> tokens, const set<string>& variables) {
+    set<string> result;
+    for (string token : tokens) {
+        if (variables.count(token) > 0) {
+            result.insert(token);
+        }
+    }
+    return result;
 }
