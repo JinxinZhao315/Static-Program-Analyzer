@@ -5,7 +5,7 @@
 
 #include "catch.hpp"
 
-string testPattern(string queryStr);
+string testPattern(string queryStr, PKB& pkb);
 
 string testPattern(string queryStr, PKB& pkb) {
     PQLPreprocessor preprocessor;
