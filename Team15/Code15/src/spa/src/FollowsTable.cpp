@@ -7,20 +7,6 @@ void FollowsTable::addFollows(int leader, int follower) {
 	addLeader(leader, follower);
 }
 
-void FollowsTable::addFollower(int leader, int follower) {
-	auto pair = leaderToFollowerMap.find(leader);
-	if (pair == leaderToFollowerMap.end()) {
-		leaderToFollowerMap[leader] = follower;
-	}
-}
-
-void FollowsTable::addLeader(int leader, int follower) {
-	auto pair = followerToLeaderMap.find(follower);
-	if (pair == followerToLeaderMap.end()) {
-		followerToLeaderMap[follower] = leader;
-	}
-}
-
 int FollowsTable::getFollower(int leader) {
 	auto pair = leaderToFollowerMap.find(leader);
 	if (pair == leaderToFollowerMap.end()) {
@@ -50,5 +36,19 @@ bool FollowsTable::inRelationship(int leaderNumber, int followerNumber) {
 }
 
 bool FollowsTable::isEmpty() {
-	return leaderToFollowerMap.empty();
+	return leaderToFollowerMap.empty() && followerToLeaderMap.empty();
+}
+
+void FollowsTable::addFollower(int leader, int follower) {
+	auto pair = leaderToFollowerMap.find(leader);
+	if (pair == leaderToFollowerMap.end()) {
+		leaderToFollowerMap[leader] = follower;
+	}
+}
+
+void FollowsTable::addLeader(int leader, int follower) {
+	auto pair = followerToLeaderMap.find(follower);
+	if (pair == followerToLeaderMap.end()) {
+		followerToLeaderMap[follower] = leader;
+	}
 }

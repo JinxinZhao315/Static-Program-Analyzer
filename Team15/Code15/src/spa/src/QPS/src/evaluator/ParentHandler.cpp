@@ -9,13 +9,13 @@ std::set<int> ParentHandler::getParentFromPKB(bool isStar, string type, string a
     if (!isStar) {
         if (type == GET_PARENT) {
             int parent = pkb.getParentParentNum(stoi(arg)); //
-            if (parent != -1) {
+            if (parent != NULL) {
                 ret.insert(parent);
             }
         }
         else { //if (type == GET_CHILD)
             int child = pkb.getParentChildNum(stoi(arg));//
-            if (child != -1) {
+            if (child != NULL) {
                 ret.insert(child);
             }
         }
@@ -51,8 +51,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
 
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
-        //std::unordered_map<std::string, SynonymLinkageMap> parentSynonVals;
-
         bool isParentEmpty = pkb.isParentEmpty(); //
         if (isParentEmpty) {
             result.setResultTrue(false);
@@ -70,9 +68,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
     }
     else if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
         std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, leftArg); // = pkb.getFollowsStarFollowerNums(stoi(leftArg))
-        for (const auto& elem : childSet) {
-            std::cout << elem << " ";
-        }
     
         if (childSet.empty()) {
             result.setResultTrue(false);

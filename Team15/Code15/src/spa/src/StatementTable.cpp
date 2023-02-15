@@ -3,8 +3,8 @@
 StatementTable::StatementTable() = default;
 
 void StatementTable::addStatementNumber(Tokens::Keyword statementType, int statementNumber) {
-	statementTable.emplace(statementNumber);
-	statementByTypeTable[statementType].emplace(statementNumber);
+	statementTable.insert(statementNumber);
+	statementByTypeTable[statementType].insert(statementNumber);
 }
 
 std::set<int> StatementTable::getAllStatementNumbers() {
