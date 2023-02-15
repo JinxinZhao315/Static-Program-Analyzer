@@ -11,6 +11,8 @@ public:
 
 	void addProcedureName(std::string procedureName);
 
+	void addAllProcedureNames(std::set<std::string> procedureNames);
+
 	std::set<std::string> getAllProcedureNames();
 
 private:
