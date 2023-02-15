@@ -33,7 +33,7 @@ std::string PQLEvaluator::evaluate(Query query)
             if (result.isResultTrue() == false)
             {
 
-  //              resultTable.resetKeySetEmpty(selectedVarName);
+                resultTable.resetKeySetEmpty(selectedVarName);
 
                 isEarlyExit = true;
 
@@ -58,8 +58,13 @@ std::string PQLEvaluator::evaluate(Query query)
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
             Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
-            if (result.isResultTrue() == false) {
+            if (result.isResultTrue() == false)
+            {
+
                 resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
                 break;
             }
             parentHandler.combineResult(resultTable, result);
@@ -82,10 +87,16 @@ std::string PQLEvaluator::evaluate(Query query)
             }
 
 
-            if (result.isResultTrue() == false) {
+            if (result.isResultTrue() == false)
+            {
+
                 resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
                 break;
             }
+
             if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
                 //modifiesPHandler.combineResult(resultTable, result);
             }
