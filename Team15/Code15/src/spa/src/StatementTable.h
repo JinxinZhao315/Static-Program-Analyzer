@@ -2,7 +2,7 @@
 
 #include <set>
 #include <map>
-#include "source_processor/include/parser/Tokens.h"
+#include <string>
 
 using namespace std;
 
@@ -12,20 +12,20 @@ public:
 
 	void addStatementNumber(int statementNumber);
 
-	void addStatementNumberByType(int statementNumber, Tokens::Keyword statementType);
+	void addStatementNumberByType(int statementNumber, string statementType);
 
 	std::set<int> getAllStatementNumbers();
 
-	std::set<int> getAllStatementNumbersByType(Tokens::Keyword statementType);
+	std::set<int> getAllStatementNumbersByType(string statementType);
 
 private:
 	std::set<int> statementTable;
-	std::map<Tokens::Keyword, std::set<int>> statementByTypeTable = {
-		{Tokens::Keyword::READ, {}},
-		{Tokens::Keyword::PRINT, {}},
-		{Tokens::Keyword::ASSIGN, {}},
-		{Tokens::Keyword::CALL, {}},
-		{Tokens::Keyword::WHILE, {}},
-		{Tokens::Keyword::IF, {}}
+	std::map<string, std::set<int>> statementByTypeTable = {
+		{"read", {}},
+		{"print", {}},
+		{"=", {}},
+		{"call", {}},
+		{"while", {}},
+		{"if", {}}
 	};
 };

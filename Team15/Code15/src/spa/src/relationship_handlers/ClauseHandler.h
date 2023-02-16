@@ -5,7 +5,6 @@
 #include "ResultTable.h"
 #include "Utility.h"
 #include "Result.h"
-#include "source_processor/include/parser/Tokens.h"
 
 #ifndef SPA_CLAUSEHANDLER_H
 #define SPA_CLAUSEHANDLER_H

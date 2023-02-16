@@ -1,6 +1,5 @@
 #pragma once
 
-#include "source_processor/include/parser/Tokens.h"
 #include "ProcedureTable.h"
 #include "StatementTable.h"
 #include "VariableTable.h"
@@ -16,7 +15,7 @@ public:
 
 	void addProc(std::string procName);
 
-	void addStmt(Tokens::Keyword stmtType, int stmtNum);
+	void addStmt(string stmtType, int stmtNum);
 
 	void addVar(std::string varName);
 
@@ -34,7 +33,7 @@ public:
 
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(Tokens::Keyword stmtType);
+	std::set<int> getAllStmtNumsByType(string stmtType);
 
 	std::set<std::string> getAllVarNames();
 

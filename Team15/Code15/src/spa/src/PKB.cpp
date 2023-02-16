@@ -15,7 +15,7 @@ void PKB::addProc(std::string procName) {
 	procTable.addProcedureName(procName);
 }
 
-void PKB::addStmt(Tokens::Keyword stmtType, int stmtNum) {
+void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
 	stmtTable.addStatementNumber(stmtNum);
 	stmtTable.addStatementNumberByType(stmtNum, stmtType);
 }
@@ -44,7 +44,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(Tokens::Keyword stmtType) {
+std::set<int> PKB::getAllStmtNumsByType(string stmtType) { // TODO: @Galen please review
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
