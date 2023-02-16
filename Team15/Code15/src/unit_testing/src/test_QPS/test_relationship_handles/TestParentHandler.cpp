@@ -14,7 +14,7 @@ string testParent(string queryStr, PKB& pkb) {
 TEST_CASE("Parent Integer Underscore test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -22,7 +22,7 @@ TEST_CASE("Parent Integer Underscore test") {
     pkb.addParent(1,2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(1, _)", pkb);
@@ -46,7 +46,7 @@ TEST_CASE("Parent Integer Underscore test") {
 TEST_CASE("Parent* Integer Underscore test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -55,7 +55,7 @@ TEST_CASE("Parent* Integer Underscore test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -84,7 +84,7 @@ TEST_CASE("Parent* Integer Underscore test") {
 TEST_CASE("Parent Underscore Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -92,7 +92,7 @@ TEST_CASE("Parent Underscore Integer test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -119,7 +119,7 @@ TEST_CASE("Parent Underscore Integer test") {
 TEST_CASE("Parent* Underscore Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -128,7 +128,7 @@ TEST_CASE("Parent* Underscore Integer test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -155,7 +155,7 @@ TEST_CASE("Parent* Underscore Integer test") {
 TEST_CASE("Parent Integer Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -163,7 +163,7 @@ TEST_CASE("Parent Integer Integer test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -188,7 +188,7 @@ TEST_CASE("Parent Integer Integer test") {
 TEST_CASE("Parent* Integer Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -197,7 +197,7 @@ TEST_CASE("Parent* Integer Integer test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -224,7 +224,7 @@ TEST_CASE("Parent* Integer Integer test") {
 TEST_CASE("Parent Synonym Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -232,7 +232,7 @@ TEST_CASE("Parent Synonym Integer test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -252,7 +252,7 @@ TEST_CASE("Parent Synonym Integer test") {
 TEST_CASE("Parent* Synonym Integer test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -261,7 +261,7 @@ TEST_CASE("Parent* Synonym Integer test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -288,7 +288,7 @@ TEST_CASE("Parent* Synonym Integer test") {
 TEST_CASE("Parent Integer Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -296,7 +296,7 @@ TEST_CASE("Parent Integer Synonym test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -320,7 +320,7 @@ TEST_CASE("Parent Integer Synonym test") {
 TEST_CASE("Parent* Integer Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -329,7 +329,7 @@ TEST_CASE("Parent* Integer Synonym test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -356,7 +356,7 @@ TEST_CASE("Parent* Integer Synonym test") {
 TEST_CASE("Parent Synonym Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -364,7 +364,7 @@ TEST_CASE("Parent Synonym Synonym test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -392,7 +392,7 @@ TEST_CASE("Parent Synonym Synonym test") {
 TEST_CASE("Parent* Synonym Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -401,7 +401,7 @@ TEST_CASE("Parent* Synonym Synonym test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -428,7 +428,7 @@ TEST_CASE("Parent* Synonym Synonym test") {
 TEST_CASE("Parent Synonym Underscore test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -436,7 +436,7 @@ TEST_CASE("Parent Synonym Underscore test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -456,7 +456,7 @@ TEST_CASE("Parent Synonym Underscore test") {
 TEST_CASE("Parent* Synonym Underscore test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -465,7 +465,7 @@ TEST_CASE("Parent* Synonym Underscore test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -484,7 +484,7 @@ TEST_CASE("Parent* Synonym Underscore test") {
 TEST_CASE("Parent Underscore Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -492,7 +492,7 @@ TEST_CASE("Parent Underscore Synonym test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
@@ -512,7 +512,7 @@ TEST_CASE("Parent Underscore Synonym test") {
 TEST_CASE("Parent* Underscore Synonym test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -521,7 +521,7 @@ TEST_CASE("Parent* Underscore Synonym test") {
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
@@ -540,7 +540,7 @@ TEST_CASE("Parent* Underscore Synonym test") {
 TEST_CASE("Parent/Parent* Underscore Underscore test") {
     PKB pkb;
     pkb.addStmt("while", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -548,7 +548,7 @@ TEST_CASE("Parent/Parent* Underscore Underscore test") {
     pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
-    pkb.addStmt("assign", 4);
+    pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 

@@ -21,12 +21,12 @@ TEST_CASE("PatternHandler a(_,_) test empty pkb") {
 
 TEST_CASE("PatternHandler a(_,_) test filled pkb") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
+    pkb.addStmt("=", 1);
     vector<string> rhs = {"x", "y", "+"};
     set<vector<string>> rhsSet = {rhs};
     pkb.addPattern(1, "k", rhsSet);
 
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};
@@ -42,8 +42,8 @@ TEST_CASE("PatternHandler a(_,_) test filled pkb") {
 
 TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     vector<string> rhs = {"x", "y", "+"};
     set<vector<string>> rhsSet = {rhs};
@@ -73,8 +73,8 @@ TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
 
 TEST_CASE("PatternHandler a(SYNONYM,_/UNDERSCORED_EXPR) test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -120,7 +120,7 @@ TEST_CASE("PatternHandler a(SYNONYM,_/UNDERSCORED_EXPR) test") {
 TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
     PKB pkb;
 
-    pkb.addStmt("assign", 1);
+    pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
@@ -129,7 +129,7 @@ TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
     pkb.addPattern(1, "k", rhsSet1);
 
 
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};

@@ -14,7 +14,7 @@ string testDriver(string queryStr, PKB& pkb) {
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
 
-    pkb.addStmt("assign", 1);
+    pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");

@@ -18,8 +18,8 @@ using namespace std;
 //        std::multimap<std::string, std::string> varTable;
 //        ResultTable resultTable = ResultTable();
 //
-//        varTable.insert(pair<std::string, std::string>("a1", "assign"));
-//        varTable.insert(pair<std::string, std::string>("a2", "assign"));
+//        varTable.insert(pair<std::string, std::string>("a1", "="));
+//        varTable.insert(pair<std::string, std::string>("a2", "="));
 //        varTable.insert(pair<std::string, std::string>("r", "read"));
 //        varTable.insert(pair<std::string, std::string>("i", "if"));
 //        varTable.insert(pair<std::string, std::string>("w", "while"));
@@ -36,8 +36,8 @@ using namespace std;
 //        PKB pkb;
 //  
 //        pkb.addProc("p");
-//        pkb.addStmt("assign", 1);
-//        pkb.addStmt("assign", 2);
+//        pkb.addStmt("=", 1);
+//        pkb.addStmt("=", 2);
 //        pkb.addStmt("read", 3);
 //        pkb.addStmt("read", 7);
 //        pkb.addStmt("read", 8);

@@ -11,13 +11,13 @@ string testUses(string queryStr) {
 
     PKB pkb;
 
-    pkb.addStmt("assign", 1);
+    pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addUsesStmt(1,  {"x", "y"});
 
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 2);
     pkb.addVar("m");
     pkb.addVar("i");
     pkb.addVar("j");

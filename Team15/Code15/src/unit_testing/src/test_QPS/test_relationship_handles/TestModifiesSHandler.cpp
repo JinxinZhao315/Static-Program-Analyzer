@@ -24,8 +24,8 @@ string testModifiesS(string queryStr, PKB& pkb) {
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -57,8 +57,8 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
 TEST_CASE("ModifiesS Integer IdentString test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -94,8 +94,8 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
 TEST_CASE("ModifiesS Integer Variable test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -134,8 +134,8 @@ TEST_CASE("ModifiesS Integer Variable test") {
 
 TEST_CASE("ModifiesS Statement Variable test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -168,8 +168,8 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
 TEST_CASE("ModifiesS Statement IdentString test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -205,8 +205,8 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
 TEST_CASE("ModifiesS Statement Underscore test") {
     PKB pkb;
-    pkb.addStmt("assign", 1);
-    pkb.addStmt("assign", 2);
+    pkb.addStmt("=", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
