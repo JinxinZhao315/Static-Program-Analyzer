@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <set>
 
 using namespace std;
@@ -20,10 +20,20 @@ public:
 		addRightToManyLeft(left, right);
 	}
 
+	inline void addAllOneToOneAbstractions(std::unordered_map<L, R> oneToOneAbstractions) {
+		leftToOneRightMap = oneToOneAbstractions;
+		flipOneToOne(oneToOneAbstractions);
+	}
+
+	inline void addAllOneToManyAbstractions(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+		leftToManyRightMap = oneToManyAbstractions;
+		flipOneToMany(oneToManyAbstractions);
+	}
+
 	inline R getOneRight(L left) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
-			return nullptr;
+			return NULL;
 		}
 		return pair->second;
 	}
@@ -31,7 +41,7 @@ public:
 	inline L getOneLeft(R right) {
 		auto pair = rightToOneLeftMap.find(right);
 		if (pair == rightToOneLeftMap.end()) {
-			return nullptr;
+			return NULL;
 		}
 		return pair->second;
 	}
@@ -77,7 +87,16 @@ public:
 		return true;
 	}
 
+	inline bool isEmpty() {
+		return leftToOneRightMap.empty() && rightToOneLeftMap.empty() && leftToManyRightMap.empty() && rightToManyLeftMap.empty();
+	}
+
 private:
+	std::unordered_map<L, R> leftToOneRightMap;
+	std::unordered_map<R, L> rightToOneLeftMap;
+	std::unordered_map<L, std::set<R>> leftToManyRightMap;
+	std::unordered_map<R, std::set<L>> rightToManyLeftMap;
+
 	inline void addLeftToOneRight(L left, R right) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
@@ -113,9 +132,24 @@ private:
 			}
 		}
 	}
+
+	inline void flipOneToOne(std::unordered_map<L, R> oneToOneAbstractions) {
+		for (const auto& [key, value] : oneToOneAbstractions) {
+			rightToOneLeftMap[value] = key;
+		}
+	}
 	
-	std::map<L, R> leftToOneRightMap;
-	std::map<R, L> rightToOneLeftMap;
-	std::map<L, std::set<R>> leftToManyRightMap;
-	std::map<R, std::set<L>> rightToManyLeftMap;	
+	inline void flipOneToMany(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+		for (const auto& [key, values] : oneToManyAbstractions) {
+			for (R value : values) {
+				auto pair = rightToManyLeftMap.find(value);
+				if (pair == rightToManyLeftMap.end()) {
+					rightToManyLeftMap[value] = { key };
+				}
+				else {
+					pair->second.insert(key);
+				}
+			}
+		}
+	}
 };

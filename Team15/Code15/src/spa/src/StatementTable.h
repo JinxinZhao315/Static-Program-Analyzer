@@ -4,15 +4,21 @@
 #include <map>
 #include <string>
 
+#include <unordered_map>
+
 using namespace std;
 
 class StatementTable {
 public:
 	StatementTable();
 
-	void addStatementNumber(int statementNumber);
+	void addStatementNumber(string statementType, int statementNumber);
 
 	void addStatementNumberByType(int statementNumber, string statementType);
+
+	void addAllStatements(std::set<int> statements);
+
+	void addAllStatementsByType(std::unordered_map<string, std::set<int>> statementsByType);
 
 	std::set<int> getAllStatementNumbers();
 
@@ -20,7 +26,7 @@ public:
 
 private:
 	std::set<int> statementTable;
-	std::map<string, std::set<int>> statementByTypeTable = {
+	std::unordered_map<string, std::set<int>> statementByTypeTable = {
 		{"read", {}},
 		{"print", {}},
 		{"=", {}},
