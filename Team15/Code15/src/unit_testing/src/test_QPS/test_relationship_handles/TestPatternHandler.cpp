@@ -1,17 +1,13 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PatternHandler.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "QPS/include/PQLDriver.h"
 
 #include "catch.hpp"
 
-string testPattern(string queryStr);
+string testPattern(string queryStr, PKB& pkb);
 
 string testPattern(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 
@@ -123,9 +119,8 @@ TEST_CASE("PatternHandler a(SYNONYM,_/UNDERSCORED_EXPR) test") {
 
 TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
 
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
@@ -133,6 +128,8 @@ TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
     set<vector<string>> rhsSet1 = {rhs1};
     pkb.addPattern(1, "k", rhsSet1);
 
+
+    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};

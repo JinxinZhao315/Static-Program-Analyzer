@@ -16,28 +16,28 @@ void Result::setResultTrue(bool isTrueValue) {
 std::string Result::getFirstArgName() {
     return this->firstArgName;
 };
-std::set<std::string> Result::getFirstArgValue() {
+std::unordered_map<std::string, SynonymLinkageMap> Result::getFirstArgValue() {
     return this->firstArgValue;
 };
-void Result::setFirstArg(std::string name, std::set<std::string> value) {
+void Result::setFirstArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
     this->firstArgName = name;
     this->firstArgValue = value;
-    this->isfirstArgAvailable = true;
+    this->isFirstArgAvailable = true;
 }
 
 bool Result::isFirstArgSynonym() {
-    return this->isfirstArgAvailable;
+    return this->isFirstArgAvailable;
 }
 
 //getter and setter for right arg
 std::string Result::getSecondArgName() {
     return this->secondArgName;
 };
-std::set<std::string> Result::getSecondArgValue() {
+std::unordered_map<std::string, SynonymLinkageMap> Result::getSecondArgValue() {
     return this->secondArgValue;
 };
 
-void Result::setSecondArg(std::string name, std::set<std::string> value) {
+void Result::setSecondArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
     this->secondArgName = name;
     this->secondArgValue = value;
     this->isSecondArgAvailable = true;
