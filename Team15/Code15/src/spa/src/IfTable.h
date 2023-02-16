@@ -10,6 +10,8 @@ public:
 
 	void addIfNumber(int ifNumber);
 
+	void addAllIfNumbers(std::set<int> ifNumbers);
+
 	std::set<int> getAllIfNumbers();
 
 private:

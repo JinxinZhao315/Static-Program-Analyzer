@@ -19,10 +19,10 @@ std::string PQLDriver::processPQL(std::string queryStr) {
         return results;
 
     } catch(PQLSyntaxError syntaxError) {
-        // Write something in results
+        results = "SyntaxError";
         return results;
     } catch(PQLSemanticError semanticError) {
-        // Write something in results
+        results  = "SemanticError";
         return results;
     }
 

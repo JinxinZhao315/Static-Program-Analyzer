@@ -12,6 +12,8 @@ public:
 
 	void addUsesStatement(int statement, std::set<std::string> variables);
 
+	void addAllUsesStatement(std::unordered_map<int, std::set<std::string>> statementToVariables);
+
 	std::set<std::string> getVariables(int statement);
 
 	std::set<int> getStatements(std::string variable);
@@ -23,6 +25,8 @@ public:
 	void addVariables(int statement, std::set<std::string> variables);
 
 	void addStatements(int statement, std::set<std::string> variables);
+
+	void flipStatementToVariables(std::unordered_map<int, std::set<std::string>> statementToVariables);
 
 private:
 	std::unordered_map<int, std::set<std::string>> statementToVariablesMap;

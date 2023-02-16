@@ -20,6 +20,16 @@ public:
 		addRightToManyLeft(left, right);
 	}
 
+	inline void addAllOneToOneAbstractions(std::unordered_map<L, R> oneToOneAbstractions) {
+		leftToOneRightMap = oneToOneAbstractions;
+		flipOneToOne(oneToOneAbstractions);
+	}
+
+	inline void addAllOneToManyAbstractions(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+		leftToManyRightMap = oneToManyAbstractions;
+		flipOneToMany(oneToManyAbstractions);
+	}
+
 	inline R getOneRight(L left) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
@@ -121,5 +131,25 @@ private:
 				pair->second.insert(left);
 			}
 		}
-	}	
+	}
+
+	inline void flipOneToOne(std::unordered_map<L, R> oneToOneAbstractions) {
+		for (const auto& [key, value] : oneToOneAbstractions) {
+			rightToOneLeftMap[value] = key;
+		}
+	}
+	
+	inline void flipOneToMany(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+		for (const auto& [key, values] : oneToManyAbstractions) {
+			for (R value : values) {
+				auto pair = rightToManyLeftMap.find(value);
+				if (pair == rightToManyLeftMap.end()) {
+					rightToManyLeftMap[value] = { key };
+				}
+				else {
+					pair->second.insert(key);
+				}
+			}
+		}
+	}
 };

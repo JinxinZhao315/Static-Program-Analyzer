@@ -6,7 +6,6 @@
 #include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/evaluator/SelectHandler.h"
 #include "PKBStub.h"
-#include "Tokens.h"
 
 #include "catch.hpp"
 
@@ -19,8 +18,8 @@ using namespace std;
 //        std::multimap<std::string, std::string> varTable;
 //        ResultTable resultTable = ResultTable();
 //
-//        varTable.insert(pair<std::string, std::string>("a1", "assign"));
-//        varTable.insert(pair<std::string, std::string>("a2", "assign"));
+//        varTable.insert(pair<std::string, std::string>("a1", "="));
+//        varTable.insert(pair<std::string, std::string>("a2", "="));
 //        varTable.insert(pair<std::string, std::string>("r", "read"));
 //        varTable.insert(pair<std::string, std::string>("i", "if"));
 //        varTable.insert(pair<std::string, std::string>("w", "while"));
@@ -37,14 +36,14 @@ using namespace std;
 //        PKB pkb;
 //  
 //        pkb.addProc("p");
-//        pkb.addStmt(Tokens::ASSIGN, 1);
-//        pkb.addStmt(Tokens::ASSIGN, 2);
-//        pkb.addStmt(Tokens::READ, 3);
-//        pkb.addStmt(Tokens::READ, 7);
-//        pkb.addStmt(Tokens::READ, 8);
-//        pkb.addStmt(Tokens::IF, 4);
-//        pkb.addStmt(Tokens::WHILE, 5);
-//        pkb.addStmt(Tokens::CALL, 6);
+//        pkb.addStmt("=", 1);
+//        pkb.addStmt("=", 2);
+//        pkb.addStmt("read", 3);
+//        pkb.addStmt("read", 7);
+//        pkb.addStmt("read", 8);
+//        pkb.addStmt("if", 4);
+//        pkb.addStmt("while", 5);
+//        pkb.addStmt("call", 6);
 //        pkb.addVar("x");
 //        pkb.addVar("y");
 //        pkb.addVar("z");

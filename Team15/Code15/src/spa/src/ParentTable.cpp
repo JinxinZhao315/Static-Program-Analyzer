@@ -7,6 +7,11 @@ void ParentTable::addParentChild(int parent, int child) {
 	addParent(parent, child);
 }
 
+void ParentTable::addAllParentChilds(std::unordered_map<int, int> parentToChild) {
+	parentToChildMap = parentToChild;
+	flipParentToChild(parentToChild);
+}
+
 int ParentTable::getChild(int parent) {
 	auto pair = parentToChildMap.find(parent);
 	if (pair == parentToChildMap.end()) {
@@ -50,5 +55,11 @@ void ParentTable::addParent(int parent, int child) {
 	auto pair = childToParentMap.find(child);
 	if (pair == childToParentMap.end()) {
 		childToParentMap[child] = parent;
+	}
+}
+
+void ParentTable::flipParentToChild(std::unordered_map<int, int> parentToChild) {
+	for (const auto& [key, value] : parentToChild) {
+		childToParentMap[value] = key;
 	}
 }

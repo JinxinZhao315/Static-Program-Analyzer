@@ -1,41 +1,29 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "QPS/include/model/Result.h"
-#include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/SelectHandler.h"
-#include "QPS/include/evaluator/ClauseHandler.h"
-#include "QPS/include/evaluator/ParentHandler.h"
+#include "QPS/include/PQLDriver.h"
 
-#include "PKBStub.h"
-#include <assert.h>
 #include "catch.hpp"
 
-using namespace std;
-
-string testParent(string queryStr);
+string testParent(string queryStr, PKB& pkb);
 
 string testParent(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 
 TEST_CASE("Parent Integer Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1,2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(1, _)", pkb);
     cout << retStr1 << endl;
@@ -57,8 +45,8 @@ TEST_CASE("Parent Integer Underscore test") {
 
 TEST_CASE("Parent* Integer Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -66,9 +54,9 @@ TEST_CASE("Parent* Integer Underscore test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -95,17 +83,17 @@ TEST_CASE("Parent* Integer Underscore test") {
 
 TEST_CASE("Parent Underscore Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(_, 1)", pkb);
@@ -130,8 +118,8 @@ TEST_CASE("Parent Underscore Integer test") {
 
 TEST_CASE("Parent* Underscore Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -139,9 +127,9 @@ TEST_CASE("Parent* Underscore Integer test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -166,17 +154,17 @@ TEST_CASE("Parent* Underscore Integer test") {
 
 TEST_CASE("Parent Integer Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(2, 1)", pkb);
@@ -199,8 +187,8 @@ TEST_CASE("Parent Integer Integer test") {
 
 TEST_CASE("Parent* Integer Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -208,9 +196,9 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -235,17 +223,17 @@ TEST_CASE("Parent* Integer Integer test") {
 
 TEST_CASE("Parent Synonym Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(w, 1)", pkb);
@@ -263,8 +251,8 @@ TEST_CASE("Parent Synonym Integer test") {
 
 TEST_CASE("Parent* Synonym Integer test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -272,9 +260,9 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -299,17 +287,17 @@ TEST_CASE("Parent* Synonym Integer test") {
 
 TEST_CASE("Parent Integer Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(1, a)", pkb);
@@ -331,8 +319,8 @@ TEST_CASE("Parent Integer Synonym test") {
 
 TEST_CASE("Parent* Integer Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -340,9 +328,9 @@ TEST_CASE("Parent* Integer Synonym test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -367,17 +355,17 @@ TEST_CASE("Parent* Integer Synonym test") {
 
 TEST_CASE("Parent Synonym Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select a such that Parent(w, a)", pkb);
@@ -403,8 +391,8 @@ TEST_CASE("Parent Synonym Synonym test") {
 
 TEST_CASE("Parent* Synonym Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -412,9 +400,9 @@ TEST_CASE("Parent* Synonym Synonym test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -439,17 +427,17 @@ TEST_CASE("Parent* Synonym Synonym test") {
 
 TEST_CASE("Parent Synonym Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select w such that Parent(w, _)", pkb);
@@ -467,8 +455,8 @@ TEST_CASE("Parent Synonym Underscore test") {
 
 TEST_CASE("Parent* Synonym Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -476,9 +464,9 @@ TEST_CASE("Parent* Synonym Underscore test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -495,17 +483,17 @@ TEST_CASE("Parent* Synonym Underscore test") {
 
 TEST_CASE("Parent Underscore Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     string retStr1 = testParent("assign a; while w; Select w such that Parent(_, w)", pkb);
@@ -523,8 +511,8 @@ TEST_CASE("Parent Underscore Synonym test") {
 
 TEST_CASE("Parent* Underscore Synonym test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -532,9 +520,9 @@ TEST_CASE("Parent* Underscore Synonym test") {
     pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -551,22 +539,22 @@ TEST_CASE("Parent* Underscore Synonym test") {
 
 TEST_CASE("Parent/Parent* Underscore Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::WHILE, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("while", 1);
+    pkb.addStmt("=", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, 2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 4);
-    pkb.addStmt(Tokens::Keyword::WHILE, 5);
+    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 4);
+    pkb.addStmt("while", 5);
     pkb.addParent(5, 1);
 
     PKB pkbEmpty;
-    pkbEmpty.addStmt(Tokens::Keyword::CALL, 1);
-    pkbEmpty.addStmt(Tokens::Keyword::PRINT, 2);
+    pkbEmpty.addStmt("call", 1);
+    pkbEmpty.addStmt("print", 2);
 
     string retStr1 = testParent("assign a; while w; Select w such that Parent(_, _)", pkb);
     cout << retStr1 << endl;

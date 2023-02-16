@@ -12,6 +12,8 @@ public:
 
 	void addModifiesProcedure(std::string procedure, std::set<std::string> variables);
 
+	void addAllModifiesProcedure(std::unordered_map<std::string, std::set<std::string>> procedureToVariables);
+
 	std::set<std::string> getVariables(std::string procedure);
 
 	std::set<std::string> getProcedures(std::string variable);
@@ -23,6 +25,8 @@ public:
 	void addVariables(std::string procedure, std::set<std::string> variables);
 
 	void addProcedures(std::string procedure, std::set<std::string> variables);
+
+	void flipProcedureToVariables(std::unordered_map<std::string, std::set<std::string>> procedureToVariables);
 
 private:
 	std::unordered_map<std::string, std::set<std::string>> procedureToVariablesMap;

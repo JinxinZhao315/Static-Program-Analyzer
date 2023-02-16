@@ -1,24 +1,20 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PatternHandler.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "QPS/include/PQLDriver.h"
 
 #include "catch.hpp"
 
 string testDriver(string queryStr, PKB& pkb);
 
 string testDriver(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
+    pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
@@ -27,17 +23,17 @@ TEST_CASE("Follows/Follow* and pattern test") {
     pkb.addPattern(1, "k", rhsSet1);
 
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("read", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};
     pkb.addPattern(2, "m", rhsSet2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
     pkb.addVar("t");
-    pkb.addStmt(Tokens::Keyword::READ, 4);
+    pkb.addStmt("read", 4);
     pkb.addVar("i");
-    pkb.addStmt(Tokens::Keyword::READ, 5);
+    pkb.addStmt("read", 5);
     pkb.addVar("j");
 
     pkb.addFollows(1, 2);
@@ -97,7 +93,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
 TEST_CASE("Follows/Follow* and pattern test 2") {
     PKB pkb;
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
+    pkb.addStmt("read", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
@@ -106,13 +102,13 @@ TEST_CASE("Follows/Follow* and pattern test 2") {
     pkb.addPattern(1, "k", rhsSet1);
 
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("read", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};
     pkb.addPattern(2, "m", rhsSet2);
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 3);
+    pkb.addStmt("read", 3);
     pkb.addVar("n");
     vector<string> rhs3 = {"2", "3", "+"};
     set<vector<string>> rhsSet3 = {rhs3};

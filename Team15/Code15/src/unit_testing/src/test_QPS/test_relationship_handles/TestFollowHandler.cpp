@@ -1,25 +1,13 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "QPS/include/model/Result.h"
-#include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
-#include "QPS/include/evaluator/SelectHandler.h"
-#include "QPS/include/evaluator/ClauseHandler.h"
+#include "QPS/include/PQLDriver.h"
 
-#include "PKBStub.h"
-#include <assert.h>
 #include "catch.hpp"
-
-using namespace std;
 
 string testFollows(string queryStr, PKB& pkb);
 
 string testFollows(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 
@@ -29,11 +17,11 @@ TEST_CASE("Follows* test")
     {
         PKB pkb;
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         pkb.addFollows(1, 2);
         pkb.addFollows(2, 3);
@@ -105,11 +93,11 @@ TEST_CASE("Follows test 1")
 
         PKB pkb;
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         pkb.addFollows(1, 2);
         pkb.addFollows(2, 3);
@@ -177,11 +165,11 @@ TEST_CASE("Follows test 2")
         pkb.addFollows(2, 3);
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         //WC-Synon
         string retStr = testFollows("read s1; call c1; Select s1 such that Follows(_,s1)", pkb);

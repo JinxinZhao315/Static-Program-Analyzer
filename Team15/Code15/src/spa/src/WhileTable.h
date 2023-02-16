@@ -10,6 +10,8 @@ public:
 
 	void addWhileNumber(int whileNumber);
 
+	void addAllWhileNumbers(std::set<int> whileNumbers);
+
 	std::set<int> getAllWhileNumbers();
 
 private:

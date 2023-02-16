@@ -80,14 +80,14 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
-            set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
+            set<string> patternSynonLineNums = resultTable.getStringSetFromKey(patternSynon);
 
-            for (int assignLineNum : allAssignLineNums) {
-                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);
+            for (string lineNum : patternSynonLineNums) {
+                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(stoi(lineNum));
                 set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
                 if (!matchingLines.empty()) {
                     patternSynonVals.insert(make_pair(
-                            to_string(assignLineNum),
+                            lineNum,
                             SynonymLinkageMap()));
                 }
             }

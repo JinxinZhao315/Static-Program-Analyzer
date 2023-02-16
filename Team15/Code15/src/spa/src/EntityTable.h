@@ -14,10 +14,14 @@ public:
 		entityTable.insert(entity);
 	}
 
+	inline void addAllEntities(std::set<E> entities) {
+		entityTable = entities;
+	}
+
 	inline std::set<E> getAllEntities() {
 		return entityTable;
 	}
 
 private:
-	std::set<std::string> entityTable;
+	std::set<E> entityTable;
 };

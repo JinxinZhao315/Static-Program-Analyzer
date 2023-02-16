@@ -11,6 +11,8 @@ public:
 
 	void addConstantValue(std::string constantValue);
 
+	void addAllConstantValues(std::set<std::string> constantValues);
+
 	std::set<std::string> getAllConstantValues();
 
 private:

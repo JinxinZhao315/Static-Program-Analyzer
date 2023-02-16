@@ -10,6 +10,8 @@ public:
 
 	void addParentChild(int parent, int child);
 
+	void addAllParentChilds(std::unordered_map<int, int> parentToChild);
+
 	int getChild(int parent);
 
 	int getParent(int child);
@@ -21,6 +23,8 @@ public:
 	void addChild(int parent, int child);
 
 	void addParent(int parent, int child);
+
+	void flipParentToChild(std::unordered_map<int, int> parentToChild);
 
 private:
 	std::unordered_map<int, int> parentToChildMap;

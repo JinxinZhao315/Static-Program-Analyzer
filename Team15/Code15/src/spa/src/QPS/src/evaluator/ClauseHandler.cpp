@@ -254,30 +254,17 @@ std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, string DeType) {
     else if (DeType == "variable") {
         ret = pkb.getAllVarNames();
     }
-    else if (DeType == "stmt") {
-        std::set<int> allStmtIntSet = pkb.getAllStmtNums();
-        for (int stmtNum: allStmtIntSet) {
-            ret.insert(to_string(stmtNum));
-        }
-    } else  {
-        Tokens::Keyword DeToken;
-        if (DeType == "read") {
-            DeToken = Tokens::Keyword::READ;
-        } else if (DeType == "print") {
-            DeToken = Tokens::Keyword::PRINT;
+    else {
+        std::set<int> allStmtIntSet;
+
+        if (DeType == "stmt") {
+           allStmtIntSet = pkb.getAllStmtNums();
         } else if (DeType == "assign") {
-            DeToken = Tokens::Keyword::ASSIGN;
-        } else if (DeType == "call") {
-            DeToken = Tokens::Keyword::CALL;
-        } else if (DeType == "while") {
-            DeToken = Tokens::Keyword::WHILE;
-        } else if (DeType == "if") {
-            DeToken = Tokens::Keyword::IF;
+            allStmtIntSet = pkb.getAllStmtNumsByType("=");
         } else {
-            throw runtime_error("unsupported DeType in ClauseHandler" + DeType);
+            allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
         }
 
-        std::set<int> allStmtIntSet = pkb.getAllStmtNumsByType(DeToken);
         for (int stmtNum: allStmtIntSet) {
             ret.insert(to_string(stmtNum));
         }
