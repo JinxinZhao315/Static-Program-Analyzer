@@ -23,7 +23,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
     pkb.addPattern(1, "k", rhsSet1);
 
 
-    pkb.addStmt("read", 2);
+    pkb.addStmt("=", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};
@@ -90,10 +90,10 @@ TEST_CASE("Follows/Follow* and pattern test") {
 
 }
 
-TEST_CASE("Follows/Follow* and pattern test 2") {
+TEST_CASE("Follows/Follow* and pattern linked synons test") {
     PKB pkb;
 
-    pkb.addStmt("read", 1);
+    pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
@@ -102,13 +102,13 @@ TEST_CASE("Follows/Follow* and pattern test 2") {
     pkb.addPattern(1, "k", rhsSet1);
 
 
-    pkb.addStmt("read", 2);
+    pkb.addStmt("=", 2);
     pkb.addVar("m");
     vector<string> rhs2 = {"1", "2", "+"};
     set<vector<string>> rhsSet2 = {rhs2};
     pkb.addPattern(2, "m", rhsSet2);
 
-    pkb.addStmt("read", 3);
+    pkb.addStmt("=", 3);
     pkb.addVar("n");
     vector<string> rhs3 = {"2", "3", "+"};
     set<vector<string>> rhsSet3 = {rhs3};
@@ -143,4 +143,63 @@ TEST_CASE("Follows/Follow* and pattern test 2") {
     // pattern: a2: 2
     cout << retStr << endl;
     REQUIRE(retStr == "1");
+}
+
+TEST_CASE("ModifiesS and pattern test") {
+    PKB pkb;
+
+    pkb.addStmt("=", 1);
+    pkb.addVar("x");
+    pkb.addVar("y");
+    pkb.addVar("k");
+    vector<string> rhs1 = {"x", "y", "+"};
+    set<vector<string>> rhsSet1 = {rhs1};
+    pkb.addPattern(1, "k", rhsSet1);
+    pkb.addModifiesStmt(1, {"k"});
+    pkb.addUsesStmt(1, {"x", "y"});
+
+    pkb.addStmt("=", 2);
+    pkb.addVar("m");
+    pkb.addVar("t");
+    vector<string> rhs2 = {"t","2","+"};
+    set<vector<string>> rhsSet2 = {rhs2};
+    pkb.addPattern(2, "m", rhsSet2);
+    pkb.addModifiesStmt(2, {"m"});
+    pkb.addUsesStmt(2, {"t"});
+
+    pkb.addStmt("=", 3);
+    pkb.addVar("n");
+    vector<string> rhs3 = {"2", "y", "+"};
+    set<vector<string>> rhsSet3 = {rhs3};
+    pkb.addPattern(3, "n", rhsSet3);
+    pkb.addModifiesStmt(3, {"n"});
+    pkb.addUsesStmt(3, {"y"});
+
+    // Line 1: k = x + y;
+    // Line 2: m = t + 2;
+    // Line 3: n = 2 + y
+
+    // ModifiesS
+    string retStr1 = testDriver("assign a; Select a such that Modifies(a,_) pattern a (\"k\",_)", pkb);
+    cout << retStr1 << endl;
+    REQUIRE(retStr1 == "1");
+
+    string retStr2 = testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (\"k\",_)", pkb);
+    cout << retStr2 << endl;
+    REQUIRE(retStr2 == "k");
+
+    string retStr3 = testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (_,_\"2\"_)", pkb);
+    cout << retStr3 << endl;
+    REQUIRE(retStr3 == "m,n");
+
+    // UsesS
+    string retStr4 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_\"y\"_)", pkb);
+    cout << retStr4 << endl;
+    REQUIRE(retStr4 == "x,y");
+
+
+    string retStr5 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_)", pkb);
+    cout << retStr5 << endl;
+    REQUIRE(retStr5 == "t,x,y");
+
 }
