@@ -3,13 +3,6 @@
 
 UsesSHandler::UsesSHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-std::string trim_double_quotes(std::string s) {
-	if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
-		return s.substr(1, s.length() - 2);
-	}
-	return s;
-}
-
 Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
@@ -42,7 +35,7 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 	// Find ident string in source program which is used by a statement line defined in source.
 	else if (leftType == Utility::INTEGER && rightType == Utility::QUOTED_IDENT) {
 		// identString of format \"x\"
-		bool isUses = pkb.areInUsesStmtRelationship(stoi(leftArg), trim_double_quotes(rightArg));
+		bool isUses = pkb.areInUsesStmtRelationship(stoi(leftArg), Utility::trim_double_quotes(rightArg));
 		if (!isUses) {
 			result.setResultTrue(false);
 			return result;
@@ -102,7 +95,7 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 
 		for (auto currSynonVal : currSynonValues) {
 			// check whether given statement line uses historical variables in source.
-			bool isUses = pkb.areInUsesStmtRelationship(stoi(currSynonVal.first), trim_double_quotes(rightArg));
+			bool isUses = pkb.areInUsesStmtRelationship(stoi(currSynonVal.first), Utility::trim_double_quotes(rightArg));
 			if (isUses) {
 				resultSynonValues.insert(currSynonVal);
 			}

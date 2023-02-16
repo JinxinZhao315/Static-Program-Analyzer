@@ -3,13 +3,6 @@
 
 ModifiesSHandler::ModifiesSHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-std::string trim_double_quotes(std::string s) {
-	if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
-		return s.substr(1, s.length() - 2);
-	}
-	return s;
-}
-
 Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
@@ -40,7 +33,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 	// Find ident string in source program which is modified by a statement line defined in source.
 	else if (leftType == Utility::INTEGER && rightType == Utility::QUOTED_IDENT) {
 		// identString of format \"x\"
-		bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), trim_double_quotes(rightArg));
+		bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), Utility::trim_double_quotes(rightArg));
 		if (!isModifies) {
 			result.setResultTrue(false);
 			return result;
@@ -100,7 +93,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 
 		for (auto currSynonVal : currSynonValues) {
 			// check whether given statement line modifies historical variables in source.
-			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(currSynonVal.first), trim_double_quotes(rightArg));
+			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(currSynonVal.first), Utility::trim_double_quotes(rightArg));
 			if (isModifies) {
 				resultSynonValues.insert(currSynonVal);
 			}
