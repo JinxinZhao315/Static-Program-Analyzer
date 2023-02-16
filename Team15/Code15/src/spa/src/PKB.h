@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Tokens.h"
+#include "ProcedureTable.h"
 #include "EntityTable.h"
 #include "StatementTable.h"
 #include "AbstractionTable.h"
 #include "PatternTable.h"
+#include <set>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ public:
 
 	//SP procedure
 	void addProc(std::string procName);
+
+	void addStmt(string stmtType, int stmtNum);
 
 	void addAllProcs(std::set<std::string> procNames);
 
@@ -28,11 +31,10 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addStmt(Tokens::Keyword stmtType, int stmtNum);
 
 	void addAllStmts(std::set<int> stmtNums);
 
-	void addAllStmtsByType(std::unordered_map<Tokens::Keyword, std::set<int>> stmtNumsByType);
+	void addAllStmtsByType(unordered_map<string, set<int>> stmtNumsByType);
 
 	//SP follows
 	void addFollows(int leaderNum, int followerNum);
@@ -42,7 +44,7 @@ public:
 	//SP follows*
 	void addFollowsStar(int leaderNum, std::set<int> followerNums);
 
-	void addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers);
+	void addAllFollowsStar(std::unordered_map<int, set<int>> allLeaderToFollowers);
 
 	//SP parent
 	void addParent(int parentNum, int childNum);
@@ -89,7 +91,7 @@ public:
 	//QPS statement
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(Tokens::Keyword stmtType);
+	std::set<int> getAllStmtNumsByType(string stmtType);
 
 	//QPS follow
 	int getFollowsLeaderNum(int followerNum);

@@ -6,7 +6,6 @@
 #include "relationship_handlers/FollowsHandler.h"
 #include "relationship_handlers/SelectHandler.h"
 #include "PKBStub.h"
-#include "Tokens.h"
 
 #include "catch.hpp"
 
@@ -37,14 +36,14 @@ TEST_CASE("Select Handler test 1") {
         PKB pkb;
   
         pkb.addProc("p");
-        pkb.addStmt(Tokens::ASSIGN, 1);
-        pkb.addStmt(Tokens::ASSIGN, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 7);
-        pkb.addStmt(Tokens::READ, 8);
-        pkb.addStmt(Tokens::IF, 4);
-        pkb.addStmt(Tokens::WHILE, 5);
-        pkb.addStmt(Tokens::CALL, 6);
+        pkb.addStmt("=", 1);
+        pkb.addStmt("=", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 7);
+        pkb.addStmt("read", 8);
+        pkb.addStmt("if", 4);
+        pkb.addStmt("while", 5);
+        pkb.addStmt("call", 6);
         pkb.addVar("x");
         pkb.addVar("y");
         pkb.addVar("z");

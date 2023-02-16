@@ -116,11 +116,11 @@ TEST_CASE("Follows Handler Synonym Integer test") {
 
         Query query = Query();
         pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         query = preprocessor.preprocess("read s1; Select s1 such that Follows(s1,5)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
@@ -150,11 +150,11 @@ TEST_CASE("Follows Handler Integer Synonym test") {
 
         Query query = Query();
         pkb.addFollows(1, 2);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         query = preprocessor.preprocess("read s1; Select s1 such that Follows(1,s1)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
@@ -185,11 +185,11 @@ TEST_CASE("Follows Handler Synonym Synonym test") {
         Query query = Query();
         pkb.addFollows(2, 3);
         pkb.addFollows(1, 2);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(c1,s1)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
@@ -223,11 +223,11 @@ TEST_CASE("Follows Handler WildCard Synonym test") {
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
  
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,s1)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);
@@ -261,11 +261,11 @@ TEST_CASE("Follows Handler Synonym WildCard test") {
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(s1,_)");
 
@@ -300,11 +300,11 @@ TEST_CASE("Follows Handler Integer WildCard test") {
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(1,_)");
 
@@ -341,11 +341,11 @@ TEST_CASE("Follows Handler WildCard Integer test") {
         pkb.addFollows(4, 5);
 
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,1)");
 
@@ -384,11 +384,11 @@ TEST_CASE("Follows Handler WildCard Synonym test 2") {
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
         query = preprocessor.preprocess("read s1; call c1; Select s1 such that Follows(_,s1)");
 
         FollowsHandler followsHandler = FollowsHandler(pkb);

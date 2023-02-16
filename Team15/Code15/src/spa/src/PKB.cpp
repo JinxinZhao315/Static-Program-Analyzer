@@ -42,15 +42,16 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 }
 
 //SP statement
-void PKB::addStmt(Tokens::Keyword stmtType, int stmtNum) {
-	stmtTable.addStatementNumber(stmtType, stmtNum);
+void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
+    stmtTable.addStatementNumber(stmtType, stmtNum);
+    stmtTable.addStatementNumberByType(stmtNum, stmtType);
 }
 
 void PKB::addAllStmts(std::set<int> stmtNums) {
 	stmtTable.addAllStatements(stmtNums);
 }
 
-void PKB::addAllStmtsByType(std::unordered_map<Tokens::Keyword, std::set<int>> stmtNumsByType) {
+void PKB::addAllStmtsByType(std::unordered_map<string, std::set<int>> stmtNumsByType) {
 	stmtTable.addAllStatementsByType(stmtNumsByType);
 }
 
@@ -151,7 +152,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(Tokens::Keyword stmtType) {
+std::set<int> PKB::getAllStmtNumsByType(string stmtType) { // TODO: @Galen please review
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
