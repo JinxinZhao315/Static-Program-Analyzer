@@ -85,7 +85,7 @@ void ClauseHandler::filterResultTable(std::string currSynName, std::unordered_ma
 
 void ClauseHandler::filterCurrResultLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynValues,
     std::string secondSynName, std::unordered_map<std::string, SynonymLinkageMap>& secondSynValues, ResultTable& resultTable) {
-    std::unordered_map<std::string, SynonymLinkageMap> firstSynTableResult = resultTable.getSynonymEntry(firstSynName);
+    std::unordered_map<std::string, SynonymLinkageMap> firstSynTableValues = resultTable.getSynonymEntry(firstSynName);
     for (auto currSynValue = firstSynValues.begin(); currSynValue != firstSynValues.end(); currSynValue++) {
         SynonymLinkageMap& tableSynValueLinkageMap = resultTable.getSynonymEntry(firstSynName).at(currSynValue->first);
         SynonymLinkageMap& currSynValueLinkageMap = currSynValue->second;
@@ -137,7 +137,7 @@ void ClauseHandler::filterResultTableLinkageSet(std::string firstSynName, std::u
             std::set<std::string> synsToDelete;
             for (auto linkedTableValue : linkedSynValues) {
                 if (intersectedValues.count(linkedTableValue) == 0) {
-                    deleteLinkage(secondSynName, linkedTableValue, firstSynName, tableSynValue->first, resultTable);
+                    deleteLinkageInTable(secondSynName, linkedTableValue, firstSynName, tableSynValue->first, resultTable);
                     synsToDelete.insert(linkedTableValue);
                 }
             }
@@ -225,17 +225,23 @@ void ClauseHandler::deleteSynTableEntry(std::string synName, std::string synValu
     std::unordered_map<std::string, std::set<std::string>> tableLinkageMap = resultTable.getSynonymEntry(synName).at(synValue).getLinkageMap();
     
     //example: "11":{"stmt2":[12,13,14],"stmt3":[10,11,12]} iterate through all linked instance and delete them, then delete the synonym instance entry
-    for (pair<std::string, std::set<std::string>> linkedInstanceCollection : tableLinkageMap) {
-        for (std::string linkedValue : linkedInstanceCollection.second) {
-            deleteLinkage(linkedInstanceCollection.first, linkedValue, synName, synValue, resultTable);
+    for (pair<std::string, std::set<std::string>> linkedValueCollection : tableLinkageMap) {
+        for (std::string linkedValue : linkedValueCollection.second) {
+            deleteLinkageInTable(synName, synValue, linkedValueCollection.first, linkedValue,  resultTable);
         }
     }
     resultTable.deleteSynonymInstance(synName, synValue);
 }
 
-void ClauseHandler::deleteLinkage(std::string linkedSynName, std::string linkedSynInstance, 
-    std::string synName, std::string synInstance, ResultTable& resultTable) {
-    resultTable.getSynonymEntry(linkedSynName).find(linkedSynInstance)->second.deleteLinkage(synName, synInstance);
+//void ClauseHandler::deleteSynValueInResult(std::string currSynName, std::string currSynValue, std::set<std::string> linkageSet, 
+//    std::string linkedSynName, std::unordered_map<std::string, SynonymLinkageMap>& LinkedSynValues) {
+//
+//}
+
+//go to the linked synonym and delete the link with the current synonym
+void ClauseHandler::deleteLinkageInTable(std::string synName, std::string synValue, 
+    std::string linkedSynName, std::string linkedSynInstance, ResultTable& resultTable) {
+    resultTable.getSynonymEntry(linkedSynName).at(linkedSynInstance).deleteLinkage(synName, synValue);
 
     //example: "stmt2":{"6":{"stmt1": [5], "stmt2": [7]}}}, now delete 5, "stmt1" entry becomes empty, then "6" can't be selected now
     if (resultTable.getSynonymEntry(linkedSynName).find(linkedSynInstance)->second.isEmptyLinkageSet(synName)) {
@@ -272,15 +278,15 @@ std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, string DeType) {
     return ret;
 }
 
-void ClauseHandler::resultTableCheckAndAdd(string synonymName, ResultTable& resultTable, string DeType) {
-    if (!resultTable.isSynonymPresent(synonymName)) {
+void ClauseHandler::resultTableCheckAndAdd(string synName, ResultTable& resultTable, string DeType) {
+    if (!resultTable.isSynonymPresent(synName)) {
         Result result;
-        std::set<string> synonymInstanceStrSet = getResultFromPKB(pkb, DeType);
-        std::unordered_map<std::string, SynonymLinkageMap> synonymInstanceCollection;
-        for (std::string key : synonymInstanceStrSet) {
-            synonymInstanceCollection.insert(std::make_pair<>(key, SynonymLinkageMap()));
+        std::set<string> synValuesStrSet = getResultFromPKB(pkb, DeType);
+        std::unordered_map<std::string, SynonymLinkageMap> synValues;
+        for (std::string synValueStr : synValuesStrSet) {
+            synValues.insert(std::make_pair<>(synValueStr, SynonymLinkageMap()));
         }
-        result.setFirstArg(synonymName, synonymInstanceCollection);
+        result.setFirstArg(synName, synValues);
         ClauseHandler::combineResult(resultTable, result);
     }
 }

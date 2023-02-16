@@ -72,3 +72,12 @@ void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
     deleteKeyValuePair(selectedVarName);
     insertSynonymEntry(selectedVarName, {});
 }
+
+bool ResultTable::existSynonymWithNoValue() {
+    for (auto synonym : resultTable) {
+        if (synonym.second.empty()) {
+            return true;
+        }
+    }
+    return false;
+}

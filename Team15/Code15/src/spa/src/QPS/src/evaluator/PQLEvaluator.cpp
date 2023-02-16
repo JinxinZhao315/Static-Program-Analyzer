@@ -40,6 +40,11 @@ std::string PQLEvaluator::evaluate(Query query)
                 break;
             }
             followsHandler.combineResult(resultTable, result);
+            if (resultTable.existSynonymWithNoValue()) {
+                isEarlyExit = true;
+
+                break;
+            }
         }
         /*else if (relationship == "Uses") 
         {
@@ -68,6 +73,11 @@ std::string PQLEvaluator::evaluate(Query query)
                 break;
             }
             parentHandler.combineResult(resultTable, result);
+            if (resultTable.existSynonymWithNoValue()) {
+                isEarlyExit = true;
+
+                break;
+            }
         }
         else if (relationship == "Modifies") {
             Result result;
@@ -102,6 +112,11 @@ std::string PQLEvaluator::evaluate(Query query)
             }
             else {
                 modifiesSHandler.combineResult(resultTable, result);
+            }
+            if (resultTable.existSynonymWithNoValue()) {
+                isEarlyExit = true;
+
+                break;
             }
 
         }
@@ -139,6 +154,12 @@ std::string PQLEvaluator::evaluate(Query query)
             else {
                 usesSHandler.combineResult(resultTable, result);
             }
+
+            if (resultTable.existSynonymWithNoValue()) {
+                isEarlyExit = true;
+
+                break;
+            }
         }
     }
     for (PatternClause patternCl : patternVec)
@@ -158,12 +179,17 @@ std::string PQLEvaluator::evaluate(Query query)
         }
 
         patternHandler.combineResult(resultTable, result);
+        if (resultTable.existSynonymWithNoValue()) {
+            isEarlyExit = true;
+
+            break;
+        }
     }
 
     // return the values of the selected synonym in ResultTable
     std::string retStr;
     set<string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-    if (retSet.empty())
+    if (retSet.empty() || isEarlyExit)
     {
         retStr = "None";
     }

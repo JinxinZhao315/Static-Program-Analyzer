@@ -24,8 +24,8 @@ public:
     void combineOneSynResult(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap>& currResult, ResultTable& resultTable);
     //void mergeResultToTable(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap>& currResult, ResultTable& resultTable);
     void deleteSynTableEntry(std::string synonymName, std::string key, ResultTable& resultTable);
-    void deleteLinkage(std::string linkedSynonym, std::string linkedSynonymInstance,
-        std::string synonymName, std::string synonymInstance, ResultTable& resultTable);
+    void deleteLinkageInTable(std::string synName, std::string synValue, 
+        std::string linkedSyn, std::string linkedSynValue, ResultTable& resultTable);
     void filterCurrResult(std::string firstSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult, 
         std::string secondSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& secondSynResult, ResultTable &resultTable);
     void filterResultTable(std::string firstSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult, ResultTable &resultTable);
