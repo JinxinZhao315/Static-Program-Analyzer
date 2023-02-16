@@ -3,12 +3,10 @@
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/SelectHandler.h"
 #include "QPS/include/evaluator/ClauseHandler.h"
 #include "QPS/include/evaluator/ModifiesSHandler.h"
 
-#include "PKBStub.h"
-#include <assert.h>
+
 #include "catch.hpp"
 
 using namespace std;
@@ -23,9 +21,6 @@ string testModifiesS(string queryStr, PKB& pkb) {
     return retStr;
 }
 
-//void PKB::addModifiesStmt(int stmtNum, std::set<std::string> varNames) {
-//    modifiesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
-//}
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;

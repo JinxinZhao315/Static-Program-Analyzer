@@ -1,25 +1,13 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "QPS/include/model/Result.h"
-#include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
-#include "QPS/include/evaluator/SelectHandler.h"
-#include "QPS/include/evaluator/ClauseHandler.h"
+#include "QPS/include/PQLDriver.h"
 
-#include "PKBStub.h"
-#include <assert.h>
 #include "catch.hpp"
-
-using namespace std;
 
 string testFollows(string queryStr, PKB& pkb);
 
 string testFollows(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 

@@ -1,7 +1,5 @@
 #include "QPS/include/model/SynonymLinkageMap.h"
 #include "catch.hpp"
-#include <assert.h>
-#pragma once
 
 TEST_CASE("Test isEmpty function") {
 	SECTION("return true") {

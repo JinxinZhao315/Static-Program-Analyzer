@@ -1,17 +1,13 @@
 #include "PKB.h"
-#include "QPS/include/evaluator/PatternHandler.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "QPS/include/PQLDriver.h"
 
 #include "catch.hpp"
 
 string testDriver(string queryStr, PKB& pkb);
 
 string testDriver(string queryStr, PKB& pkb) {
-    PQLPreprocessor preprocessor;
-    PQLEvaluator evaluator = PQLEvaluator(pkb);
-    Query query = preprocessor.preprocess(queryStr);
-    string retStr = evaluator.evaluate(query);
+    PQLDriver driver = PQLDriver(pkb);
+    string retStr = driver.processPQL(queryStr);
     return retStr;
 }
 
