@@ -1,5 +1,5 @@
 project(unitTesting)
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.20.2)
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/test_relationship_handles/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/parser/*.cpp"
