@@ -3,6 +3,7 @@
 #include "Utility.h"
 #include "QPS/include/model/PatternClause.h"
 #include <stack>
+#include "stddef.h"
 
 #ifndef SPA_PATTERNHANDLER_H
 #define SPA_PATTERNHANDLER_H
@@ -14,6 +15,7 @@ public:
     Result evalPattern(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
     set<string> findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch);
     bool findIsMatch(vector<string> rhsTokensVec, string substrToMatch);
+    bool findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec);
     pair<bool,string> trimUnderscoreQuotes(string input);
 
     // TODO: These functions should be in common file

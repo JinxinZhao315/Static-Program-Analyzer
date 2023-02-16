@@ -40,11 +40,31 @@ bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMat
     vector<string> substrTokens = tokenise(trimmedPair.second);
     vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
     if (!isPartialMatch) {
-        return rhsTokensVec == substrTokens;
+        return rhsTokensVec == substrPostfix;
     } else {
-        return includes(rhsTokensVec.begin(), rhsTokensVec.end(),
-                        substrPostfix.begin(), substrPostfix.end());
+        return findIsPartialMatch(rhsTokensVec, substrPostfix);
     }
+}
+
+bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec) {
+    size_t subStrSize = substrVec.size();
+    size_t fullStrSize = fullstrVec.size();
+    for (size_t windowStart = 0; windowStart <= fullStrSize - subStrSize; windowStart++)
+    {
+        for (size_t i = 0; i < subStrSize; i++)
+        {
+            if (substrVec[i] != fullstrVec[windowStart + i])
+            {
+                break;
+            }
+            if (i == subStrSize - 1) {
+                return true;
+            }
+
+        }
+    }
+
+    return false;
 }
 
 

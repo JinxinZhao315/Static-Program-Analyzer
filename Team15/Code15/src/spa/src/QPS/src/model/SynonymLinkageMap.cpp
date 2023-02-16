@@ -43,7 +43,7 @@ bool SynonymLinkageMap::containsKey(std::string linkedSynonymName) {
 
 std::set<std::string>& SynonymLinkageMap::getLinkedSynValueSet(std::string linkedSynName) {
 	if (linkageMap.count(linkedSynName) == 0) {
-		return std::set<std::string>{};
+		return EMPTY_SET;
 	}
 	else {
 		return linkageMap.at(linkedSynName);

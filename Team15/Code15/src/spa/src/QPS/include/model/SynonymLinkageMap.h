@@ -9,6 +9,7 @@
 class SynonymLinkageMap {
 private:
 	std::unordered_map<std::string, std::set<std::string>> linkageMap;
+    std::set<std::string> EMPTY_SET;
 public:
 	SynonymLinkageMap();
 	SynonymLinkageMap(std::unordered_map<std::string, std::set<std::string>> linkageMap);
