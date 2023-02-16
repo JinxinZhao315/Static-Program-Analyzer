@@ -600,7 +600,7 @@ TEST_CASE("Follows Handler WildCard Integer test")
 
         followsHandler.combineResult(resultTable, followResult);
 
-        set<std::string> result = resultTable.getStringSetFromKey("s1");
+        std::unordered_map<std::string, SynonymLinkageMap> result = resultTable.getSynonymEntry("s1");
 
         REQUIRE(result.size() == 0);
 
