@@ -16,8 +16,6 @@ public:
 	//SP procedure
 	void addProc(std::string procName);
 
-	void addStmt(string stmtType, int stmtNum);
-
 	void addAllProcs(std::set<std::string> procNames);
 
 	//SP variable
@@ -31,6 +29,7 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
+	void addStmt(string stmtType, int stmtNum);
 
 	void addAllStmts(std::set<int> stmtNums);
 

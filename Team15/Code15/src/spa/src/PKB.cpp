@@ -44,7 +44,6 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 //SP statement
 void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
     stmtTable.addStatementNumber(stmtType, stmtNum);
-    stmtTable.addStatementNumberByType(stmtNum, stmtType);
 }
 
 void PKB::addAllStmts(std::set<int> stmtNums) {
