@@ -55,24 +55,7 @@ std::set<std::string> ClauseHandler::getResultFromPKB(PKB& pkb, string DeType) {
             ret.insert(to_string(stmtNum));
         }
     } else  {
-        Tokens::Keyword DeToken;
-        if (DeType == "read") {
-            DeToken = Tokens::Keyword::READ;
-        } else if (DeType == "print") {
-            DeToken = Tokens::Keyword::PRINT;
-        } else if (DeType == "assign") {
-            DeToken = Tokens::Keyword::ASSIGN;
-        } else if (DeType == "call") {
-            DeToken = Tokens::Keyword::CALL;
-        } else if (DeType == "while") {
-            DeToken = Tokens::Keyword::WHILE;
-        } else if (DeType == "if") {
-            DeToken = Tokens::Keyword::IF;
-        } else {
-            throw runtime_error("unsupported DeType in ClauseHandler" + DeType);
-        }
-
-        std::set<int> allStmtIntSet = pkb.getAllStmtNumsByType(DeToken);
+        std::set<int> allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
         for (int stmtNum: allStmtIntSet) {
             ret.insert(to_string(stmtNum));
         }

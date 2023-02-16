@@ -11,6 +11,8 @@ public:
 
 	void addVariableName(std::string variableName);
 
+	void addAllVariableNames(std::set<std::string> variableNames);
+
 	std::set<std::string> getAllVariableNames();
 
 private:

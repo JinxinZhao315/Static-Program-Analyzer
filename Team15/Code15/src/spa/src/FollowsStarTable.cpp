@@ -7,27 +7,9 @@ void FollowsStarTable::addFollowsStar(int leader, set<int> followers) {
 	addLeaders(leader, followers);
 }
 
-void FollowsStarTable::addFollowers(int leader, std::set<int> followers) {
-	auto pair = leaderToFollowersMap.find(leader);
-	if (pair == leaderToFollowersMap.end()) {
-		leaderToFollowersMap[leader] = followers;
-	}
-	else {
-		pair->second.insert(followers.begin(), followers.end());
-	}
-}
-
-void FollowsStarTable::addLeaders(int leader, set<int> followers) {
-	std::set<int>::iterator follower;
-	for (follower = followers.begin(); follower != followers.end(); follower++) {
-		auto pair = followerToLeadersMap.find(*follower);
-		if (pair == followerToLeadersMap.end()) {
-			followerToLeadersMap[*follower] = { leader };
-		}
-		else {
-			pair->second.emplace(leader);
-		}
-	}
+void FollowsStarTable::addAllFollowsStar(std::unordered_map<int, std::set<int>> leaderToFollowers) {
+	leaderToFollowersMap = leaderToFollowers;
+	flipLeaderToFollowers(leaderToFollowers);
 }
 
 std::set<int> FollowsStarTable::getFollowers(int leader) {
@@ -60,5 +42,42 @@ bool FollowsStarTable::inRelationship(int leaderNumber, int followerNumber) {
 }
 
 bool FollowsStarTable::isEmpty() {
-	return leaderToFollowersMap.empty();
+	return leaderToFollowersMap.empty() && followerToLeadersMap.empty();
+}
+
+void FollowsStarTable::addFollowers(int leader, std::set<int> followers) {
+	auto pair = leaderToFollowersMap.find(leader);
+	if (pair == leaderToFollowersMap.end()) {
+		leaderToFollowersMap[leader] = followers;
+	}
+	else {
+		pair->second.insert(followers.begin(), followers.end());
+	}
+}
+
+void FollowsStarTable::addLeaders(int leader, set<int> followers) {
+	std::set<int>::iterator follower;
+	for (follower = followers.begin(); follower != followers.end(); follower++) {
+		auto pair = followerToLeadersMap.find(*follower);
+		if (pair == followerToLeadersMap.end()) {
+			followerToLeadersMap[*follower] = { leader };
+		}
+		else {
+			pair->second.insert(leader);
+		}
+	}
+}
+
+void FollowsStarTable::flipLeaderToFollowers(std::unordered_map<int, std::set<int>> leaderToFollowers) {
+	for (const auto& [key, values] : leaderToFollowers) {
+		for (int value : values) {
+			auto pair = followerToLeadersMap.find(value);
+			if (pair == followerToLeadersMap.end()) {
+				followerToLeadersMap[value] = { key };
+			}
+			else {
+				pair->second.insert(key);
+			}
+		}
+	}
 }

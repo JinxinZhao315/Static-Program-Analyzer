@@ -11,7 +11,11 @@ public:
 	inline EntityTable() = default;
 
 	inline void addEntity(E entity) {
-		entityTable.emplace(entity);
+		entityTable.insert(entity);
+	}
+
+	inline void addAllEntities(std::set<E> entities) {
+		entityTable = entities;
 	}
 
 	inline std::set<E> getAllEntities() {
@@ -19,5 +23,5 @@ public:
 	}
 
 private:
-	std::set<std::string> entityTable;
+	std::set<E> entityTable;
 };

@@ -19,9 +19,17 @@ void PKB::addProc(std::string procName) {
 	procTable.addEntity(procName);
 }
 
+void PKB::addAllProcs(std::set<std::string> procNames) {
+	procTable.addAllEntities(procNames);
+}
+
 //SP variable
 void PKB::addVar(std::string varName) {
 	varTable.addEntity(varName);
+}
+
+void PKB::addAllVars(std::set<std::string> varNames) {
+	varTable.addAllEntities(varNames);
 }
 
 //SP constant
@@ -29,9 +37,22 @@ void PKB::addConst(std::string constVal) {
 	constTable.addEntity(constVal);
 }
 
+void PKB::addAllConsts(std::set<std::string> constVals) {
+	constTable.addAllEntities(constVals);
+}
+
 //SP statement
-void PKB::addStmt(Tokens::Keyword stmtType, int stmtNum) {
-	stmtTable.addStatementNumber(stmtType, stmtNum);
+void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
+    stmtTable.addStatementNumber(stmtType, stmtNum);
+    stmtTable.addStatementNumberByType(stmtNum, stmtType);
+}
+
+void PKB::addAllStmts(std::set<int> stmtNums) {
+	stmtTable.addAllStatements(stmtNums);
+}
+
+void PKB::addAllStmtsByType(std::unordered_map<string, std::set<int>> stmtNumsByType) {
+	stmtTable.addAllStatementsByType(stmtNumsByType);
 }
 
 //SP follows
@@ -39,9 +60,17 @@ void PKB::addFollows(int leaderNum, int followerNum) {
 	followsTable.addOneToOneAbstraction(leaderNum, followerNum);
 }
 
+void PKB::addAllFollows(std::unordered_map<int, int> allLeaderToFollower) {
+	followsTable.addAllOneToOneAbstractions(allLeaderToFollower);
+}
+
 //SP follows*
 void PKB::addFollowsStar(int leaderNum, std::set<int> followerNums) {
 	followsStarTable.addOneToManyAbstraction(leaderNum, followerNums);
+}
+
+void PKB::addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers) {
+	followsStarTable.addAllOneToManyAbstractions(allLeaderToFollowers);
 }
 
 //SP parent
@@ -49,9 +78,17 @@ void PKB::addParent(int parentNum, int childNum) {
 	parentTable.addOneToOneAbstraction(parentNum, childNum);
 }
 
+void PKB::addAllParent(std::unordered_map<int, int> allParentToChild) {
+	parentTable.addAllOneToOneAbstractions(allParentToChild);
+}
+
 //SP parent*
 void PKB::addParentStar(int parentNum, std::set<int> childrenNums) {
 	parentStarTable.addOneToManyAbstraction(parentNum, childrenNums);
+}
+
+void PKB::addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren) {
+	parentStarTable.addAllOneToManyAbstractions(allParentToChildren);
 }
 
 //SP uses statement-variable
@@ -59,9 +96,17 @@ void PKB::addUsesStmt(int stmtNum, std::set<std::string> varNames) {
 	usesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
 }
 
+void PKB::addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
+	usesStmtTable.addAllOneToManyAbstractions(allStmtToVars);
+}
+
 //SP uses procedure-variable
 void PKB::addUsesProc(std::string procName, std::set<std::string> varNames) {
 	usesProcTable.addOneToManyAbstraction(procName, varNames);
+}
+
+void PKB::addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
+	usesProcTable.addAllOneToManyAbstractions(allProcToVars);
 }
 
 //SP modifies statement-variable
@@ -69,9 +114,17 @@ void PKB::addModifiesStmt(int stmtNum, std::set<std::string> varNames) {
 	modifiesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
 }
 
+void PKB::addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
+	modifiesStmtTable.addAllOneToManyAbstractions(allStmtToVars);
+}
+
 //SP modifies procedure-variable
 void PKB::addModifiesProc(std::string procName, std::set<std::string> varNames) {
 	modifiesProcTable.addOneToManyAbstraction(procName, varNames);
+}
+
+void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
+	modifiesProcTable.addAllOneToManyAbstractions(allProcToVars);
 }
 
 //SP pattern
@@ -99,7 +152,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(Tokens::Keyword stmtType) {
+std::set<int> PKB::getAllStmtNumsByType(string stmtType) { // TODO: @Galen please review
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
@@ -117,7 +170,7 @@ bool PKB::areInFollowsRelationship(int leaderNum, int followerNum) {
 }
 
 bool PKB::isFollowsEmpty() {
-	return (followsTable.isEmpty() || followsStarTable.isEmpty());
+	return followsTable.isEmpty();
 }
 
 //QPS follows*
@@ -131,6 +184,10 @@ std::set<int> PKB::getFollowsStarFollowerNums(int leaderNum) {
 
 bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
 	return followsStarTable.inOneToManyRelationship(leaderNum, followerNum);
+}
+
+bool PKB::isFollowsStarEmpty() {
+	return followsStarTable.isEmpty();
 }
 
 //QPS parent
@@ -156,11 +213,15 @@ std::set<int> PKB::getParentStarParentNums(int child) {
 }
 
 std::set<int> PKB::getParentStarChildNums(int parent) {
-	return parentStarTable.getManyLeft(parent);
+	return parentStarTable.getManyRight(parent);
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
 	return parentStarTable.inOneToManyRelationship(parentNum, childNum);
+}
+
+bool PKB::isParentStarEmpty() {
+	return parentStarTable.isEmpty();
 }
 
 //QPS uses statement-variable
