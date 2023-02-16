@@ -78,7 +78,7 @@ public:
 	}
 
 	inline bool isEmpty() {
-		return (leftToOneRightMap.empty() || leftToManyRightMap.empty());
+		return leftToOneRightMap.empty() && rightToOneLeftMap.empty() && leftToManyRightMap.empty() && rightToManyLeftMap.empty();
 	}
 
 private:

@@ -32,8 +32,8 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 	}
 	// Find ident string in source program which is modified by a statement line defined in source.
 	else if (leftType == Utility::INTEGER && rightType == Utility::QUOTED_IDENT) {
-		// 
-		bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), rightArg);
+		// identString of format \"x\"
+		bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), Utility::trim_double_quotes(rightArg));
 		if (!isModifies) {
 			result.setResultTrue(false);
 			return result;
@@ -43,13 +43,12 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 	else if (leftType == Utility::INTEGER) {
 		string synonDeType = synonymTable.find(rightArg)->second;
 		resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
-		std::set<string> currSynonValues = resultTable.getValueFromKey(rightArg);
-
-		std::set<string> resultSynonValues;
+		std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(rightArg);
+		std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 	
-		for (string currSynonVal : currSynonValues) {
+		for (auto currSynonVal : currSynonValues) {
 			// check whether given statement line modifies historical variables in source.
-			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), currSynonVal);
+			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(leftArg), currSynonVal.first);
 			if (isModifies) {
 				resultSynonValues.insert(currSynonVal);
 			}
@@ -66,12 +65,12 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 		string synonDeType = synonymTable.find(leftArg)->second;
 		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
 		// currSynonValues here are statement line numbers in string format.
-		std::set<string> currSynonValues = resultTable.getValueFromKey(leftArg);
+		std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(leftArg);
+		std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
-		std::set<string> resultSynonValues;
+		for (auto currSynonVal : currSynonValues) {
 
-		for (string currSynonVal : currSynonValues) {
-			std::set<std::string> modifiesSet = pkb.getModifiesVarsFromStmt(stoi(leftArg));
+			std::set<std::string> modifiesSet = pkb.getModifiesVarsFromStmt(stoi(currSynonVal.first));
 			
 			if (!modifiesSet.empty()) {
 				resultSynonValues.insert(currSynonVal);
@@ -89,13 +88,12 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 		string synonDeType = synonymTable.find(leftArg)->second;
 		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
 		// currSynonValues here are statement line numbers in string format.
-		std::set<string> currSynonValues = resultTable.getValueFromKey(leftArg);
+		std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(leftArg);
+		std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
-		std::set<string> resultSynonValues;
-
-		for (string currSynonVal : currSynonValues) {
+		for (auto currSynonVal : currSynonValues) {
 			// check whether given statement line modifies historical variables in source.
-			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(currSynonVal), rightArg);
+			bool isModifies = pkb.areInModifiesStmtRelationship(stoi(currSynonVal.first), Utility::trim_double_quotes(rightArg));
 			if (isModifies) {
 				resultSynonValues.insert(currSynonVal);
 			}
@@ -114,18 +112,34 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 		string rightDeType = synonymTable.find(rightArg)->second;
 		resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
 		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
-		std::set<string> currLeftValues = resultTable.getValueFromKey(leftArg);
-		std::set<string> currRightValues = resultTable.getValueFromKey(rightArg);
-
-		std::set<string> leftResultValues;
-		std::set<string> rightResultValues;
+		set<string> currLeftValues = resultTable.getStringSetFromKey(leftArg);
+		set<string> currRightValues = resultTable.getStringSetFromKey(rightArg);
+		std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
+		std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
 
 		for (string currLeftVal : currLeftValues) {
 			for (string currRightVal : currRightValues) {
 				bool isRightModifiesLeft = pkb.areInModifiesStmtRelationship(stoi(currLeftVal), currRightVal); 
 				if (isRightModifiesLeft) {
-					leftResultValues.insert(currLeftVal);
-					rightResultValues.insert(currRightVal);
+					if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
+						SynonymLinkageMap leftLinkedSynonymCollection;
+						leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
+						leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
+					}
+					else {
+						leftResultValues.find(currLeftVal)->second
+							.insertLinkage(rightArg, currRightVal);
+					}
+
+					if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
+						SynonymLinkageMap rightLinkedSynonymCollection;
+						rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
+						rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
+					}
+					else {
+						rightResultValues.find(currRightVal)->second
+							.insertLinkage(leftArg, currLeftVal);
+					}
 				}
 			}
 		}

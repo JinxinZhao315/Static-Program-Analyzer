@@ -117,7 +117,7 @@ bool PKB::areInFollowsRelationship(int leaderNum, int followerNum) {
 }
 
 bool PKB::isFollowsEmpty() {
-	return (followsTable.isEmpty() || followsStarTable.isEmpty());
+	return followsTable.isEmpty();
 }
 
 //QPS follows*
@@ -131,6 +131,10 @@ std::set<int> PKB::getFollowsStarFollowerNums(int leaderNum) {
 
 bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
 	return followsStarTable.inOneToManyRelationship(leaderNum, followerNum);
+}
+
+bool PKB::isFollowsStarEmpty() {
+	return followsStarTable.isEmpty();
 }
 
 //QPS parent
@@ -156,11 +160,15 @@ std::set<int> PKB::getParentStarParentNums(int child) {
 }
 
 std::set<int> PKB::getParentStarChildNums(int parent) {
-	return parentStarTable.getManyLeft(parent);
+	return parentStarTable.getManyRight(parent);
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
 	return parentStarTable.inOneToManyRelationship(parentNum, childNum);
+}
+
+bool PKB::isParentStarEmpty() {
+	return parentStarTable.isEmpty();
 }
 
 //QPS uses statement-variable

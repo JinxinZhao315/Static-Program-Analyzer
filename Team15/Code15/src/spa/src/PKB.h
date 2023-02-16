@@ -83,6 +83,8 @@ public:
 
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
+	bool isFollowsStarEmpty();
+
 	//QPS parent
 	int getParentParentNum(int childNum);
 
@@ -98,6 +100,8 @@ public:
 	std::set<int> getParentStarChildNums(int parent);
 
 	bool areInParentStarRelationship(int parentNum, int childNum);
+
+	bool isParentStarEmpty();
 
 	//QPS uses statement-variable
 	std::set<std::string> getUsesVarsFromStmt(int stmtNum);
