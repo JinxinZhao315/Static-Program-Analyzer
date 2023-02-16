@@ -145,7 +145,7 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
     REQUIRE(retStr == "1");
 }
 
-TEST_CASE("ModifiesS and pattern test") {
+TEST_CASE("ModifiesS / UsesS and pattern test") {
     PKB pkb;
 
     pkb.addStmt("=", 1);
@@ -179,7 +179,7 @@ TEST_CASE("ModifiesS and pattern test") {
     // Line 2: m = t + 2;
     // Line 3: n = 2 + y
 
-    // ModifiesS
+     //ModifiesS
     string retStr1 = testDriver("assign a; Select a such that Modifies(a,_) pattern a (\"k\",_)", pkb);
     cout << retStr1 << endl;
     REQUIRE(retStr1 == "1");
@@ -192,14 +192,27 @@ TEST_CASE("ModifiesS and pattern test") {
     cout << retStr3 << endl;
     REQUIRE(retStr3 == "m,n");
 
+    string retStr7 = testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"x\"_)", pkb);
+    cout << retStr7 << endl;
+    REQUIRE(retStr7 == "1");
+
+    string retStr8 = testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"t\"_)", pkb);
+    cout << retStr8 << endl;
+    REQUIRE(retStr8 == "None");
+
     // UsesS
     string retStr4 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_\"y\"_)", pkb);
     cout << retStr4 << endl;
     REQUIRE(retStr4 == "x,y");
 
-
     string retStr5 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_)", pkb);
     cout << retStr5 << endl;
     REQUIRE(retStr5 == "t,x,y");
+
+    string retStr6 = testDriver("assign a; Select a such that Uses(a,\"y\") pattern a (\"k\",_)", pkb);
+    cout << retStr6 << endl;
+    REQUIRE(retStr6 == "1");
+
+
 
 }
