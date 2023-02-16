@@ -1,14 +1,16 @@
 #include "PKB.h"
 #include "QPS/include/PQLDriver.h"
+#include "TestUtility.h"
 
 #include "catch.hpp"
 
 using namespace std;
 
+
+
 string testUses(string queryStr);
 
 string testUses(string queryStr) {
-
     PKB pkb;
 
     pkb.addStmt("=", 1);
@@ -31,8 +33,8 @@ string testUses(string queryStr) {
     // Line 2: m = i + j;
     // Line 3: print t;
 
-    PQLDriver driver = PQLDriver(pkb);
-    string retStr = driver.processPQL(queryStr);
+
+    string retStr = TestUtility::testDriver(queryStr, pkb);
     return retStr;
 }
 
@@ -40,18 +42,18 @@ TEST_CASE("UsesS empty pkb") {
     PKB pkb;
     PQLDriver driver = PQLDriver(pkb);
 
-    string retStr = driver.processPQL("assign a; Select a such that Uses(1, \"x\")");
+    string retStr = TestUtility::testDriver("assign a; Select a such that Uses(1, \"x\")", pkb);
     REQUIRE(retStr == "None");
 
-    string retStr1 = driver.processPQL("assign a; Select a such that Uses(1,_)");
+    string retStr1 = TestUtility::testDriver("assign a; Select a such that Uses(1,_)", pkb);
     cout << retStr1 << endl;
     REQUIRE(retStr1 == "None");
 
-    string retStr2 = driver.processPQL("variable v; Select v such that Uses(1,v)");
+    string retStr2 = TestUtility::testDriver("variable v; Select v such that Uses(1,v)", pkb);
     cout << retStr2 << endl;
     REQUIRE(retStr2 == "None");
 
-    string retStr3 = driver.processPQL("assign a; variable v; Select a such that Uses(a,v)");
+    string retStr3 = TestUtility::testDriver("assign a; variable v; Select a such that Uses(a,v)", pkb);
     cout << retStr3 << endl;
     REQUIRE(retStr3 == "None");
 }

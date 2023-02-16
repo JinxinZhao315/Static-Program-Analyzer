@@ -1,15 +1,9 @@
 #include "PKB.h"
 #include "QPS/include/PQLDriver.h"
+#include "TestUtility.h"
 
 #include "catch.hpp"
 
-string testDriver(string queryStr, PKB& pkb);
-
-string testDriver(string queryStr, PKB& pkb) {
-    PQLDriver driver = PQLDriver(pkb);
-    string retStr = driver.processPQL(queryStr);
-    return retStr;
-}
 
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
@@ -53,36 +47,36 @@ TEST_CASE("Follows/Follow* and pattern test") {
     // Line 5: read j;
 
     //Follows
-    string retStr1 = testDriver("assign a; Select a such that Follows(a,2) pattern a (\"k\",_)", pkb);
+    string retStr1 = TestUtility::testDriver("assign a; Select a such that Follows(a,2) pattern a (\"k\",_)", pkb);
     cout << retStr1 << endl;
     REQUIRE(retStr1 == "1");
 
-    string retStr2 = testDriver("assign a; Select a such that Follows(a,3) pattern a (\"k\",_)", pkb);
+    string retStr2 = TestUtility::testDriver("assign a; Select a such that Follows(a,3) pattern a (\"k\",_)", pkb);
     cout << retStr2 << endl;
     REQUIRE(retStr2 == "None");
 
-    string retStr3 = testDriver("assign a; Select a such that Follows(a,3) pattern a (\"m\",_)", pkb);
+    string retStr3 = TestUtility::testDriver("assign a; Select a such that Follows(a,3) pattern a (\"m\",_)", pkb);
     cout << retStr3 << endl;
     REQUIRE(retStr3 == "2");
 
     // Follows*
-    string retStr4 = testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_)", pkb);
+    string retStr4 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_)", pkb);
     cout << retStr4 << endl;
     REQUIRE(retStr4 == "1");
 
-    string retStr5 = testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_\"y\"_)", pkb);
+    string retStr5 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_\"y\"_)", pkb);
     cout << retStr5 << endl;
     REQUIRE(retStr5 == "1");
 
-    string retStr6 = testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_\"t\"_)", pkb);
+    string retStr6 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_\"t\"_)", pkb);
     cout << retStr6 << endl;
     REQUIRE(retStr6 == "None");
 
-    string retStr7 = testDriver("assign a; Select a such that Follows*(a,3) pattern a (_,_)", pkb);
+    string retStr7 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (_,_)", pkb);
     cout << retStr7 << endl;
     REQUIRE(retStr7 == "1,2");
 
-    string retStr8 = testDriver("assign a; Select a such that Follows*(a,3) pattern a (_,_\"2\"_)", pkb);
+    string retStr8 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (_,_\"2\"_)", pkb);
     cout << retStr8 << endl;
     REQUIRE(retStr8 == "2");
 
@@ -125,19 +119,19 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
     // Line 2: m = 1 + 2;
     // Line 3: n = 2 + 3;
 
-    string retStr1 = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2)", pkb);
+    string retStr1 = TestUtility::testDriver("assign a1, a2; Select a1 such that Follows(a1,a2)", pkb);
     cout << retStr1 << endl;
     REQUIRE(retStr1 == "1,2");
 
-    string retStr2 = testDriver("assign a1, a2; Select a2 such that Follows(a1,a2)", pkb);
+    string retStr2 = TestUtility::testDriver("assign a1, a2; Select a2 such that Follows(a1,a2)", pkb);
     cout << retStr2 << endl;
     REQUIRE(retStr2 == "2,3");
 
-    string retStr3 = testDriver("assign a1, a2; Select a2 pattern a2 (\"m\",_)", pkb);
+    string retStr3 = TestUtility::testDriver("assign a1, a2; Select a2 pattern a2 (\"m\",_)", pkb);
     cout << retStr3 << endl;
     REQUIRE(retStr3 == "2");
 
-    string retStr = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2) pattern a2 (\"m\",_)", pkb);
+    string retStr = TestUtility::testDriver("assign a1, a2; Select a1 such that Follows(a1,a2) pattern a2 (\"m\",_)", pkb);
     // Follows: a1: 1,2
     //          a2: 2,3
     // pattern: a2: 2
@@ -180,39 +174,41 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     // Line 3: n = 2 + y
 
      //ModifiesS
-    string retStr1 = testDriver("assign a; Select a such that Modifies(a,_) pattern a (\"k\",_)", pkb);
+    string retStr1 = TestUtility::testDriver("assign a; Select a such that Modifies(a,_) pattern a (\"k\",_)", pkb);
     cout << retStr1 << endl;
     REQUIRE(retStr1 == "1");
 
-    string retStr2 = testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (\"k\",_)", pkb);
+    string retStr2 = TestUtility::testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (\"k\",_)", pkb);
     cout << retStr2 << endl;
     REQUIRE(retStr2 == "k");
 
-    string retStr3 = testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (_,_\"2\"_)", pkb);
+    string retStr3 = TestUtility::testDriver("assign a; variable v; Select v such that Modifies(a,v) pattern a (_,_\"2\"_)", pkb);
     cout << retStr3 << endl;
     REQUIRE(retStr3 == "m,n");
 
-    string retStr7 = testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"x\"_)", pkb);
+    string retStr7 = TestUtility::testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"x\"_)", pkb);
     cout << retStr7 << endl;
     REQUIRE(retStr7 == "1");
 
-    string retStr8 = testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"t\"_)", pkb);
+    string retStr8 = TestUtility::testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"t\"_)", pkb);
     cout << retStr8 << endl;
     REQUIRE(retStr8 == "None");
 
     // UsesS
-    string retStr4 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_\"y\"_)", pkb);
+    string retStr4 = TestUtility::testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_\"y\"_)", pkb);
     cout << retStr4 << endl;
     REQUIRE(retStr4 == "x,y");
 
-    string retStr5 = testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_)", pkb);
+    string retStr5 = TestUtility::testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_)", pkb);
     cout << retStr5 << endl;
     REQUIRE(retStr5 == "t,x,y");
 
-    string retStr6 = testDriver("assign a; Select a such that Uses(a,\"y\") pattern a (\"k\",_)", pkb);
+    string retStr6 = TestUtility::testDriver("assign a; Select a such that Uses(a,\"y\") pattern a (\"k\",_)", pkb);
     cout << retStr6 << endl;
     REQUIRE(retStr6 == "1");
 
-
-
+    //Invalid syntax test
+    string retStr10 = TestUtility::testDriver("if i; Select i such that Parents(i,_) pattern i (\"k\",_)", pkb);
+    cout << retStr10 << endl;
+    REQUIRE(retStr10 == "SyntaxError");
 }

@@ -5,7 +5,7 @@ PQLEvaluator::PQLEvaluator(PKB &pkb)
     this->pkb = pkb;
 }
 
-std::string PQLEvaluator::evaluate(Query query)
+std::set<std::string> PQLEvaluator::evaluate(Query query)
 {
     ResultTable resultTable = ResultTable();
     std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
@@ -161,20 +161,20 @@ std::string PQLEvaluator::evaluate(Query query)
     }
 
     // return the values of the selected synonym in ResultTable
-    std::string retStr;
+//    std::string retStr;
     set<string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-    if (retSet.empty())
-    {
-        retStr = "None";
-    }
-    else
-    {
-        retStr = std::accumulate(begin(retSet),
-                                 end(retSet),
-                                 string{},
-                                 [](const string &a, const string &b)
-                                 { return a.empty() ? b : a + ',' + b; });
-    }
+//    if (retSet.empty())
+//    {
+//        retStr = "None";
+//    }
+//    else
+//    {
+//        retStr = std::accumulate(begin(retSet),
+//                                 end(retSet),
+//                                 string{},
+//                                 [](const string &a, const string &b)
+//                                 { return a.empty() ? b : a + ',' + b; });
+//    }
 
-    return retStr;
+    return retSet;
 }

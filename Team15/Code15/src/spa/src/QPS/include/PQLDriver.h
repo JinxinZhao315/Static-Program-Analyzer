@@ -12,7 +12,7 @@
 class PQLDriver {
 public:
     PQLDriver(PKB& pkb);
-    std::string processPQL(std::string queryStr);
+    std::set<std::string> processPQL(std::string queryStr);
 private:
     PQLPreprocessor preprocessor;
     PQLEvaluator evaluator;
