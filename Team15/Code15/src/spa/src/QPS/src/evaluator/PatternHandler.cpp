@@ -80,7 +80,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         } else if (rightType == Utility::UNDERSCORED_EXPR) {
 
-            set<int> allAssignLineNums = pkb.getAllStmtNumsByType(Tokens::Keyword::ASSIGN);
+            set<int> allAssignLineNums = pkb.getAllStmtNumsByType("assign");
 
             for (int assignLineNum : allAssignLineNums) {
                 set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(assignLineNum);

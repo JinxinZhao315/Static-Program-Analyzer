@@ -17,11 +17,11 @@ TEST_CASE("Follows* test")
     {
         PKB pkb;
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         pkb.addFollows(1, 2);
         pkb.addFollows(2, 3);
@@ -93,11 +93,11 @@ TEST_CASE("Follows test 1")
 
         PKB pkb;
 
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::READ, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("read", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         pkb.addFollows(1, 2);
         pkb.addFollows(2, 3);
@@ -165,11 +165,11 @@ TEST_CASE("Follows test 2")
         pkb.addFollows(2, 3);
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
-        pkb.addStmt(Tokens::READ, 1);
-        pkb.addStmt(Tokens::CALL, 2);
-        pkb.addStmt(Tokens::READ, 3);
-        pkb.addStmt(Tokens::READ, 4);
-        pkb.addStmt(Tokens::READ, 5);
+        pkb.addStmt("read", 1);
+        pkb.addStmt("call", 2);
+        pkb.addStmt("read", 3);
+        pkb.addStmt("read", 4);
+        pkb.addStmt("read", 5);
 
         //WC-Synon
         string retStr = testFollows("read s1; call c1; Select s1 such that Follows(_,s1)", pkb);

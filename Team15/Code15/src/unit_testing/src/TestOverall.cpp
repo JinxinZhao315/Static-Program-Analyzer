@@ -3,7 +3,7 @@
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/evaluator/FollowsHandler.h"
-#include "Tokeniser.h"
+#include "source_processor/include/tokeniser/Tokeniser.h"
 #include "QPS/include/PQLDriver.h"
 
 #include "catch.hpp"

@@ -11,19 +11,19 @@ string testUses(string queryStr) {
 
     PKB pkb;
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
+    pkb.addStmt("assign", 1);
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addUsesStmt(1,  {"x", "y"});
 
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 2);
     pkb.addVar("m");
     pkb.addVar("i");
     pkb.addVar("j");
     pkb.addUsesStmt(2, {"i", "j"});
 
-    pkb.addStmt(Tokens::Keyword::PRINT, 3);
+    pkb.addStmt("print", 3);
     pkb.addVar("t");
     pkb.addUsesStmt(3, {"t"});
 

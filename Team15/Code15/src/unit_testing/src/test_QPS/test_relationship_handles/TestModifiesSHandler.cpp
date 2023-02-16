@@ -24,8 +24,8 @@ string testModifiesS(string queryStr, PKB& pkb) {
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -35,7 +35,7 @@ TEST_CASE("ModifiesS Integer Underscore test") {
     
     pkb.addModifiesStmt(1, set1);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     string retStr1 = testModifiesS("assign a; variable b; Select a such that Modifies(1, _)", pkb);
     cout << retStr1 << endl;
@@ -57,8 +57,8 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
 TEST_CASE("ModifiesS Integer IdentString test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -68,7 +68,7 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
     pkb.addModifiesStmt(1, set1);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     set<string> set3({ "x" });
 
@@ -94,8 +94,8 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
 TEST_CASE("ModifiesS Integer Variable test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -105,7 +105,7 @@ TEST_CASE("ModifiesS Integer Variable test") {
 
     pkb.addModifiesStmt(1, set1);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     set<string> set3({ "x" });
 
@@ -134,8 +134,8 @@ TEST_CASE("ModifiesS Integer Variable test") {
 
 TEST_CASE("ModifiesS Statement Variable test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -145,7 +145,7 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
     pkb.addModifiesStmt(1, set1);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     set<string> set3({ "x" });
 
@@ -168,8 +168,8 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
 TEST_CASE("ModifiesS Statement IdentString test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -179,7 +179,7 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
     pkb.addModifiesStmt(1, set1);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     set<string> set3({ "x" });
 
@@ -205,8 +205,8 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
 TEST_CASE("ModifiesS Statement Underscore test") {
     PKB pkb;
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 1);
-    pkb.addStmt(Tokens::Keyword::ASSIGN, 2);
+    pkb.addStmt("assign", 1);
+    pkb.addStmt("assign", 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -218,7 +218,7 @@ TEST_CASE("ModifiesS Statement Underscore test") {
     set<string> set2({ "y" });
     pkb.addModifiesStmt(2, set2);
 
-    pkb.addStmt(Tokens::Keyword::READ, 3);
+    pkb.addStmt("read", 3);
 
     set<string> set3({ "x" });
     pkb.addModifiesStmt(3, set3);
