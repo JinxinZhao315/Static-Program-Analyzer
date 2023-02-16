@@ -12,9 +12,6 @@ void StatementTable::addStatementNumber(string statementType, int statementNumbe
 		statementByTypeTable[statementType].insert(statementNumber);
 	}
 }
-void StatementTable::addStatementNumberByType(int statementNumber, string statementType) {
-    statementByTypeTable[statementType].emplace(statementNumber);
-}
 
 void StatementTable::addAllStatements(std::set<int> statements) {
 	statementTable = statements;
