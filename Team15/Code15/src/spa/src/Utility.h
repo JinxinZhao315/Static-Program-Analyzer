@@ -84,6 +84,13 @@ public:
 			std::inserter(resultSet, resultSet.begin()));
 		return resultSet;
 	}
+
+	inline static const std::string trim_double_quotes(std::string s) {
+		if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
+			return s.substr(1, s.length() - 2);
+		}
+		return s;
+	}
 };
 
 
