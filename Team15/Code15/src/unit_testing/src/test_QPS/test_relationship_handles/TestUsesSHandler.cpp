@@ -36,6 +36,26 @@ string testUses(string queryStr) {
     return retStr;
 }
 
+TEST_CASE("UsesS empty pkb") {
+    PKB pkb;
+    PQLDriver driver = PQLDriver(pkb);
+
+    string retStr = driver.processPQL("assign a; Select a such that Uses(1, \"x\")");
+    REQUIRE(retStr == "None");
+
+    string retStr1 = driver.processPQL("assign a; Select a such that Uses(1,_)");
+    cout << retStr1 << endl;
+    REQUIRE(retStr1 == "None");
+
+    string retStr2 = driver.processPQL("variable v; Select v such that Uses(1,v)");
+    cout << retStr2 << endl;
+    REQUIRE(retStr2 == "None");
+
+    string retStr3 = driver.processPQL("assign a; variable v; Select a such that Uses(a,v)");
+    cout << retStr3 << endl;
+    REQUIRE(retStr3 == "None");
+}
+
 TEST_CASE("UsesS (int, quoted_ident)"){
 
     string retStr1 = testUses("assign a; Select a such that Uses(1, \"x\")");
