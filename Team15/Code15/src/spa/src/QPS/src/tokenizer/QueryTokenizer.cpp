@@ -140,7 +140,8 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<Patte
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {
-	std::size_t nextWhiteSpace = input.find_first_of(Utility::WHITESPACES);
+	input = Utility::trim(input, Utility::WHITESPACES);
+    std::size_t nextWhiteSpace = input.find_first_of(Utility::WHITESPACES);
 	if (nextWhiteSpace == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid keyword");
 	}

@@ -40,6 +40,9 @@ void ClauseHandler::combineResult(ResultTable& resultTable, Result& result) {
 //    }
 //}
 
+
+// TODO: Refactor code by creating more intermediate vars
+
 void ClauseHandler::combineTwoSynResult(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult,
     std::string secondSynName, std::unordered_map<std::string, SynonymLinkageMap>& secondSynResult, ResultTable& resultTable) {
     if (!resultTable.isSynonymPresent(firstSynName)) {
@@ -105,6 +108,11 @@ void ClauseHandler::filterOneSynLinkageSet(std::string firstSynName, std::unorde
                 }
             }
         }
+        else if (resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).isEmptyLinkageSet(secondSynName)
+            && !currSynonymInstance.second.isEmptyLinkageSet(secondSynName)) {
+            resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).getLinkageMap().insert({ secondSynName, currSynonymInstance.second.getLinkageMap().at(secondSynName) });
+
+        }
     }
 }
 
@@ -161,6 +169,12 @@ void ClauseHandler::filterCurrResultLinkageSet(std::string firstSynName, std::un
                 }
             }
         }
+        // TODO: handle situation where resultTable does not have a linkage map record of secondSynName
+        else if(resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).isEmptyLinkageSet(secondSynName)
+            && !currSynonymInstance.second.isEmptyLinkageSet(secondSynName)){
+            resultTable.getSynonymEntry(firstSynName).at(currSynonymInstance.first).getLinkageMap().insert({ secondSynName, currSynonymInstance.second.getLinkageMap().at(secondSynName) });
+
+        }
     }
 }
 
@@ -184,7 +198,7 @@ void ClauseHandler::filterResultTableLinkageSet(std::string firstSynonymName, st
             for (auto synToDelete : synToDeleteSet) {
                 resultTable.getSynonymEntry(firstSynonymName).find(synonymInstance.first)->second.getLinkageMap().find(secondSynonymName)->second.erase(synToDelete);
             }
-        }
+        } // TODO: Decide if there's a "else" situation to handle here?
     }
 }
 
