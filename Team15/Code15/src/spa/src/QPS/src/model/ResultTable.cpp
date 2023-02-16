@@ -55,7 +55,7 @@ bool ResultTable::isKeyPresent(std::string key) {
     }
 }
 void ResultTable::deleteSynonymInstance(std::string synonymName, std::string synonymInstance) {
-    this->resultTable.find(synonymName)->second.erase(synonymInstance);
+    this->resultTable.at(synonymName).erase(synonymInstance);
 }
 //
 //void ResultTable::deleteKeyValuePair(std::string key) {

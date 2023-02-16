@@ -37,6 +37,7 @@ TEST_CASE("Test insertLinkage function") {
 
 	map.insertLinkage("synon1", "11");
 	map.insertLinkage("synon1", "13");
+	expectedSet.insert("13");
 	//keep only the intersection
 	REQUIRE(map.getLinkageMap().find("synon1")->second == expectedSet);
 }

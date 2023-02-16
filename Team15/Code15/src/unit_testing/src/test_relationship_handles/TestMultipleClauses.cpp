@@ -129,17 +129,17 @@ TEST_CASE("Follows/Follow* and pattern test 2") {
     // Line 2: m = 1 + 2;
     // Line 3: n = 2 + 3;
 
-//    string retStr1 = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2)", pkb);
-//    cout << retStr1 << endl;
-//    REQUIRE(retStr1 == "1,2");
-//
-//    string retStr2 = testDriver("assign a1, a2; Select a2 such that Follows(a1,a2)", pkb);
-//    cout << retStr2 << endl;
-//    REQUIRE(retStr2 == "2,3");
-//
-//    string retStr3 = testDriver("assign a1, a2; Select a2 pattern a2 (\"m\",_)", pkb);
-//    cout << retStr3 << endl;
-//    REQUIRE(retStr3 == "2");
+    string retStr1 = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2)", pkb);
+    cout << retStr1 << endl;
+    REQUIRE(retStr1 == "1,2");
+
+    string retStr2 = testDriver("assign a1, a2; Select a2 such that Follows(a1,a2)", pkb);
+    cout << retStr2 << endl;
+    REQUIRE(retStr2 == "2,3");
+
+    string retStr3 = testDriver("assign a1, a2; Select a2 pattern a2 (\"m\",_)", pkb);
+    cout << retStr3 << endl;
+    REQUIRE(retStr3 == "2");
 
     string retStr = testDriver("assign a1, a2; Select a1 such that Follows(a1,a2) pattern a2 (\"m\",_)", pkb);
     // Follows: a1: 1,2
