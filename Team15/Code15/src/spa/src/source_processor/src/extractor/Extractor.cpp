@@ -1,4 +1,4 @@
-#include "../../include/extractor/Extractor.h"
+#include "source_processor/include/extractor/Extractor.h"
 
 Extractor::Extractor() {
     statements["while"] = {};

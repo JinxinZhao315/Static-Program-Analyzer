@@ -1,7 +1,5 @@
-#include "TestParser.h"
+#include "catch.hpp"
 
-using namespace std;
-
-TEST_CASE("Test case 2") {
-    cout << "Test";
+TEST_CASE("Test case 1") {
+    REQUIRE(1==1);
 }

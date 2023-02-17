@@ -1,7 +1,7 @@
-#include "../../include/tokeniser/Tokeniser.h"
+#include "source_processor/include/tokeniser/Tokeniser.h"
 
 Tokeniser::Tokeniser() {
-    vector<string>* keys = new vector<string>();
+    auto* keys = new vector<string>();
     *keys = {
             "procedure",
             "while",
@@ -41,7 +41,7 @@ Tokeniser::Tokeniser() {
 }
 
 void Tokeniser::feedLines(string filename) {
-    vector<vector<string>*>* tokenVector = new vector<vector<string>*>();
+    auto* tokenVector = new vector<vector<string>*>();
     ifstream file(filename);
     if (!file.is_open()) {
         cout << "Failed to open file: " << filename << endl;
@@ -57,7 +57,7 @@ void Tokeniser::feedLines(string filename) {
 
 void Tokeniser::printTokens() {
     for(vector<string>* line : *extractedTokens) {
-        for(string token : *line) {
+        for(const string& token : *line) {
             cout << token << " ";
         }
         cout << endl;
@@ -102,7 +102,7 @@ void moveToNextKeyword(vector<string>* keywords, vector<string>* tokens, string 
 }
 
 vector<string>* Tokeniser::tokenise(string line) {
-    vector<string>* tokens = new vector<string>();
+    auto* tokens = new vector<string>();
     stringstream stream(line);
     string token;
     while(stream >> token) {
@@ -116,34 +116,21 @@ vector<string>* Tokeniser::tokenise(string line) {
 }
 
 string findKeyword(vector<string>* line, vector<string>* keywords) {
-    bool extracted = false;
-    string extractedKeyword = "";
-    for(auto token : *line) {
-        for(auto keyword: *keywords) {
-            if(token == keyword) {
-                extracted = true;
-                extractedKeyword = keyword;
-                break;
-            }
-        }
-        if(extracted) {
-            break;
+    for (auto token : *line) {
+        if (find(keywords->begin(), keywords->end(), token) != keywords->end()) {
+            return token;
         }
     }
-    return extractedKeyword;
+    return "";
 }
 
 bool checkKeywordHasLineNumber(string keyword) {
-    if(keyword == "procedure" || keyword == "else") {
-        return false;
-    } else {
-        return true;
-    }
+    return !(keyword == "procedure" || keyword == "else");
 }
 
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
     int lineNumber = 1;
-    vector<Line> extractedLines;
+    vector<Line> lines;
     for(auto line : *tokens) {
         string keyword = findKeyword(line, keywords);
         bool hasLineNumber = checkKeywordHasLineNumber(keyword);
@@ -154,9 +141,9 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
         } else {
             extractedLine = new Line(*line, keyword);
         }
-        extractedLines.push_back(*extractedLine);
+        lines.push_back(*extractedLine);
     }
-    this->extractedLines = extractedLines;
+    this->extractedLines = lines;
 }
 
 vector<Line> Tokeniser::getExtractedLines() {

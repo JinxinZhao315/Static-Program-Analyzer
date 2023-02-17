@@ -1,3 +1,7 @@
+cmake_minimum_required(VERSION 3.20.2)
+project(spa)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
@@ -12,12 +16,12 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/extractor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/tokeniser/*.cpp"
-        "src/util/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/extractor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/tokeniser/*.cpp"
-        "src/util/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.cpp"
         )
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
@@ -35,7 +39,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/extractor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/parser/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/util/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/models/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 
 add_library(spa ${srcs} ${headers})

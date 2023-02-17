@@ -1,4 +1,4 @@
-#include "../../include/extractor/ParentsRelationshipExtractor.h"
+#include "source_processor/include/extractor/ParentsRelationshipExtractor.h"
 
 tuple<unordered_map<int, int>, unordered_map<int, set<int> >> extractParentsRelationship(const vector<Line>& program) {
     unordered_map<int, int> parentsRS;

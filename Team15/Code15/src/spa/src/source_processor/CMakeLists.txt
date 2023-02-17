@@ -5,19 +5,17 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 set(srcs ${srcs}
-        src/*.h
-        src/tokeniser/*.h
-        src/extractor/*.h
-        src/parser/*.h
-        ../util/*.h
+        src/SourceProcessor.cpp
+        src/tokeniser/*.cpp
+        src/extractor/*.cpp
+        src/parser/*.cpp
         )
 
 set(headers ${headers}
-        include/*.h
+        include/SourceProcessor.h
         include/tokeniser/*.h
         include/extractor/*.h
         include/parser/*.h
-        include/util/*.h
         )
 
 add_library(source_processor ${srcs} ${headers})

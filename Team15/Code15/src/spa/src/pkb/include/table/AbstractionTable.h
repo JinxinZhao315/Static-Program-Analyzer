@@ -25,7 +25,7 @@ public:
 		flipOneToOne(oneToOneAbstractions);
 	}
 
-	inline void addAllOneToManyAbstractions(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+	inline void addAllOneToManyAbstractions(std::unordered_map<L, std::set<R> > oneToManyAbstractions) {
 		leftToManyRightMap = oneToManyAbstractions;
 		flipOneToMany(oneToManyAbstractions);
 	}
@@ -94,8 +94,8 @@ public:
 private:
 	std::unordered_map<L, R> leftToOneRightMap;
 	std::unordered_map<R, L> rightToOneLeftMap;
-	std::unordered_map<L, std::set<R>> leftToManyRightMap;
-	std::unordered_map<R, std::set<L>> rightToManyLeftMap;
+	std::unordered_map<L, std::set<R> > leftToManyRightMap;
+	std::unordered_map<R, std::set<L> > rightToManyLeftMap;
 
 	inline void addLeftToOneRight(L left, R right) {
 		auto pair = leftToOneRightMap.find(left);

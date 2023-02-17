@@ -1,5 +1,5 @@
-#include "../include/SourceProcessor.h"
-#include "../include/parser/Line.h"
+#include "source_processor//include/SourceProcessor.h"
+#include "common/include/models/Line.h"
 #include <iostream>
 
 using namespace std;

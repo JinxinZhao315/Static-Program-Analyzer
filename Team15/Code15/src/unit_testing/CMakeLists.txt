@@ -6,6 +6,8 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/tokeniser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/extractor/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.cpp"
         )
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
@@ -16,6 +18,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/parser/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/tokeniser/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/extractor/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.h"
         )
 
 

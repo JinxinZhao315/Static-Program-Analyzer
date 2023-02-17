@@ -1,7 +1,5 @@
-#include "TestTokeniser.h"
+#include "catch.hpp"
 
-using namespace std;
-
-TEST_CASE("Test case 3") {
-    cout << "Test";
+TEST_CASE("Test case 1") {
+    REQUIRE(1==1);
 }

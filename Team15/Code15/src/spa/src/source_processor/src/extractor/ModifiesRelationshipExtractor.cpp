@@ -1,4 +1,4 @@
-#include "../../include/extractor/ModifiesRelationshipExtractor.h"
+#include "source_processor/include/extractor/ModifiesRelationshipExtractor.h"
 
 /**
  * Goes through each line of the program and checks if the line is a read, assign or is a container where modifies holds
