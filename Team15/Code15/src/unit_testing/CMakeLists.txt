@@ -19,7 +19,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         )
 
 
-add_executable(unit_testing ${srcs} src/source_processor/extractor/TestAssignsRelationShipExtractor.cpp src/source_processor/extractor/TestModifiesRelationshipExtractor.cpp src/source_processor/extractor/TestFollowsRelationshipExtractor.cpp src/source_processor/extractor/TestParentsRelationshipExtractor.cpp)
+add_executable(unit_testing ${srcs})
 
 target_link_libraries(unit_testing spa)
 
