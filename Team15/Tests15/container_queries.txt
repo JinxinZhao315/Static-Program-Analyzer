@@ -1,0 +1,50 @@
+1 - all procedures
+procedure p;
+Select p
+proc1, proc2
+5000
+2 - call follows
+call cl;
+Select cl such that Follows(22, cl)
+25
+5000
+3 - call follows star
+call cl;
+Select cl such that Follows*(2, cl)
+25
+5000
+4 - if follows
+if i;
+Select i such that Follows(13, i)
+14
+5000
+5 - while follows
+while w;
+Select w such that Follows(21, w)
+22
+5000
+6 - all constants
+constant c;
+Select c
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+5000
+7 - assign pattern
+assign a;
+Select a pattern a("w", _"b + c"_)
+15, 28
+5000
+8 - assign pattern
+assign a;
+Select a pattern a(_, _"a * b"_)
+16
+5000
+9 - assign pattern
+assign a;
+Select a pattern a(_, _"c * d"_)
+none
+5000
+10 - assign pattern
+assign a;
+Select a pattern a("count", "count")
+none
+5000

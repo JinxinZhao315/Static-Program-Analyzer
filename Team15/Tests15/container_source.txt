@@ -1,0 +1,30 @@
+procedure proc1 {
+  v = 0;
+  w = 0;
+  x = 0;
+  y = 0;
+  z = 0;
+  a = 1;
+  b = 2;
+  c = 3;
+  d = 4;
+  e = 5;
+  f = 6;
+  v = a - b + c;
+  if (v > 0) then {
+    w = a - (b + c);
+    x = a * b / c;
+    y = a * (b / c);
+  } else {
+    z = a + b * c * d + e;
+  }
+  count = 0;
+  while (count < 7) {
+    count = count + 1;
+  }
+  call proc2; }
+
+procedure proc2 {
+    w = b + c + 8;
+    x = d * e * 9;
+}
