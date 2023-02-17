@@ -1,7 +1,7 @@
 //
 // Created by Jinxin Zhao on 3/2/23.
 //
-#include "PKB.h"
+#include "pkb/include/PKB.h"
 #include "QPS/include/model/ResultTable.h"
 #include "Utility.h"
 #include "QPS/include/model/Result.h"

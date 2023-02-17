@@ -1,4 +1,4 @@
-#include "VariableTable.h"
+#include "pkb/include/table/VariableTable.h"
 
 VariableTable::VariableTable() = default;
 

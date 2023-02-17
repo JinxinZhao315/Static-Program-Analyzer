@@ -1,4 +1,4 @@
-#include "ModifiesProcedureTable.h"
+#include "pkb/include/table/ModifiesProcedureTable.h"
 
 ModifiesProcedureTable::ModifiesProcedureTable() = default;
 

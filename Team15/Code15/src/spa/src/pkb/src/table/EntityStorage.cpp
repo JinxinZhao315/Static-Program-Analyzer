@@ -1,4 +1,4 @@
-#include "EntityStorage.h"
+#include "pkb/include/table/EntityStorage.h"
 
 EntityStorage::EntityStorage() = default;
 

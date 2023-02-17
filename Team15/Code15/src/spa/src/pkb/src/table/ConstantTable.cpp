@@ -1,4 +1,4 @@
-#include "ConstantTable.h"
+#include "pkb/include/table/ConstantTable.h"
 
 ConstantTable::ConstantTable() = default;
 

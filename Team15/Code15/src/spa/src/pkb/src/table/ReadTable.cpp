@@ -1,4 +1,4 @@
-#include "ReadTable.h"
+#include "pkb/include/table/ReadTable.h"
 
 ReadTable::ReadTable() = default;
 

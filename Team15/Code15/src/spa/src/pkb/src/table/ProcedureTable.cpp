@@ -1,4 +1,4 @@
-#include "ProcedureTable.h"
+#include "pkb/include/table/ProcedureTable.h"
 
 ProcedureTable::ProcedureTable() = default;
 

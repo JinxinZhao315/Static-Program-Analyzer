@@ -1,4 +1,4 @@
-#include "ParentTable.h"
+#include "pkb/include/table/ParentTable.h"
 
 ParentTable::ParentTable() = default;
 
