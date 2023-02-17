@@ -17,8 +17,19 @@ void SourceProcessor::parseProgram(string fileName) {
     extract(extractedLines);
 }
 
-void SourceProcessor::storeDataInPKB() {
-    //TODO: all API calls to PKB
+void SourceProcessor::storeDataInPKB(PKB* pkb) {
+    pkb->addAllProcs(extractor->getProcedures());
+    pkb->addAllVars(this->extractor->getVariables());
+    pkb->addAllConsts(this->extractor->getConstants());
+    pkb->addAllStmtsByType(this->extractor->getStatements());
+    // TODO
+    // add follows
+    // add followsStar
+    // add parent
+    // add parent star
+    // add modifies
+    // add uses
+    // add assigns
 }
 
 void SourceProcessor::printParsedProgram() {

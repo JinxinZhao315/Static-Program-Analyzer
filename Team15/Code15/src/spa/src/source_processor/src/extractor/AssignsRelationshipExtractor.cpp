@@ -48,7 +48,7 @@ vector<string> convertToPostfix(vector<string> tokens, const set<string>& variab
     return result;
 }
 
-unordered_map<string, set<Line> > extractAssignmentRS(const vector<Line>& program, const set<string>& variables) {
+unordered_map<string, set<Line>> extractAssignmentRS(const vector<Line>& program, const set<string>& variables) {
     unordered_map<string, set<Line>> assignsRS;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();

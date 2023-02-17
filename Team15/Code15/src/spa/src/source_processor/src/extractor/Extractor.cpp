@@ -13,7 +13,7 @@ set<string> Extractor::getVariables() {
     return variables;
 }
 
-vector<string> Extractor::getConstants() {
+set<string> Extractor::getConstants() {
     return constants;
 }
 
@@ -21,7 +21,7 @@ set<string> Extractor::getProcedures() {
     return procedures;
 }
 
-map<string, vector<int>> Extractor::getStatements() {
+unordered_map<string, set<int>> Extractor::getStatements() {
     return statements;
 }
 
@@ -65,23 +65,23 @@ bool isNumeric(const string& token) {
 
 void Extractor::extractConstants(Line line) {
     vector<string> tokens = line.getTokens();
-    vector<string> *c = &this->constants;
+    set<string> *c = &this->constants;
     for (auto token = begin(tokens); token != end(tokens); token++) {
         if (isNumeric(*token)) {
-            c->push_back(*token);
+            c->insert(*token);
         }
     }
 }
 
-void insertLineNumber(map<string, vector<int>>* statements, string* type, int* lineNumber) {
-    statements->at(*type).push_back(*lineNumber);
+void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
+    statements->at(*type).insert(*lineNumber);
 }
 
 void Extractor::extractStatement(Line line) {
     vector<string> tokens = line.getTokens();
     string type = line.getType();
     int lineNumber = line.getLineNumber();
-    map<string, vector<int>> *stmt = &this->statements;
+    unordered_map<string, set<int>> *stmt = &this->statements;
     insertLineNumber(stmt, &type, &lineNumber);
     if(type == "=") {
         extractVariables(line);
@@ -140,6 +140,22 @@ void Extractor::printEntities() {
     cout << endl;
 }
 
+map<int, int> Extractor::getFollowsRS() {
+    return this->followsRS;
+}
+
+map<int, set<int>> Extractor::getFollowsStarRS() {
+    return this->followsStarRS;
+}
+
+map<int, int> Extractor::getParentRS() {
+    return this->parentsRS;
+}
+
+map<int, set<int>> Extractor::getParentStarRS() {
+    return this->parentsStarRS;
+}
+
 void Extractor::extract(const vector<Line> &program) {
     extractEntities(program);
     // Call and get results of extraction
@@ -155,4 +171,8 @@ void Extractor::extract(const vector<Line> &program) {
 
     this->followsRS = followsRS;
     this->followsStarRS = followsStarRS;
+
+    this->usesRS = usesRS;
+    this->modifiesRS = modifiesRS;
+    this->assignsRS = assignsRS;
 }

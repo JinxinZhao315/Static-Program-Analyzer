@@ -21,7 +21,7 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
     sourceProcessor.parseProgram(filename);
-    sourceProcessor.storeDataInPKB();
+    sourceProcessor.storeDataInPKB(&this->pkb);
     // sourceProcessor.printParsedProgram();
 }
 
