@@ -50,11 +50,11 @@ string findProcedureName(vector<string> tokens) {
 void Extractor::extractProcedure(Line line) {
     vector<string> tokens = line.getTokens();
     string procedureName = findProcedureName(tokens);
-    set<string>* procedures = &this->procedures;
-    procedures->insert(procedureName);
+    set<string>* p = &this->procedures;
+    p->insert(procedureName);
 }
 
-bool isNumeric(string token) {
+bool isNumeric(const string& token) {
     try {
         stoi(token);
         return true;
@@ -65,10 +65,10 @@ bool isNumeric(string token) {
 
 void Extractor::extractConstants(Line line) {
     vector<string> tokens = line.getTokens();
-    vector<string> *constants = &this->constants;
+    vector<string> *c = &this->constants;
     for (auto token = begin(tokens); token != end(tokens); token++) {
         if (isNumeric(*token)) {
-            constants->push_back(*token);
+            c->push_back(*token);
         }
     }
 }
@@ -81,19 +81,19 @@ void Extractor::extractStatement(Line line) {
     vector<string> tokens = line.getTokens();
     string type = line.getType();
     int lineNumber = line.getLineNumber();
-    map<string, vector<int>> *statements = &this->statements;
-    insertLineNumber(statements, &type, &lineNumber);
+    map<string, vector<int>> *stmt = &this->statements;
+    insertLineNumber(stmt, &type, &lineNumber);
     if(type == "=") {
         extractVariables(line);
     }
 }
 
 void Extractor::extractVariables(Line line) {
-    set<string>* variables = &this->variables;
+    set<string>* v = &this->variables;
     vector<string> tokens = line.getTokens();
     for(auto token = begin(tokens); token != end(tokens); token++) {
         if(*token == "=" && token != begin(tokens)) {
-            variables->insert(*(prev(token)));
+            v->insert(*(prev(token)));
         }
     }
 }
@@ -112,20 +112,20 @@ void Extractor::extractEntities(const vector<Line> &program) {
 
 void Extractor::printEntities() {
     cout << "Procedures: " << endl;
-    for(auto procedure: this->procedures) {
+    for(const auto& procedure: this->procedures) {
         cout << procedure << " ";
     }
     cout << endl << endl;
 
     cout << "Variables: " << endl;
-    for(auto variable: this->variables) {
+    for(const auto& variable: this->variables) {
         cout << variable << " ";
     }
     cout << endl << endl;
 
     cout << "Constants: " << endl;
-    for(auto constants: this->constants) {
-        cout << constants << " ";
+    for(const auto& c: this->constants) {
+        cout << c << " ";
     }
     cout << endl << endl;
 

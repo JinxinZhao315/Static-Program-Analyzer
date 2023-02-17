@@ -1,23 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <string>
-#include <stack>
-#include <stdio.h>
-#include <iostream>
-#include <utility>
-#include "../parser/Line.h"
-#include "../util/StringOperations.h"
+#include "CommonExtractorHeader.h"
 #include "FollowsRelationshipExtractor.h"
 #include "ParentsRelationshipExtractor.h"
 #include "ModifiesRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
 #include "UsesRelationshipExtractor.h"
-
-using namespace std;
 
 class Extractor {
 public:

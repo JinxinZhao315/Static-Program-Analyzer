@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Extractor.h"
+#include "CommonExtractorHeader.h"
+
+using namespace std;
 
 int precedence(string c);
 bool isOperator(string c);

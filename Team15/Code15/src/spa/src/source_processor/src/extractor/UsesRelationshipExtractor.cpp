@@ -39,4 +39,5 @@ unordered_map<int, set<string>> extractUsesRS(const vector<Line>& program, const
             usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
         }
     }
+    return usesRS;
 }
