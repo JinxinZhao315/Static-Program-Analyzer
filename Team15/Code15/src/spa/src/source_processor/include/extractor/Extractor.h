@@ -22,11 +22,11 @@ public:
     void extractVariables(Line line);
     void printEntities();
 
-    map<int, int> getFollowsRS();
-    map<int, set<int>> getFollowsStarRS();
+    unordered_map<int, int> getFollowsRS();
+    unordered_map<int, set<int>> getFollowsStarRS();
 
-    map<int, int> getParentRS();
-    map<int, set<int>> getParentStarRS();
+    unordered_map<int, int> getParentRS();
+    unordered_map<int, set<int>> getParentStarRS();
 
     unordered_map<int, set<string>> getModifiesRS();
     unordered_map<int, set<string>> getUsesRS();

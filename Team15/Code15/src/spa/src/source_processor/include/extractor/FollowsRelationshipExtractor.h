@@ -4,4 +4,4 @@
 
 using namespace std;
 
-tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program);
+tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program);

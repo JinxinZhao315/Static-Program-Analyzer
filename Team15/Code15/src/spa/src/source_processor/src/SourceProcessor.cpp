@@ -19,17 +19,17 @@ void SourceProcessor::parseProgram(string fileName) {
 
 void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllProcs(extractor->getProcedures());
-    pkb->addAllVars(this->extractor->getVariables());
-    pkb->addAllConsts(this->extractor->getConstants());
-    pkb->addAllStmtsByType(this->extractor->getStatements());
-    // TODO
-    // add follows
-    // add followsStar
-    // add parent
-    // add parent star
-    // add modifies
-    // add uses
-    // add assigns
+    pkb->addAllVars(extractor->getVariables());
+    pkb->addAllConsts(extractor->getConstants());
+    pkb->addAllStmtsByType(extractor->getStatements());
+    pkb->addAllFollows(extractor->getFollowsRS());
+    pkb->addAllFollowsStar(extractor->getFollowsStarRS());
+    pkb->addAllParent(extractor->getParentRS());
+    pkb->addAllParentStar(extractor->getParentStarRS());
+    pkb->addAllModifiesStmt(extractor->getModifiesRS());
+    pkb->addAllUsesStmt(extractor->getUsesRS());
+//    pkb->addPatt(); //TODO: finish this after PKB api is implemented
+//    extractor->getAssignsRS()
 }
 
 void SourceProcessor::printParsedProgram() {

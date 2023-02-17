@@ -1,9 +1,9 @@
 #include "../../include/extractor/FollowsRelationshipExtractor.h"
 
-tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program) {
+tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program) {
     int startOfBlock = 0;
     stack<int> stack;
-    map<int, int> startOfBlockRS;
+    unordered_map<int, int> startOfBlockRS;
 
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
@@ -23,8 +23,8 @@ tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vect
         }
     }
 
-    map<int, int> followsRS;
-    map<int, set<int> > followsStarRS;
+    unordered_map<int, int> followsRS;
+    unordered_map<int, set<int> > followsStarRS;
     for (int i = 0; i < program.size(); i++) {
         Line firstLine = program[i];
         int firstLineNumber = firstLine.getLineNumber();

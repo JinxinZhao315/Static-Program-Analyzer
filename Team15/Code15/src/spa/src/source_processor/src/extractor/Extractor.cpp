@@ -142,19 +142,19 @@ void Extractor::printEntities() {
     cout << endl;
 }
 
-map<int, int> Extractor::getFollowsRS() {
+unordered_map<int, int> Extractor::getFollowsRS() {
     return this->followsRS;
 }
 
-map<int, set<int>> Extractor::getFollowsStarRS() {
+unordered_map<int, set<int>> Extractor::getFollowsStarRS() {
     return this->followsStarRS;
 }
 
-map<int, int> Extractor::getParentRS() {
+unordered_map<int, int> Extractor::getParentRS() {
     return this->parentsRS;
 }
 
-map<int, set<int>> Extractor::getParentStarRS() {
+unordered_map<int, set<int>> Extractor::getParentStarRS() {
     return this->parentsStarRS;
 }
 

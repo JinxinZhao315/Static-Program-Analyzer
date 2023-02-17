@@ -15,7 +15,7 @@ bool isOperator(string c) {
     return precedence(c) > 0;
 }
 
-bool isNumber(string num) {
+bool isNumber(const string& num) {
     try {
         stod(num);
         return true;
