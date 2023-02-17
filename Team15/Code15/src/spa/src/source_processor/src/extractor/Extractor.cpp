@@ -156,6 +156,18 @@ map<int, set<int>> Extractor::getParentStarRS() {
     return this->parentsStarRS;
 }
 
+unordered_map<int, set<string>> Extractor::getModifiesRS() {
+    return this->modifiesRS;
+}
+
+unordered_map<int, set<string>> Extractor::getUsesRS() {
+    return this->usesRS;
+}
+
+unordered_map<string, set<Line>> Extractor::getAssignsRS() {
+    return this->assignsRS;
+}
+
 void Extractor::extract(const vector<Line> &program) {
     extractEntities(program);
     // Call and get results of extraction
