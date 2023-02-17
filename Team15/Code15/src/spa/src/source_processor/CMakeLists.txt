@@ -9,14 +9,14 @@ set(srcs ${srcs}
         src/tokeniser/*.cpp
         src/extractor/*.cpp
         src/parser/*.cpp
-        )
+    )
 
 set(headers ${headers}
         include/SourceProcessor.h
         include/tokeniser/*.h
         include/extractor/*.h
         include/parser/*.h
-        )
+    )
 
 add_library(source_processor ${srcs} ${headers})
 add_executable(SourceProcessor ${srcs} ${headers})

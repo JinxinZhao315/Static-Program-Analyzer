@@ -7,12 +7,12 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 set(srcs ${srcs}
         src/models/*.cpp
         src/utils/*.cpp
-        )
+    )
 
 set(headers ${headers}
         include/models/*.h
         include/utils/*.h
-        )
+    )
 
 add_library(common ${srcs} ${headers})
 add_executable(CommonExec ${srcs} ${headers})
