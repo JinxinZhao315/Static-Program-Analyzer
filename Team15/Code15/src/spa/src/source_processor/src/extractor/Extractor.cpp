@@ -58,8 +58,11 @@ bool isNumeric(const string& token) {
     try {
         stoi(token);
         return true;
-    } catch (exception) {
+    } catch (const std::invalid_argument&) {
         return false;
+    } catch (const std::out_of_range&) {
+        return false;
+    }
     }
 }
 
