@@ -28,20 +28,20 @@ TEST_CASE("ModifiesS Integer Underscore test") {
     pkb.addStmt("read", 3);
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, _)", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1,2");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; Select b  such that Modifies(1, _)", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "k,x,y");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, _)", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(2, _)", pkb);
-    cout << retStr5 << endl;
+    
     REQUIRE(retStr5 == "None");
 }
 
@@ -65,20 +65,20 @@ TEST_CASE("ModifiesS Integer IdentString test") {
     pkb.addModifiesStmt(3, set3);
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, \"k\")", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1,2");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; Select b  such that Modifies(1, \"x\")", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "None");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, \"x\")", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(3, \"x\")", pkb);
-    cout << retStr5 << endl;
+    
     REQUIRE(retStr5 == "k,x,y");
 }
 
@@ -102,21 +102,21 @@ TEST_CASE("ModifiesS Integer Variable test") {
     pkb.addModifiesStmt(3, set3);
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, b)", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1,2");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; Select b  such that Modifies(1, b)", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "k");
 
     //Assume one synonmy empty then all empty(not the case waiting for change)
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, b)", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(3, b)", pkb);
-    cout << retStr5 << endl;
+    
     REQUIRE(retStr5 == "x");
 }
 
@@ -142,15 +142,15 @@ TEST_CASE("ModifiesS Statement Variable test") {
     pkb.addModifiesStmt(3, set3);
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, b)", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; read r; Select r  such that Modifies(r, b)", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "3");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; call c; Select c such that Modifies(c, b)", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 }
@@ -176,20 +176,20 @@ TEST_CASE("ModifiesS Statement IdentString test") {
     pkb.addModifiesStmt(3, set3);
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, \"k\")", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; read r; Select r  such that Modifies(r, \"x\")", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "3");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, \"d\")", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(a, \"x\")", pkb);
-    cout << retStr5 << endl;
+    
     REQUIRE(retStr5 == "None");
 }
 
@@ -215,20 +215,20 @@ TEST_CASE("ModifiesS Statement Underscore test") {
 
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, _)", pkb);
-    cout << retStr1 << endl;
+    
     REQUIRE(retStr1 == "1,2");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; read r; Select r  such that Modifies(r, _)", pkb);
-    cout << retStr2 << endl;
+    
     REQUIRE(retStr2 == "3");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; call c; Select c such that Modifies(c, _)", pkb);
-    cout << retStr3 << endl;
+    
     REQUIRE(retStr3 == "None");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(a, _)", pkb);
-    cout << retStr5 << endl;
+    
     REQUIRE(retStr5 == "k,x,y");
 }
 

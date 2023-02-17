@@ -28,8 +28,8 @@ public:
     void filterCurrResultLinkageSet(std::string firstSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult,
         std::string secondSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& secondSynResult, ResultTable& resultTable);
     void filterResultTableLinkageSet(std::string firstSynonymName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult, std::string secondSynonymName, ResultTable& resultTable);
-    void filterOneSynWithLinkage(std::string synName, std::unordered_map<std::string, SynonymLinkageMap>& synValue, std::string linkedSynName, ResultTable& resultTable);
-    void filterOneSynLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult, std::string secondSynName, ResultTable& resultTable);
+    /*void filterOneSynWithLinkage(std::string synName, std::unordered_map<std::string, SynonymLinkageMap>& synValue, std::string linkedSynName, ResultTable& resultTable);
+    void filterOneSynLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynResult, std::string secondSynName, ResultTable& resultTable);*/
 
     void combineOneSynResult(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap>& currResult, ResultTable& resultTable);
     //void mergeResultToTable(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap>& currResult, ResultTable& resultTable);

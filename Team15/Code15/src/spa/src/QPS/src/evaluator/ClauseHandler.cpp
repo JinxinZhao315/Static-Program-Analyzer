@@ -39,9 +39,9 @@ void ClauseHandler::combineTwoSynResult(std::string firstSynName, std::unordered
     filterCurrResultLinkageSet(firstSynName, firstSynValues, secondSynName, secondSynValues, resultTable);
     filterResultTableLinkageSet(firstSynName, firstSynValues, secondSynName, resultTable);
 
-    filterOneSynWithLinkage(secondSynName, secondSynValues, firstSynName, resultTable);
+    //filterOneSynWithLinkage(secondSynName, secondSynValues, firstSynName, resultTable);
     filterResultTable(secondSynName, secondSynValues, resultTable);
-    filterOneSynLinkageSet(secondSynName, secondSynValues, firstSynName, resultTable);
+    //filterOneSynLinkageSet(secondSynName, secondSynValues, firstSynName, resultTable);
     filterResultTableLinkageSet(secondSynName, secondSynValues, firstSynName, resultTable);
     
 }
@@ -85,6 +85,7 @@ void ClauseHandler::filterResultTable(std::string currSynName, std::unordered_ma
 
 void ClauseHandler::filterCurrResultLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynValues,
     std::string secondSynName, std::unordered_map<std::string, SynonymLinkageMap>& secondSynValues, ResultTable& resultTable) {
+    std::set<std::string> synValuesToDelete;
     std::unordered_map<std::string, SynonymLinkageMap> firstSynTableValues = resultTable.getSynonymEntry(firstSynName);
     for (auto currSynValue = firstSynValues.begin(); currSynValue != firstSynValues.end(); currSynValue++) {
         SynonymLinkageMap& tableSynValueLinkageMap = resultTable.getSynonymEntry(firstSynName).at(currSynValue->first);
@@ -112,17 +113,23 @@ void ClauseHandler::filterCurrResultLinkageSet(std::string firstSynName, std::un
             for (auto linkedValue : linkageToDelete) {
                 currSynValueLinkageMap.deleteLinkage(secondSynName, linkedValue);
             }
+            if (currSynValueLinkageMap.getLinkedSynValueSet(secondSynName).size() == 0) {
+                synValuesToDelete.insert(currSynValue->first);
+            }
         }
         else if (!isTableFirstSecondSynLinked && isCurrFirstSecondSynLinked) {
             tableSynValueLinkageMap.insertNewEntry(secondSynName, currSynValueLinkageMap.getLinkedSynValueSet(secondSynName));
         }
+    }
+    for (auto synValue : synValuesToDelete) {
+        firstSynValues.erase(synValue);
     }
 }
 
 void ClauseHandler::filterResultTableLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynValues,
     std::string secondSynName, ResultTable& resultTable) {
     std::unordered_map<std::string, SynonymLinkageMap>& firstSynTableValues = resultTable.getSynonymEntry(firstSynName);
-    
+    std::set<std::string> synValuesToDelete;
     for (auto tableSynValue = firstSynTableValues.begin(); tableSynValue != firstSynTableValues.end(); tableSynValue++) {
         SynonymLinkageMap& tableSynValueLinkageMap = tableSynValue->second;
         SynonymLinkageMap& currSynValueLinkageMap = firstSynValues.at(tableSynValue->first);
@@ -137,74 +144,83 @@ void ClauseHandler::filterResultTableLinkageSet(std::string firstSynName, std::u
             std::set<std::string> synsToDelete;
             for (auto linkedTableValue : linkedSynValues) {
                 if (intersectedValues.count(linkedTableValue) == 0) {
-                    deleteLinkageInTable(secondSynName, linkedTableValue, firstSynName, tableSynValue->first, resultTable);
+                    deleteLinkageInTable(firstSynName, tableSynValue->first, secondSynName, linkedTableValue,  resultTable);
                     synsToDelete.insert(linkedTableValue);
                 }
             }
             for (auto synToDelete : synsToDelete) {
                 tableSynValueLinkageMap.deleteLinkage(secondSynName, synToDelete);
             }
-        } // TODO: Decide if there's a "else" situation to handle here?
-    }
-}
-
-void ClauseHandler::filterOneSynWithLinkage(std::string currSynName, std::unordered_map<std::string, SynonymLinkageMap>& currSynValues, std::string linkedSynName, ResultTable& resultTable) {
-    std::unordered_map<std::string, SynonymLinkageMap> tableSynValues = resultTable.getSynonymEntry(currSynName);
-    std::set<std::string> synValuesToRemove;
-    for (auto currSynValue : currSynValues) {
-        //can't find entry in table
-        if (tableSynValues.count(currSynValue.first) == 0) {
-            //since only 2 argument, first arg can only be linked to second arg
-            std::set<std::string> linkedSynValues = currSynValue.second.getLinkedSynValueSet(linkedSynName);
-            for (auto linkedSynValue : linkedSynValues) {
-                SynonymLinkageMap& tableLinkedSynMap = resultTable.getSynonymEntry(linkedSynName).at(linkedSynValue);
-                tableLinkedSynMap.deleteLinkage(currSynName, currSynValue.first);
-                    //getLinkageMap().find(currSynName)->second.erase(currSynValue.first);
-                if (tableLinkedSynMap.isEmptyLinkageSet(currSynName)) {
-                    resultTable.getSynonymEntry(linkedSynName).erase(linkedSynValue);
-                }
-            }
-            synValuesToRemove.insert(currSynValue.first);
-        }
-    }
-    for (auto synValueToRemove : synValuesToRemove) {
-        currSynValues.erase(synValueToRemove);
-    }
-}
-
-void ClauseHandler::filterOneSynLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynValues, 
-    std::string secondSynName, ResultTable &resultTable) {
-    std::unordered_map<std::string, SynonymLinkageMap> tableFirstSynValues = resultTable.getSynonymEntry(firstSynName);
-
-    for (auto currSynValue = firstSynValues.begin(); currSynValue != firstSynValues.end(); currSynValue++) {
-        SynonymLinkageMap& tableSynValueLinkageMap = resultTable.getSynonymEntry(firstSynName).at(currSynValue->first);
-        SynonymLinkageMap& currSynValueLinkageMap = currSynValue->second;
-        bool isTableFirstSecondSynLinked = !tableSynValueLinkageMap.isEmptyLinkageSet(secondSynName);
-        bool isCurrFirstSecondSynLinked = !currSynValueLinkageMap.isEmptyLinkageSet(secondSynName);
-        if (isTableFirstSecondSynLinked && isCurrFirstSecondSynLinked) {
-            std::set<std::string> intersectedValues = Utility::getSetIntersection(
-                currSynValueLinkageMap.getLinkedSynValueSet(secondSynName),
-                tableSynValueLinkageMap.getLinkedSynValueSet(secondSynName));
-            for (auto linkedSynValue : currSynValueLinkageMap.getLinkedSynValueSet(secondSynName)) {
-                if (intersectedValues.count(linkedSynValue) == 0) {
-                    currSynValueLinkageMap.deleteLinkage(secondSynName, linkedSynValue);
-                        //.getLinkageMap().find(secondSynName)->second.erase(linkedSynValue);
-                    //now we are merging arg2 into resultTable, since arg2 contains linkage with arg1 and arg1 is now merged into resultTable, 
-                    //after deleting the link in arg2, we need to go through the resultTable and delete the link there.
-                    resultTable.getSynonymEntry(secondSynName).at(linkedSynValue).deleteLinkage(firstSynName, currSynValue->first);
-                        //getLinkageMap().find(firstSynName)->second.erase(currSynValue.first);
-                    if (resultTable.getSynonymEntry(secondSynName).at(linkedSynValue).isEmptyLinkageSet(firstSynName)) {
-                        resultTable.getSynonymEntry(secondSynName).erase(linkedSynValue);
-                    }
-                }
+            if (tableSynValueLinkageMap.getLinkedSynValueSet(secondSynName).size() == 0) {
+                synValuesToDelete.insert(tableSynValue->first);
             }
         }
         else if (!isTableFirstSecondSynLinked && isCurrFirstSecondSynLinked) {
             tableSynValueLinkageMap.insertNewEntry(secondSynName, currSynValueLinkageMap.getLinkedSynValueSet(secondSynName));
-
         }
     }
+    for (auto tableSynValue : synValuesToDelete) {
+        firstSynTableValues.erase(tableSynValue);
+    }
 }
+
+//void ClauseHandler::filterOneSynWithLinkage(std::string currSynName, std::unordered_map<std::string, SynonymLinkageMap>& currSynValues, std::string linkedSynName, ResultTable& resultTable) {
+//    std::unordered_map<std::string, SynonymLinkageMap> tableSynValues = resultTable.getSynonymEntry(currSynName);
+//    std::set<std::string> synValuesToRemove;
+//    for (auto currSynValue : currSynValues) {
+//        //can't find entry in table
+//        if (tableSynValues.count(currSynValue.first) == 0) {
+//            //since only 2 argument, first arg can only be linked to second arg
+//            std::set<std::string> linkedSynValues = currSynValue.second.getLinkedSynValueSet(linkedSynName);
+//            for (auto linkedSynValue : linkedSynValues) {
+//                SynonymLinkageMap& tableLinkedSynMap = resultTable.getSynonymEntry(linkedSynName).at(linkedSynValue);
+//                tableLinkedSynMap.deleteLinkage(currSynName, currSynValue.first);
+//                    //getLinkageMap().find(currSynName)->second.erase(currSynValue.first);
+//                if (tableLinkedSynMap.isEmptyLinkageSet(currSynName)) {
+//                    resultTable.getSynonymEntry(linkedSynName).erase(linkedSynValue);
+//                }
+//            }
+//            synValuesToRemove.insert(currSynValue.first);
+//        }
+//    }
+//    for (auto synValueToRemove : synValuesToRemove) {
+//        currSynValues.erase(synValueToRemove);
+//    }
+//}
+
+//void ClauseHandler::filterOneSynLinkageSet(std::string firstSynName, std::unordered_map<std::string, SynonymLinkageMap>& firstSynValues, 
+//    std::string secondSynName, ResultTable &resultTable) {
+//    std::unordered_map<std::string, SynonymLinkageMap> tableFirstSynValues = resultTable.getSynonymEntry(firstSynName);
+//
+//    for (auto currSynValue = firstSynValues.begin(); currSynValue != firstSynValues.end(); currSynValue++) {
+//        SynonymLinkageMap& tableSynValueLinkageMap = resultTable.getSynonymEntry(firstSynName).at(currSynValue->first);
+//        SynonymLinkageMap& currSynValueLinkageMap = currSynValue->second;
+//        bool isTableFirstSecondSynLinked = !tableSynValueLinkageMap.isEmptyLinkageSet(secondSynName);
+//        bool isCurrFirstSecondSynLinked = !currSynValueLinkageMap.isEmptyLinkageSet(secondSynName);
+//        if (isTableFirstSecondSynLinked && isCurrFirstSecondSynLinked) {
+//            std::set<std::string> intersectedValues = Utility::getSetIntersection(
+//                currSynValueLinkageMap.getLinkedSynValueSet(secondSynName),
+//                tableSynValueLinkageMap.getLinkedSynValueSet(secondSynName));
+//            for (auto linkedSynValue : currSynValueLinkageMap.getLinkedSynValueSet(secondSynName)) {
+//                if (intersectedValues.count(linkedSynValue) == 0) {
+//                    currSynValueLinkageMap.deleteLinkage(secondSynName, linkedSynValue);
+//                        //.getLinkageMap().find(secondSynName)->second.erase(linkedSynValue);
+//                    //now we are merging arg2 into resultTable, since arg2 contains linkage with arg1 and arg1 is now merged into resultTable, 
+//                    //after deleting the link in arg2, we need to go through the resultTable and delete the link there.
+//                    resultTable.getSynonymEntry(secondSynName).at(linkedSynValue).deleteLinkage(firstSynName, currSynValue->first);
+//                        //getLinkageMap().find(firstSynName)->second.erase(currSynValue.first);
+//                    if (resultTable.getSynonymEntry(secondSynName).at(linkedSynValue).isEmptyLinkageSet(firstSynName)) {
+//                        resultTable.getSynonymEntry(secondSynName).erase(linkedSynValue);
+//                    }
+//                }
+//            }
+//        }
+//        else if (!isTableFirstSecondSynLinked && isCurrFirstSecondSynLinked) {
+//            tableSynValueLinkageMap.insertNewEntry(secondSynName, currSynValueLinkageMap.getLinkedSynValueSet(secondSynName));
+//
+//        }
+//    }
+//}
 
 void ClauseHandler::combineOneSynResult(std::string currSynName, std::unordered_map<std::string, SynonymLinkageMap>& currSynValues, ResultTable& resultTable) {
     if (resultTable.isSynonymPresent(currSynName)) {

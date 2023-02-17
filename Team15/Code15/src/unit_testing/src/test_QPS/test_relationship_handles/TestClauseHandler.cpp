@@ -9,13 +9,184 @@
 
 using namespace std;
 
+ResultTable resultTableGenerator(int sampleNum) {
+	ResultTable resultTable;
+	if (sampleNum == 1) {
+		SynonymLinkageMap s1Ins4LinkageMap({ { "s2", std::set<std::string>({"5", "6"})} });
+		SynonymLinkageMap s1Ins5LinkageMap({ { "s2", std::set<std::string>({"5", "6"})} });
+
+		SynonymLinkageMap s2Ins5LinkageMap({ { "s1", std::set<std::string>({"4", "5"})} });
+		SynonymLinkageMap s2Ins6LinkageMap({ { "s1", std::set<std::string>({"4", "5"})} });
+		std::unordered_map<std::string,
+			std::unordered_map<std::string, SynonymLinkageMap>> testTable = {
+				{"s1", {
+					{"4", s1Ins4LinkageMap},
+					{"5", s1Ins5LinkageMap}
+					}
+				},
+				{"s2", {
+					{"5", s2Ins5LinkageMap},
+					{"6", s2Ins6LinkageMap}
+					}
+				}
+		};
+		resultTable = ResultTable(testTable);
+	}
+	else if (sampleNum == 2) {
+		SynonymLinkageMap s1Ins4LinkageMap({ { "s2", std::set<std::string>({"5"})} });
+		SynonymLinkageMap s1Ins5LinkageMap({ 
+			{ "s2", std::set<std::string>({"6"})},
+			{ "s3", std::set<std::string>({"7"})} });
+
+		SynonymLinkageMap s2Ins5LinkageMap({ 
+			{ "s1", std::set<std::string>({"4"})},
+			{ "s3", std::set<std::string>({"7"})} });
+		SynonymLinkageMap s2Ins6LinkageMap({ { "s1", std::set<std::string>({"5"})} });
+
+		SynonymLinkageMap s2Ins7LinkageMap({ 
+			{ "s1", std::set<std::string>({"5"})},
+			{ "s2", std::set<std::string>({"5"})} });
+		std::unordered_map<std::string,
+			std::unordered_map<std::string, SynonymLinkageMap>> testTable = {
+				{"s1", {
+					{"4", s1Ins4LinkageMap},
+					{"5", s1Ins5LinkageMap}
+					}
+				},
+				{"s2", {
+					{"5", s2Ins5LinkageMap},
+					{"6", s2Ins6LinkageMap}
+					}
+				},
+				{"s3", {
+					{"7", s2Ins7LinkageMap}
+					}
+				}
+		};
+		resultTable = ResultTable(testTable);
+	}
+	else if (sampleNum == 3) {
+		SynonymLinkageMap s1Ins4LinkageMap({ { "s2", std::set<std::string>({"5", "7"})}});
+
+		SynonymLinkageMap s2Ins5LinkageMap({{ "s1", std::set<std::string>({"4"})} });
+		SynonymLinkageMap s2Ins7LinkageMap({ { "s1", std::set<std::string>({"4"})} });
+
+		std::unordered_map<std::string,
+			std::unordered_map<std::string, SynonymLinkageMap>> testTable = {
+				{"s1", {
+					{"4", s1Ins4LinkageMap}
+					}
+				},
+				{"s2", {
+					{"5", s2Ins5LinkageMap},
+					{"7", s2Ins7LinkageMap}
+					}
+				}
+		};
+		resultTable = ResultTable(testTable);
+	}
+	return resultTable;
+}
+
+Result resultGenerator(int sampleNum) {
+	Result result;
+	if (sampleNum == 1) {
+		SynonymLinkageMap currS2Ins5LinkageMap = SynonymLinkageMap();
+		SynonymLinkageMap currS2Ins6LinkageMap = SynonymLinkageMap();
+		std::unordered_map<std::string, SynonymLinkageMap> currLeftResult = {
+				{"5", currS2Ins5LinkageMap},
+				{"6", currS2Ins6LinkageMap}
+		};
+		result = Result(true, "s1", currLeftResult);
+	}
+	else if (sampleNum == 2) {
+		SynonymLinkageMap currS2Ins5LinkageMap = SynonymLinkageMap();
+		SynonymLinkageMap currS2Ins6LinkageMap = SynonymLinkageMap();
+		std::unordered_map<std::string, SynonymLinkageMap> currRightResult = {
+				{"5", currS2Ins5LinkageMap},
+				{"6", currS2Ins6LinkageMap}
+		};
+		result.setSecondArg("s1", currRightResult);
+	}
+	else if (sampleNum == 3) {
+		SynonymLinkageMap currS1Ins5LinkageMap = SynonymLinkageMap({ { "s2", std::set<std::string>({"4"})} });
+		SynonymLinkageMap currS1Ins6LinkageMap = SynonymLinkageMap({ { "s2", std::set<std::string>({"3"})} });
+		SynonymLinkageMap currS2Ins3LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"6"})} });
+		SynonymLinkageMap currS2Ins4LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"5"})} });
+		
+		std::unordered_map<std::string, SynonymLinkageMap> currLeftResult = {
+				{"5", currS1Ins5LinkageMap},
+				{"6", currS1Ins6LinkageMap}
+		};
+		std::unordered_map<std::string, SynonymLinkageMap> currRightResult = {
+				{"3", currS2Ins3LinkageMap},
+				{"4", currS2Ins4LinkageMap}
+		};
+		result = Result(true, "s1", currLeftResult, "s2", currRightResult);
+	} else if (sampleNum == 4) {
+		SynonymLinkageMap currS1Ins4LinkageMap = SynonymLinkageMap({ { "s2", std::set<std::string>({"7", "8"})}});
+		SynonymLinkageMap currS1Ins5LinkageMap = SynonymLinkageMap({ { "s2", std::set<std::string>({"6", "7"})}});
+		SynonymLinkageMap currS2Ins6LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"5"})} });
+		SynonymLinkageMap currS2Ins7LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"4", "5"})}});
+		SynonymLinkageMap currS2Ins8LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"4"})} });
+
+		std::unordered_map<std::string, SynonymLinkageMap> currLeftResult = {
+				{"4", currS1Ins4LinkageMap},
+				{"5", currS1Ins5LinkageMap}
+		};
+		std::unordered_map<std::string, SynonymLinkageMap> currRightResult = {
+				{"6", currS2Ins6LinkageMap},
+				{"7", currS2Ins7LinkageMap},
+				{"8", currS2Ins8LinkageMap}
+		};
+		result = Result(true, "s1", currLeftResult, "s2", currRightResult);
+	}
+	else if (sampleNum == 5) {
+		SynonymLinkageMap currS2Ins5LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"4"})} });
+		SynonymLinkageMap currS2Ins6LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"4"})} });
+
+		std::unordered_map<std::string, SynonymLinkageMap> currRightResult = {
+				{"5", currS2Ins5LinkageMap},
+				{"6", currS2Ins6LinkageMap}
+		};
+		result.setSecondArg("s2", currRightResult);
+	}
+	return result;
+}
+
 TEST_CASE("Test combineResult function in ClauseHandler") {
+	PKB pkb;
+	ClauseHandler clauseHandler(pkb);
 
+	ResultTable resultTable = resultTableGenerator(1);
+	Result resultLeftSyn = resultGenerator(1);
+	clauseHandler.combineResult(resultTable, resultLeftSyn);
 
+	REQUIRE(resultTable.getSynonymEntry("s1").size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s1").count("4") == 0);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("5").getLinkedSynValueSet("s2").count("4") == 0);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet("s2").count("4") == 0);
+
+	Result resultRightSyn = resultGenerator(2);
+	clauseHandler.combineResult(resultTable, resultRightSyn);
+	REQUIRE(resultTable.getSynonymEntry("s1").size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s1").count("4") == 0);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("5").getLinkedSynValueSet("s2").count("4") == 0);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet("s2").count("4") == 0);
 }
 
 TEST_CASE("Test resultTableCheckAndAdd function in ClauseHandler") {
-
+	PKB pkb;
+	pkb.addVar("x");
+	pkb.addVar("y");
+	pkb.addVar("k");
+	ClauseHandler clauseHandler(pkb);
+	ResultTable resultTable;
+	clauseHandler.resultTableCheckAndAdd("v1", resultTable, "variable");
+	REQUIRE(resultTable.getSynonymEntry("v1").size() == 3);
+	REQUIRE(resultTable.getSynonymEntry("v1").count("x") == 1);
+	REQUIRE(resultTable.getSynonymEntry("v1").count("y") == 1);
+	REQUIRE(resultTable.getSynonymEntry("v1").count("k") == 1);
 }
 
 TEST_CASE("Test combineTwoSynResult function in ClauseHandler") {
@@ -252,30 +423,96 @@ TEST_CASE("Test combineOneSynResult function in ClauseHandler 3: there are 2 ste
 	REQUIRE(resultTable.getSynonymEntry("s3").count("7") == 0);
 }
 
-
 TEST_CASE("Test filterCurrResult function in ClauseHandler") {
+	PKB pkb;
+	ClauseHandler clauseHandler(pkb);
 
+	ResultTable resultTable = resultTableGenerator(1);
+	Result result = resultGenerator(3);
+	std::string firstArgName = result.getFirstArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> firstArgVal = result.getFirstArgValue();
+	std::string secondArgName = result.getSecondArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> secondArgVal = result.getSecondArgValue();
+	clauseHandler.filterCurrResult(firstArgName, firstArgVal, secondArgName, secondArgVal, resultTable);
+	REQUIRE(firstArgVal.size() == 1);
+	REQUIRE(firstArgVal.count("6") == 0);
+	REQUIRE(secondArgVal.size() == 1);
+	REQUIRE(secondArgVal.count("3") == 0);
 }
 
 TEST_CASE("Test filterResultTable function in ClauseHandler") {
+	PKB pkb;
+	ClauseHandler clauseHandler(pkb);
 
+	ResultTable resultTable = resultTableGenerator(2);
+	Result result = resultGenerator(3);
+	std::string firstArgName = result.getFirstArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> firstArgVal = result.getFirstArgValue();
+	std::string secondArgName = result.getSecondArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> secondArgVal = result.getSecondArgValue();
+	clauseHandler.filterResultTable(firstArgName, firstArgVal, resultTable);
+	REQUIRE(resultTable.getSynonymEntry("s1").size() == 0);
+	REQUIRE(resultTable.getSynonymEntry("s2").size() == 0);
+	REQUIRE(resultTable.getSynonymEntry("s3").size() == 0);
 }
 
 TEST_CASE("Test filterCurrResultLinkageSet function in ClauseHandler") {
+	PKB pkb;
+	ClauseHandler clauseHandler(pkb);
+
+	ResultTable resultTable = resultTableGenerator(1);
+	Result result = resultGenerator(4);
+	std::string firstArgName = result.getFirstArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> firstArgVal = result.getFirstArgValue();
+	std::string secondArgName = result.getSecondArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> secondArgVal = result.getSecondArgValue();
+	clauseHandler.filterCurrResultLinkageSet(firstArgName, firstArgVal, secondArgName, secondArgVal, resultTable);
+	REQUIRE(firstArgVal.size() == 1);
+	REQUIRE(firstArgVal.at("5").getLinkedSynValueSet("s2").size() == 1);
+	REQUIRE(firstArgVal.at("5").getLinkedSynValueSet("s2").count("6") == 1);
+	REQUIRE(secondArgVal.size() == 1);
+	REQUIRE(secondArgVal.count("6") == 1);
 
 }
 
 TEST_CASE("Test filterResultTableLinkageSet function in ClauseHandler") {
+	PKB pkb;
+	ClauseHandler clauseHandler(pkb);
 
+	ResultTable resultTable = resultTableGenerator(1);
+	Result result = resultGenerator(4);
+	std::string firstArgName = result.getFirstArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> firstArgVal = result.getFirstArgValue();
+	std::string secondArgName = result.getSecondArgName();
+	std::unordered_map<std::string, SynonymLinkageMap> secondArgVal = result.getSecondArgValue();
+	clauseHandler.filterResultTableLinkageSet(firstArgName, firstArgVal, secondArgName, resultTable);
+	REQUIRE(resultTable.getSynonymEntry("s1").size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s1").at("5").getLinkedSynValueSet(secondArgName).size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s1").at("5").getLinkedSynValueSet(secondArgName).count("6") == 1);
+
+	REQUIRE(resultTable.getSynonymEntry("s2").size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet(firstArgName).size() == 1);
+	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet(firstArgName).count("5") == 1);
 }
 
-TEST_CASE("Test filterOneSynWithLinkage function in ClauseHandler") {
-
-}
-
-TEST_CASE("Test filterOneSynLinkageSet function in ClauseHandler") {
-
-}
+//TEST_CASE("Test filterOneSynWithLinkage function in ClauseHandler") {
+//	PKB pkb;
+//	ClauseHandler clauseHandler(pkb);
+//
+//	ResultTable resultTable = resultTableGenerator(3);
+//	Result result = resultGenerator(5);
+//	std::string secondArgName = result.getSecondArgName();
+//	std::unordered_map<std::string, SynonymLinkageMap> secondArgVal = result.getSecondArgValue();
+//	std::string firstArgName = "s1";
+//	clauseHandler.filterOneSynWithLinkage(secondArgName, secondArgVal, firstArgName, resultTable);
+//
+//	REQUIRE(secondArgVal.count("5") == 1);
+//	REQUIRE(secondArgVal.count("6") == 0);
+//}
+//
+//TEST_CASE("Test filterOneSynLinkageSet function in ClauseHandler") {
+//
+//}
 
 TEST_CASE("Test deleteSynTableEntry function in ClauseHandler") {
 	SynonymLinkageMap s1Ins5LinkageMap({ { "s2", {"7", "8"} } });
