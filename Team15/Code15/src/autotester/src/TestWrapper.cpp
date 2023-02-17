@@ -14,7 +14,7 @@ TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   this->pkb = PKB();
-  this->sourceProcessor = SourceProcessor()
+  this->sourceProcessor = SourceProcessor();
 }
 
 // method for parsing the SIMPLE source
