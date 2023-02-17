@@ -5,6 +5,9 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/evaluator/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/model/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/table/*.cpp"
         )
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
@@ -14,7 +17,11 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/evaluator/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/model/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/tokenizer/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/table/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
+        )
 
 add_library(spa ${srcs} ${headers})
 

@@ -1,4 +1,4 @@
-#include "PKB.h"
+#include "pkb/include/PKB.h"
 
 PKB::PKB() {
 	procTable = EntityTable<std::string>();

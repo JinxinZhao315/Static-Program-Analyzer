@@ -1,4 +1,4 @@
-#include "PatternTable.h"
+#include "pkb/include/table/PatternTable.h"
 
 PatternTable::PatternTable() = default;
 

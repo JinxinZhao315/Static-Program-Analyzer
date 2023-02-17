@@ -1,7 +1,7 @@
 #include "QPS/include/model/Query.h"
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
 #include "QPS/include/evaluator/PQLEvaluator.h"
-#include "PKB.h"
+#include "pkb/include/PKB.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "exceptions/PQLSemanticError.h"
 #include <string>

@@ -1,4 +1,4 @@
-#include "StatementTable.h"
+#include "pkb/include/table/StatementTable.h"
 
 StatementTable::StatementTable() = default;
 

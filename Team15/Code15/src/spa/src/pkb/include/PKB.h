@@ -1,10 +1,9 @@
 #pragma once
 
-#include "ProcedureTable.h"
-#include "EntityTable.h"
-#include "StatementTable.h"
-#include "AbstractionTable.h"
-#include "PatternTable.h"
+#include "pkb/include/table/EntityTable.h"
+#include "pkb/include/table/StatementTable.h"
+#include "pkb/include/table/AbstractionTable.h"
+#include "pkb/include/table/PatternTable.h"
 #include <set>
 
 using namespace std;
