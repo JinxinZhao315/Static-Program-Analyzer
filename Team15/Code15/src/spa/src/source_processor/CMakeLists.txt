@@ -9,7 +9,7 @@ set(srcs ${srcs}
         src/tokeniser/*.h
         src/extractor/*.h
         src/parser/*.h
-        src/util/*.h
+        ../util/*.h
         )
 
 set(headers ${headers}

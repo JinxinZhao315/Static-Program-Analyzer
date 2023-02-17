@@ -1,4 +1,4 @@
-#include "../../include/util/StringOperations.h"
+#include "source_processor/include/util/StringOperations.h"
 
 
 pair<vector<string>, vector<string>> getLHSandRHSofAssignStatement(vector<string> tokens) {
