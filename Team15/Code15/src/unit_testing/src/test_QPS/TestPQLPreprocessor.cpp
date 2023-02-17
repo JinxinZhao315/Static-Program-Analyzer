@@ -9,7 +9,7 @@
 
 using namespace std;
 
-TEST_CASE("PQLPreprocessor test syntax cheker 1") {
+TEST_CASE("PQLPreprocessor test syntax checker 1") {
 	try {
 		PQLPreprocessor preprocessor;
 		Query query = Query();
@@ -22,7 +22,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 1") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test 2") {
+TEST_CASE("PQLPreprocessor test syntax checker 2") {
 
     std::multimap<std::string, std::string> varTable;
     PQLPreprocessor preprocessor;
@@ -41,7 +41,7 @@ TEST_CASE("PQLPreprocessor test 2") {
 
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 2") {
+TEST_CASE("PQLPreprocessor test syntax checker 3") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -54,7 +54,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 2") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 3") {
+TEST_CASE("PQLPreprocessor test syntax checker 4") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -67,7 +67,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 3") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 4") {
+TEST_CASE("PQLPreprocessor test syntax checker 5") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -80,7 +80,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 4") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 5") {
+TEST_CASE("PQLPreprocessor test syntax checker 6") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -93,7 +93,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 5") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 6") {
+TEST_CASE("PQLPreprocessor test syntax checker 7") {
 
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -106,7 +106,7 @@ TEST_CASE("PQLPreprocessor test syntax cheker 6") {
 	}
 }
 
-TEST_CASE("PQLPreprocessor test syntax cheker 7") {
+TEST_CASE("PQLPreprocessor test syntax checker 8") {
 
 	PQLPreprocessor preprocessor;
 	Query query;

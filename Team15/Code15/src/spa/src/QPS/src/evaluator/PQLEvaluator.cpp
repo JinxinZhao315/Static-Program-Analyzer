@@ -41,6 +41,9 @@ std::string PQLEvaluator::evaluate(Query query)
             }
             followsHandler.combineResult(resultTable, result);
             if (resultTable.existSynonymWithNoValue()) {
+
+                resultTable.resetKeySetEmpty(selectedVarName);
+
                 isEarlyExit = true;
 
                 break;
@@ -74,6 +77,8 @@ std::string PQLEvaluator::evaluate(Query query)
             }
             parentHandler.combineResult(resultTable, result);
             if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
                 isEarlyExit = true;
 
                 break;
@@ -114,6 +119,8 @@ std::string PQLEvaluator::evaluate(Query query)
                 modifiesSHandler.combineResult(resultTable, result);
             }
             if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
                 isEarlyExit = true;
 
                 break;
@@ -156,6 +163,8 @@ std::string PQLEvaluator::evaluate(Query query)
             }
 
             if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
                 isEarlyExit = true;
 
                 break;
@@ -180,6 +189,8 @@ std::string PQLEvaluator::evaluate(Query query)
 
         patternHandler.combineResult(resultTable, result);
         if (resultTable.existSynonymWithNoValue()) {
+            resultTable.resetKeySetEmpty(selectedVarName);
+
             isEarlyExit = true;
 
             break;
@@ -189,7 +200,7 @@ std::string PQLEvaluator::evaluate(Query query)
     // return the values of the selected synonym in ResultTable
     std::string retStr;
     set<string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-    if (retSet.empty() || isEarlyExit)
+    if (retSet.empty())
     {
         retStr = "None";
     }

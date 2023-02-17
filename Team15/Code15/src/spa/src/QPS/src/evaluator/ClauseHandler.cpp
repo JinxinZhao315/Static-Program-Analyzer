@@ -39,7 +39,7 @@ void ClauseHandler::combineTwoSynResult(std::string firstSynName, std::unordered
     filterCurrResultLinkageSet(firstSynName, firstSynValues, secondSynName, secondSynValues, resultTable);
     filterResultTableLinkageSet(firstSynName, firstSynValues, secondSynName, resultTable);
 
-    filterOneSynToResult(secondSynName, secondSynValues, firstSynName, resultTable);
+    filterOneSynWithLinkage(secondSynName, secondSynValues, firstSynName, resultTable);
     filterResultTable(secondSynName, secondSynValues, resultTable);
     filterOneSynLinkageSet(secondSynName, secondSynValues, firstSynName, resultTable);
     filterResultTableLinkageSet(secondSynName, secondSynValues, firstSynName, resultTable);
@@ -148,7 +148,7 @@ void ClauseHandler::filterResultTableLinkageSet(std::string firstSynName, std::u
     }
 }
 
-void ClauseHandler::filterOneSynToResult(std::string currSynName, std::unordered_map<std::string, SynonymLinkageMap>& currSynValues, std::string linkedSynName, ResultTable& resultTable) {
+void ClauseHandler::filterOneSynWithLinkage(std::string currSynName, std::unordered_map<std::string, SynonymLinkageMap>& currSynValues, std::string linkedSynName, ResultTable& resultTable) {
     std::unordered_map<std::string, SynonymLinkageMap> tableSynValues = resultTable.getSynonymEntry(currSynName);
     std::set<std::string> synValuesToRemove;
     for (auto currSynValue : currSynValues) {
