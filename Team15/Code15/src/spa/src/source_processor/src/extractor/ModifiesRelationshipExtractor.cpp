@@ -3,7 +3,7 @@
 /**
  * Goes through each line of the program and checks if the line is a read, assign or is a container where modifies holds
  */
-unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program, const set<string>& variables) {
+unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program) {
     unordered_map<int, set<string>> modifiesRS;
     vector<int> stmtContainerStack;
     for (Line line: program) {

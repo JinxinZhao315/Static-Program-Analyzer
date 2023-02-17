@@ -63,7 +63,6 @@ bool isNumeric(const string& token) {
     } catch (const std::out_of_range&) {
         return false;
     }
-    }
 }
 
 void Extractor::extractConstants(Line line) {
@@ -174,20 +173,16 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
 void Extractor::extract(const vector<Line> &program) {
     extractEntities(program);
     // Call and get results of extraction
-    auto [parentsRS, parentsStarRS] = extractParentsRelationship(program);
-    auto [followsRS, followsStarRS] = extractFollowsRelationship(program);
-    auto modifiesRS = extractModifiesRS(program);
+    this->modifiesRS = extractModifiesRS(program);
+    auto [parents, parentsStar] = extractParentsRelationship(program);
+    auto [follows, followsStar] = extractFollowsRelationship(program);
     //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
-    auto assignsRS = extractAssignmentRS(program, variables);
-    auto usesRS = extractUsesRS(program, variables);
+    this->assignsRS = extractAssignmentRS(program, variables);
+    this->usesRS = extractUsesRS(program, variables);
     // Set results here
-    this->parentsRS = parentsRS;
-    this->parentsStarRS = parentsStarRS;
+    this->parentsRS = parents;
+    this->parentsStarRS = parentsStar;
 
-    this->followsRS = followsRS;
-    this->followsStarRS = followsStarRS;
-
-    this->usesRS = usesRS;
-    this->modifiesRS = modifiesRS;
-    this->assignsRS = assignsRS;
+    this->followsRS = follows;
+    this->followsStarRS = followsStar;
 }
