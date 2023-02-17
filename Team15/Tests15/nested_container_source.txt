@@ -11,11 +11,11 @@ procedure proc1 {
   c = d + e;
   while (count < 5) {
     if (a < b) then {
-        a = a + 1;
-        y = 0 + 1;
-        count = count + 1;
+      a = a + 1;
+      y = 0 + 1;
+      count = count + 1;
     } else {
-        count = count * 2;
+      count = count * 2;
     }
   }
   y = c + d + e; }
