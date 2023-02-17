@@ -11,6 +11,7 @@
 #include "../../spa/src/QPS/include/PQLDriver.h"
 //TODO: Change the path
 #include "../../spa/src/PKB.h"
+#include "../../spa/src/source_processor/include/SourceProcessor.h"
 
 class TestWrapper : public AbstractWrapper {
  public:
@@ -28,6 +29,7 @@ class TestWrapper : public AbstractWrapper {
 
 private:
     PKB pkb;
+    SourceProcessor sourceProcessor;
 };
 
 #endif
