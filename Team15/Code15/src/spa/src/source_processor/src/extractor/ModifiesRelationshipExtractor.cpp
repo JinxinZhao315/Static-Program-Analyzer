@@ -38,4 +38,5 @@ unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program) {
             modifiesRS[stmtContainerLine].insert(varName);
         }
     }
+    return modifiesRS;
 }

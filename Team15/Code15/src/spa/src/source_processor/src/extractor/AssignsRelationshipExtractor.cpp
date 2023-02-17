@@ -1,4 +1,4 @@
-#include "../../include/extractor/assignsRelationshipExtractor.h"
+#include "../../include/extractor/AssignsRelationshipExtractor.h"
 
 int precedence(string c) {
     if (c == "-" || c == "+") {
