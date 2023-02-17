@@ -33,11 +33,11 @@ public:
     unordered_map<string, set<Line>> getAssignsRS();
 
 private:
-    map<int, int> parentsRS;
-    map<int, set<int>> parentsStarRS;
+    unordered_map<int, int> parentsRS;
+    unordered_map<int, set<int>> parentsStarRS;
 
-    map<int, int> followsRS;
-    map<int, set<int>> followsStarRS;
+    unordered_map<int, int> followsRS;
+    unordered_map<int, set<int>> followsStarRS;
 
     unordered_map<int, set<string>> modifiesRS;
     unordered_map<int, set<string>> usesRS;

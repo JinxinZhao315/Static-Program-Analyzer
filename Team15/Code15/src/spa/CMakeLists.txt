@@ -36,14 +36,9 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/parser/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/util/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/parser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/extractor/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/util/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 
-add_library(spa ${srcs} ${headers} src/source_processor/src/SourceProcessor.cpp src/source_processor/src/parser/Parser.cpp src/source_processor/src/extractor/Extractor.cpp)
+add_library(spa ${srcs} ${headers})
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

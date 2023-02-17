@@ -1,7 +1,7 @@
 #include "tokeniser/Tokeniser.h"
 #include "parser/Parser.h"
 #include "extractor/Extractor.h"
-#include "PKB.h"
+#include "../../pkb/include/PKB.h"
 
 class SourceProcessor {
 private:

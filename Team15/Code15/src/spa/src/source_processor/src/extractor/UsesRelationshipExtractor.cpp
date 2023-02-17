@@ -35,8 +35,9 @@ unordered_map<int, set<string>> extractUsesRS(const vector<Line>& program, const
         }
         usesRS[currLineNumber].insert(varNames.begin(), varNames.end()); // for current line
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
-            int stmtContainerLine = stmtContainerStack.back();
-            usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
+            for (auto stmtContainerLine : stmtContainerStack) {
+                usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
+            }
         }
     }
     return usesRS;
