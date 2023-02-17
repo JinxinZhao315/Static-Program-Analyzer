@@ -6,8 +6,8 @@ PQLDriver::PQLDriver(PKB& pkb) : evaluator(pkb) {
     this->preprocessor = PQLPreprocessor();
 }
 
-std::string PQLDriver::processPQL(std::string queryStr) {
-    std::string results;
+std::set<std::string> PQLDriver::processPQL(std::string queryStr) {
+    std::set<std::string> results;
     try {
         // Call preprocessor
         Query query = preprocessor.preprocess(queryStr);
@@ -19,10 +19,10 @@ std::string PQLDriver::processPQL(std::string queryStr) {
         return results;
 
     } catch(PQLSyntaxError syntaxError) {
-        results = "SyntaxError";
+        results.insert("SyntaxError");
         return results;
     } catch(PQLSemanticError semanticError) {
-        results  = "SemanticError";
+        results.insert("SemanticError");
         return results;
     }
 

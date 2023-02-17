@@ -22,7 +22,7 @@
 class PQLEvaluator {
 public:
     PQLEvaluator(PKB& pkb);
-    std::string evaluate(Query query);
+    std::set<std::string> evaluate(Query query);
 private:
     PKB pkb;
 };
