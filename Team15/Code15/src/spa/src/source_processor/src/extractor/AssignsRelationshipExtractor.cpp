@@ -15,7 +15,7 @@ bool isOperator(string c) {
     return precedence(c) > 0;
 }
 
-bool isNumber(string num) {
+bool isNumber(const string& num) {
     try {
         stod(num);
         return true;
@@ -48,7 +48,7 @@ vector<string> convertToPostfix(vector<string> tokens, const set<string>& variab
     return result;
 }
 
-unordered_map<string, set<Line> > extractAssignmentRS(const vector<Line>& program, const set<string>& variables) {
+unordered_map<string, set<Line>> extractAssignmentRS(const vector<Line>& program, const set<string>& variables) {
     unordered_map<string, set<Line>> assignsRS;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();

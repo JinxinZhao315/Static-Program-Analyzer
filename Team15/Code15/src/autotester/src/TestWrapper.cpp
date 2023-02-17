@@ -14,15 +14,15 @@ TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   this->pkb = PKB();
-//  this->sourceProcessor = SourceProcessor();
+  this->sourceProcessor = SourceProcessor();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
-//    sourceProcessor.parseProgram(filename);
-//    sourceProcessor.printParsedProgram();
-//    sourceProcessor.extract();
+    sourceProcessor.parseProgram(filename);
+    sourceProcessor.storeDataInPKB(&this->pkb);
+    // sourceProcessor.printParsedProgram();
 }
 
 // method to evaluating a query

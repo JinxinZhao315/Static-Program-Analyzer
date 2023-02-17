@@ -17,8 +17,19 @@ void SourceProcessor::parseProgram(string fileName) {
     extract(extractedLines);
 }
 
-void SourceProcessor::storeDataInPKB() {
-    //TODO: all API calls to PKB
+void SourceProcessor::storeDataInPKB(PKB* pkb) {
+    pkb->addAllProcs(extractor->getProcedures());
+    pkb->addAllVars(extractor->getVariables());
+    pkb->addAllConsts(extractor->getConstants());
+    pkb->addAllStmtsByType(extractor->getStatements());
+    pkb->addAllFollows(extractor->getFollowsRS());
+    pkb->addAllFollowsStar(extractor->getFollowsStarRS());
+    pkb->addAllParent(extractor->getParentRS());
+    pkb->addAllParentStar(extractor->getParentStarRS());
+    pkb->addAllModifiesStmt(extractor->getModifiesRS());
+    pkb->addAllUsesStmt(extractor->getUsesRS());
+//    pkb->addPatt(); //TODO: finish this after PKB api is implemented
+//    extractor->getAssignsRS()
 }
 
 void SourceProcessor::printParsedProgram() {
@@ -32,13 +43,3 @@ void SourceProcessor::printParsedProgram() {
 void SourceProcessor::extract(const vector<Line>& program) {
     extractor->extract(program);
 }
-
-//int main() {
-//    cout << "Creating source processor" << endl;
-//    string fileName = "../../../../../../Tests15/Sample_source.txt";
-//
-//    SourceProcessor *sourceProcessor = new SourceProcessor();
-//    sourceProcessor->parseProgram(fileName);
-//    sourceProcessor->printParsedProgram(); //Optional
-//    return 0;
-//}

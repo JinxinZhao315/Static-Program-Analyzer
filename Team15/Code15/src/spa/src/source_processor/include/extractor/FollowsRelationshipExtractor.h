@@ -1,5 +1,7 @@
 #pragma once
 
-#include "Extractor.h"
+#include "CommonExtractorHeader.h"
 
-tuple<map<int, int>, map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program);
+using namespace std;
+
+tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRelationship(const vector<Line>& program);
