@@ -1,4 +1,4 @@
-#include "AssignTable.h"
+#include "pkb/include/table/AssignTable.h"
 
 AssignTable::AssignTable() = default;
 

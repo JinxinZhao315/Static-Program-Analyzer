@@ -1,4 +1,4 @@
-#include "WhileTable.h"
+#include "pkb/include/table/WhileTable.h"
 
 WhileTable::WhileTable() = default;
 

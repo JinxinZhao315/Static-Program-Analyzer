@@ -1,4 +1,4 @@
-#include "PrintTable.h"
+#include "pkb/include/table/PrintTable.h"
 
 PrintTable::PrintTable() = default;
 

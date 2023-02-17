@@ -1,4 +1,4 @@
-#include "CallTable.h"
+#include "pkb/include/table/CallTable.h"
 
 CallTable::CallTable() = default;
 

@@ -1,4 +1,4 @@
-#include "IfTable.h"
+#include "pkb/include/table/IfTable.h"
 
 IfTable::IfTable() = default;
 

@@ -1,4 +1,4 @@
-#include "UsesProcedureTable.h"
+#include "pkb/include/table/UsesProcedureTable.h"
 
 UsesProcedureTable::UsesProcedureTable() = default;
 

@@ -1,4 +1,4 @@
-#include "FollowsTable.h"
+#include "pkb/include/table/FollowsTable.h"
 
 FollowsTable::FollowsTable() = default;
 

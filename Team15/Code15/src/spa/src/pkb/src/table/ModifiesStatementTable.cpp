@@ -1,4 +1,4 @@
-#include "ModifiesStatementTable.h"
+#include "pkb/include/table/ModifiesStatementTable.h"
 
 ModifiesStatementTable::ModifiesStatementTable() = default;
 

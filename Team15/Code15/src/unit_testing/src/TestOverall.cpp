@@ -1,4 +1,4 @@
-#include "PKB.h"
+#include "pkb/include/PKB.h"
 #include "QPS/include/evaluator/PQLEvaluator.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"

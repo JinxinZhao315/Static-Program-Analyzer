@@ -1,5 +1,5 @@
 #include "QPS/include/model/Query.h"
-#include "PKB.h"
+#include "pkb/include/PKB.h"
 
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"

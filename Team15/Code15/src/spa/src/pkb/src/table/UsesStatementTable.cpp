@@ -1,4 +1,4 @@
-#include "UsesStatementTable.h"
+#include "pkb/include/table/UsesStatementTable.h"
 
 UsesStatementTable::UsesStatementTable() = default;
 
