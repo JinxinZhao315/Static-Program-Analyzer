@@ -14,6 +14,7 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
             followsRS = unordered_map<int, int>(tempFollows.begin(), tempFollows.end());
             parent.clear();
             tempFollows.clear();
+            v.clear();
             continue;
         }
         // keep track of which block curr line is in

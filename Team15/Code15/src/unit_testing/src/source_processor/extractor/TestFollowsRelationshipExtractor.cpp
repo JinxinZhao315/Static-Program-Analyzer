@@ -55,7 +55,7 @@ TEST_CASE("extractFollowsRelationship_withBothWhileAndIf") {
 TEST_CASE("extractFollowsRelationship_superNested") {
     auto [result, result2] = extractFollowsRelationship(superNested);
     unordered_map<int, int> expectedFollows = {{1,2},{2,3},{3,4},{5,14},{8,9}};
-    unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4,14}},{2,{3,4,14}},{3,{4,14}},{5,{14}},{8,{9}}};
+    unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4}},{2,{3,4}},{3,{4}},{5,{14}},{8,{9}}};
     REQUIRE(result == expectedFollows);
     REQUIRE(result2 == expectedFollowsStar);
 }

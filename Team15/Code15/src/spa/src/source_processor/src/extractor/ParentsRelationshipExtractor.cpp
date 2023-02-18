@@ -8,7 +8,7 @@ tuple<unordered_map<int, set<int>>, unordered_map<int, set<int> >> extractParent
         int currLineNumber = line.getLineNumber();
         string lineType = line.getType();
         if (lineType == "procedure") {
-//            parent.clear();
+            v.clear();
             continue;
         }
         // keep track of which block curr line is in
