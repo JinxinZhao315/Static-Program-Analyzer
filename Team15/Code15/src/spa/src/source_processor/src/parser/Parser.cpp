@@ -1,4 +1,5 @@
 #include "source_processor/include/parser/Parser.h"
+#include <regex>
 
 using namespace std;
 
@@ -27,7 +28,10 @@ void Parser::parseProgram(const string& fileName) {
 }
 
 void Parser::removeWhiteSpaces(string &str) {
-    str.erase (remove (str.begin(), str.end(), ' '), str.end());
+    regex pattern("\\s+");
+    string result = regex_replace(str, pattern, " ");
+    str = result;
+    str.erase(remove(str.begin(), str.end(), ';'), str.end());
 }
 
 vector<string> Parser::separateLines(string str) {
