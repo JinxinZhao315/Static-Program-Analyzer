@@ -1,5 +1,4 @@
 #include "source_processor/include/extractor/ConstantExtractor.h"
-#include "common/include/models/Line.h"
 
 bool isNumeric(const string& token) {
     try {

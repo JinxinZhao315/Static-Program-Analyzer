@@ -38,5 +38,5 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
             if (isSameBlock) followsStarRS[firstLineNumber].insert(secondLineNumber);
         }
     }
-    return tuple(followsRS, followsStarRS);
+    return make_tuple(followsRS, followsStarRS);
 }
