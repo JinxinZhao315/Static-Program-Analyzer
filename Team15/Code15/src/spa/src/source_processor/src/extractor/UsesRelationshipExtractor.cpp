@@ -1,4 +1,4 @@
-#include "../../include/extractor/UsesRelationshipExtractor.h"
+#include "source_processor/include/extractor/UsesRelationshipExtractor.h"
 
 /**
  * Goes through each line of the program and checks if the line is a read, assign or is a container where modifies holds
@@ -35,8 +35,10 @@ unordered_map<int, set<string>> extractUsesRS(const vector<Line>& program, const
         }
         usesRS[currLineNumber].insert(varNames.begin(), varNames.end()); // for current line
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
-            int stmtContainerLine = stmtContainerStack.back();
-            usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
+            for (auto stmtContainerLine : stmtContainerStack) {
+                usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
+            }
         }
     }
+    return usesRS;
 }

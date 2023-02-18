@@ -24,5 +24,5 @@ public:
 
 private:
 	std::set<int> statementTable;
-	std::unordered_map<string, std::set<int>> statementByTypeTable;
+	std::unordered_map<string, std::set<int> > statementByTypeTable;
 };

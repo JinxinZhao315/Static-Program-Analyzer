@@ -1,4 +1,4 @@
-#include "../../include/extractor/Extractor.h"
+#include "source_processor/include/extractor/Extractor.h"
 
 Extractor::Extractor() {
     statements["while"] = {};
@@ -13,7 +13,7 @@ set<string> Extractor::getVariables() {
     return variables;
 }
 
-vector<string> Extractor::getConstants() {
+set<string> Extractor::getConstants() {
     return constants;
 }
 
@@ -21,7 +21,7 @@ set<string> Extractor::getProcedures() {
     return procedures;
 }
 
-map<string, vector<int>> Extractor::getStatements() {
+unordered_map<string, set<int>> Extractor::getStatements() {
     return statements;
 }
 
@@ -50,50 +50,52 @@ string findProcedureName(vector<string> tokens) {
 void Extractor::extractProcedure(Line line) {
     vector<string> tokens = line.getTokens();
     string procedureName = findProcedureName(tokens);
-    set<string>* procedures = &this->procedures;
-    procedures->insert(procedureName);
+    set<string>* p = &this->procedures;
+    p->insert(procedureName);
 }
 
-bool isNumeric(string token) {
+bool isNumeric(const string& token) {
     try {
         stoi(token);
         return true;
-    } catch (exception) {
+    } catch (const std::invalid_argument&) {
+        return false;
+    } catch (const std::out_of_range&) {
         return false;
     }
 }
 
 void Extractor::extractConstants(Line line) {
     vector<string> tokens = line.getTokens();
-    vector<string> *constants = &this->constants;
+    set<string> *c = &this->constants;
     for (auto token = begin(tokens); token != end(tokens); token++) {
         if (isNumeric(*token)) {
-            constants->push_back(*token);
+            c->insert(*token);
         }
     }
 }
 
-void insertLineNumber(map<string, vector<int>>* statements, string* type, int* lineNumber) {
-    statements->at(*type).push_back(*lineNumber);
+void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
+    statements->at(*type).insert(*lineNumber);
 }
 
 void Extractor::extractStatement(Line line) {
     vector<string> tokens = line.getTokens();
     string type = line.getType();
     int lineNumber = line.getLineNumber();
-    map<string, vector<int>> *statements = &this->statements;
-    insertLineNumber(statements, &type, &lineNumber);
+    unordered_map<string, set<int>> *stmt = &this->statements;
+    insertLineNumber(stmt, &type, &lineNumber);
     if(type == "=") {
         extractVariables(line);
     }
 }
 
 void Extractor::extractVariables(Line line) {
-    set<string>* variables = &this->variables;
+    set<string>* v = &this->variables;
     vector<string> tokens = line.getTokens();
     for(auto token = begin(tokens); token != end(tokens); token++) {
         if(*token == "=" && token != begin(tokens)) {
-            variables->insert(*(prev(token)));
+            v->insert(*(prev(token)));
         }
     }
 }
@@ -112,20 +114,20 @@ void Extractor::extractEntities(const vector<Line> &program) {
 
 void Extractor::printEntities() {
     cout << "Procedures: " << endl;
-    for(auto procedure: this->procedures) {
+    for(const auto& procedure: this->procedures) {
         cout << procedure << " ";
     }
     cout << endl << endl;
 
     cout << "Variables: " << endl;
-    for(auto variable: this->variables) {
+    for(const auto& variable: this->variables) {
         cout << variable << " ";
     }
     cout << endl << endl;
 
     cout << "Constants: " << endl;
-    for(auto constants: this->constants) {
-        cout << constants << " ";
+    for(const auto& c: this->constants) {
+        cout << c << " ";
     }
     cout << endl << endl;
 
@@ -140,19 +142,47 @@ void Extractor::printEntities() {
     cout << endl;
 }
 
+unordered_map<int, int> Extractor::getFollowsRS() {
+    return this->followsRS;
+}
+
+unordered_map<int, set<int>> Extractor::getFollowsStarRS() {
+    return this->followsStarRS;
+}
+
+unordered_map<int, int> Extractor::getParentRS() {
+    return this->parentsRS;
+}
+
+unordered_map<int, set<int>> Extractor::getParentStarRS() {
+    return this->parentsStarRS;
+}
+
+unordered_map<int, set<string>> Extractor::getModifiesRS() {
+    return this->modifiesRS;
+}
+
+unordered_map<int, set<string>> Extractor::getUsesRS() {
+    return this->usesRS;
+}
+
+unordered_map<string, set<Line>> Extractor::getAssignsRS() {
+    return this->assignsRS;
+}
+
 void Extractor::extract(const vector<Line> &program) {
     extractEntities(program);
     // Call and get results of extraction
-    auto [parentsRS, parentsStarRS] = extractParentsRelationship(program);
-    auto [followsRS, followsStarRS] = extractFollowsRelationship(program);
-    auto modifiesRS = extractModifiesRS(program);
+    this->modifiesRS = extractModifiesRS(program);
+    auto [parents, parentsStar] = extractParentsRelationship(program);
+    auto [follows, followsStar] = extractFollowsRelationship(program);
     //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
-    auto assignsRS = extractAssignmentRS(program, variables);
-    auto usesRS = extractUsesRS(program, variables);
+    this->assignsRS = extractAssignmentRS(program, variables);
+    this->usesRS = extractUsesRS(program, variables);
     // Set results here
-    this->parentsRS = parentsRS;
-    this->parentsStarRS = parentsStarRS;
+    this->parentsRS = parents;
+    this->parentsStarRS = parentsStar;
 
-    this->followsRS = followsRS;
-    this->followsStarRS = followsStarRS;
+    this->followsRS = follows;
+    this->followsStarRS = followsStar;
 }

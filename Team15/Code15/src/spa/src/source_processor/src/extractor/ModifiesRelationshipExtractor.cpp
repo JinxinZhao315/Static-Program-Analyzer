@@ -1,5 +1,4 @@
-#include "../../include/extractor/ModifiesRelationshipExtractor.h"
-#include "../../include/util/StringOperations.h"
+#include "source_processor/include/extractor/ModifiesRelationshipExtractor.h"
 
 /**
  * Goes through each line of the program and checks if the line is a read, assign or is a container where modifies holds
@@ -34,8 +33,10 @@ unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program) {
         }
         modifiesRS[currLineNumber].insert(varName); // for current line
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
-            int stmtContainerLine = stmtContainerStack.back();
-            modifiesRS[stmtContainerLine].insert(varName);
+            for (auto stmtContainerLine : stmtContainerStack) {
+                modifiesRS[stmtContainerLine].insert(varName);
+            }
         }
     }
+    return modifiesRS;
 }

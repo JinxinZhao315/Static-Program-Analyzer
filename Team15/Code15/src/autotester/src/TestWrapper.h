@@ -28,7 +28,7 @@ class TestWrapper : public AbstractWrapper {
 
  private:
   PKB pkb;
-  //SourceProcessor sourceProcessor;
+  SourceProcessor sourceProcessor;
 };
 
 #endif

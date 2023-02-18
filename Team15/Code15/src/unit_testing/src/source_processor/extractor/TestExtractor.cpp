@@ -1,7 +1,7 @@
-#include "TestExtractor.h"
+#include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test case 1") {
-    cout << "Test";
-}
+//TEST_CASE("Test case 1") {
+//    cout << "Test";
+//}

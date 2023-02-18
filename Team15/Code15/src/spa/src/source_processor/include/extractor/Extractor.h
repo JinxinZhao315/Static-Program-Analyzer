@@ -1,23 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <string>
-#include <stack>
-#include <stdio.h>
-#include <iostream>
-#include <utility>
-#include "../parser/Line.h"
-#include "../util/StringOperations.h"
+#include "CommonExtractorHeader.h"
 #include "FollowsRelationshipExtractor.h"
 #include "ParentsRelationshipExtractor.h"
 #include "ModifiesRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
 #include "UsesRelationshipExtractor.h"
-
-using namespace std;
 
 class Extractor {
 public:
@@ -25,24 +13,38 @@ public:
     void extractEntities(const vector<Line> &program);
     void extract(const vector<Line>& program);
     set<string> getVariables();
-    vector<string> getConstants();
+    set<string> getConstants();
     set<string> getProcedures();
-    map<string, vector<int>> getStatements();
+    unordered_map<string, set<int>> getStatements();
     void extractProcedure(Line line);
     void extractConstants(Line line);
     void extractStatement(Line line);
     void extractVariables(Line line);
     void printEntities();
 
-private:
-    map<int, int> parentsRS;
-    map<int, set<int> > parentsStarRS;
+    unordered_map<int, int> getFollowsRS();
+    unordered_map<int, set<int>> getFollowsStarRS();
 
-    map<int, int> followsRS;
-    map<int, set<int> > followsStarRS;
+    unordered_map<int, int> getParentRS();
+    unordered_map<int, set<int>> getParentStarRS();
+
+    unordered_map<int, set<string>> getModifiesRS();
+    unordered_map<int, set<string>> getUsesRS();
+    unordered_map<string, set<Line>> getAssignsRS();
+
+private:
+    unordered_map<int, int> parentsRS;
+    unordered_map<int, set<int>> parentsStarRS;
+
+    unordered_map<int, int> followsRS;
+    unordered_map<int, set<int>> followsStarRS;
+
+    unordered_map<int, set<string>> modifiesRS;
+    unordered_map<int, set<string>> usesRS;
+    unordered_map<string, set<Line>> assignsRS;
 
     set<string> variables;
-    vector<string> constants;
+    set<string> constants;
     set<string> procedures;
-    map<string, vector<int>> statements;
+    unordered_map<string, set<int>> statements;
 };

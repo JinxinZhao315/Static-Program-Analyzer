@@ -5,7 +5,7 @@
 #include <string>
 #include <regex>
 #include <algorithm>
-#include "../parser/Line.h"
+#include "common/include/models/Line.h"
 
 using namespace std;
 
