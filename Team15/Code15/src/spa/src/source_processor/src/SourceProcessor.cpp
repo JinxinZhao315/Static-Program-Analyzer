@@ -12,7 +12,7 @@ SourceProcessor::SourceProcessor() {
 
 void SourceProcessor::parseProgram(string fileName) {
     parser->parseProgram(fileName);
-    tokeniser->feedLines(fileName);
+    tokeniser->feedLines(parser->getParsedProgram());
     vector<Line> extractedLines = tokeniser->getExtractedLines();
     extract(extractedLines);
 }
