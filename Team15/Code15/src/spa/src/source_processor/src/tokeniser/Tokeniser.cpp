@@ -120,7 +120,7 @@ string findKeyword(vector<string>* line, vector<string>* keywords) {
 }
 
 bool checkKeywordHasLineNumber(string keyword) {
-    return !(keyword == "procedure" || keyword == "else");
+    return !(keyword == "procedure" || keyword == "else" || keyword == "}");
 }
 
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
