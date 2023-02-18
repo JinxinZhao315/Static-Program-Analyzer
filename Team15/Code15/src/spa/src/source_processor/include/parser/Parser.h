@@ -12,11 +12,11 @@ using namespace std;
 class Parser {
 public:
     Parser() {}
-    void parseProgram(string fileName);
+    void parseProgram(const string& fileName);
     void printParsedProgram();
     vector<string> getParsedProgram();
 private:
     vector<string> parsedFile;
-    vector<string> separateLines(string str);
-    void removeWhiteSpaces(string &str);
+    static vector<string> separateLines(string str);
+    static void removeWhiteSpaces(string &str);
 };
