@@ -77,6 +77,8 @@ public:
 	//SP pattern
 	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
 
+	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
 
