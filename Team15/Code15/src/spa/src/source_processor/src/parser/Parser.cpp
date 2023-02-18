@@ -31,7 +31,6 @@ void Parser::removeWhiteSpaces(string &str) {
     regex pattern("\\s+");
     string result = regex_replace(str, pattern, " ");
     str = result;
-    str.erase(remove(str.begin(), str.end(), ';'), str.end());
 }
 
 vector<string> Parser::separateLines(string str) {
