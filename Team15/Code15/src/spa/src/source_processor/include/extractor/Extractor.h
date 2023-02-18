@@ -6,6 +6,9 @@
 #include "ModifiesRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
 #include "UsesRelationshipExtractor.h"
+#include "ConstantExtractor.h"
+#include "ProcedureExtractor.h"
+#include "StatementExtractor.h"
 
 class Extractor {
 public:
@@ -16,10 +19,6 @@ public:
     set<string> getConstants();
     set<string> getProcedures();
     unordered_map<string, set<int>> getStatements();
-    void extractProcedure(Line line);
-    void extractConstants(Line line);
-    void extractStatement(Line line);
-    void extractVariables(Line line);
     void printEntities();
 
     unordered_map<int, int> getFollowsRS();
@@ -32,6 +31,7 @@ public:
     unordered_map<int, set<string>> getUsesRS();
     unordered_map<string, set<Line>> getAssignsRS();
 
+
 private:
     unordered_map<int, int> parentsRS;
     unordered_map<int, set<int>> parentsStarRS;
@@ -43,8 +43,7 @@ private:
     unordered_map<int, set<string>> usesRS;
     unordered_map<string, set<Line>> assignsRS;
 
-    set<string> variables;
-    set<string> constants;
-    set<string> procedures;
-    unordered_map<string, set<int>> statements;
+    ConstantExtractor* constantExtractor;
+    ProcedureExtractor* procedureExtractor;
+    StatementExtractor* statementExtractor;
 };

@@ -1,28 +1,25 @@
 #include "source_processor/include/extractor/Extractor.h"
 
 Extractor::Extractor() {
-    statements["while"] = {};
-    statements["if"] = {};
-    statements["read"] = {};
-    statements["print"] = {};
-    statements["call"] = {};
-    statements["="] = {};
+    constantExtractor = new ConstantExtractor();
+    procedureExtractor = new ProcedureExtractor();
+    statementExtractor = new StatementExtractor();
 }
 
 set<string> Extractor::getVariables() {
-    return variables;
+    return statementExtractor->getVariables();
 }
 
 set<string> Extractor::getConstants() {
-    return constants;
+    return constantExtractor->getConstants();
 }
 
 set<string> Extractor::getProcedures() {
-    return procedures;
+    return procedureExtractor->getProcedures();
 }
 
 unordered_map<string, set<int>> Extractor::getStatements() {
-    return statements;
+    return statementExtractor->getStatements();
 }
 
 bool isProcedure(Line line) {
@@ -38,101 +35,39 @@ bool isStatement(Line line) {
         || line.getType() == "=";
 }
 
-string findProcedureName(vector<string> tokens) {
-    for(auto token = begin(tokens); token != end(tokens); token++) {
-        if(*token == "procedure") {
-            return *(next(token));
-        }
-    }
-    return "";
-}
-
-void Extractor::extractProcedure(Line line) {
-    vector<string> tokens = line.getTokens();
-    string procedureName = findProcedureName(tokens);
-    set<string>* p = &this->procedures;
-    p->insert(procedureName);
-}
-
-bool isNumeric(const string& token) {
-    try {
-        stoi(token);
-        return true;
-    } catch (const std::invalid_argument&) {
-        return false;
-    } catch (const std::out_of_range&) {
-        return false;
-    }
-}
-
-void Extractor::extractConstants(Line line) {
-    vector<string> tokens = line.getTokens();
-    set<string> *c = &this->constants;
-    for (auto token = begin(tokens); token != end(tokens); token++) {
-        if (isNumeric(*token)) {
-            c->insert(*token);
-        }
-    }
-}
-
-void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
-    statements->at(*type).insert(*lineNumber);
-}
-
-void Extractor::extractStatement(Line line) {
-    vector<string> tokens = line.getTokens();
-    string type = line.getType();
-    int lineNumber = line.getLineNumber();
-    unordered_map<string, set<int>> *stmt = &this->statements;
-    insertLineNumber(stmt, &type, &lineNumber);
-    if(type == "=") {
-        extractVariables(line);
-    }
-}
-
-void Extractor::extractVariables(Line line) {
-    set<string>* v = &this->variables;
-    vector<string> tokens = line.getTokens();
-    for(auto token = begin(tokens); token != end(tokens); token++) {
-        if(*token == "=" && token != begin(tokens)) {
-            v->insert(*(prev(token)));
-        }
-    }
-}
-
 void Extractor::extractEntities(const vector<Line> &program) {
     for(auto line: program) {
         string type = line.getType();
         if(isProcedure(line)) {
-            extractProcedure(line);
+            procedureExtractor->extractProcedures(line);
         } if (isStatement(line)) {
-            extractStatement(line);
+            statementExtractor->extractStatements(line);
         }
-        extractConstants(line);
+        constantExtractor->extractConstants(line);
     }
 }
 
 void Extractor::printEntities() {
     cout << "Procedures: " << endl;
-    for(const auto& procedure: this->procedures) {
+    for(const auto& procedure: procedureExtractor->getProcedures()) {
         cout << procedure << " ";
     }
     cout << endl << endl;
 
     cout << "Variables: " << endl;
-    for(const auto& variable: this->variables) {
+    for(const auto& variable: statementExtractor->getVariables()) {
         cout << variable << " ";
     }
     cout << endl << endl;
 
     cout << "Constants: " << endl;
-    for(const auto& c: this->constants) {
+    for(const auto& c: constantExtractor->getConstants()) {
         cout << c << " ";
     }
     cout << endl << endl;
 
     cout << "Statements: " << endl;
-    for(auto[key, value] : this->statements) {
+    for(auto[key, value] : statementExtractor->getStatements()) {
         cout << "Statement type " << key << ": ";
         for(auto i : value) {
             cout << i << " ";
@@ -177,8 +112,8 @@ void Extractor::extract(const vector<Line> &program) {
     auto [parents, parentsStar] = extractParentsRelationship(program);
     auto [follows, followsStar] = extractFollowsRelationship(program);
     //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
-    this->assignsRS = extractAssignmentRS(program, variables);
-    this->usesRS = extractUsesRS(program, variables);
+    this->assignsRS = extractAssignmentRS(program, statementExtractor->getVariables());
+    this->usesRS = extractUsesRS(program, statementExtractor->getVariables());
     // Set results here
     this->parentsRS = parents;
     this->parentsStarRS = parentsStar;
