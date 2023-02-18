@@ -8,7 +8,6 @@ class ConstantExtractor {
 private:
     set<string> constants;
 public:
-    ConstantExtractor();
     set<string> getConstants();
     void extractConstants(Line line);
 };

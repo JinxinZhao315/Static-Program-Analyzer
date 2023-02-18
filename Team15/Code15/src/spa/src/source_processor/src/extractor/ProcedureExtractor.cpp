@@ -15,3 +15,7 @@ void ProcedureExtractor::extractProcedures(Line line) {
     set<string>* p = &this->procedures;
     p->insert(procedureName);
 }
+
+set<string> ProcedureExtractor::getProcedures() {
+    return procedures;
+}

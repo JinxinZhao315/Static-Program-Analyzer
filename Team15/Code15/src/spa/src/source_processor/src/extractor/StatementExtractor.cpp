@@ -33,3 +33,11 @@ void StatementExtractor::extractStatements(Line line) {
         extractVariables(line);
     }
 }
+
+unordered_map<string, set<int>> StatementExtractor::getStatements() {
+    return statements;
+}
+
+set<string> StatementExtractor::getVariables() {
+    return variables;
+}

@@ -7,7 +7,6 @@
 #include "AssignsRelationshipExtractor.h"
 #include "UsesRelationshipExtractor.h"
 #include "ConstantExtractor.h"
-#include "VariableExtractor.h"
 #include "ProcedureExtractor.h"
 #include "StatementExtractor.h"
 

@@ -8,7 +8,6 @@ class ProcedureExtractor {
 private:
     set<string> procedures;
 public:
-    ProcedureExtractor();
     set<string> getProcedures();
     void extractProcedures(Line line);
 };

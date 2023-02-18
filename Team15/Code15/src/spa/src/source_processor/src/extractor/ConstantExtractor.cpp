@@ -21,3 +21,7 @@ void ConstantExtractor::extractConstants(Line line) {
         }
     }
 }
+
+set<string> ConstantExtractor::getConstants() {
+    return constants;
+}
