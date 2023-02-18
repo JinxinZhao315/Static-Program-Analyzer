@@ -3,8 +3,8 @@ project(spa)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/src/models/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/src/utils/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/*.cpp"
