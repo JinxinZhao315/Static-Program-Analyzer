@@ -42,12 +42,20 @@ TEST_CASE("extractFollowsRelationship_withIfElseStatementBeforeAndAfter") {
     REQUIRE(result2 == expectedFollowsStar);
 }
 
-TEST_CASE("extractFollowsRelationship_withNesting") {
+TEST_CASE("extractFollowsRelationship_withBothWhileAndIf") {
     auto [result, result2] = extractFollowsRelationship(computeCentroid);
     unordered_map<int, int> expectedFollows = {{1,2}, {2,3}, {3,4}, {4,5}, {6,7}, {7,8},
                                                {8,9}, {5,10}, {10,14}, {12,13}};
     unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4,5,10,14}},{2,{3,4,5,10,14}},{3,{4,5,10,14}},
         {4,{5,10,14}},{5,{10,14}},{6,{7,8,9}},{7,{8,9}},{8,{9}},{10,{14}},{12,{13}}};
+    REQUIRE(result == expectedFollows);
+    REQUIRE(result2 == expectedFollowsStar);
+}
+
+TEST_CASE("extractFollowsRelationship_superNested") {
+    auto [result, result2] = extractFollowsRelationship(superNested);
+    unordered_map<int, int> expectedFollows = {{1,2},{2,3},{3,4},{5,14},{8,9}};
+    unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4,14}},{2,{3,4,14}},{3,{4,14}},{5,{14}},{8,{9}}};
     REQUIRE(result == expectedFollows);
     REQUIRE(result2 == expectedFollowsStar);
 }

@@ -24,7 +24,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         )
 
 
-add_executable(unit_testing ${srcs})
+add_executable(unit_testing ${srcs} src/source_processor/extractor/Constants.cpp)
 
 target_link_libraries(unit_testing spa)
 
