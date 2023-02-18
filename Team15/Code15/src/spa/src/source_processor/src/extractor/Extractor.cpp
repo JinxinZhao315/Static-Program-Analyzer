@@ -1,73 +1,44 @@
 #include "source_processor/include/extractor/Extractor.h"
 
-Extractor::Extractor() {
-    constantExtractor = new ConstantExtractor();
-    procedureExtractor = new ProcedureExtractor();
-    statementExtractor = new StatementExtractor();
-}
+Extractor::Extractor() {}
 
 set<string> Extractor::getVariables() {
-    return statementExtractor->getVariables();
+    return variables;
 }
 
 set<string> Extractor::getConstants() {
-    return constantExtractor->getConstants();
+    return constants;
 }
 
 set<string> Extractor::getProcedures() {
-    return procedureExtractor->getProcedures();
+    return procedures;
 }
 
 unordered_map<string, set<int>> Extractor::getStatements() {
-    return statementExtractor->getStatements();
-}
-
-bool isProcedure(Line line) {
-    return line.getType() == "procedure";
-}
-
-bool isStatement(Line line) {
-    return line.getType() == "read"
-        || line.getType() == "print"
-        || line.getType() == "call"
-        || line.getType() == "while"
-        || line.getType() == "if"
-        || line.getType() == "=";
-}
-
-void Extractor::extractEntities(const vector<Line> &program) {
-    for(auto line: program) {
-        string type = line.getType();
-        if(isProcedure(line)) {
-            procedureExtractor->extractProcedures(line);
-        } if (isStatement(line)) {
-            statementExtractor->extractStatements(line);
-        }
-        constantExtractor->extractConstants(line);
-    }
+    return statements;
 }
 
 void Extractor::printEntities() {
     cout << "Procedures: " << endl;
-    for(const auto& procedure: procedureExtractor->getProcedures()) {
+    for(const auto& procedure: procedures) {
         cout << procedure << " ";
     }
     cout << endl << endl;
 
     cout << "Variables: " << endl;
-    for(const auto& variable: statementExtractor->getVariables()) {
+    for(const auto& variable: variables) {
         cout << variable << " ";
     }
     cout << endl << endl;
 
     cout << "Constants: " << endl;
-    for(const auto& c: constantExtractor->getConstants()) {
+    for(const auto& c: constants) {
         cout << c << " ";
     }
     cout << endl << endl;
 
     cout << "Statements: " << endl;
-    for(auto[key, value] : statementExtractor->getStatements()) {
+    for(auto[key, value] : statements) {
         cout << "Statement type " << key << ": ";
         for(auto i : value) {
             cout << i << " ";
@@ -106,14 +77,17 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
 }
 
 void Extractor::extract(const vector<Line> &program) {
-    extractEntities(program);
+    this->constants = extractConstants(program);
+    this->statements = extractStatements(program);
+    this->variables = extractVariables(program);
+    this->procedures = extractProcedures(program);
     // Call and get results of extraction
     this->modifiesRS = extractModifiesRS(program);
     auto [parents, parentsStar] = extractParentsRelationship(program);
     auto [follows, followsStar] = extractFollowsRelationship(program);
     //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
-    this->assignsRS = extractAssignmentRS(program, statementExtractor->getVariables());
-    this->usesRS = extractUsesRS(program, statementExtractor->getVariables());
+    this->assignsRS = extractAssignmentRS(program, variables);
+    this->usesRS = extractUsesRS(program, variables);
     // Set results here
     this->parentsRS = parents;
     this->parentsStarRS = parentsStar;

@@ -12,16 +12,16 @@ bool isNumeric(const string& token) {
     }
 }
 
-void ConstantExtractor::extractConstants(Line line) {
-    vector<string> tokens = line.getTokens();
-    set<string> *c = &this->constants;
-    for (auto token = begin(tokens); token != end(tokens); token++) {
-        if (isNumeric(*token)) {
-            c->insert(*token);
+set<string> extractConstants(const vector<Line>& program) {
+    set<string> constants;
+    for(auto line: program) {
+        vector<string> tokens = line.getTokens();
+        set<string> *c = &constants;
+        for (auto token = begin(tokens); token != end(tokens); token++) {
+            if (isNumeric(*token)) {
+                c->insert(*token);
+            }
         }
     }
-}
-
-set<string> ConstantExtractor::getConstants() {
     return constants;
 }

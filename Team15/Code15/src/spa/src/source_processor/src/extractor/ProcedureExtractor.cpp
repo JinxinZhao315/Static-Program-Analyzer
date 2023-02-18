@@ -9,13 +9,19 @@ string findProcedureName(vector<string> tokens) {
     return "";
 }
 
-void ProcedureExtractor::extractProcedures(Line line) {
-    vector<string> tokens = line.getTokens();
-    string procedureName = findProcedureName(tokens);
-    set<string>* p = &this->procedures;
-    p->insert(procedureName);
+bool isProcedure(Line line) {
+    return line.getType() == "procedure";
 }
 
-set<string> ProcedureExtractor::getProcedures() {
+set<string> extractProcedures(const vector<Line>& program) {
+    set<string> procedures;
+    for(auto line: program) {
+        vector<string> tokens = line.getTokens();
+        set<string> *p = &procedures;
+        if(isProcedure(line)) {
+            string procedureName = findProcedureName(tokens);
+            p->insert(procedureName);
+        }
+    }
     return procedures;
-}
+};

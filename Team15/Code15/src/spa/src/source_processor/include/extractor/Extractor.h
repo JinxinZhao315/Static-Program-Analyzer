@@ -8,12 +8,12 @@
 #include "UsesRelationshipExtractor.h"
 #include "ConstantExtractor.h"
 #include "ProcedureExtractor.h"
+#include "VariableExtractor.h"
 #include "StatementExtractor.h"
 
 class Extractor {
 public:
     Extractor();
-    void extractEntities(const vector<Line> &program);
     void extract(const vector<Line>& program);
     set<string> getVariables();
     set<string> getConstants();
@@ -43,7 +43,8 @@ private:
     unordered_map<int, set<string>> usesRS;
     unordered_map<string, set<Line>> assignsRS;
 
-    ConstantExtractor* constantExtractor;
-    ProcedureExtractor* procedureExtractor;
-    StatementExtractor* statementExtractor;
+    set<string> procedures;
+    set<string> constants;
+    set<string> variables;
+    unordered_map<string, set<int>> statements;
 };

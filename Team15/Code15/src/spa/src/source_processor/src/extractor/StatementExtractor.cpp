@@ -1,43 +1,35 @@
 #include "source_processor/include/extractor/StatementExtractor.h"
 
-StatementExtractor::StatementExtractor() {
+void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
+    statements->at(*type).insert(*lineNumber);
+}
+
+bool isStatement(Line line) {
+    return line.getType() == "read"
+           || line.getType() == "print"
+           || line.getType() == "call"
+           || line.getType() == "while"
+           || line.getType() == "if"
+           || line.getType() == "=";
+}
+
+unordered_map<string, set<int>> extractStatements(const vector<Line>& program) {
+    unordered_map<string, set<int>> statements;
     statements["while"] = {};
     statements["if"] = {};
     statements["read"] = {};
     statements["print"] = {};
     statements["call"] = {};
     statements["="] = {};
-}
 
-void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
-    statements->at(*type).insert(*lineNumber);
-}
-
-void StatementExtractor::extractVariables(Line line) {
-    set<string>* v = &this->variables;
-    vector<string> tokens = line.getTokens();
-    for(auto token = begin(tokens); token != end(tokens); token++) {
-        if(*token == "=" && token != begin(tokens)) {
-            v->insert(*(prev(token)));
+    for(auto line: program) {
+        if(isStatement(line)) {
+            vector<string> tokens = line.getTokens();
+            string type = line.getType();
+            int lineNumber = line.getLineNumber();
+            unordered_map<string, set<int>> *stmt = &statements;
+            insertLineNumber(stmt, &type, &lineNumber);
         }
     }
-}
-
-void StatementExtractor::extractStatements(Line line) {
-    vector<string> tokens = line.getTokens();
-    string type = line.getType();
-    int lineNumber = line.getLineNumber();
-    unordered_map<string, set<int>> *stmt = &this->statements;
-    insertLineNumber(stmt, &type, &lineNumber);
-    if(type == "=" || type == "read") {
-        extractVariables(line);
-    }
-}
-
-unordered_map<string, set<int>> StatementExtractor::getStatements() {
     return statements;
-}
-
-set<string> StatementExtractor::getVariables() {
-    return variables;
 }
