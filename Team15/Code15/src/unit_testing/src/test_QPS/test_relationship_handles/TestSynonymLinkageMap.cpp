@@ -57,3 +57,30 @@ TEST_CASE("Test deleteLinkage") {
 	REQUIRE(map.isEmptyLinkageSet("synon1") == true);
 }
 
+TEST_CASE("Test containsKey") {
+	SynonymLinkageMap map;
+
+	map.insertLinkage("synon1", "11");
+	map.insertLinkage("synon1", "12");
+	REQUIRE(map.containsKey("synon1") == true);
+	REQUIRE(map.containsKey("synon2") == false);
+}
+
+TEST_CASE("Test getLinkedSynValueSet") {
+	SynonymLinkageMap map;
+
+	map.insertLinkage("synon1", "11");
+	map.insertLinkage("synon1", "12");
+	std::set<std::string> expectedSet = { "11", "12" };
+	REQUIRE(map.getLinkedSynValueSet("synon1") == expectedSet);
+}
+
+TEST_CASE("Test insertNewEntry") {
+	SynonymLinkageMap map;
+	std::set<std::string> sampleSet = { "11", "12" };
+
+	map.insertNewEntry("synon1", sampleSet);
+	std::set<std::string> expectedSet = { "11", "12" };
+	REQUIRE(map.getLinkedSynValueSet("synon1") == expectedSet);
+}
+

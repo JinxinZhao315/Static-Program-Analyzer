@@ -34,6 +34,7 @@ public:
 
     std::set<std::string> getStringSetFromKey(std::string synonymName);
     void deleteSynonymInstance(std::string synonymName, std::string synonymInstance);
+    bool existSynonymWithNoValue();
 };
 
 

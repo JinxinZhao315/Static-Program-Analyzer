@@ -3,14 +3,24 @@
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/evaluator/FollowsHandler.h"
-#include "source_processor/include/tokeniser/Tokeniser.h"
 #include "QPS/include/PQLDriver.h"
+#include "source_processor/include/SourceProcessor.h"
 
 #include "catch.hpp"
-
 using namespace std;
 
-//TEST_CASE("Overall test") {
+TEST_CASE("Overall test : Sample_source2.txt") {
+    // Enter source of SIMPLE code
+    string filename = "../../../../../../Tests15/Sample_source2.txt"; /*"../../../../Tests15/Sample_source2.txt";*/
+    SourceProcessor sourceProcessor = SourceProcessor();
+    PKB pkb = PKB();
+    sourceProcessor.parseProgram(filename);
+    sourceProcessor.storeDataInPKB(&pkb);
+    string queryStr = "constant c; Select c";
+    PQLDriver pqlDriver = PQLDriver(pkb);
+    set<string> result = pqlDriver.processPQL(queryStr);
+    set<string> expectedResult = { "2", "3", "5" };
+    REQUIRE(result == expectedResult);
 //    // Enter source of SIMPLE code
 //    string filename = "../../../../Tests15/Sample_source2.txt";
 //    ifstream file(filename);
@@ -64,5 +74,5 @@ using namespace std;
 //    string result = pqlDriver.processPQL(queryStr);
 //    cout << "result:" << result << endl;
 //    REQUIRE(result == "2,3,5");
-//}
+}
 

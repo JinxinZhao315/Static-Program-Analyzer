@@ -40,6 +40,14 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 break;
             }
             followsHandler.combineResult(resultTable, result);
+            if (resultTable.existSynonymWithNoValue()) {
+
+                resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
+                break;
+            }
         }
         /*else if (relationship == "Uses") 
         {
@@ -68,6 +76,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 break;
             }
             parentHandler.combineResult(resultTable, result);
+            if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
+                break;
+            }
         }
         else if (relationship == "Modifies") {
             Result result;
@@ -102,6 +117,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             }
             else {
                 modifiesSHandler.combineResult(resultTable, result);
+            }
+            if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
+                break;
             }
 
         }
@@ -139,6 +161,14 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             else {
                 usesSHandler.combineResult(resultTable, result);
             }
+
+            if (resultTable.existSynonymWithNoValue()) {
+                resultTable.resetKeySetEmpty(selectedVarName);
+
+                isEarlyExit = true;
+
+                break;
+            }
         }
     }
     for (PatternClause patternCl : patternVec)
@@ -158,6 +188,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         }
 
         patternHandler.combineResult(resultTable, result);
+        if (resultTable.existSynonymWithNoValue()) {
+            resultTable.resetKeySetEmpty(selectedVarName);
+
+            isEarlyExit = true;
+
+            break;
+        }
     }
 
     // return the values of the selected synonym in ResultTable
