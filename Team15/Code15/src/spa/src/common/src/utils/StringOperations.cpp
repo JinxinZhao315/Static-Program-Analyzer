@@ -31,7 +31,7 @@ set<string> getVariablesFromStatement(vector<string> tokens, const set<string>& 
     return result;
 }
 
-int precedence(string c) {
+int precedence(const string& c) {
     if (c == "-" || c == "+") {
         return 1;
     } else if (c == "*" || c == "/" || c == "%") {
@@ -47,12 +47,8 @@ bool isOperator(string c) {
 }
 
 bool isNumber(const string& num) {
-    try {
-        stod(num);
-        return true;
-    } catch (const invalid_argument &e) {
-        return false;
-    }
+    const regex pattern("-?[0-9]+(\\.[0-9]+)?");
+    return regex_match(num, pattern);
 }
 
 
@@ -60,7 +56,6 @@ vector<string> convertToPostfix(const vector<string>& tokens, const set<string>&
     vector<string> result;
     stack<string> s;
     for (const auto &token : tokens) {
-        bool notOpeningBracket = !s.empty() && s.top() != "(";
         if (variables.count(token) || isNumber(token)) {
             result.push_back(token);
         } else if (isOperator(token)) {
@@ -69,6 +64,14 @@ vector<string> convertToPostfix(const vector<string>& tokens, const set<string>&
                 s.pop();
             }
             s.push(token);
+        } else if (token == "(") {
+            s.push(token);
+        } else if (token == ")") {
+            while (s.top() != "(") {
+                result.push_back(s.top());
+                s.pop();
+            }
+            s.pop();
         }
     }
     while (!s.empty()) {
