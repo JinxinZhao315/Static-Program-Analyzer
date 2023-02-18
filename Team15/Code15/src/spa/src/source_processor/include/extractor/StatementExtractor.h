@@ -1,9 +1,6 @@
-#include <string>
-#include <set>
-#include "common/include/models/Line.h"
-#include <unordered_map>
+#pragma once
 
-using namespace std;
+#include "CommonExtractorHeader.h"
 
 class StatementExtractor {
 private:
@@ -11,7 +8,7 @@ private:
     set<string> variables;
 public:
     StatementExtractor();
-    unordered_map<string, set<int>>  getStatements();
+    unordered_map<string, set<int>> getStatements();
     set<string> getVariables();
     void extractStatements(Line line);
     void extractVariables(Line line);

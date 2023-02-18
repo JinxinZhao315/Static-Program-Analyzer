@@ -1,8 +1,6 @@
-#include <string>
-#include <set>
-#include "common/include/models/Line.h"
+#pragma once
 
-using namespace std;
+#include "CommonExtractorHeader.h"
 
 class ConstantExtractor {
 private:
