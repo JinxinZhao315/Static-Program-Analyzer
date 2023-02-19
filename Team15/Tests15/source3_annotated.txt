@@ -1,12 +1,12 @@
 procedure proc1 {
-//1  x = 0;
-//2  y = 0;
-//3  a = 1;
-//4  b = 6;
-//5  c = 3;
-//6  d = 4;
-//7  e = 5;
-//8  count = 0;
+//1   x = 0;
+//2   y = 0;
+//3   a = 1;
+//4   b = 6;
+//5   c = 3;
+//6   d = 4;
+//7   e = 5;
+//8   count = 0;
 //9   x = c + d + e;
 //10  c = d + e;
 //11  while (count < 5) {
@@ -14,8 +14,8 @@ procedure proc1 {
 //13      a = a + 1;
 //14      y = 0 + 1;
 //15      count = count + 1;
-    } else {
+        } else {
 //16      count = count * 2;
-    }
-  }
+        }
+      }
 //17  y = c + d + e; }
