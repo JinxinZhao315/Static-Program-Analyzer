@@ -15,7 +15,7 @@ private:
     vector<Line> extractedLines;
 public:
     Tokeniser();
-    void feedLines(string filename);
+    void feedLines(vector<string> lines);
     vector<string>* keywords;
     vector<string>* tokenise(string line);
     void printTokens();

@@ -1,13 +1,6 @@
 #include "source_processor/include/extractor/Extractor.h"
 
-Extractor::Extractor() {
-    statements["while"] = {};
-    statements["if"] = {};
-    statements["read"] = {};
-    statements["print"] = {};
-    statements["call"] = {};
-    statements["="] = {};
-}
+Extractor::Extractor() {}
 
 set<string> Extractor::getVariables() {
     return variables;
@@ -25,114 +18,27 @@ unordered_map<string, set<int>> Extractor::getStatements() {
     return statements;
 }
 
-bool isProcedure(Line line) {
-    return line.getType() == "procedure";
-}
-
-bool isStatement(Line line) {
-    return line.getType() == "read"
-        || line.getType() == "print"
-        || line.getType() == "call"
-        || line.getType() == "while"
-        || line.getType() == "if"
-        || line.getType() == "=";
-}
-
-string findProcedureName(vector<string> tokens) {
-    for(auto token = begin(tokens); token != end(tokens); token++) {
-        if(*token == "procedure") {
-            return *(next(token));
-        }
-    }
-    return "";
-}
-
-void Extractor::extractProcedure(Line line) {
-    vector<string> tokens = line.getTokens();
-    string procedureName = findProcedureName(tokens);
-    set<string>* p = &this->procedures;
-    p->insert(procedureName);
-}
-
-bool isNumeric(const string& token) {
-    try {
-        stoi(token);
-        return true;
-    } catch (const std::invalid_argument&) {
-        return false;
-    } catch (const std::out_of_range&) {
-        return false;
-    }
-}
-
-void Extractor::extractConstants(Line line) {
-    vector<string> tokens = line.getTokens();
-    set<string> *c = &this->constants;
-    for (auto token = begin(tokens); token != end(tokens); token++) {
-        if (isNumeric(*token)) {
-            c->insert(*token);
-        }
-    }
-}
-
-void insertLineNumber(unordered_map<string, set<int>>* statements, string* type, int* lineNumber) {
-    statements->at(*type).insert(*lineNumber);
-}
-
-void Extractor::extractStatement(Line line) {
-    vector<string> tokens = line.getTokens();
-    string type = line.getType();
-    int lineNumber = line.getLineNumber();
-    unordered_map<string, set<int>> *stmt = &this->statements;
-    insertLineNumber(stmt, &type, &lineNumber);
-    if(type == "=") {
-        extractVariables(line);
-    }
-}
-
-void Extractor::extractVariables(Line line) {
-    set<string>* v = &this->variables;
-    vector<string> tokens = line.getTokens();
-    for(auto token = begin(tokens); token != end(tokens); token++) {
-        if(*token == "=" && token != begin(tokens)) {
-            v->insert(*(prev(token)));
-        }
-    }
-}
-
-void Extractor::extractEntities(const vector<Line> &program) {
-    for(auto line: program) {
-        string type = line.getType();
-        if(isProcedure(line)) {
-            extractProcedure(line);
-        } if (isStatement(line)) {
-            extractStatement(line);
-        }
-        extractConstants(line);
-    }
-}
-
 void Extractor::printEntities() {
     cout << "Procedures: " << endl;
-    for(const auto& procedure: this->procedures) {
+    for(const auto& procedure: procedures) {
         cout << procedure << " ";
     }
     cout << endl << endl;
 
     cout << "Variables: " << endl;
-    for(const auto& variable: this->variables) {
+    for(const auto& variable: variables) {
         cout << variable << " ";
     }
     cout << endl << endl;
 
     cout << "Constants: " << endl;
-    for(const auto& c: this->constants) {
+    for(const auto& c: constants) {
         cout << c << " ";
     }
     cout << endl << endl;
 
     cout << "Statements: " << endl;
-    for(auto[key, value] : this->statements) {
+    for(auto[key, value] : statements) {
         cout << "Statement type " << key << ": ";
         for(auto i : value) {
             cout << i << " ";
@@ -171,7 +77,10 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
 }
 
 void Extractor::extract(const vector<Line> &program) {
-    extractEntities(program);
+    this->constants = extractConstants(program);
+    this->statements = extractStatements(program);
+    this->variables = extractVariables(program);
+    this->procedures = extractProcedures(program);
     // Call and get results of extraction
     this->modifiesRS = extractModifiesRS(program);
     auto [parents, parentsStar] = extractParentsRelationship(program);
