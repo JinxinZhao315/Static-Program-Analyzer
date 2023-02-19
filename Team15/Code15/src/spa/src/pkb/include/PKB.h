@@ -27,11 +27,9 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addStmt(string stmtType, int stmtNum);
+	void addStmt(std::string stmtType, int stmtNum);
 
-	void addAllStmts(std::set<int> stmtNums);
-
-	void addAllStmtsByType(unordered_map<string, set<int>> stmtNumsByType);
+	void addAllStmts(unordered_map<std::string, set<int>> stmtNums);
 
 	//SP follows
 	void addFollows(int leaderNum, int followerNum);

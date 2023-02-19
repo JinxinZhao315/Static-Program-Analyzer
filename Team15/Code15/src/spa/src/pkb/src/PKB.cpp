@@ -46,12 +46,9 @@ void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
     stmtTable.addStatementNumber(stmtType, stmtNum);
 }
 
-void PKB::addAllStmts(std::set<int> stmtNums) {
-	stmtTable.addAllStatements(stmtNums);
-}
-
-void PKB::addAllStmtsByType(std::unordered_map<string, std::set<int>> stmtNumsByType) {
-	stmtTable.addAllStatementsByType(stmtNumsByType);
+void PKB::addAllStmts(std::unordered_map<string, std::set<int>> stmtNums) {
+	stmtTable.addAllStatementsByType(stmtNums);
+	stmtTable.addAllStatementsRegardlessOfType(stmtNums);
 }
 
 //SP follows
