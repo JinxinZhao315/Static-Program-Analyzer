@@ -5,7 +5,7 @@ v, w, x, y, z, a, b, c, d, e, f, g
 5000
 2 - modifies
 variable v;
-Select v such that Modifies(15, v)
+Select v such that Modifies(14, v)
 w
 5000
 3 - read
@@ -21,7 +21,7 @@ a, b, c
 5 - modifies
 stmt s;
 Select s such that Modifies(s, "y")
-16
+4, 16
 5000
 6 - uses
 stmt s;
@@ -62,7 +62,9 @@ SyntaxError
 stmt s;
 Select s pattern s(_,_)
 SemanticError
+5000
 14 - SemanticError
 print p;
 Select p pattern p(_,_)
 SemanticError
+5000
