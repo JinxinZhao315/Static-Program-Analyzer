@@ -182,7 +182,7 @@ TEST_CASE("Overall test : source2.txt 2") {
 TEST_CASE("Overall test : source2.txt 3") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source2.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "call cl; Select cl such that Follows * (2, cl)";
+    string queryStr = "call cl; Select cl such that Follows* (2, cl)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "21" };
@@ -273,7 +273,7 @@ TEST_CASE("Overall test : source2.txt 10") {
 TEST_CASE("Overall test : source3.txt 1") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source3.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Follows * (9, s)";
+    string queryStr = "stmt s; Select s such that Follows* (9, s)";
 
     PKB pkb;
     spDriver(filename, pkb);
@@ -285,7 +285,7 @@ TEST_CASE("Overall test : source3.txt 1") {
 TEST_CASE("Overall test : source3.txt 2") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source3.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Follows * (s, 15)";
+    string queryStr = "stmt s; Select s such that Follows* (s, 15)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "13", "14" };
@@ -340,7 +340,7 @@ TEST_CASE("Overall test : source3.txt 6") {
 TEST_CASE("Overall test : source4.txt 1") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (5, s)";
+    string queryStr = "stmt s; Select s such that Parent* (5, s)";
 
     PKB pkb;
     spDriver(filename, pkb);
@@ -352,7 +352,7 @@ TEST_CASE("Overall test : source4.txt 1") {
 TEST_CASE("Overall test : source4.txt 2") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 11)";
+    string queryStr = "stmt s; Select s such that Parent* (s, 11)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6", "7", "10" };
@@ -361,7 +361,7 @@ TEST_CASE("Overall test : source4.txt 2") {
 TEST_CASE("Overall test : source4.txt 3") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (6, s)";
+    string queryStr = "stmt s; Select s such that Parent* (6, s)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "7", "8", "9", "10", "11", "12", "13" };
@@ -370,7 +370,7 @@ TEST_CASE("Overall test : source4.txt 3") {
 TEST_CASE("Overall test : source4.txt 4") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 12)";
+    string queryStr = "stmt s; Select s such that Parent* (s, 12)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6", "7", "10" };
@@ -379,7 +379,7 @@ TEST_CASE("Overall test : source4.txt 4") {
 TEST_CASE("Overall test : source4.txt 5") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (7, s)";
+    string queryStr = "stmt s; Select s such that Parent* (7, s)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "8", "9", "10", "11", "12" };
@@ -388,7 +388,7 @@ TEST_CASE("Overall test : source4.txt 5") {
 TEST_CASE("Overall test : source4.txt 6") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 9)";
+    string queryStr = "stmt s; Select s such that Parent* (s, 9)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6", "7" };
@@ -397,7 +397,7 @@ TEST_CASE("Overall test : source4.txt 6") {
 TEST_CASE("Overall test : source4.txt 7") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (8, s)";
+    string queryStr = "stmt s; Select s such that Parent* (8, s)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "none" };
@@ -406,7 +406,7 @@ TEST_CASE("Overall test : source4.txt 7") {
 TEST_CASE("Overall test : source4.txt 8") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 8)";
+    string queryStr = "stmt s; Select s such that Parent* (s, 8)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6", "7" };
@@ -415,7 +415,7 @@ TEST_CASE("Overall test : source4.txt 8") {
 TEST_CASE("Overall test : source4.txt 9") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (12, s)";
+    string queryStr = "stmt s; Select s such that Parent* (12, s)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "none" };
@@ -424,7 +424,7 @@ TEST_CASE("Overall test : source4.txt 9") {
 TEST_CASE("Overall test : source4.txt 10") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/source4.txt"; /*"../../../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 7)";
+    string queryStr = "stmt s; Select s such that Parent* (s, 7)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6" };
