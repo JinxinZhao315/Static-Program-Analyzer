@@ -56,6 +56,10 @@ TEST_CASE("convertToPostfix_similarVarNames_shouldReturnPostfix") {
 
 TEST_CASE("convertToPostfix_simpleExpressionWithSimilarVarName_shouldReturnPostfix") {
     vector<string> tokens = {"x", "+", "y", "+", "z", "+", "xy", "+", "yz"};
-    set<string> variables = {"x", "y", "z", "xy", "yz", "+", "+", "+", "+"}
-    ;
+    set<string> variables = {"x", "y", "z", "xy", "yz", "+", "+", "+", "+"};
+}
+
+TEST_CASE("convertToPostfix_incrementVarByOne_shouldReturnPostfix") {
+    vector<string> tokens = {"x", "+", "1"};
+    set<string> variables = {"x", "1", "+"};
 }
