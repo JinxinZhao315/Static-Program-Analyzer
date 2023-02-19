@@ -40,14 +40,9 @@ Tokeniser::Tokeniser() {
     });
 }
 
-void Tokeniser::feedLines(string filename) {
+void Tokeniser::feedLines(vector<string> lines) {
     auto* tokenVector = new vector<vector<string>*>();
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cout << "Failed to open file: " << filename << endl;
-    }
-    string line;
-    while(getline(file, line)) {
+    for(auto line : lines) {
         vector<string>* tokens = tokenise(line);
         tokenVector->push_back(tokens);
     }
