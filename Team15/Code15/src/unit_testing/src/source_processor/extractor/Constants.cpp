@@ -7,6 +7,13 @@ const vector<Line> mainProgram = {
         Line(3, {"call", "printResults", ";"}, "call"),
         Line({"}"}, "}"),
 };
+
+const vector<Line> onlyCallStatements = {
+        Line({"procedure", "main", "{"}, "procedure"),
+        Line(2, {"call", "computeCentroid", ";"}, "call"),
+        Line(3, {"call", "printResults", ";"}, "call"),
+        Line({"}"}, "}"),
+};
 const vector<Line> whileLoop = {
         Line(5, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
         Line(6, {"count", "=", "count", "+", "1", ";"}, "="),
