@@ -2,7 +2,6 @@
 
 #include "pkb/include/table/AbstractionTable.h"
 #include "pkb/include/table/EntityTable.h"
-#include "pkb/include/table/ParentTable.h"
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
 
@@ -177,7 +176,7 @@ private:
 	StatementTable stmtTable;
 	AbstractionTable<int, int> followsTable;
 	AbstractionTable<int, int> followsStarTable;
-	ParentTable parentTable;
+	AbstractionTable<int, int> parentTable;
 	AbstractionTable<int, int> parentStarTable;
 	AbstractionTable<int, std::string> usesStmtTable;
 	AbstractionTable<std::string, std::string> usesProcTable;
