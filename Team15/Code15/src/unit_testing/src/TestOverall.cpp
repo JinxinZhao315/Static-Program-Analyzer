@@ -74,10 +74,10 @@ TEST_CASE("Overall test : container_source.txt 4") {
 TEST_CASE("Overall test : container_source.txt 5") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/container_source.txt"; /*"../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "while w; Select w such that Follows(19, w)";
+    string queryStr = "while w; Select w such that Follows(18, w)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "18" };
+    set<string> expectedResult = { "19" };
     REQUIRE(result == expectedResult);
 }
 
@@ -127,7 +127,7 @@ TEST_CASE("Overall test : container_source.txt 10") {
     string queryStr = "assign a; Select a pattern a(\"count\", \"count\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "20" };
+    set<string> expectedResult = { "none" };
     REQUIRE(result == expectedResult);
 }
 
@@ -142,16 +142,16 @@ TEST_CASE("Overall test : more_nested_container_source.txt 1") {
     string queryStr = "stmt s; Select s such that Parent * (5, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "6", "7", "8", "9", "10", "12", "13", "15", "19", "22"};
+    set<string> expectedResult = { "6", "7", "8", "9", "10", "11", "12", "13"};
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : more_nested_container_source.txt 2") {
     // Enter source of SIMPLE code
     string filename = "../../../../../../Tests15/more_nested_container_source.txt"; /*"../../../../Tests15/Sample_source2.txt";*/
-    string queryStr = "stmt s; Select s such that Parent * (s, 15)";
+    string queryStr = "stmt s; Select s such that Parent * (s, 11)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "5", "6", "7", "8", "12" };
+    set<string> expectedResult = { "4", "5", "6", "7", "10" };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : more_nested_container_source.txt 3") {
