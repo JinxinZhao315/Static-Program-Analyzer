@@ -221,7 +221,7 @@ TEST_CASE("Overall test : source2.txt 7") {
 TEST_CASE("Overall test : source2.txt 8") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a (_, _\"a\"_)";
+    string queryStr = "assign a; Select a pattern a (_, _\" a\"_)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "12", "14", "15", "16", "17" };
@@ -231,7 +231,7 @@ TEST_CASE("Overall test : source2.txt 8") {
 TEST_CASE("Overall test : source2.txt 9") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a (_, _\"c\"_)";
+    string queryStr = "assign a; Select a pattern a (_, _\"c \"_)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "12", "14", "15", "16", "17", "22"};

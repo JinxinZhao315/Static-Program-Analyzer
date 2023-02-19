@@ -35,7 +35,7 @@ vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int sta
 
 
 bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMatch) {
-    pair<bool, string> trimmedPair = trimUnderscoreQuotes(substrToMatch);
+    pair<bool, string> trimmedPair = trimPattern(substrToMatch);
     bool isPartialMatch = trimmedPair.first;
     vector<string> substrTokens = tokenise(trimmedPair.second);
     vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
@@ -187,7 +187,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
         // If not, set result to false
-        string leftArgTrimmed = trimUnderscoreQuotes(leftArg).second;
+        string leftArgTrimmed = trimPattern(leftArg).second;
         set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArgTrimmed);
 
         if (matchingRHS.empty()) {
@@ -237,7 +237,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 // Return a pair, where first element boolean = true if input is asking for partial match (e.g. _"x"_)
 //, and false if input is aksing for full match (e.g. "x")
 // Second element string is input trimmed of underscore and quotes
-pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
+pair<bool,string> PatternHandler::trimPattern(string input) {
     std::string trimmed = input;
 
     // Trim underscore
@@ -267,6 +267,7 @@ pair<bool,string> PatternHandler::trimUnderscoreQuotes(string input) {
     bool isPartialMatch = isLeftUnderscore && isRightUnderscore;
 
     trimmed = Utility::trim(trimmed, Utility::QUOTE);
+    trimmed = Utility::trim(trimmed, Utility::WHITESPACES);
 
     return make_pair(isPartialMatch, trimmed);
 
