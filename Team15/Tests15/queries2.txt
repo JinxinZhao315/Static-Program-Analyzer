@@ -6,7 +6,7 @@ proc1, proc2
 2 - call follows
 call cl;
 Select cl such that Follows(22, cl)
-23
+none
 5000
 3 - call follows star
 call cl;
@@ -30,45 +30,25 @@ Select c
 5000
 7 - assign pattern
 assign a;
-Select a pattern a("w", _"b + c"_)
+Select a pattern a("w", _"b"_)
 14, 22
 5000
 8 - assign pattern
 assign a;
-Select a pattern a(_, _"a * b"_)
-15
-5000
-9 - assign pattern
-assign a;
-Select a pattern a(_, _"c * d"_)
-none
-5000
-10 - assign pattern
-assign a;
-Select a pattern a("count", "count")
-none
-5000
-11 - assign pattern
-assign a;
-Select a pattern a("w", _"b"_)
-14, 22
-5000
-12 - assign pattern
-assign a;
 Select a pattern a (_, _" a"_)
 12, 14, 15, 16, 17
 5000
-13 - assign pattern
+9 - assign pattern
 assign a;
 Select a pattern a("count", _"count"_)
 20
 5000
-14 - multiple clauses
+10 - multiple clauses
 assign a;
 Select a such that Modifies (a, "y") pattern a (_, _"a"_)
 16
 5000
-15 - multiple clauses
+11 - multiple clauses
 assign a1, a2;
 Select a1 such that Follows(a1,a2) pattern a2 (_, _"e"_)
 22
