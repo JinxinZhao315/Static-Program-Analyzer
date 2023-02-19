@@ -11,7 +11,7 @@ w
 3 - read
 read re;
 Select re such that Modifies(re, "g")
-13
+12
 5000
 4 - uses
 variable v;
@@ -21,17 +21,17 @@ a, b, c
 5 - modifies
 stmt s;
 Select s such that Modifies(s, "y")
-17
+16
 5000
 6 - uses
 stmt s;
 Select s such that Uses(s, "e")
-18
+17
 5000
 7 - print
 print pr;
 Select pr such that Uses(pr, "x")
-19
+18
 5000
 8 - follows
 stmt s;
@@ -53,3 +53,16 @@ print pr; variable v;
 Select v such that Uses(pr, v)
 x
 5000
+12 - SyntaxError
+variable v;
+Select v;
+SyntaxError
+5000
+13 - SemanticError
+stmt s;
+Select s pattern s(_,_)
+SemanticError
+14 - SemanticError
+print p;
+Select p pattern p(_,_)
+SemanticError
