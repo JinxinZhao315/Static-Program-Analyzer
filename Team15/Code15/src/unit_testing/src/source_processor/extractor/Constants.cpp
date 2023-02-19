@@ -14,6 +14,14 @@ const vector<Line> onlyCallStatements = {
         Line(3, {"call", "printResults", ";"}, "call"),
         Line({"}"}, "}"),
 };
+const vector<Line> singleAssignmentSelfIncrement = {
+        Line(6, {"count", "=", "count", "+", "1", ";"}, "=")
+};
+
+const vector<Line> singleAssignmentAddVariable = {
+        Line(7, {"cenX", "=", "cenX", "+", "x", ";"}, "=")
+};
+
 const vector<Line> whileLoop = {
         Line(5, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
         Line(6, {"count", "=", "count", "+", "1", ";"}, "="),
@@ -21,14 +29,6 @@ const vector<Line> whileLoop = {
         Line(8, {"cenY", "=", "cenY", "+", "y", ";"}, "="),
         Line(9, {"call", "readPoint", ";"}, "call"),
         Line({"}"}, "}"),
-};
-
-const vector<Line> singleAssignmentSelfIncrement = {
-        Line(6, {"count", "=", "count", "+", "1", ";"}, "=")
-};
-
-const vector<Line> singleAssignmentAddVariable = {
-        Line(7, {"cenX", "=", "cenX", "+", "x", ";"}, "=")
 };
 
 const vector<Line> whileLoop2 = {
@@ -183,7 +183,7 @@ const vector<Line> source2 = {
         Line(21, {"call", "proc2", ";"}, "call"),
         Line({"}"}, "}"),
         Line({"procedure", "proc2", "{"}, "procedure"),
-//        Line(22, {"w", "=", "b", "+", "c", "+", "8", ";"}, "="),
-//        Line(23, {"x", "=", "d", "*", "e", "", "9", ";"}, "="),
-//        Line({"}"}, "}")
+        Line(22, {"w", "=", "b", "+", "c", "+", "8", ";"}, "="),
+        Line(23, {"x", "=", "d", "*", "e", "", "9", ";"}, "="),
+        Line({"}"}, "}")
 };
