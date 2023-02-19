@@ -12,17 +12,17 @@ class StatementTable {
 public:
 	StatementTable();
 
-	void addStatementNumber(string statementType, int statementNumber);
+	void addStatementNumber(std::string statementType, int statementNumber);
 
-	void addAllStatements(std::set<int> statements);
+	void addAllStatementsByType(std::unordered_map<std::string, std::set<int>> statementsByType);
 
-	void addAllStatementsByType(std::unordered_map<string, std::set<int>> statementsByType);
+	void addAllStatementsRegardlessOfType(std::unordered_map<std::string, std::set<int>> statementsByType);
 
 	std::set<int> getAllStatementNumbers();
 
-	std::set<int> getAllStatementNumbersByType(string statementType);
+	std::set<int> getAllStatementNumbersByType(std::string statementType);
 
 private:
 	std::set<int> statementTable;
-	std::unordered_map<string, std::set<int> > statementByTypeTable;
+	std::unordered_map<std::string, std::set<int> > statementByTypeTable;
 };

@@ -2,7 +2,7 @@
 
 StatementTable::StatementTable() = default;
 
-void StatementTable::addStatementNumber(string statementType, int statementNumber) {
+void StatementTable::addStatementNumber(std::string statementType, int statementNumber) {
 	statementTable.insert(statementNumber);
 	auto pair = statementByTypeTable.find(statementType);
 	if (pair == statementByTypeTable.end()) {
@@ -13,12 +13,14 @@ void StatementTable::addStatementNumber(string statementType, int statementNumbe
 	}
 }
 
-void StatementTable::addAllStatements(std::set<int> statements) {
-	statementTable = statements;
+void StatementTable::addAllStatementsByType(std::unordered_map<std::string, std::set<int>> statementsByType) {
+	statementByTypeTable = statementsByType;
 }
 
-void StatementTable::addAllStatementsByType(std::unordered_map<string, std::set<int>> statementsByType) {
-	statementByTypeTable = statementsByType;
+void StatementTable::addAllStatementsRegardlessOfType(std::unordered_map<std::string, std::set<int>> statementsByType) {
+	for (const auto& [stmtType, stmtNums] : statementsByType) {
+		statementTable.insert(stmtNums.begin(), stmtNums.end());
+	}
 }
 
 std::set<int> StatementTable::getAllStatementNumbers() {
