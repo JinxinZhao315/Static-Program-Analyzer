@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -34,5 +35,17 @@ public:
 
     bool operator<(const Line& l) const { // necessary to create set<Line>
         return lineNumber < l.lineNumber;
+    }
+
+    bool operator==(const Line& l) const { // necessary to create set<Line>
+        if(lineNumber != l.lineNumber || type != l.type) return false;
+        for(int i = 0; i < tokens.size(); i++) {
+            string token = tokens[i];
+            string other = l.tokens[i];
+            if(token != other) {
+                return false;
+            }
+        }
+        return true;
     }
 };

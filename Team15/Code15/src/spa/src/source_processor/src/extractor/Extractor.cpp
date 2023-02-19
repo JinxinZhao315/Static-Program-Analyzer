@@ -56,7 +56,7 @@ unordered_map<int, set<int>> Extractor::getFollowsStarRS() {
     return this->followsStarRS;
 }
 
-unordered_map<int, int> Extractor::getParentRS() {
+unordered_map<int, set<int>> Extractor::getParentRS() {
     return this->parentsRS;
 }
 

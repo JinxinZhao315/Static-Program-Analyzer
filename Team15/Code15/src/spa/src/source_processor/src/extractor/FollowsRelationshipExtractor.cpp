@@ -9,12 +9,12 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         string lineType = line.getType();
-        // Star of block logic
         if (lineType == "procedure") {
-            // new procedure, store everything in temp and Star anew
+            // new procedure, store everything in temp and start anew
             followsRS = unordered_map<int, int>(tempFollows.begin(), tempFollows.end());
             parent.clear();
             tempFollows.clear();
+            v.clear();
             continue;
         }
         // keep track of which block curr line is in
