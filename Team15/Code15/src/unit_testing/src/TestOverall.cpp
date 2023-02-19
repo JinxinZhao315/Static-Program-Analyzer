@@ -147,15 +147,25 @@ TEST_CASE("Overall test : source1.txt 12 SyntaxError") {
     REQUIRE(result == expectedResult);
 }
 
-//TEST_CASE("Overall test : source1.txt 12 SemanticError") {
-//    // Enter source of SIMPLE code
-//    string filename = source1_filename;
-//    string queryStr = "print p; Select p pattern p(_,_)";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "SemanticError" };
-//    REQUIRE(result == expectedResult);
-//}
+TEST_CASE("Overall test : source1.txt 12 SemanticError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "print p; Select p pattern p(_,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source1.txt 13 SemanticError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "stmt s; Select s pattern s(_,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
 
 
 
@@ -288,6 +298,28 @@ TEST_CASE("Overall test : source2.txt 12") {
     REQUIRE(result == expectedResult);
 }
 
+// Multiple clauses
+TEST_CASE("Overall test : source2.txt 13") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+
+    string queryStr = "assign a; Select a such that Modifies (a, \"y\") pattern a (_, _\"a\"_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"16"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source2.txt 14") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+
+    string queryStr = "assign a1, a2; Select a1 such that Follows(a1,a2) pattern a2 (_, _\"e\"_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"22"};
+    REQUIRE(result == expectedResult);
+}
 
 
 
@@ -351,6 +383,22 @@ TEST_CASE("Overall test : source3.txt 6") {
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "11" };
     REQUIRE(result == expectedResult);
+}
+
+// Multiple clauses
+TEST_CASE("Overall test : source3.txt 7") {
+    // Enter source of SIMPLE code
+    string filename =  source3_filename;
+
+    string queryStr1 = "assign a; variable v; Select v such that Modifies(a,v) pattern a (_,_\"e\"_)";
+    set<string> result1 = testDriver(filename, queryStr1);
+    set<string> expectedResult1 = { "c", "x", "y" };
+    REQUIRE(result1 == expectedResult1);
+
+    string queryStr2 = "assign a; variable v; Select v such that Modifies(a,v) pattern a (_,_\"blah\"_)";
+    set<string> result2 = testDriver(filename, queryStr2);
+    set<string> expectedResult2 = { };
+    REQUIRE(result2 == expectedResult2);
 }
 
 
