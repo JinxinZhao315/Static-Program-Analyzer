@@ -137,6 +137,25 @@ TEST_CASE("Overall test : source1.txt 11") {
     REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Overall test : source1.txt 12 SyntaxError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "variable v; Select v;";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SyntaxError" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source1.txt 12 SemanticError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "print p; Select p pattern p(_,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
 
 
 
@@ -406,7 +425,7 @@ TEST_CASE("Overall test : source4.txt 7") {
     string queryStr = "stmt s; Select s such that Parent* (8, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source4.txt 8") {
@@ -424,7 +443,7 @@ TEST_CASE("Overall test : source4.txt 9") {
     string queryStr = "stmt s; Select s such that Parent* (12, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source4.txt 10") {

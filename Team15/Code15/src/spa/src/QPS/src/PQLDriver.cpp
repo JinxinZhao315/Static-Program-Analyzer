@@ -15,10 +15,6 @@ std::set<std::string> PQLDriver::processPQL(std::string queryStr) {
         // Call evaluator
         results = evaluator.evaluate(query);
 
-        if (results.empty()) {
-            results.insert("none");
-        }
-
         // return results
         return results;
 
