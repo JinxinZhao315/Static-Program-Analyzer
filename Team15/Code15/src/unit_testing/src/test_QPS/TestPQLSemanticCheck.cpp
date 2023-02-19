@@ -1,5 +1,5 @@
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "Query.h"
+#include "QPS/include/model/Query.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "exceptions/PQLSemanticError.h"
 
