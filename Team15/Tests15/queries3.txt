@@ -16,7 +16,7 @@ Select s such that Parent(12, s)
 4 - parent
 stmt s;
 Select s such that Parent(13, s)
-14
+14, 15, 16, 18
 5000
 5 - parent
 stmt s;

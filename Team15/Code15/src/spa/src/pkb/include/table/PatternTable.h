@@ -1,9 +1,12 @@
 #pragma once
 
+#include <map>
 #include <set>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <vector>
+
+#include "common/include/models/Line.h"
 
 using namespace std;
 
@@ -12,6 +15,8 @@ public:
 	PatternTable();
 
 	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
+
+	void addAllPatterns(unordered_map<string, set<Line>> lhsVarToRhsLine);
 
 	string getVarFromStmt(int assignStmtNum);
 
@@ -31,11 +36,19 @@ public:
 
 	void mapStmtToPostfixes(int assignStmtNum, set<vector<string>> rhsPostfixes);
 
+	void mapStmtToOnePostfix(int assignStmtNum, vector<string> rhsPostfix);
+
 	void mapPostfixToStmts(set<vector<string>> rhsPostfixes, int assignStmtNum);
+
+	void mapOnePostfixToStmts(vector<string> rhsPostfix, int assignStmtNum);
 
 	void mapVarToPostfixes(string lhsVarName, set<vector<string>> rhsPostfixes);
 
+	void mapVarToOnePostfix(string lhsVarName, vector<string> rhsPostfix);
+
 	void mapPostfixToVars(set<vector<string>> rhsPostfixes, string lhsVarName);
+
+	void mapOnePostfixToVars(vector<string> rhsPostfix, string lhsVarName);
 
 private:
 	map<int, string> stmtToVarMap;

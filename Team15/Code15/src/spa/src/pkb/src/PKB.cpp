@@ -131,6 +131,10 @@ void PKB::addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> r
 	patternTable.addPattern(assignStmtNum, lhsVarName, rhsPostfixes);
 }
 
+void PKB::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
+	patternTable.addAllPatterns(lhsVarToRhsLine);
+}
+
 //QPS procedure
 std::set<std::string> PKB::getAllProcNames() {
 	return procTable.getAllEntities();
