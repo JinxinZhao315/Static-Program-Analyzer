@@ -16,6 +16,14 @@ const vector<Line> whileLoop = {
         Line({"}"}, "}"),
 };
 
+const vector<Line> singleAssignmentSelfIncrement = {
+        Line(6, {"count", "=", "count", "+", "1", ";"}, "=")
+};
+
+const vector<Line> singleAssignmentAddVariable = {
+        Line(7, {"cenX", "=", "cenX", "+", "x", ";"}, "=")
+};
+
 const vector<Line> whileLoop2 = {
         Line(4, {"call", "readPoint", ";"}, "call"),
         Line(5, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),

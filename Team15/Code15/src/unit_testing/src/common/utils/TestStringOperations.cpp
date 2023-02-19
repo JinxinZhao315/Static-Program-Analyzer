@@ -50,16 +50,27 @@ TEST_CASE("convertToPostfix_similarVarNames_shouldReturnPostfix") {
     vector<string> tokens = {"a", "*", "(", "b", "-", "ab", ")", "/", "a", "+", "b"};
     set<string> variables = {"a", "b", "ab"};
     auto result = convertToPostfix(tokens, variables);
-    vector<string> expected = {"a", "b", "ab", "-", "*", "a", "/", "b", "+"};;
+    vector<string> expected = {"a", "b", "ab", "-", "*", "a", "/", "b", "+"};
     REQUIRE(result == expected);
 }
 
-TEST_CASE("convertToPostfix_simpleExpressionWithSimilarVarName_shouldReturnPostfix") {
-    vector<string> tokens = {"x", "+", "y", "+", "z", "+", "xy", "+", "yz"};
-    set<string> variables = {"x", "y", "z", "xy", "yz", "+", "+", "+", "+"};
-}
+//TEST_CASE("convertToPostfix_simpleExpressionWithSimilarVarName_shouldReturnPostfix") {
+//    vector<string> tokens = {"x", "+", "y", "+", "z", "+", "xy", "+", "yz"};
+//    set<string> variables = {"x", "y", "z", "xy", "yz", "+", "+", "+", "+"};
+//}
 
 TEST_CASE("convertToPostfix_incrementVarByOne_shouldReturnPostfix") {
     vector<string> tokens = {"x", "+", "1"};
-    set<string> variables = {"x", "1", "+"};
+    set<string> variables = {"x"};
+    auto result = convertToPostfix(tokens, variables);
+    vector<string> expected = {"x", "1", "+"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("convertToPostfix_addVar_shouldReturnPostfix") {
+    vector<string> tokens = {"x", "+", "x"};
+    set<string> variables = {"x"};
+    auto result = convertToPostfix(tokens, variables);
+    vector<string> expected = {"x", "x", "+"};
+    REQUIRE(result == expected);
 }
