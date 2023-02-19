@@ -1,10 +1,10 @@
 #pragma once
 
-#include "pkb/include/table/EntityTable.h"
-#include "pkb/include/table/StatementTable.h"
 #include "pkb/include/table/AbstractionTable.h"
+#include "pkb/include/table/EntityTable.h"
+#include "pkb/include/table/ParentTable.h"
 #include "pkb/include/table/PatternTable.h"
-#include <set>
+#include "pkb/include/table/StatementTable.h"
 
 using namespace std;
 
@@ -45,9 +45,9 @@ public:
 	void addAllFollowsStar(std::unordered_map<int, set<int>> allLeaderToFollowers);
 
 	//SP parent
-	void addParent(int parentNum, int childNum);
+	void addParent(int parentNum, std::set<int> childrenNum);
 
-	void addAllParent(std::unordered_map<int, int> allParentToChild);
+	void addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren);
 
 	//SP parent*
 	void addParentStar(int parentNum, std::set<int> childrenNums);
@@ -114,7 +114,7 @@ public:
 	//QPS parent
 	int getParentParentNum(int childNum);
 
-	int getParentChildNum(int parentNum);
+	std::set<int> getParentChildrenNum(int parentNum);
 
 	bool areInParentRelationship(int parentNum, int childNum);
 
@@ -177,7 +177,7 @@ private:
 	StatementTable stmtTable;
 	AbstractionTable<int, int> followsTable;
 	AbstractionTable<int, int> followsStarTable;
-	AbstractionTable<int, int> parentTable;
+	ParentTable parentTable;
 	AbstractionTable<int, int> parentStarTable;
 	AbstractionTable<int, std::string> usesStmtTable;
 	AbstractionTable<std::string, std::string> usesProcTable;
