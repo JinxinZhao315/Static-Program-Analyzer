@@ -24,7 +24,7 @@ public:
     unordered_map<int, int> getFollowsRS();
     unordered_map<int, set<int>> getFollowsStarRS();
 
-    unordered_map<int, int> getParentRS();
+    unordered_map<int, set<int>> getParentRS();
     unordered_map<int, set<int>> getParentStarRS();
 
     unordered_map<int, set<string>> getModifiesRS();
@@ -33,7 +33,7 @@ public:
 
 
 private:
-    unordered_map<int, int> parentsRS;
+    unordered_map<int, set<int>> parentsRS;
     unordered_map<int, set<int>> parentsStarRS;
 
     unordered_map<int, int> followsRS;

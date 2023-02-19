@@ -6,6 +6,7 @@ Tokeniser::Tokeniser() {
             "procedure",
             "while",
             "if",
+            "then",
             "else",
             "{",
             "}",
@@ -63,13 +64,34 @@ void pushToken(vector<string>* tokens, string token) {
     tokens->push_back(token);
 }
 
+bool passesLengthCheck(string keyword, string token) {
+    if(keyword == "read"
+        || keyword == "print"
+        || keyword == "call"
+        || keyword == "procedure"
+        || keyword == "while"
+        || keyword == "if"
+        || keyword == "then"
+        || keyword == "else"
+        || keyword == "return"
+        || keyword == "true"
+        || keyword == "false"
+        ) {
+        return keyword.length() == token.length();
+    } else {
+        return true;
+    }
+}
+
 bool setStartsWithKeyword(vector<string>* keywords, vector<string>* tokens, string token, int* position) {
     bool isKeyword = false;
+    int tokenLength = token.length();
     for (auto keyword : *keywords) {
-        if (token.find(keyword, *position) == *position) {
+        int keywordLength = keyword.length();
+        if (token.find(keyword, *position) == *position && passesLengthCheck(keyword, token)) {
+
             isKeyword = true;
             pushToken(tokens, keyword);
-            int keywordLength = keyword.length();
             *position += keywordLength;
             break;
         }
@@ -81,7 +103,7 @@ int setNextKeywordPosition(vector<string>* keywords, string token, int currentPo
     int nextKeywordPosition = token.length();
     for (auto keyword : *keywords) {
         int keywordPosition = token.find(keyword, currentPosition);
-        if (keywordPosition != -1 && keywordPosition < nextKeywordPosition) {
+        if (keywordPosition != -1 && keywordPosition < nextKeywordPosition && passesLengthCheck(keyword, token)) {
             nextKeywordPosition = keywordPosition;
         }
     }
@@ -120,7 +142,7 @@ string findKeyword(vector<string>* line, vector<string>* keywords) {
 }
 
 bool checkKeywordHasLineNumber(string keyword) {
-    return !(keyword == "procedure" || keyword == "else");
+    return !(keyword == "procedure" || keyword == "else" || keyword == "}");
 }
 
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
