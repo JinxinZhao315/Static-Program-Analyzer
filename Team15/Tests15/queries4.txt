@@ -1,50 +1,50 @@
 1 - parent star
 stmt s;
-Select s such that Parent*(5, s)
-6, 7, 8, 9, 10, 12, 13, 15, 19, 22
+Select s such that Parent*(4, s)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 5000
 2 - parent star
 stmt s;
-Select s such that Parent*(s, 15)
-5, 6, 7, 8, 12
+Select s such that Parent*(s, 12)
+4, 5, 6, 7, 10
 5000
 3 - parent star
 stmt s;
-Select s such that Parent*(6, s)
-7, 8, 9, 10, 12, 13, 15, 19
+Select s such that Parent*(5, s)
+6, 7, 8, 9, 10, 11, 12, 13
 5000
 4 - parent star
 stmt s;
-Select s such that Parent*(s, 12)
-5, 6, 7, 8
+Select s such that Parent*(s, 10)
+4, 5, 6, 7
 5000
 5 - parent star
 stmt s;
-Select s such that Parent*(7, s)
-8, 9, 10, 12, 13, 15, 19
+Select s such that Parent*(6, s)
+7, 8, 9, 10, 11, 12, 13
 5000
 6 - parent star
 stmt s;
-Select s such that Parent*(s, 9)
-5, 6, 7, 8
+Select s such that Parent*(s, 8)
+4, 5, 6, 7
 5000
 7 - parent star
 stmt s;
-Select s such that Parent*(8, s)
-9, 10, 12, 13, 15
+Select s such that Parent*(7, s)
+8, 9, 10, 11, 12
 5000
 8 - parent star
 stmt s;
-Select s such that Parent*(s, 8)
-5, 6, 7
+Select s such that Parent*(s, 7)
+4, 5, 6
 5000
 9 - parent star
 stmt s;
-Select s such that Parent*(12, s)
-13, 15
+Select s such that Parent*(10, s)
+11, 12
 5000
 10 - parent star
 stmt s;
-Select s such that Parent*(s, 7)
-5, 6
+Select s such that Parent*(s, 6)
+4, 5
 5000
