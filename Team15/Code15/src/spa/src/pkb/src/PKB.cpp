@@ -7,7 +7,7 @@ PKB::PKB() {
 	stmtTable = StatementTable();
 	followsTable = AbstractionTable<int, int>();
 	followsStarTable = AbstractionTable<int, int>();
-	parentTable = AbstractionTable<int, int>();
+	parentTable = ParentTable();
 	parentStarTable = AbstractionTable<int, int>();
 	usesStmtTable = AbstractionTable<int, std::string>();
 	usesProcTable = AbstractionTable<std::string, std::string>();
@@ -73,12 +73,12 @@ void PKB::addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFo
 }
 
 //SP parent
-void PKB::addParent(int parentNum, int childNum) {
-	parentTable.addOneToOneAbstraction(parentNum, childNum);
+void PKB::addParent(int parentNum, std::set<int> childrenNum) {
+	parentTable.addParentChildren(parentNum, childrenNum);
 }
 
-void PKB::addAllParent(std::unordered_map<int, int> allParentToChild) {
-	parentTable.addAllOneToOneAbstractions(allParentToChild);
+void PKB::addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren) {
+	parentTable.addAllParentChildren(allParentToChildren);
 }
 
 //SP parent*
@@ -195,15 +195,15 @@ bool PKB::isFollowsStarEmpty() {
 
 //QPS parent
 int PKB::getParentParentNum(int childNum) {
-	return parentTable.getOneLeft(childNum);
+	return parentTable.getParent(childNum);
 }
 
-int PKB::getParentChildNum(int parentNum) {
-	return parentTable.getOneRight(parentNum);
+std::set<int> PKB::getParentChildrenNum(int parentNum) {
+	return parentTable.getChildren(parentNum);
 }
 
 bool PKB::areInParentRelationship(int parentNum, int childNum) {
-	return parentTable.inOneToOneRelationship(parentNum, childNum);
+	return parentTable.inRelationship(parentNum, childNum);
 }
 
 bool PKB::isParentEmpty() {

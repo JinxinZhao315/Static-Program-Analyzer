@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <unordered_map>
 
 using namespace std;
@@ -8,11 +9,11 @@ class ParentTable {
 public:
 	ParentTable();
 
-	void addParentChild(int parent, int child);
+	void addParentChildren(int parent, std::set<int> children);
 
-	void addAllParentChilds(std::unordered_map<int, int> parentToChild);
+	void addAllParentChildren(std::unordered_map<int, std::set<int>> parentToChildren);
 
-	int getChild(int parent);
+	std::set<int> getChildren(int parent);
 
 	int getParent(int child);
 
@@ -20,13 +21,13 @@ public:
 
 	bool isEmpty();
 
-	void addChild(int parent, int child);
+	void addChildren(int parent, std::set<int> children);
 
-	void addParent(int parent, int child);
+	void addParent(int parent, std::set<int> children);
 
-	void flipParentToChild(std::unordered_map<int, int> parentToChild);
+	void flip(std::unordered_map<int, std::set<int>> parentToChildren);
 
 private:
-	std::unordered_map<int, int> parentToChildMap;
+	std::unordered_map<int, std::set<int>> parentToChildrenMap;
 	std::unordered_map<int, int> childToParentMap;
 };

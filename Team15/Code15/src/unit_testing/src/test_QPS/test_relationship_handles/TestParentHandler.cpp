@@ -13,7 +13,7 @@ TEST_CASE("Parent Integer Underscore test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1,2);
+//    pkb.addParent(1,2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
@@ -41,13 +41,13 @@ TEST_CASE("Parent* Integer Underscore test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -75,12 +75,12 @@ TEST_CASE("Parent Underscore Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(_, 1)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -106,13 +106,13 @@ TEST_CASE("Parent* Underscore Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -138,12 +138,12 @@ TEST_CASE("Parent Integer Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(2, 1)", pkb);
     REQUIRE(retStr1 == "None");
@@ -167,13 +167,13 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -199,12 +199,12 @@ TEST_CASE("Parent Synonym Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(w, 1)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -224,13 +224,13 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -256,12 +256,12 @@ TEST_CASE("Parent Integer Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(1, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -284,13 +284,13 @@ TEST_CASE("Parent* Integer Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -316,12 +316,12 @@ TEST_CASE("Parent Synonym Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(w, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -347,13 +347,13 @@ TEST_CASE("Parent* Synonym Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -379,12 +379,12 @@ TEST_CASE("Parent Synonym Underscore test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(w, _)", pkb);
     REQUIRE(retStr1 == "1,5");
@@ -404,13 +404,13 @@ TEST_CASE("Parent* Synonym Underscore test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -430,12 +430,12 @@ TEST_CASE("Parent Underscore Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(_, w)", pkb);
     REQUIRE(retStr1 == "1");
@@ -455,13 +455,13 @@ TEST_CASE("Parent* Underscore Synonym test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
 
@@ -481,12 +481,12 @@ TEST_CASE("Parent/Parent* Underscore Underscore test") {
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
-    pkb.addParent(1, 2);
+//    pkb.addParent(1, 2);
 
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
-    pkb.addParent(5, 1);
+//    pkb.addParent(5, 1);
 
     PKB pkbEmpty;
     pkbEmpty.addStmt("call", 1);

@@ -14,9 +14,9 @@ std::set<int> ParentHandler::getParentFromPKB(bool isStar, string type, string a
             }
         }
         else { //if (type == GET_CHILD)
-            int child = pkb.getParentChildNum(stoi(arg));//
-            if (child != NULL) {
-                ret.insert(child);
+            std::set<int> children = pkb.getParentChildrenNum(stoi(arg));//
+            if (!children.empty()) {
+                ret.insert(children.begin(), children.end());
             }
         }
     }

@@ -2,20 +2,20 @@
 
 ParentTable::ParentTable() = default;
 
-void ParentTable::addParentChild(int parent, int child) {
-	addChild(parent, child);
-	addParent(parent, child);
+void ParentTable::addParentChildren(int parent, std::set<int> children) {
+	addChildren(parent, children);
+	addParent(parent, children);
 }
 
-void ParentTable::addAllParentChilds(std::unordered_map<int, int> parentToChild) {
-	parentToChildMap = parentToChild;
-	flipParentToChild(parentToChild);
+void ParentTable::addAllParentChildren(std::unordered_map<int, std::set<int>> parentToChildren) {
+	parentToChildrenMap = parentToChildren;
+	flip(parentToChildren);
 }
 
-int ParentTable::getChild(int parent) {
-	auto pair = parentToChildMap.find(parent);
-	if (pair == parentToChildMap.end()) {
-		return -1;
+std::set<int> ParentTable::getChildren(int parent) {
+	auto pair = parentToChildrenMap.find(parent);
+	if (pair == parentToChildrenMap.end()) {
+		return {};
 	}
 	return pair->second;
 }
@@ -29,37 +29,44 @@ int ParentTable::getParent(int child) {
 }
 
 bool ParentTable::inRelationship(int parentNumber, int childNumber) {
-	auto pair = parentToChildMap.find(parentNumber);
-	if (pair == parentToChildMap.end()) {
+	auto pair = childToParentMap.find(childNumber);
+	if (pair == childToParentMap.end()) {
 		return false;
 	}
-	auto child = pair->second;
-	if (child == childNumber) {
+	int parent = pair->second;
+	if (parent == parentNumber) {
 		return true;
 	}
 	return false;
 }
 
 bool ParentTable::isEmpty() {
-	return parentToChildMap.empty() && childToParentMap.empty();
+	return parentToChildrenMap.empty() && childToParentMap.empty();
 }
 
-void ParentTable::addChild(int parent, int child) {
-	auto pair = parentToChildMap.find(parent);
-	if (pair == parentToChildMap.end()) {
-		parentToChildMap[parent] = child;
+void ParentTable::addChildren(int parent, std::set<int> children) {
+	auto pair = parentToChildrenMap.find(parent);
+	if (pair == parentToChildrenMap.end()) {
+		parentToChildrenMap[parent] = children;
+	}
+	else {
+		pair->second.insert(children.begin(), children.end());
 	}
 }
 
-void ParentTable::addParent(int parent, int child) {
-	auto pair = childToParentMap.find(child);
-	if (pair == childToParentMap.end()) {
-		childToParentMap[child] = parent;
+void ParentTable::addParent(int parent, std::set<int> children) {
+	for (int child : children) {
+		auto pair = childToParentMap.find(child);
+		if (pair == childToParentMap.end()) {
+			childToParentMap[child] = parent;
+		}
 	}
 }
 
-void ParentTable::flipParentToChild(std::unordered_map<int, int> parentToChild) {
-	for (const auto& [key, value] : parentToChild) {
-		childToParentMap[value] = key;
+void ParentTable::flip(std::unordered_map<int, std::set<int>> parentToChildren) {
+	for (const auto& [parent, children] : parentToChildren) {
+		for (int child : children) {
+			childToParentMap[child] = parent;
+		}
 	}
 }

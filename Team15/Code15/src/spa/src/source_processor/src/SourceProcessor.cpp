@@ -24,7 +24,7 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllStmtsByType(extractor->getStatements());
     pkb->addAllFollows(extractor->getFollowsRS());
     pkb->addAllFollowsStar(extractor->getFollowsStarRS());
-    pkb->addAllParent(extractor->getParentRS());
+//    pkb->addAllParent(extractor->getParentRS());
     pkb->addAllParentStar(extractor->getParentStarRS());
     pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllUsesStmt(extractor->getUsesRS());
