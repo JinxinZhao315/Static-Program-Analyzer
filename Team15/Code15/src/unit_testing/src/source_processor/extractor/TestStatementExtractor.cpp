@@ -101,3 +101,62 @@ TEST_CASE("Extract statements from program with 3 level of nesting") {
     }
     assert(correct);
 }
+
+vector<Line> lines4 = {
+        Line({"procedure", "test", "{"}, "procedure"),
+        Line(1, {"flag", "=", "0", ";"}, "="),
+        Line(2, {"call", "computeCentroid", ";"}, "call"),
+        Line(3, {"call", "printResults", ";"}, "call"),
+        Line({"}"}, "}"),
+        Line({"procedure", "readPoint", "{"}, "procedure"),
+        Line(4, {"read", "x", ";"}, "read"),
+        Line(5, {"read", "y", ";"}, "read"),
+        Line({"}"}, "}"),
+        Line({"procedure", "printResults", "{"}, "procedure"),
+        Line(6, {"print", "flag", ";"}, "print"),
+        Line(7, {"print", "cenX", ";"}, "print"),
+        Line(8, {"print", "cenY", ";"}, "print"),
+        Line(9, {"print", "normSq", ";"}, "print"),
+        Line({"}"}, "}"),
+        Line({"procedure", "computeCentroid", "{"}, "procedure"),
+        Line(10, {"count", "=", "0", ";"}, "="),
+        Line(11, {"cenX", "=", "0", ";"}, "="),
+        Line(12, {"cenY", "=", "0", ";"}, "="),
+        Line(13, {"call", "readPoint", ";"}, "call"),
+        Line(14, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
+        Line(15, {"count", "=", "count", "+", "1", ";"}, "="),
+        Line(16, {"cenX", "=", "cenX", "+", "x", ";"}, "="),
+        Line(17, {"cenY", "=", "cenY", "+", "y", ";"}, "="),
+        Line(18, {"call", "readPoint", ";"}, "call"),
+        Line(19, {"if", "(", "count", "==", "0", ")", "{"}, "if"),
+        Line(20, {"flag", "=", "1", ";"}, "="),
+        Line({"}"}, "}"),
+        Line({"else", "{"}, "else"),
+        Line(21, {"cenX", "=", "cenX", "/", "count", ";"}, "="),
+        Line(22, {"cenY", "=", "cenY", "/", "count", ";"}, "="),
+        Line({"}"}, "}"),
+        Line(23, {"normSq", "=", "cenX", "*", "cenX", "+", "cenY", "*", "cenY", ";"}, "="),
+        Line({"}"}, "}"),
+};
+
+unordered_map<string, set<int>> expectedStatements4 = {
+        {"call", {2, 3, 13, 18}},
+        { "print", {6, 7, 8, 9}},
+        { "=", {1, 10, 11, 12, 15, 16, 17, 20, 21, 22, 23}},
+        { "if", {}},
+        { "read", {4, 5}},
+        { "while", {14}},
+};
+
+TEST_CASE("Extract statements from program with multiple procedures") {
+    bool correct = true;
+    unordered_map<string, set<int>> statements = extractStatements(lines4);
+    for(auto [key, value] : statements) {
+        for(int i : value) {
+            if(expectedStatements4[key].find(i) == value.end()) {
+                correct = false;
+            }
+        }
+    }
+    assert(correct);
+}
