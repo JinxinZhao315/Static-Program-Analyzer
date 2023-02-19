@@ -33,7 +33,9 @@ unordered_map<int, set<string>> extractUsesRS(const vector<Line>& program, const
         } else if (lineType == "if" || lineType == "while") {
             varNames = getVariablesFromStatement(tokens, variables);
         }
-        usesRS[currLineNumber].insert(varNames.begin(), varNames.end()); // for current line
+        if (currLineNumber && !varNames.empty()) {
+            usesRS[currLineNumber].insert(varNames.begin(), varNames.end()); // for current line
+        }
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
             for (auto stmtContainerLine : stmtContainerStack) {
                 usesRS[stmtContainerLine].insert(varNames.begin(), varNames.end());
