@@ -18,10 +18,12 @@ unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program) {
             continue;
         } else if (lineType == "if" || lineType == "while") { // keep track of stmt container line number
             stmtContainerStack.push_back(currLineNumber);
+            continue;
         } else if (lineType == "}") {
             if (!stmtContainerStack.empty()) {
                 stmtContainerStack.pop_back();
             }
+            continue;
         }
 
         string varName;
@@ -31,7 +33,9 @@ unordered_map<int, set<string>> extractModifiesRS(const vector<Line>& program) {
         } else if (lineType == "read") { // check if modifies(r, v)
             varName = getVarNameFromReadStatement(tokens);
         }
-        modifiesRS[currLineNumber].insert(varName); // for current line
+        if (currLineNumber) {
+            modifiesRS[currLineNumber].insert(varName); // for current line
+        }
         if (!stmtContainerStack.empty()) { // for stmtContainer: modifies(s, v)
             for (auto stmtContainerLine : stmtContainerStack) {
                 modifiesRS[stmtContainerLine].insert(varName);
