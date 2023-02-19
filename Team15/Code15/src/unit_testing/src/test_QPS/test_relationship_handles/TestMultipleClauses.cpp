@@ -51,7 +51,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
     REQUIRE(retStr1 == "1");
 
     string retStr2 = TestUtility::testDriver("assign a; Select a such that Follows(a,3) pattern a (\"k\",_)", pkb);
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr3 = TestUtility::testDriver("assign a; Select a such that Follows(a,3) pattern a (\"m\",_)", pkb);
     REQUIRE(retStr3 == "2");
@@ -64,7 +64,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
     REQUIRE(retStr5 == "1");
 
     string retStr6 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_\"t\"_)", pkb);
-    REQUIRE(retStr6 == "None");
+    REQUIRE(retStr6 == "none");
 
     string retStr7 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (_,_)", pkb);
     REQUIRE(retStr7 == "1,2");
@@ -175,7 +175,7 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     REQUIRE(retStr7 == "1");
 
     string retStr8 = TestUtility::testDriver("assign a; Select a such that Modifies(a,\"k\") pattern a (_,_\"t\"_)", pkb);
-    REQUIRE(retStr8 == "None");
+    REQUIRE(retStr8 == "none");
 
     // UsesS
     string retStr4 = TestUtility::testDriver("assign a; variable v; Select v such that Uses(a,v) pattern a (_,_\"y\"_)", pkb);

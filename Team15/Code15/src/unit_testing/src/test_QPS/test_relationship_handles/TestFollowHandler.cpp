@@ -45,7 +45,7 @@ TEST_CASE("Follows* test")
 
         string retStr3 = TestUtility::testDriver("read s1; Select s1 such that Follows*(5, _)", pkb);
         
-        REQUIRE(retStr3 == "None");
+        REQUIRE(retStr3 == "none");
 
         //(int, int)
         string retStr4 = TestUtility::testDriver("read s1; Select s1 such that Follows*(4, 5)", pkb);
@@ -54,7 +54,7 @@ TEST_CASE("Follows* test")
 
         string retStr5 = TestUtility::testDriver("read s1; Select s1 such that Follows*(5,4)", pkb);
         
-        REQUIRE(retStr5 == "None");
+        REQUIRE(retStr5 == "none");
 
         //WC-Synon
         string retStr6 = TestUtility::testDriver("read s1; call c1; Select s1 such that Follows*(_,s1)", pkb);
@@ -111,7 +111,7 @@ TEST_CASE("Follows test 1")
 
         string retStr3 = TestUtility::testDriver("read s1; Select s1 such that Follows(5, _)", pkb);
         
-        REQUIRE(retStr3 == "None");
+        REQUIRE(retStr3 == "none");
 
         //(int, int)
         string retStr4 = TestUtility::testDriver("read s1; Select s1 such that Follows(4, 5)", pkb);
@@ -120,7 +120,7 @@ TEST_CASE("Follows test 1")
 
         string retStr5 = TestUtility::testDriver("read s1; Select s1 such that Follows(5,4)", pkb);
         
-        REQUIRE(retStr5 == "None");
+        REQUIRE(retStr5 == "none");
 
         //Synon-int
         string retStr6 = TestUtility::testDriver("read s1; Select s1 such that Follows(s1,5)", pkb);
@@ -188,7 +188,7 @@ TEST_CASE("Follows test 2")
 
         string retStr5 = TestUtility::testDriver("read s1; call c1; Select s1 such that Follows(_,1)", pkb);
         
-        REQUIRE(retStr5 == "None");
+        REQUIRE(retStr5 == "none");
 
     }
     catch (exception e)

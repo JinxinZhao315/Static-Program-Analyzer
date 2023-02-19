@@ -43,19 +43,19 @@ TEST_CASE("UsesS empty pkb") {
     PQLDriver driver = PQLDriver(pkb);
 
     string retStr = TestUtility::testDriver("assign a; Select a such that Uses(1, \"x\")", pkb);
-    REQUIRE(retStr == "None");
+    REQUIRE(retStr == "none");
 
     string retStr1 = TestUtility::testDriver("assign a; Select a such that Uses(1,_)", pkb);
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "None");
+    REQUIRE(retStr1 == "none");
 
     string retStr2 = TestUtility::testDriver("variable v; Select v such that Uses(1,v)", pkb);
     //cout << retStr2 << endl;
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr3 = TestUtility::testDriver("assign a; variable v; Select a such that Uses(a,v)", pkb);
     //cout << retStr3 << endl;
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 }
 
 TEST_CASE("UsesS (int, quoted_ident)"){
@@ -70,7 +70,7 @@ TEST_CASE("UsesS (int, quoted_ident)"){
 
     string retStr2 = testUses("assign a; Select a such that Uses(1, \"i\")");
     //cout << retStr2 << endl;
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 }
 
 TEST_CASE("UsesS (int, _)"){

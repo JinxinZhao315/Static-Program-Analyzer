@@ -37,12 +37,12 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, _)", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(2, _)", pkb);
     
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("ModifiesS Integer IdentString test") {
@@ -70,11 +70,11 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; Select b  such that Modifies(1, \"x\")", pkb);
     
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, \"x\")", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(3, \"x\")", pkb);
@@ -112,7 +112,7 @@ TEST_CASE("ModifiesS Integer Variable test") {
     //Assume one synonmy empty then all empty(not the case waiting for change)
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(2, b)", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(3, b)", pkb);
@@ -151,7 +151,7 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; call c; Select c such that Modifies(c, b)", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 }
 
@@ -185,12 +185,12 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, \"d\")", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(a, \"x\")", pkb);
     
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("ModifiesS Statement Underscore test") {
@@ -224,7 +224,7 @@ TEST_CASE("ModifiesS Statement Underscore test") {
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; call c; Select c such that Modifies(c, _)", pkb);
     
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Modifies(a, _)", pkb);
