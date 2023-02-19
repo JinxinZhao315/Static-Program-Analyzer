@@ -26,11 +26,11 @@ TEST_CASE("Parent Integer Underscore test") {
     REQUIRE(retStr2 == "1,5");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Parent(3, _)", pkb);
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent(5, _)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("Parent* Integer Underscore test") {
@@ -58,7 +58,7 @@ TEST_CASE("Parent* Integer Underscore test") {
     REQUIRE(retStr2 == "1,5");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Parent*(3, _)", pkb);
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent*(5, _)", pkb);
@@ -93,7 +93,7 @@ TEST_CASE("Parent Underscore Integer test") {
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent(_, 5)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 
 }
 
@@ -127,7 +127,7 @@ TEST_CASE("Parent* Underscore Integer test") {
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent*(_, 5)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("Parent Integer Integer test") {
@@ -146,17 +146,17 @@ TEST_CASE("Parent Integer Integer test") {
     pkb.addParent(5, {1});
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(2, 1)", pkb);
-    REQUIRE(retStr1 == "None");
+    REQUIRE(retStr1 == "none");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select w  such that Parent(1, 2)", pkb);
     REQUIRE(retStr2 == "1,5");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Parent(3, 2)", pkb);
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent(5, 2)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("Parent* Integer Integer test") {
@@ -178,13 +178,13 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addParentStar(5, childSet2);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(2, 1)", pkb);
-    REQUIRE(retStr1 == "None");
+    REQUIRE(retStr1 == "none");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select w  such that Parent*(1, 2)", pkb);
     REQUIRE(retStr2 == "1,5");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a such that Parent*(3, 2)", pkb);
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent*(5, 2)", pkb);
@@ -213,7 +213,7 @@ TEST_CASE("Parent Synonym Integer test") {
     REQUIRE(retStr2 == "1");
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b such that Parent(a, 2)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("Parent* Synonym Integer test") {
@@ -235,7 +235,7 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addParentStar(5, childSet2);
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(a, 1)", pkb);
-    REQUIRE(retStr1 == "None");
+    REQUIRE(retStr1 == "none");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select w  such that Parent*(w, 2)", pkb);
     REQUIRE(retStr2 == "1,5");
@@ -245,7 +245,7 @@ TEST_CASE("Parent* Synonym Integer test") {
 
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select a such that Parent*(a, 2)", pkb);
-    REQUIRE(retStr5 == "None");
+    REQUIRE(retStr5 == "none");
 }
 
 TEST_CASE("Parent Integer Synonym test") {
@@ -267,7 +267,7 @@ TEST_CASE("Parent Integer Synonym test") {
     REQUIRE(retStr1 == "2");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select w  such that Parent(2, w)", pkb);
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr5 = TestUtility::testDriver("assign a; while w; Select w such that Parent(5, w)", pkb);
     REQUIRE(retStr5 == "1");
@@ -301,7 +301,7 @@ TEST_CASE("Parent* Integer Synonym test") {
     REQUIRE(retStr2 == "2");
 
     string retStr3 = TestUtility::testDriver("assign a; while w; Select w such that Parent*(1, w)", pkb);
-    REQUIRE(retStr3 == "None");
+    REQUIRE(retStr3 == "none");
 
 
     string retStr5 = TestUtility::testDriver("assign a;  while w; Select w such that Parent*(5, w)", pkb);
@@ -327,7 +327,7 @@ TEST_CASE("Parent Synonym Synonym test") {
     REQUIRE(retStr1 == "2");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select w  such that Parent(a, w)", pkb);
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr5 = TestUtility::testDriver("assign a; while w1, w2; Select w1 such that Parent(w1, w2)", pkb);
     REQUIRE(retStr5 == "5");
@@ -336,7 +336,7 @@ TEST_CASE("Parent Synonym Synonym test") {
     REQUIRE(retStr6 == "1");
 
     string retStr7 = TestUtility::testDriver("assign a; read r; while w1, w2; Select r such that Parent(r, w1)", pkb);
-    REQUIRE(retStr7 == "None");
+    REQUIRE(retStr7 == "none");
 }
 
 TEST_CASE("Parent* Synonym Synonym test") {
@@ -390,10 +390,10 @@ TEST_CASE("Parent Synonym Underscore test") {
     REQUIRE(retStr1 == "1,5");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select a  such that Parent(a, _)", pkb);
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr7 = TestUtility::testDriver("assign a; read r; while w1, w2; Select r such that Parent(r, _)", pkb);
-    REQUIRE(retStr7 == "None");
+    REQUIRE(retStr7 == "none");
 }
 
 TEST_CASE("Parent* Synonym Underscore test") {
@@ -418,7 +418,7 @@ TEST_CASE("Parent* Synonym Underscore test") {
     REQUIRE(retStr1 == "1,5");
 
     string retStr2 = TestUtility::testDriver("assign a; while w; Select a  such that Parent*(a, _)", pkb);
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
 }
 
@@ -502,9 +502,9 @@ TEST_CASE("Parent/Parent* Underscore Underscore test") {
     REQUIRE(retStr7 == "3");
 
     string retStr8 = TestUtility::testDriver("assign a; read r; while w1, w2; call c; Select c such that Parent(_, _)", pkbEmpty);
-    REQUIRE(retStr8 == "None");
+    REQUIRE(retStr8 == "none");
 
     string retStr9 = TestUtility::testDriver("assign a; read r; while w1, w2; call c; Select r such that Parent(_, _)", pkbEmpty);
-    REQUIRE(retStr9 == "None");
+    REQUIRE(retStr9 == "none");
 }
 

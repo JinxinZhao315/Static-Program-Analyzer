@@ -117,7 +117,6 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 
 
 void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<PatternClause>& patternClauseVec) {
-	std::string synonym = extractKeyword(input);
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
@@ -127,7 +126,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<Patte
 	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-//	std::string relationship = trim(input.substr(0, nextLeftPar));
+	std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::WHITESPACES);
     std::string leftArg = Utility::trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1),
                                         Utility::WHITESPACES);
     std::string rightArg = Utility::trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1),

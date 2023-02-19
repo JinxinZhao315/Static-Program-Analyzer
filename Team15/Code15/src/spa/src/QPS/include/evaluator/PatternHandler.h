@@ -16,7 +16,7 @@ public:
     set<string> findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch);
     bool findIsMatch(vector<string> rhsTokensVec, string substrToMatch);
     bool findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec);
-    pair<bool,string> trimUnderscoreQuotes(string input);
+    pair<bool,string> trimPattern(string input);
 
     // TODO: These functions should be in common file
     vector<string>  convertToPostfix(vector<string> input, int startIndex);

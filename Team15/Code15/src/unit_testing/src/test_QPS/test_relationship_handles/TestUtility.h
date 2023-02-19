@@ -8,19 +8,17 @@ public:
         PQLDriver driver = PQLDriver(pkb);
         set<string> retSet = driver.processPQL(queryStr);
         string retStr;
-
-        if (retSet.empty())
-        {
-            retStr = "None";
-        }
-        else
-        {
+        if (retSet.empty()) {
+            retStr = "none";
+        } else {
             retStr = std::accumulate(begin(retSet),
                                      end(retSet),
                                      string{},
                                      [](const string &a, const string &b)
                                      { return a.empty() ? b : a + ',' + b; });
         }
+
+
         return retStr;
     };
 };

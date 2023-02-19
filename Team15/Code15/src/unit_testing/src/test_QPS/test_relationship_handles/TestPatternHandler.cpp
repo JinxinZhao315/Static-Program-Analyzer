@@ -9,7 +9,7 @@ TEST_CASE("PatternHandler a(_,_) test empty pkb") {
     PKB pkb;
     string retStr = TestUtility::testDriver("assign a; Select a pattern a (_,_)", pkb);
     //cout << retStr << endl;
-    REQUIRE(retStr == "None");
+    REQUIRE(retStr == "none");
 }
 
 TEST_CASE("PatternHandler a(_,_) test filled pkb") {
@@ -56,7 +56,7 @@ TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
 
     string retStr2 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"t\"_)", pkb);
     //cout << retStr2 << endl;
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr3 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"2\"_)", pkb);
     //cout << retStr3 << endl;
@@ -142,7 +142,7 @@ TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
 
     string retStr2 = TestUtility::testDriver("assign a; Select a pattern a (\"t\",_)", pkb);
     //cout << retStr2 << endl;
-    REQUIRE(retStr2 == "None");
+    REQUIRE(retStr2 == "none");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select b pattern a (\"k\", _)", pkb);
     //cout << retStr3 << endl;

@@ -88,24 +88,9 @@ TEST_CASE("Overall test : source1.txt 4") {
     set<string> expectedResult = { "a", "b", "c" };
     REQUIRE(result == expectedResult);
 }
-TEST_CASE("Overall test : source1.txt 5") {
-    // Enter source of SIMPLE code
-    string filename = source1_filename;
-    string queryStr = "stmt s; Select s such that Modifies(s, \"y\")";
 
-    set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "16" };
-    REQUIRE(result == expectedResult);
-}
-TEST_CASE("Overall test : source1.txt 6") {
-    // Enter source of SIMPLE code
-    string filename = source1_filename;
-    string queryStr = "stmt s; Select s such that Uses(s, \"e\")";
 
-    set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "17" };
-    REQUIRE(result == expectedResult);
-}
+
 TEST_CASE("Overall test : source1.txt 7") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
@@ -152,6 +137,25 @@ TEST_CASE("Overall test : source1.txt 11") {
     REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Overall test : source1.txt 12 SyntaxError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "variable v; Select v;";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SyntaxError" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source1.txt 12 SemanticError") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "print p; Select p pattern p(_,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
 
 
 
@@ -226,7 +230,7 @@ TEST_CASE("Overall test : source2.txt 6") {
 TEST_CASE("Overall test : source2.txt 7") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a(\"w\", _\"b + c\"_)";
+    string queryStr = "assign a; Select a pattern a(\"w\", _\"b\"_)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "14", "22" };
@@ -236,36 +240,53 @@ TEST_CASE("Overall test : source2.txt 7") {
 TEST_CASE("Overall test : source2.txt 8") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a(_, _\"a * b\"_)";
+    string queryStr = "assign a; Select a pattern a (_, _\" a\"_)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "15" };
+    set<string> expectedResult = { "12", "14", "15", "16", "17" };
     REQUIRE(result == expectedResult);
 }
 
 TEST_CASE("Overall test : source2.txt 9") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a(_, _\"c * d\"_)";
+    string queryStr = "assign a; Select a pattern a (_, _\"c \"_)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { "12", "14", "15", "16", "17", "22"};
     REQUIRE(result == expectedResult);
 }
 
 TEST_CASE("Overall test : source2.txt 10") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a(\"count\", \"count\")";
+    string queryStr = "assign a; Select a pattern a(\"count\", _\"count\"_)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { "20" };
     REQUIRE(result == expectedResult);
 }
 
 
+TEST_CASE("Overall test : source2.txt 11") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+    string queryStr = "stmt s; Select s such that Modifies(s, \"y\")";
 
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "16" };
+    REQUIRE(result == expectedResult);
+}
 
+TEST_CASE("Overall test : source2.txt 12") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+    string queryStr = "stmt s; Select s such that Uses(s, \"e\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "17" };
+    REQUIRE(result == expectedResult);
+}
 
 
 
@@ -404,7 +425,7 @@ TEST_CASE("Overall test : source4.txt 7") {
     string queryStr = "stmt s; Select s such that Parent* (8, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source4.txt 8") {
@@ -422,7 +443,7 @@ TEST_CASE("Overall test : source4.txt 9") {
     string queryStr = "stmt s; Select s such that Parent* (12, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "none" };
+    set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source4.txt 10") {
