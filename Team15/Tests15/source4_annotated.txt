@@ -1,0 +1,24 @@
+procedure proc1 {
+//1  a = 0;
+//2  b = 100;
+//3  c = 50;
+//4  while (a < 50) {
+//5    while (b > 1) {
+//6      if (a > 25) then {
+//7        if (b < 50) then {
+//8          b = b / 2;
+//9          a = a + 5;
+        } else {
+//10          if (b < 75) then {
+//11            b = b / 3;
+          } else {
+//12            b = b / 4;
+          }
+        }
+      } else {
+//13        a = a * 2;
+      }
+    }
+//14    a = a + 1;
+  }
+ }
