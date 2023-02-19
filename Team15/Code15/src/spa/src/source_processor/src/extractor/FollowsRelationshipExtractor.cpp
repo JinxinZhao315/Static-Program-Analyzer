@@ -4,16 +4,13 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
     vector<int> v;
     unordered_map<int, int> followsRS;
     unordered_map<int, int> parent;
-    unordered_map<int, int> tempFollows; // used within each procedure
     int prevLineNumber = 0;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         string lineType = line.getType();
         if (lineType == "procedure") {
             // new procedure, store everything in temp and start anew
-            followsRS.insert(tempFollows.begin(), tempFollows.end());
             parent.clear();
-            tempFollows.clear();
             v.clear();
             continue;
         }
@@ -26,7 +23,7 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
         bool bothSameParent = parent[prevLineNumber] == parent[currLineNumber];
         bool isSiblings = bothNoParent || bothSameParent;
         if (prevLineNumber && currLineNumber && isSiblings) {
-            tempFollows[prevLineNumber] = currLineNumber;
+            followsRS[prevLineNumber] = currLineNumber;
         }
         if (lineType == "if" || lineType == "while") {
             v.push_back(currLineNumber);
@@ -48,7 +45,6 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
         }
     }
     // store info for last procedure
-    followsRS = unordered_map<int, int>(tempFollows.begin(), tempFollows.end());
     unordered_map<int, set<int>> followsStarRS;
     for (const auto& p : followsRS) {
         int leader = p.first;
