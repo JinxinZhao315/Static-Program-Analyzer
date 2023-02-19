@@ -24,12 +24,11 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllStmtsByType(extractor->getStatements());
     pkb->addAllFollows(extractor->getFollowsRS());
     pkb->addAllFollowsStar(extractor->getFollowsStarRS());
-    pkb->addAllParent(extractor->getParentRS()); //TODO: uncomment once PKB api updated
+    pkb->addAllParent(extractor->getParentRS());
     pkb->addAllParentStar(extractor->getParentStarRS());
     pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllUsesStmt(extractor->getUsesRS());
-//    pkb->addPatt(); //TODO: finish this after PKB api is implemented
-//    extractor->getAssignsRS()
+    pkb->addAllPatterns(extractor->getAssignsRS());
 }
 
 void SourceProcessor::printParsedProgram() {
