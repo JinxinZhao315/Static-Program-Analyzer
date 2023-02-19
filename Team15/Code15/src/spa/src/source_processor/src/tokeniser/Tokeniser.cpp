@@ -85,7 +85,6 @@ bool passesLengthCheck(string keyword, string token) {
 
 bool setStartsWithKeyword(vector<string>* keywords, vector<string>* tokens, string token, int* position) {
     bool isKeyword = false;
-    int tokenLength = token.length();
     for (auto keyword : *keywords) {
         int keywordLength = keyword.length();
         if (token.find(keyword, *position) == *position && passesLengthCheck(keyword, token)) {
