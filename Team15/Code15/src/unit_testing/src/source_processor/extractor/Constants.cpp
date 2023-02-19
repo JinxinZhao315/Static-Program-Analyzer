@@ -96,6 +96,13 @@ const vector<Line> superNested = {
         Line({"}"}, "}"),
 };
 
+const vector<Line> readPoint = {
+        Line({"procedure", "readPoint", "{"}, "procedure"),
+        Line(4, {"read", "x", ";"}, "read"),
+        Line(5, {"read", "y", ";"}, "read"),
+        Line({"}"}, "}"),
+};
+
 const vector<Line> program = {
         Line({"procedure", "main", "{"}, "procedure"),
         Line(1, {"flag", "=", "0", ";"}, "="),
