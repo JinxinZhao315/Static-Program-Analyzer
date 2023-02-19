@@ -10,4 +10,6 @@ extern const vector<Line> ifElse2;
 extern const vector<Line> program;
 extern const vector<Line> superNested;
 extern const vector<Line> readPoint;
+extern const vector<Line> singleAssignmentSelfIncrement;
+extern const vector<Line> singleAssignmentAddVariable;
 extern const vector<Line> source2;
