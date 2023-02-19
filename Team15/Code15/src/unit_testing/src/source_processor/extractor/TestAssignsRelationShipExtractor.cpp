@@ -18,13 +18,13 @@ TEST_CASE("extractAssignmentRS_oneAssignment") {
     REQUIRE(result == expected);
 }
 
-//TEST_CASE("extractAssignmentRS_manyAssignmentsWhileLoop") {
-//    set<string> variables = {"count", "cenX", "cenY"};
-//    auto result = extractAssignmentRS(whileLoop, variables);
-//    unordered_map<string, set<Line>> expected = {
-//        {"count", {Line(6, {"count", "1" "+"})}},
-//        {"cenX", {Line(7, {"cenX", "x", "+"})}},
-//        {"cenY", {Line(8, {"cenY", "y", "+"})}}
-//    };
-//    REQUIRE(result == expected);
-//}
+TEST_CASE("extractAssignmentRS_manyAssignmentsWhileLoop") {
+    set<string> variables = {"count", "cenX", "cenY"};
+    auto result = extractAssignmentRS(whileLoop, variables);
+    unordered_map<string, set<Line>> expected = {
+        {"count", {Line(6, {"count", "1" "+"})}},
+        {"cenX", {Line(7, {"cenX", "x", "+"})}},
+        {"cenY", {Line(8, {"cenY", "y", "+"})}}
+    };
+    REQUIRE(result == expected);
+}
