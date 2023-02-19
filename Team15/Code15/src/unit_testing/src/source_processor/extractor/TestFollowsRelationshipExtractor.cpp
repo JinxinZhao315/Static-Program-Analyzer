@@ -59,3 +59,11 @@ TEST_CASE("extractFollowsRelationship_superNested") {
     REQUIRE(result == expectedFollows);
     REQUIRE(result2 == expectedFollowsStar);
 }
+
+//TEST_CASE("extractFollowsRelationship_source2") {
+//    auto [result, result2] = extractFollowsRelationship(source2);
+//    unordered_map<int, int> expectedFollows = {{1,2},{2,3},{3,4},{5,14},{8,9}};
+//    unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4}},{2,{3,4}},{3,{4}},{5,{14}},{8,{9}}};
+//    REQUIRE(result == expectedFollows);
+//    REQUIRE(result2 == expectedFollowsStar);
+//}
