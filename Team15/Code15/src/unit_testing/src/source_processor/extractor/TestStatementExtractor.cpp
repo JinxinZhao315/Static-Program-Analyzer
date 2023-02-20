@@ -140,14 +140,6 @@ unordered_map<string, set<int>> expectedStatementsSource4 = {
 };
 
 TEST_CASE("test source 4 extractor") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(source4);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatementsSource4[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatementsSource4 == statements);
 }
