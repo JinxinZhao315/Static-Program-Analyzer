@@ -17,7 +17,7 @@ No additional instructions required.
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 Banerjee Aditya | PHONE | aditya_banerjee@u.nus.edu | OS/IDE
-Tan Zhong Hong, Marcus | PHONE | e0424790@u.nus.edu | MacOS/CLion VERSION
+Tan Zhong Hong, Marcus | 9880933 | e0424790@u.nus.edu | MacOS/CLion VERSION 2022.3.1
 Galen Cheung Zhen Yu | 85229420 | e0407610@u.nus.edu | Windows 10/Visual Studio Community 2019
 Luo Zhijie | 83879381 | e0492460@u.nus.edu | Windows 11/Visual Studio Community 2019
 Qin Guorui | PHONE | e0550355@u.nus.edu | Windows VERSION/Visual Studio VERSION
