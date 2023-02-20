@@ -133,9 +133,6 @@ vector<string>* Tokeniser::tokenise(string line) {
 
 string findKeyword(vector<string>* line, vector<string>* keywords) {
     for (auto token : *line) {
-        if (token.find("else") != string::npos) { // special case TODO: find better implementation
-            return "else";
-        }
         if (find(keywords->begin(), keywords->end(), token) != keywords->end()) {
             return token;
         }
@@ -145,6 +142,11 @@ string findKeyword(vector<string>* line, vector<string>* keywords) {
 
 bool checkKeywordHasLineNumber(string keyword) {
     return !(keyword == "procedure" || keyword == "else" || keyword == "}");
+}
+
+bool checkElse(vector <string>* line) {
+    return find(line->begin(), line->end(), "}") != line->end()
+           && find(line->begin(), line->end(), "else") != line->end();
 }
 
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
@@ -159,6 +161,9 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
             lineNumber++;
         } else {
             extractedLine = new Line(*line, keyword);
+            if(checkElse(line)) {
+                extractedLine = new Line(*line, "else");
+            }
         }
         lines.push_back(*extractedLine);
     }

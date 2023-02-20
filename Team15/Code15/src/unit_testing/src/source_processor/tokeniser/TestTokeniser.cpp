@@ -197,11 +197,7 @@ TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines3.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines3.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(extractedLines == nonEmptyLines3.second);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 4, multiple procedures") {

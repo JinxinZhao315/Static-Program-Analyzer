@@ -34,6 +34,12 @@ void Parser::removeWhiteSpaces(string &str) {
     str = result;
 }
 
+string Parser::removeAllWhitespace(std::string str) {
+    // use std::remove_if() with std::isspace() to remove all white space characters
+    str.erase(remove_if(str.begin(), str.end(), [](unsigned char c) { return isspace(c); }), str.end());
+    return str;
+}
+
 vector<string> Parser::separateLines(string str) {
     vector<string> lines;
     string line;
@@ -52,6 +58,15 @@ vector<string> Parser::separateLines(string str) {
     return lines;
 }
 
+string Parser::trimStartingAndTrailingWhitespace(const string& str) {
+    auto firstValid = str.find_first_not_of(" \t\n\r\f\v");
+    if (firstValid == std::string::npos) {
+        return "";
+    }
+    auto lastValid = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(firstValid, lastValid - firstValid + 1);
+}
+
 void Parser::reformatParsedProgram() {
     int len = (int) this->parsedFile.size();
     if (len < 2) {
@@ -61,10 +76,11 @@ void Parser::reformatParsedProgram() {
     for (int i = 0; i < len; i++) {
         string line = this->parsedFile[i];
         string nextLine = this->parsedFile[i + 1];
-        if (i < len - 1 && line == "}" && nextLine == "else {") {
+        if (i < len - 1 && removeAllWhitespace(line) == "}" && removeAllWhitespace(nextLine) == "else{") {
             formattedFile.emplace_back("} else {");
+            i++;
         } else {
-            formattedFile.push_back(line);
+            formattedFile.push_back(trimStartingAndTrailingWhitespace(line));
         }
     }
     this->parsedFile = formattedFile;
