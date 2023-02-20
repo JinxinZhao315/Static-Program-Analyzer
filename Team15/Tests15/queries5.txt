@@ -1,0 +1,55 @@
+1 - assign pattern
+assign a; variable v;
+Select v pattern a(v, _)
+a, b, c, d, e, f, g
+5000
+2 - assign pattern
+assign a; variable v;
+Select v pattern a(v, _"7"_)
+c
+5000
+3 - assign pattern
+assign a; variable v;
+Select v pattern a(_, _)
+a, b, c, d, e, f, g
+5000
+4 - assign pattern
+assign a; variable v;
+Select v pattern a(_, _"7"_)
+a, b, c, d, e, f, g
+5000
+5 - assign pattern
+assign a;
+Select a pattern a("a", _)
+1, 8, 12, 15
+5000
+6 - assign pattern
+assign a;
+Select a pattern a("c", _"7"_)
+16
+5000
+7 - assign pattern
+assign a;
+Select a pattern a("b", _)
+2, 13
+5000
+8 - assign pattern
+assign a;
+Select a pattern a("b", _"7"_)
+none
+5000
+9 - assign pattern
+assign a; variable v;
+Select v such that Modifies(9, v) pattern a(v, _"8"_)
+c
+5000
+10 - assign pattern
+assign a; variable v1, v2;
+Select v1 such that Uses(8, v2) pattern a(v1, _"7"_)
+c
+5000
+11 - assign pattern
+assign a; variable v1, v2;
+Select v1 such that Uses(8, v2) pattern a(v1, _"h"_)
+none
+5000

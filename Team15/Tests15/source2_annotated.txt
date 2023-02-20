@@ -1,0 +1,30 @@
+procedure proc1 {
+//1   v = 0;
+//2   w = 0;
+//3   x = 0;
+//4   y = 0;
+//5   z = 0;
+//6   a = 1;
+//7   b = 2;
+//8   c = 3;
+//9   d = 4;
+//10  e = 5;
+//11  f = 6;
+//12  v = a - b + c;
+//13  if (v > 0) then {
+//14    w = a - (b + c);
+//15    x = a * b / c;
+//16    y = a * (b / c);
+      } else {
+//17    z = a + b * c * d + e;
+      }
+//18  count = 0;
+//19  while (count < 7) {
+//20    count = count + 1;
+      }
+//21  call proc2; }
+
+procedure proc2 {
+//22  w = b + c + 8;
+//23  x = d * e * 9;
+}
