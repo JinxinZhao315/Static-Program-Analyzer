@@ -22,16 +22,8 @@ unordered_map<string, set<int>> expectedStatements1 = {
 };
 
 TEST_CASE("Extract statements from program with no nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines1);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements1[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements1 == statements);
 }
 
 vector<Line> lines2 = {
@@ -53,16 +45,8 @@ unordered_map<string, set<int>> expectedStatements2 = {
 };
 
 TEST_CASE("Extract statements from program with 1 level of nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines2);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements2[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements2 == statements)
 }
 
 vector<Line> lines3 = {
@@ -91,16 +75,8 @@ unordered_map<string, set<int>> expectedStatements3 = {
 };
 
 TEST_CASE("Extract statements from program with 3 level of nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines3);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements3[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements3 == statements);
 }
 
 vector<Line> lines4 = {
@@ -150,16 +126,8 @@ unordered_map<string, set<int>> expectedStatements4 = {
 };
 
 TEST_CASE("Extract statements from program with multiple procedures") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines4);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements4[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements4 == statements);
 }
 
 unordered_map<string, set<int>> expectedStatementsSource4 = {
