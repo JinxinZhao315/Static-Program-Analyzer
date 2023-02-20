@@ -22,37 +22,37 @@ TEST_CASE("extract variables from singleAssignmentSelfIncrement") {
 
 TEST_CASE("extract variables from singleAssignmentAddVariable") {
 	set<string> results = extractVariables(singleAssignmentAddVariable);
-	set<string> expected = { "cenX", "x" };
+	set<string> expected = { "cenX" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract variables from whileLoop") {
 	set<string> results = extractVariables(whileLoop);
-	set<string> expected = { "cenX", "cenY", "count", "x", "y" };
+	set<string> expected = { "cenX", "cenY", "count" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract variables from whileLoop2") {
 	set<string> results = extractVariables(whileLoop2);
-	set<string> expected = { "cenX", "cenY", "count", "x", "y" };
+	set<string> expected = { "cenX", "cenY", "count" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract variables from computeCentroid") {
 	set<string> results = extractVariables(computeCentroid);
-	set<string> expected = { "cenX", "cenY", "count", "flag", "normSq", "x", "y" };
+	set<string> expected = { "cenX", "cenY", "count", "flag", "normSq" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract variables from ifElse") {
 	set<string> results = extractVariables(ifElse);
-	set<string> expected = { "cenX", "cenY", "count", "flag" };
+	set<string> expected = { "cenX", "cenY", "flag" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract variables from ifElse2") {
 	set<string> results = extractVariables(ifElse2);
-	set<string> expected = { "cenX", "cenY", "count", "flag", "normSq" };
+	set<string> expected = { "cenX", "cenY", "flag" };
 	REQUIRE(results == expected);
 }
 
