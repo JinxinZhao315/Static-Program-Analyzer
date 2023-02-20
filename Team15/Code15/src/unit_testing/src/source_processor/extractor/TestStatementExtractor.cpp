@@ -120,7 +120,7 @@ unordered_map<string, set<int>> expectedStatements4 = {
         {"call", {2, 3, 13, 18}},
         { "print", {6, 7, 8, 9}},
         { "=", {1, 10, 11, 12, 15, 16, 17, 20, 21, 22, 23}},
-        { "if", {}},
+        { "if", {19}},
         { "read", {4, 5}},
         { "while", {14}},
 };
