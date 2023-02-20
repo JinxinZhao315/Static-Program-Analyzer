@@ -14,3 +14,4 @@ extern const vector<Line> singleAssignmentSelfIncrement;
 extern const vector<Line> singleAssignmentAddVariable;
 extern const vector<Line> onlyCallStatements;
 extern const vector<Line> source2;
+extern const vector<Line> source4;

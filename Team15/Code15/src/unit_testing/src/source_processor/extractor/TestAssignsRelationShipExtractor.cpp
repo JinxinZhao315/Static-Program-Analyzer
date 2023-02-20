@@ -59,3 +59,16 @@ TEST_CASE("extractAssignmentRS_manyAssignmentsIfAndWhileLoop") {
     };
     REQUIRE(result == expected);
 }
+
+TEST_CASE("extractAssignmentRS_source4") {
+    set<string> variables = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
+    auto result = extractAssignmentRS(computeCentroid, variables);
+    unordered_map<string, set<Line>> expected = {
+            {"count", { Line(1, {"0"}), Line(6, {"count", "1", "+"}) }},
+            {"cenX", { Line(2, {"0"}), Line(7, {"cenX", "x", "+"}), Line(12, {"cenX", "count", "/"}) }},
+            {"cenY", { Line(3, {"0"}), Line(8, {"cenY", "y", "+"}), Line(13, {"cenY", "count", "/"}) }},
+            {"flag", { Line(11, {"1"}) }},
+            {"normSq", { Line(14, {"cenX", "cenX", "*", "cenY", "cenY", "*", "+"}) }},
+    };
+    REQUIRE(result == expected);
+}
