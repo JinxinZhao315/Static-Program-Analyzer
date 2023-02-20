@@ -212,3 +212,63 @@ TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 
     vector<Line> extractedLines = tokeniser->getExtractedLines();
     REQUIRE(nonEmptyLines6.second == extractedLines);
 }
+
+pair<vector<string>, vector<Line>> source4 = {{
+    "procedure proc1 {",
+    "a = 0;",
+    "b = 100;",
+    "c = 50;",
+    "while (a < 50) {",
+    "while (b > 1) {",
+    "if (a > 25) then {",
+    "if (b < 50) then {",
+    "b = b / 2;",
+    "a = a + 5;",
+    "} else {",
+    "if (b < 75) then {",
+    "b = b / 3;",
+    "} else {",
+    "b = b / 4;",
+    "}",
+    "}",
+    "} else {",
+    "a = a * 2;",
+    "}",
+    "}",
+    "a = a + 1;",
+    "}",
+    "}",
+    }, {
+        Line({"procedure", "proc1", "{"}, "procedure"),
+        Line(1, {"a", "=", "0", ";"}, "="),
+        Line(2, {"b", "=", "100", ";"}, "="),
+        Line(3, {"c", "=", "50", ";"}, "="),
+        Line(4, {"while", "(", "a", "<", "50", ")", "{"}, "while"),
+        Line(5, {"while", "(", "b", ">", "1", ")", "{"}, "while"),
+        Line(6, {"if", "(", "a", ">", "25", ")", "then", "{"}, "if"),
+        Line(7, {"if", "(", "b", "<", "50", ")", "then", "{"}, "if"),
+        Line(8, {"b", "=", "b", "/", "2", ";"}, "="),
+        Line(9, {"a", "=", "a", "+", "5", ";"}, "="),
+        Line({"}", "else", "{"}, "else"),
+        Line(10, {"if", "(", "b", "<", "75", ")", "then", "{"}, "if"),
+        Line(11, {"b", "=", "b", "/", "3", ";"}, "="),
+        Line({"}", "else", "{"}, "else"),
+        Line(12, {"b", "=", "b", "/", "4", ";"}, "="),
+        Line({"}"}, "}"),
+        Line({"}"}, "}"),
+        Line({"}", "else", "{"}, "else"),
+        Line(13, {"a", "=", "a", "*", "2", ";"}, "="),
+        Line({"}"}, "}"),
+        Line({"}"}, "}"),
+        Line(14, {"a", "=", "a", "+", "1", ";"}, "="),
+        Line({"}"}, "}"),
+        Line({"}"}, "}")
+}
+};
+
+TEST_CASE("source 4") {
+    Tokeniser* tokeniser = new Tokeniser();
+    tokeniser->feedLines(source4.first);
+    vector<Line> extractedLines = tokeniser->getExtractedLines();
+    REQUIRE(source4.second == extractedLines);
+}
