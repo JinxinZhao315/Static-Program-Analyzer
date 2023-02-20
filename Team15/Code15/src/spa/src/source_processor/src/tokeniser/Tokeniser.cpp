@@ -144,6 +144,11 @@ bool checkKeywordHasLineNumber(string keyword) {
     return !(keyword == "procedure" || keyword == "else" || keyword == "}");
 }
 
+bool checkElse(vector <string>* line) {
+    return find(line->begin(), line->end(), "}") != line->end()
+           && find(line->begin(), line->end(), "else") != line->end();
+}
+
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
     int lineNumber = 1;
     vector<Line> lines;
@@ -156,6 +161,9 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
             lineNumber++;
         } else {
             extractedLine = new Line(*line, keyword);
+            if(checkElse(line)) {
+                extractedLine = new Line(*line, "else");
+            }
         }
         lines.push_back(*extractedLine);
     }

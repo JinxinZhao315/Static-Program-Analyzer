@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdio>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
 
@@ -17,6 +18,9 @@ public:
     vector<string> getParsedProgram();
 private:
     vector<string> parsedFile;
+    void reformatParsedProgram();
     static vector<string> separateLines(string str);
     static void removeWhiteSpaces(string &str);
+    static string removeAllWhitespace(string str);
+    static string trimStartingAndTrailingWhitespace(const string& str);
 };
