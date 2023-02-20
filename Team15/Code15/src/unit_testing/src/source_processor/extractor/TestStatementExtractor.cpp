@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "source_processor/include/extractor/StatementExtractor.h";
+#include "Constants.hpp"
 
 using namespace std;
 
@@ -154,6 +155,28 @@ TEST_CASE("Extract statements from program with multiple procedures") {
     for(auto [key, value] : statements) {
         for(int i : value) {
             if(expectedStatements4[key].find(i) == value.end()) {
+                correct = false;
+            }
+        }
+    }
+    assert(correct);
+}
+
+unordered_map<string, set<int>> expectedStatementsSource4 = {
+        {"call", {}},
+        { "print", {}},
+        { "=", {1,2,3,8,9,11,12,13,14}},
+        { "if", {6,7,10}},
+        { "read", {}},
+        { "while", {4,5}},
+};
+
+TEST_CASE("test source 4 extractor") {
+    bool correct = true;
+    unordered_map<string, set<int>> statements = extractStatements(source4);
+    for(auto [key, value] : statements) {
+        for(int i : value) {
+            if(expectedStatementsSource4[key].find(i) == value.end()) {
                 correct = false;
             }
         }

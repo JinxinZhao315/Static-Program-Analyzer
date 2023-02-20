@@ -79,3 +79,9 @@ TEST_CASE("extract procedures from source2") {
 	set<string> expected = { "proc1", "proc2" };
 	REQUIRE(results == expected);
 }
+
+TEST_CASE("extract procedures from source4") {
+    set<string> results = extractProcedures(source4);
+    set<string> expected = { "proc1" };
+    REQUIRE(results == expected);
+}

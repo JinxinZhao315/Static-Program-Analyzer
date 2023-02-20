@@ -213,7 +213,7 @@ TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 
     REQUIRE(nonEmptyLines6.second == extractedLines);
 }
 
-pair<vector<string>, vector<Line>> source4 = {{
+pair<vector<string>, vector<Line>> source4_tok = {{
     "procedure proc1 {",
     "a = 0;",
     "b = 100;",
@@ -266,9 +266,9 @@ pair<vector<string>, vector<Line>> source4 = {{
 }
 };
 
-TEST_CASE("source 4") {
+TEST_CASE("test source 4") {
     Tokeniser* tokeniser = new Tokeniser();
-    tokeniser->feedLines(source4.first);
+    tokeniser->feedLines(source4_tok.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    REQUIRE(source4.second == extractedLines);
+    REQUIRE(source4_tok.second == extractedLines);
 }
