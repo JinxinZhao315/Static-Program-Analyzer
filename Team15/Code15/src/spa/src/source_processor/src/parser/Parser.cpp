@@ -75,10 +75,14 @@ void Parser::reformatParsedProgram() {
     vector<string> formattedFile;
     for (int i = 0; i < len; i++) {
         string line = this->parsedFile[i];
-        string nextLine = this->parsedFile[i + 1];
-        if (i < len - 1 && removeAllWhitespace(line) == "}" && removeAllWhitespace(nextLine) == "else{") {
-            formattedFile.emplace_back("} else {");
-            i++;
+        if (i < len - 1) {
+            string nextLine = this->parsedFile[i + 1];
+            if (removeAllWhitespace(line) == "}" && removeAllWhitespace(nextLine) == "else{") {
+                formattedFile.emplace_back("} else {");
+                i++;
+            } else {
+                formattedFile.push_back(trimStartingAndTrailingWhitespace(line));
+            }
         } else {
             formattedFile.push_back(trimStartingAndTrailingWhitespace(line));
         }
