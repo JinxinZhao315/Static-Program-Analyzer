@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "source_processor/include/extractor/StatementExtractor.h";
+#include "source_processor/include/extractor/StatementExtractor.h"
 #include "Constants.hpp"
 
 using namespace std;
@@ -46,7 +46,7 @@ unordered_map<string, set<int>> expectedStatements2 = {
 
 TEST_CASE("Extract statements from program with 1 level of nesting") {
     unordered_map<string, set<int>> statements = extractStatements(lines2);
-    REQUIRE(expectedStatements2 == statements)
+    REQUIRE(expectedStatements2 == statements);
 }
 
 vector<Line> lines3 = {
