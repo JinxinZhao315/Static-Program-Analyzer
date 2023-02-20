@@ -24,6 +24,7 @@ void Parser::parseProgram(const string& fileName) {
         vector<string> newLines = separateLines(currLine);
         parsedFile.insert(parsedFile.end(),  newLines.begin(), newLines.end());
     }
+    reformatParsedProgram();
     file.close();
 }
 
@@ -51,6 +52,23 @@ vector<string> Parser::separateLines(string str) {
     return lines;
 }
 
+void Parser::reformatParsedProgram() {
+    int len = (int) this->parsedFile.size();
+    if (len < 2) {
+        return;
+    }
+    vector<string> formattedFile;
+    for (int i = 0; i < len; i++) {
+        string line = this->parsedFile[i];
+        string nextLine = this->parsedFile[i + 1];
+        if (i < len - 1 && line == "}" && nextLine == "else {") {
+            formattedFile.emplace_back("} else {");
+        } else {
+            formattedFile.push_back(line);
+        }
+    }
+    this->parsedFile = formattedFile;
+}
 vector<string> Parser::getParsedProgram() {
     return this->parsedFile;
 }

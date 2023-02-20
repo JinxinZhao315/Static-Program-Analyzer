@@ -17,6 +17,7 @@ public:
     vector<string> getParsedProgram();
 private:
     vector<string> parsedFile;
+    void reformatParsedProgram();
     static vector<string> separateLines(string str);
     static void removeWhiteSpaces(string &str);
 };
