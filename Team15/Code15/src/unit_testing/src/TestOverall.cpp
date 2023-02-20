@@ -294,7 +294,7 @@ TEST_CASE("Overall test : source2.txt 12") {
     string queryStr = "stmt s; Select s such that Uses(s, \"e\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "17", "23" };
+    set<string> expectedResult = { "13", "17" , "23"};
     REQUIRE(result == expectedResult);
 }
 
@@ -354,7 +354,7 @@ TEST_CASE("Overall test : source3.txt 3") {
     string queryStr = "stmt s; Select s such that Parent(11, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "12", "16" };
+    set<string> expectedResult = { "12" };
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source3.txt 4") {
@@ -363,7 +363,7 @@ TEST_CASE("Overall test : source3.txt 4") {
     string queryStr = "stmt s; Select s such that Parent(12, s)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "13", "14", "15"};
+    set<string> expectedResult = { "13", "14", "15", "16"};
     REQUIRE(result == expectedResult);
 }
 TEST_CASE("Overall test : source3.txt 5") {
