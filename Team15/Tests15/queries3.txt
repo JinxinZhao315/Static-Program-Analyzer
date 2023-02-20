@@ -11,12 +11,12 @@ Select s such that Follows*(s, 15)
 3 - parent
 stmt s;
 Select s such that Parent(11, s)
-12, 16
+12
 5000
 4 - parent
 stmt s;
 Select s such that Parent(12, s)
-13, 14, 15
+13, 14, 15, 16
 5000
 5 - parent
 stmt s;
