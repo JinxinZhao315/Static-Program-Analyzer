@@ -42,13 +42,6 @@ TEST_CASE("Overall test : Sample_source2.txt 0") {
     set<string> expectedResult = { "2", "3", "5" };
     REQUIRE(result == expectedResult);
 }
-
-
-
-
-
-
-
 TEST_CASE("Overall test : source1.txt 1") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
@@ -166,14 +159,6 @@ TEST_CASE("Overall test : source1.txt 13 SemanticError") {
     set<string> expectedResult = { "SemanticError" };
     REQUIRE(result == expectedResult);
 }
-
-
-
-
-
-
-
-
 TEST_CASE("Overall test : source2.txt 1") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
@@ -277,7 +262,6 @@ TEST_CASE("Overall test : source2.txt 10") {
     REQUIRE(result == expectedResult);
 }
 
-
 TEST_CASE("Overall test : source2.txt 11") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
@@ -320,12 +304,6 @@ TEST_CASE("Overall test : source2.txt 14") {
     set<string> expectedResult = {"22"};
     REQUIRE(result == expectedResult);
 }
-
-
-
-
-
-
 
 TEST_CASE("Overall test : source3.txt 1") {
     // Enter source of SIMPLE code
@@ -493,16 +471,3 @@ TEST_CASE("Overall test : source4.txt 10") {
     set<string> expectedResult = { "4", "5", "6" };
     REQUIRE(result == expectedResult);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
