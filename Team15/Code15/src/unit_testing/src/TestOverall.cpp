@@ -400,16 +400,6 @@ TEST_CASE("Overall test : source3.txt 7") {
     set<string> expectedResult2 = { };
     REQUIRE(result2 == expectedResult2);
 }
-
-
-
-
-
-
-
-
-
-
 TEST_CASE("Overall test : source4.txt 1") {
     // Enter source of SIMPLE code
     string filename = source4_filename;
