@@ -133,6 +133,9 @@ vector<string>* Tokeniser::tokenise(string line) {
 
 string findKeyword(vector<string>* line, vector<string>* keywords) {
     for (auto token : *line) {
+        if (token.find("else") != string::npos) { // special case TODO: find better implementation
+            return "else";
+        }
         if (find(keywords->begin(), keywords->end(), token) != keywords->end()) {
             return token;
         }
