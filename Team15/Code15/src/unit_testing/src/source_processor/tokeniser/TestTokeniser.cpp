@@ -168,67 +168,47 @@ TEST_CASE("Empty lines vector should return empty extracted lines vector") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(emptyLines);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    assert(extractedLines.empty());
+    REQUIRE(extractedLines.empty());
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 1, all same nesting level") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines1.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines1.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(nonEmptyLines1.second == extractedLines);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 2, 2 nesting levels") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines2.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines2.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(nonEmptyLines2.second == extractedLines);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 3, 3 nesting levels") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines3.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    REQUIRE(extractedLines == nonEmptyLines3.second);
+    REQUIRE(nonEmptyLines3.second == extractedLines);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 4, multiple procedures") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines4.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines4.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(nonEmptyLines4.second == extractedLines);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 5, procedure name contains keyword") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines5.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines5.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(nonEmptyLines5.second == extractedLines);
 }
 
 TEST_CASE("Non-empty lines vector should return non-empty extracted line vector 6, variable name contains keyword") {
     Tokeniser* tokeniser = new Tokeniser();
     tokeniser->feedLines(nonEmptyLines6.first);
     vector<Line> extractedLines = tokeniser->getExtractedLines();
-    bool correct = true;
-    for(int i = 0; i < extractedLines.size(); i++) {
-        if(!(extractedLines[i] == nonEmptyLines6.second[i])) correct = false;
-    }
-    assert(correct);
+    REQUIRE(nonEmptyLines6.second == extractedLines);
 }
