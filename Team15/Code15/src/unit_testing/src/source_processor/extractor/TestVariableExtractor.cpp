@@ -23,6 +23,7 @@ TEST_CASE("extract variables from singleAssignmentSelfIncrement") {
 }
 
 TEST_CASE("extract variables from singleAssignmentAddVariable") {
+
 	set<string> results = variableExtractor->extractVariables(singleAssignmentAddVariable);
 	set<string> expected = { "cenX", "x" };
 	REQUIRE(results == expected);
@@ -80,4 +81,11 @@ TEST_CASE("extract variables from source2") {
 	set<string> results = variableExtractor->extractVariables(source2);
 	set<string> expected = { "a", "b", "c", "count", "d", "e", "f", "v", "w", "x", "y", "z" };
 	REQUIRE(results == expected);
+}
+
+TEST_CASE("extract undeclared variables") {
+    set<string> results = variableExtractor->extractVariables(source6);
+    set<string> expected = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                             "n", "o", "p", "q", "r", "s"};
+    REQUIRE(results == expected);
 }
