@@ -6,6 +6,7 @@
 #include <regex>
 #include <algorithm>
 #include "common/include/models/Line.h"
+#include "common/include/models/Keywords.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ private:
 public:
     Tokeniser();
     void feedLines(vector<string> lines);
-    vector<string>* keywords;
+    Keywords* keywords;
     vector<string>* tokenise(string line);
     void printTokens();
     void printLines();

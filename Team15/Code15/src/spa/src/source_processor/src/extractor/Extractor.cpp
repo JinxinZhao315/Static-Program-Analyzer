@@ -1,6 +1,8 @@
 #include "source_processor/include/extractor/Extractor.h"
 
-Extractor::Extractor() {}
+Extractor::Extractor() {
+    variableExtractor = new VariableExtractor();
+}
 
 set<string> Extractor::getVariables() {
     return variables;
@@ -79,7 +81,7 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
 void Extractor::extract(const vector<Line> &program) {
     this->constants = extractConstants(program);
     this->statements = extractStatements(program);
-    this->variables = extractVariables(program);
+    this->variables = variableExtractor->extractVariables(program);
     this->procedures = extractProcedures(program);
     // Call and get results of extraction
     this->modifiesRS = extractModifiesRS(program);

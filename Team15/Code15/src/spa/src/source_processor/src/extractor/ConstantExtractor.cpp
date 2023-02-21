@@ -1,6 +1,6 @@
 #include "source_processor/include/extractor/ConstantExtractor.h"
 
-bool isNumeric(const string& token) {
+bool tokenIsNumeric(const string& token) {
     try {
         stoi(token);
         return true;
@@ -17,7 +17,7 @@ set<string> extractConstants(const vector<Line>& program) {
         vector<string> tokens = line.getTokens();
         set<string> *c = &constants;
         for (auto token = begin(tokens); token != end(tokens); token++) {
-            if (isNumeric(*token)) {
+            if (tokenIsNumeric(*token)) {
                 c->insert(*token);
             }
         }
