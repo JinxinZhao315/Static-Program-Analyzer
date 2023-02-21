@@ -31,7 +31,7 @@ set<string> VariableExtractor::extractVariables(const vector<Line> &program) {
         vector<string> tokens = line.getTokens();
         string type = line.getType();
         set<string>* v = &variables;
-        for(auto token = begin(tokens); token != end(tokens); token++) {
+        for(auto token = begin(tokens) + 1; token != end(tokens); token++) {
             if(isVariable(*token, *prev(token))) {
                 v->insert(*token);
             } else if(*token == "=" && token != begin(tokens)) {
