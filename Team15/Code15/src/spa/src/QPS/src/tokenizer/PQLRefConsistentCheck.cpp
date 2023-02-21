@@ -9,7 +9,9 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
     std::multimap < std::string, std::string > varTable = query.getSynonymTable();
-    std::shared_ptr<PQLRefConsistentLogic> refConsistentLogic = std::make_shared<PQLRefConsistentLogic>();
+    //race condition when multithreads?
+    //std::shared_ptr<PQLRefConsistentLogic> refConsistentLogic = std::make_shared<PQLRefConsistentLogic>();
+    PQLRefConsistentLogic* refConsistentLogic = new PQLRefConsistentLogic();
     bool suchThatFlag = true;
     bool patternFlag = true;
 
