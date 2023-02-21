@@ -1,44 +1,7 @@
 #include "source_processor/include/tokeniser/Tokeniser.h"
 
 Tokeniser::Tokeniser() {
-    auto* keys = new vector<string>();
-    *keys = {
-            "procedure",
-            "while",
-            "if",
-            "then",
-            "else",
-            "{",
-            "}",
-            "(",
-            ")",
-            ";",
-            "=",
-            "read",
-            "call",
-            "print",
-            "+",
-            "*",
-            "/",
-            "-",
-            "%",
-            ">",
-            "<",
-            ">=",
-            "<=",
-            "==",
-            "!=",
-            "&&",
-            "||",
-            "!",
-            "return",
-            "true",
-            "false"
-    };
-    keywords = keys;
-    sort(keywords->begin(), keywords->end(), [](auto first, auto second) {
-        return second.length() < first.length();
-    });
+    keywords = new Keywords();
 }
 
 void Tokeniser::feedLines(vector<string> lines) {
@@ -124,8 +87,8 @@ vector<string>* Tokeniser::tokenise(string line) {
     while(stream >> token) {
         int currentPosition = 0;
         while(currentPosition < token.length()) {
-            bool startsWithKeyword = setStartsWithKeyword(keywords, tokens, token, &currentPosition);
-            if (!startsWithKeyword) moveToNextKeyword(keywords, tokens, token, &currentPosition);
+            bool startsWithKeyword = setStartsWithKeyword(keywords->getKeywords(), tokens, token, &currentPosition);
+            if (!startsWithKeyword) moveToNextKeyword(keywords->getKeywords(), tokens, token, &currentPosition);
         }
     }
     return tokens;
@@ -153,7 +116,7 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
     int lineNumber = 1;
     vector<Line> lines;
     for(auto line : *tokens) {
-        string keyword = findKeyword(line, keywords);
+        string keyword = findKeyword(line, keywords->getKeywords());
         bool hasLineNumber = checkKeywordHasLineNumber(keyword);
         Line* extractedLine;
         if(hasLineNumber) {
