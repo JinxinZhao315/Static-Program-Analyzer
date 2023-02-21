@@ -52,7 +52,7 @@ TEST_CASE("extract variables from ifElse") {
 
 TEST_CASE("extract variables from ifElse2") {
 	set<string> results = extractVariables(ifElse2);
-	set<string> expected = { "cenX", "cenY", "flag" };
+	set<string> expected = { "cenX", "cenY", "flag", "normSq"};
 	REQUIRE(results == expected);
 }
 
@@ -78,4 +78,11 @@ TEST_CASE("extract variables from source2") {
 	set<string> results = extractVariables(source2);
 	set<string> expected = { "a", "b", "c", "count", "d", "e", "f", "v", "w", "x", "y", "z" };
 	REQUIRE(results == expected);
+}
+
+TEST_CASE("extract undeclared variables") {
+    set<string> results = extractVariables(source6);
+    set<string> expected = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                             "n", "o", "p", "q", "r", "s"};
+    REQUIRE(results == expected);
 }
