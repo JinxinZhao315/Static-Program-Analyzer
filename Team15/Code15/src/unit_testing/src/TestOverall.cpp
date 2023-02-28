@@ -26,11 +26,11 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string sample_source2 = "../../../../Tests15/Sample_source2.txt";
-string source1_filename = "../../../../Tests15/source1.txt";
-string source2_filename = "../../../../Tests15/source2.txt";
-string source3_filename = "../../../../Tests15/source3.txt";
-string source4_filename = "../../../../Tests15/source4.txt";
+string sample_source2 = "../../../../../../Tests15/Sample_source2.txt";
+string source1_filename = "../../../../../../Tests15/source1.txt";
+string source2_filename = "../../../../../../Tests15/source2.txt";
+string source3_filename = "../../../../../../Tests15/source3.txt";
+string source4_filename = "../../../../../../Tests15/source4.txt";
 
 TEST_CASE("Overall test : Sample_source2.txt 0") {
     // Enter source of SIMPLE code
@@ -469,5 +469,45 @@ TEST_CASE("Overall test : source4.txt 10") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source4.txt 11") {
+    // Enter source of SIMPLE code
+    string filename = source4_filename;
+    string queryStr = "stmt s; Select s such that Parent* (s, s)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source4.txt 12") {
+    // Enter source of SIMPLE code
+    string filename = source4_filename;
+    string queryStr = "stmt s; Select s such that Parent (s, s)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source4.txt 13") {
+    // Enter source of SIMPLE code
+    string filename = source4_filename;
+    string queryStr = "stmt s; Select s such that Follows (s, s)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source4.txt 14") {
+    // Enter source of SIMPLE code
+    string filename = source4_filename;
+    string queryStr = "stmt s; Select s such that Follows* (s, s)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
     REQUIRE(result == expectedResult);
 }

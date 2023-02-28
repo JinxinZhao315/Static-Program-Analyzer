@@ -48,7 +48,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
     std::string leftType = Utility::getReferenceType(leftArg);
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
-
+    
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isParentEmpty = pkb.isParentEmpty(); //
@@ -143,6 +143,10 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         // Synon - Synon
     }
     else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
+        if (leftArg == rightArg) {
+            result.setResultTrue(false);
+            return result;
+        }
         string leftDeType = varTable.find(leftArg)->second;
         string rightDeType = varTable.find(rightArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
