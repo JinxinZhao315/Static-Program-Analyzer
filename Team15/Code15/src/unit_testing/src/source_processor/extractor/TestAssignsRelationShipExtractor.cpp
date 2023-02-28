@@ -59,3 +59,14 @@ TEST_CASE("extractAssignmentRS_manyAssignmentsIfAndWhileLoop") {
     };
     REQUIRE(result == expected);
 }
+
+TEST_CASE("extractAssignmentRS_source4") {
+    set<string> variables = {"a", "b", "c"};
+    auto result = extractAssignmentRS(source4, variables);
+    unordered_map<string, set<Line>> expected = {
+            {"a", { Line(1, {"0"}), Line(9, {"a", "5", "+"}), Line(13, {"a", "2", "*"}), Line(14, {"a", "1", "+"}) }},
+            {"b", { Line(2, {"100"}), Line(8, {"b", "2", "/"}), Line(11, {"b", "3", "/"}), Line(12, {"b", "4", "/"}) }},
+            {"c", { Line(3, {"50"})}}
+    };
+    REQUIRE(result == expected);
+}

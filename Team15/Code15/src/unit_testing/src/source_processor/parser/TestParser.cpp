@@ -6,6 +6,9 @@ string parsedProgram = "../../../../Tests15/Sample_source_parsed.txt";
 string sourceProgram2 = "../../../../Tests15/Sample_source2.txt";
 string parsedProgram2 = "../../../../Tests15/Sample_source2_parsed.txt";
 
+string sourceProgram4 = "../../../../Tests15/source4.txt";
+string parsedProgram4 = "../../../../Tests15/source4_parsed.txt";
+
 TEST_CASE("parseProgram_emptyString_shouldReturnEmptyString") {
     Parser parser;
     parser.getParsedProgram();
@@ -45,3 +48,18 @@ TEST_CASE("parseProgram_oneProcedure_shouldReturnParsedProgram") {
     REQUIRE(parser.getParsedProgram() == expected);
 }
 
+TEST_CASE("parseProgram_oneProcedure_shouldReturnParsedProgram 2") {
+    Parser parser;
+    parser.parseProgram(sourceProgram4);
+    parser.getParsedProgram();
+    vector<string> expected;
+    std::ifstream file(parsedProgram4);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            expected.push_back(line);
+        }
+        file.close();
+    }
+    REQUIRE(parser.getParsedProgram() == expected);
+}

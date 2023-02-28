@@ -1,5 +1,6 @@
 #include "catch.hpp"
-#include "source_processor/include/extractor/StatementExtractor.h";
+#include "source_processor/include/extractor/StatementExtractor.h"
+#include "Constants.hpp"
 
 using namespace std;
 
@@ -21,16 +22,8 @@ unordered_map<string, set<int>> expectedStatements1 = {
 };
 
 TEST_CASE("Extract statements from program with no nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines1);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements1[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements1 == statements);
 }
 
 vector<Line> lines2 = {
@@ -52,16 +45,8 @@ unordered_map<string, set<int>> expectedStatements2 = {
 };
 
 TEST_CASE("Extract statements from program with 1 level of nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines2);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements2[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements2 == statements);
 }
 
 vector<Line> lines3 = {
@@ -90,16 +75,8 @@ unordered_map<string, set<int>> expectedStatements3 = {
 };
 
 TEST_CASE("Extract statements from program with 3 level of nesting") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines3);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements3[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements3 == statements);
 }
 
 vector<Line> lines4 = {
@@ -143,20 +120,26 @@ unordered_map<string, set<int>> expectedStatements4 = {
         {"call", {2, 3, 13, 18}},
         { "print", {6, 7, 8, 9}},
         { "=", {1, 10, 11, 12, 15, 16, 17, 20, 21, 22, 23}},
-        { "if", {}},
+        { "if", {19}},
         { "read", {4, 5}},
         { "while", {14}},
 };
 
 TEST_CASE("Extract statements from program with multiple procedures") {
-    bool correct = true;
     unordered_map<string, set<int>> statements = extractStatements(lines4);
-    for(auto [key, value] : statements) {
-        for(int i : value) {
-            if(expectedStatements4[key].find(i) == value.end()) {
-                correct = false;
-            }
-        }
-    }
-    assert(correct);
+    REQUIRE(expectedStatements4 == statements);
+}
+
+unordered_map<string, set<int>> expectedStatementsSource4 = {
+        {"call", {}},
+        { "print", {}},
+        { "=", {1,2,3,8,9,11,12,13,14}},
+        { "if", {6,7,10}},
+        { "read", {}},
+        { "while", {4,5}},
+};
+
+TEST_CASE("test source 4 extractor") {
+    unordered_map<string, set<int>> statements = extractStatements(source4);
+    REQUIRE(expectedStatementsSource4 == statements);
 }

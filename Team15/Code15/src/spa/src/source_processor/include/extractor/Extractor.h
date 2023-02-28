@@ -31,7 +31,6 @@ public:
     unordered_map<int, set<string>> getUsesRS();
     unordered_map<string, set<Line>> getAssignsRS();
 
-
 private:
     unordered_map<int, set<int>> parentsRS;
     unordered_map<int, set<int>> parentsStarRS;
@@ -47,4 +46,6 @@ private:
     set<string> constants;
     set<string> variables;
     unordered_map<string, set<int>> statements;
+
+    VariableExtractor* variableExtractor;
 };

@@ -79,3 +79,9 @@ TEST_CASE("extract constants from source2") {
 	set<string> expected = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 	REQUIRE(results == expected);
 }
+
+TEST_CASE("extract constants from source4") {
+    set<string> results = extractConstants(source4);
+    set<string> expected = {"0", "100", "50", "1", "25", "2", "5", "75", "3", "4"};
+    REQUIRE(results == expected);
+}
