@@ -4,16 +4,79 @@
 
 #include "QPS/include/model/ResultTable.h"
 ResultTable::ResultTable() {}
-ResultTable::ResultTable(std::unordered_map<std::string, std::unordered_map<std::string, SynonymLinkageMap>> resultTable) {
+
+ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std::vector<std::string> synList) {
     this->resultTable = resultTable;
+    this->synList = synList;
 }
 
-void ResultTable::insertSynonymEntry(std::string synonymName, std::unordered_map<std::string, SynonymLinkageMap> synonymInstanceCollection) {
-    if(resultTable.find(synonymName) == resultTable.end()) {
+void ResultTable::combineTable(ResultTable tempResult) {
+    /*if(resultTable.find(synonymName) == resultTable.end()) {
         this->resultTable.insert(std::make_pair<>(synonymName, synonymInstanceCollection));
-    };
+    };*/
+    if (isTableEmpty()) {
+        this->resultTable = tempResult.resultTable;
+        this->synList = tempResult.synList;
+    }
+    else {
+        
+        //index of the old synonym if they match the synonym in the new result
+        std::vector<int> commonSynIndex;
+        std::vector<std::string> tempSynList = tempResult.getSynList();
+        for (int i = 0; i < tempSynList.size(); i++) {
+            auto it = find(synList.begin(), synList.end(), tempSynList[i]);
+            if (it != synList.end()) {
+                commonSynIndex[i] = it - synList.begin();
+            }
+            else {
+                commonSynIndex[i] = -1;
+            }
+        }
 
+        std::vector<std::string> newSynList = synList;
+        for (int i = 0; i < tempSynList.size(); i++) {
+            if (commonSynIndex[i] < 0) {
+                newSynList.push_back(tempSynList[i]);
+            }
+        }
+
+        ResultTable newResultTable({}, newSynList);
+
+        for (std::vector<std::string> oldTuple : resultTable) {
+            for (std::vector<std::string> currTuple : tempResult.getResultTable()) {
+                if (isValidMatch(oldTuple, currTuple, commonSynIndex)) {
+                    newResultTable.insertTuple(mergeTuple(oldTuple, currTuple, commonSynIndex));
+                }
+            }
+        }
+        this->resultTable = newResultTable.resultTable;
+        this->synList = newResultTable.synList;
+    }
 }
+
+std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex) {
+    for (int i = 0; i < currTuple.size(); i++) {
+        if (commonSynIndex[i] < 0) {
+            oldTuple.push_back(currTuple[i]);
+        }
+    }
+    return oldTuple;
+}
+
+bool ResultTable::isValidMatch(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex) {
+    for (int i = 0; i < currTuple.size(); i++) {
+        if (commonSynIndex[i] >= 0 && currTuple[i] != oldTuple[commonSynIndex[i]]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
+
+
+
 
 bool ResultTable::isSynonymPresent(std::string key) {
     if (this->resultTable.find(key) == this->resultTable.end()) {

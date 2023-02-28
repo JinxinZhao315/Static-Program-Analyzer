@@ -12,36 +12,48 @@ void Result::setResultTrue(bool isTrueValue) {
     this->isTrue = isTrueValue;
 }
 
-//getter and setter for left arg
+//getter for left arg
 std::string Result::getFirstArgName() {
     return this->firstArgName;
-};
-std::unordered_map<std::string, SynonymLinkageMap> Result::getFirstArgValue() {
-    return this->firstArgValue;
-};
-void Result::setFirstArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
-    this->firstArgName = name;
-    this->firstArgValue = value;
-    this->isFirstArgAvailable = true;
 }
 
 bool Result::isFirstArgSynonym() {
     return this->isFirstArgAvailable;
 }
 
+//std::unordered_map<std::string, SynonymLinkageMap> Result::getFirstArgValue() {
+//    return this->firstArgValue;
+//};
+//void Result::setFirstArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
+//    this->firstArgName = name;
+//    this->firstArgValue = value;
+//    this->isFirstArgAvailable = true;
+//}
+
+
+
 //getter and setter for right arg
 std::string Result::getSecondArgName() {
     return this->secondArgName;
-};
-std::unordered_map<std::string, SynonymLinkageMap> Result::getSecondArgValue() {
-    return this->secondArgValue;
-};
-
-void Result::setSecondArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
-    this->secondArgName = name;
-    this->secondArgValue = value;
-    this->isSecondArgAvailable = true;
 }
+
 bool Result::isSecondArgSynonym() {
     return this->isSecondArgAvailable;
+}
+//std::unordered_map<std::string, SynonymLinkageMap> Result::getSecondArgValue() {
+//    return this->secondArgValue;
+//};
+
+//void Result::setSecondArg(std::string name, std::unordered_map<std::string, SynonymLinkageMap> value) {
+//    this->secondArgName = name;
+//    this->secondArgValue = value;
+//    this->isSecondArgAvailable = true;
+//}
+
+
+
+void Result::setClauseResult(bool isFirstArgAvailable, bool isSecondArgAvailable, ResultTable tempResult) {
+    this->isFirstArgAvailable = isFirstArgAvailable;
+    this->isSecondArgAvailable = isSecondArgAvailable;
+    this->clauseResult = tempResult;
 }
