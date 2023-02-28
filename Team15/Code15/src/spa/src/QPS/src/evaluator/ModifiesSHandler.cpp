@@ -20,7 +20,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 	//bool areInModifiesStmtRelationship(int stmtNum, std::string varName);
 
 	// bool areInModifiesProcRelationship(std::string procName, std::string varName);
-	
+
 	// Find everything defined in source modified by a statement line defined in source.
 	if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
 		//input statement line number, return all vars modified in statement line.
