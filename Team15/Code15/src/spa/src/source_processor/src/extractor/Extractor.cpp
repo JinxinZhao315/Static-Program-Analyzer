@@ -78,22 +78,49 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
     return this->assignsRS;
 }
 
+unordered_map<string, set<string>> Extractor::getProcedureModifiesRS() {
+    return this->procedureModifiesRS;
+}
+
+unordered_map<string, set<string>> Extractor::getProcedureUsesRS() {
+    return this->procedureUsesRS;
+}
+
+unordered_map<string, set<string>> Extractor::getCallsRS() {
+    return this->callsRS;
+}
+
+unordered_map<string, set<string>> Extractor::getCallsStarRS() {
+    return this->callsStarRS;
+}
+
+
 void Extractor::extract(const vector<Line> &program) {
     this->constants = extractConstants(program);
     this->statements = extractStatements(program);
     this->variables = variableExtractor->extractVariables(program);
     this->procedures = extractProcedures(program);
     // Call and get results of extraction
-    this->modifiesRS = extractModifiesRS(program);
-    auto [parents, parentsStar] = extractParentsRelationship(program);
-    auto [follows, followsStar] = extractFollowsRelationship(program);
-    //TODO: ensure variables are defined before calling extractAssignmentRS and extractUsesRS
     this->assignsRS = extractAssignmentRS(program, variables);
-    this->usesRS = extractUsesRS(program, variables);
-    // Set results here
+
+    auto [parents, parentsStar] = extractParentsRelationship(program);
     this->parentsRS = parents;
     this->parentsStarRS = parentsStar;
 
+    auto [follows, followsStar] = extractFollowsRelationship(program);
     this->followsRS = follows;
     this->followsStarRS = followsStar;
+
+    auto [modifies, procModifies, uses, procUses, calls, callsStar] = extractModifiesUsesAndCallRS(program, variables);
+    this->modifiesRS = modifies;
+    this->procedureModifiesRS = procModifies;
+    this->usesRS = uses;
+    this->procedureUsesRS = procUses;
+    this->callsRS = calls;
+    this->callsStarRS = callsStar;
+
 }
+
+
+
+
