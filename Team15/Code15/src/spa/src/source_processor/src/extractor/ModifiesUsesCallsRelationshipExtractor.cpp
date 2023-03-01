@@ -11,9 +11,7 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
         vector<string> tokens = line.getTokens();
         string lineType = line.getType();
 
-        if (lineType == "else" || !currLineNumber) {
-            continue;
-        } else if (lineType == "procedure") {
+        if (lineType == "procedure") {
             stmtContainerStack.clear(); // new procedure failsafe
             currProcedure = getProcedureNameFromProcedureStatement(tokens);
             continue;
@@ -25,8 +23,9 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
                 stmtContainerStack.pop_back();
             }
             continue;
+        } else if (lineType == "else" || !currLineNumber) {
+            continue;
         }
-
         string LHSVar;
         set<string> RHSVars;
         if (lineType == "=") { // LHS is being modified and RHS is being used
@@ -58,29 +57,52 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
                 result.usesRS[stmtContainerLine].insert(RHSVars.begin(), RHSVars.end());
             }
         }
+    }
+    // determine transitive relationship callsStar
+    generateCallsStarRS(result.callsRS, result.callsStarRS);
+    // determine transitive modification of variables through procedure calls
+    updateProcModifiesAndUsesRS(result.procedureModifiesRS, result.procedureUsesRS, result.callsStarRS);
+    return result;
+}
 
-        // determine transitive relationship callsStar
-        for (const auto& [caller, callees] : result.callsRS) {
-            set<string> visited{caller};
-            stack<string> toVisit;
-            toVisit.push(caller);
+void generateCallsStarRS(unordered_map<string, set<string>>& callsRS, unordered_map<string, set<string>>& callsStarRS) {
+    for (const auto& [caller, callees] : callsRS) {
+        set<string> visited{caller};
+        stack<string> toVisit;
+        toVisit.push(caller);
 
-            while (!toVisit.empty()) {
-                string curr = toVisit.top();
-                toVisit.pop();
+        while (!toVisit.empty()) {
+            string curr = toVisit.top();
+            toVisit.pop();
 
-                for (const auto& callee : result.callsRS.at(curr)) {
+            auto it = callsRS.find(curr);
+            if (it != callsRS.end()) {
+                for (const auto& callee : it->second) {
                     if (visited.find(callee) == visited.end()) {
                         visited.insert(callee);
                         toVisit.push(callee);
-                        result.callsStarRS[caller].insert(callee);
+                        callsStarRS[caller].insert(callee);
                     }
                 }
             }
         }
-
     }
+}
 
-    return result;
+void updateProcModifiesAndUsesRS(unordered_map<string, set<string>>& procedureModifiesRS,
+                                 unordered_map<string, set<string>>& procedureUsesRS,
+                                 unordered_map<string, set<string>>& callsStarRS) {
+    for (const auto& [caller, callees] : callsStarRS) {
+        for (auto const& callee: callees) {
+            if (procedureModifiesRS.find(callee) != procedureModifiesRS.end()) {
+                set<string> additionalModifies = procedureModifiesRS[callee];
+                procedureModifiesRS[caller].insert(additionalModifies.begin(), additionalModifies.end());
+            }
+            if (procedureUsesRS.find(callee) != procedureUsesRS.end()) {
+                set<string> additionalUses = procedureUsesRS[callee];
+                procedureUsesRS[caller].insert(additionalUses.begin(), additionalUses.end());
+            }
+        }
+    }
 }
 

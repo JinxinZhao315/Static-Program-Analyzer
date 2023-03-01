@@ -12,3 +12,7 @@ struct ModifiesUsesCallsRS {
 };
 
 ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, const set<string>& variables);
+void generateCallsStarRS(unordered_map<string, set<string>>& callsRS, unordered_map<string, set<string>>& callsStarRS);
+void updateProcModifiesAndUsesRS(unordered_map<string, set<string>>& procedureModifiesRS,
+                                 unordered_map<string, set<string>>& procedureUsesRS,
+                                 unordered_map<string, set<string>>& callsStarRS);
