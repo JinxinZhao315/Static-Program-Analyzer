@@ -48,6 +48,12 @@ public:
 	//SP pattern
 	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
 
+	//SP calls
+	void addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
+
+	//SP calls*
+	void addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
+
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
 
@@ -139,6 +145,24 @@ public:
 
 	std::set<std::string> getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix);
 
+	//QPS calls
+	std::set<std::string> getCallsCallerNames(std::string calleeName);
+
+	std::set<std::string> getCallsCalleeNames(std::string callerName);
+
+	bool areInCallsRelationship(std::string callerName, std::string calleeName);
+
+	bool isCallsEmpty();
+
+	//QPS calls*
+	std::set<std::string> getCallsStarCallerNames(std::string calleeName);
+
+	std::set<std::string> getCallsStarCalleeNames(std::string callerName);
+
+	bool areInCallsStarRelationship(std::string callerName, std::string calleeName);
+
+	bool isCallsStarEmpty();
+
 private:
 	EntityTable<std::string> procTable;
 	EntityTable<std::string> varTable;
@@ -153,4 +177,6 @@ private:
 	AbstractionTable<int, std::string> modifiesStmtTable;
 	AbstractionTable<std::string, std::string> modifiesProcTable;
 	PatternTable patternTable;
+	AbstractionTable<std::string, std::string> callsTable;
+	AbstractionTable<std::string, std::string> callsStarTable;
 };

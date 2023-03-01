@@ -12,6 +12,8 @@ PKB::PKB() {
 	usesStmtTable = AbstractionTable<int, std::string>();
 	usesProcTable = AbstractionTable<std::string, std::string>();
 	patternTable = PatternTable();
+	callsTable = AbstractionTable<std::string, std::string>();
+	callsStarTable = AbstractionTable<std::string, std::string>();
 }
 
 //SP procedure
@@ -78,6 +80,16 @@ void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::strin
 //SP pattern
 void PKB::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
 	patternTable.addAllPatterns(lhsVarToRhsLine);
+}
+
+//SP calls
+void PKB::addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
+	callsTable.addAllOneToManyAbstractions(allCallertoCallees);
+}
+
+//SP calls*
+void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
+	callsStarTable.addAllOneToManyAbstractions(allCallertoCallees);
 }
 
 //QPS procedure
@@ -247,4 +259,38 @@ std::set<std::vector<std::string>> PKB::getPatternPostfixesFromVar(std::string l
 
 std::set<std::string> PKB::getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getVarsFromPostfix(rhsPostfix);
+}
+
+//QPS calls
+std::set<std::string> PKB::getCallsCallerNames(std::string calleeName) {
+	return callsTable.getManyLeft(calleeName);
+}
+
+std::set<std::string> PKB::getCallsCalleeNames(std::string callerName) {
+	return callsTable.getManyRight(callerName);
+}
+
+bool PKB::areInCallsRelationship(std::string callerName, std::string calleeName) {
+	return callsTable.inOneToManyRelationship(callerName, calleeName);
+}
+
+bool PKB::isCallsEmpty() {
+	return callsTable.isEmpty();
+}
+
+//QPS calls*
+std::set<std::string> PKB::getCallsStarCallerNames(std::string calleeName) {
+	return callsStarTable.getManyLeft(calleeName);
+}
+
+std::set<std::string> PKB::getCallsStarCalleeNames(std::string callerName) {
+	return callsStarTable.getManyRight(callerName);
+}
+
+bool PKB::areInCallsStarRelationship(std::string callerName, std::string calleeName) {
+	return callsStarTable.inOneToManyRelationship(callerName, calleeName);
+}
+
+bool PKB::isCallsStarEmpty() {
+	return callsStarTable.isEmpty();
 }
