@@ -5,6 +5,7 @@
 #include "ParentsRelationshipExtractor.h"
 #include "ModifiesUsesCallsRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
+#include "ConditionalRelationshipExtractor.h"
 #include "ConstantExtractor.h"
 #include "ProcedureExtractor.h"
 #include "VariableExtractor.h"
@@ -27,6 +28,8 @@ public:
     unordered_map<int, set<int>> getParentStarRS();
 
     unordered_map<string, set<Line>> getAssignsRS();
+    set<Line> getIfRS();
+    set<Line> getWhileRS();
 
     unordered_map<int, set<string>> getModifiesRS();
     unordered_map<string, set<string>> getProcedureModifiesRS();
@@ -52,7 +55,10 @@ private:
 
     unordered_map<int, set<string>> modifiesRS;
     unordered_map<int, set<string>> usesRS;
+
     unordered_map<string, set<Line>> assignsRS;
+    set<Line> ifRS;
+    set<Line> whileRS;
 
     set<string> procedures;
     set<string> constants;

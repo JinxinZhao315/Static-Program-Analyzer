@@ -78,6 +78,14 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
     return this->assignsRS;
 }
 
+set<Line> Extractor::getIfRS() {
+    return this->ifRS;
+}
+
+set<Line> Extractor::getWhileRS() {
+    return this->whileRS;
+}
+
 unordered_map<string, set<string>> Extractor::getProcedureModifiesRS() {
     return this->procedureModifiesRS;
 }
@@ -102,6 +110,8 @@ void Extractor::extract(const vector<Line> &program) {
     this->procedures = extractProcedures(program);
     // Call and get results of extraction
     this->assignsRS = extractAssignmentRS(program, variables);
+    this->ifRS = extractConditionalRS("if", program, variables);
+    this->whileRS = extractConditionalRS("while", program, variables);
 
     auto [parents, parentsStar] = extractParentsRelationship(program);
     this->parentsRS = parents;
