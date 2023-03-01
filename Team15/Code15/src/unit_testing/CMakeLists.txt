@@ -23,7 +23,6 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.h"
         )
 
-
 add_executable(unit_testing ${srcs} ${headers})
 
 target_link_libraries(unit_testing spa)
