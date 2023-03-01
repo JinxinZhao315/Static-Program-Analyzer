@@ -177,9 +177,10 @@ TEST_CASE("Test combineResult function in ClauseHandler") {
 
 TEST_CASE("Test resultTableCheckAndAdd function in ClauseHandler") {
 	PKB pkb;
-	pkb.addVar("x");
-	pkb.addVar("y");
-	pkb.addVar("k");
+	//do not add one by one to pkb
+	//pkb.addVar("x");
+	//pkb.addVar("y");
+	//pkb.addVar("k");
 	ClauseHandler clauseHandler(pkb);
 	ResultTable resultTable;
 	clauseHandler.resultTableCheckAndAdd("v1", resultTable, "variable");
