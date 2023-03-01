@@ -5,8 +5,6 @@
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
 
-using namespace std;
-
 class PKB {
 public:
 	PKB();
@@ -21,13 +19,13 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addAllStmts(unordered_map<std::string, set<int>> stmtNums);
+	void addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums);
 
 	//SP follows
 	void addAllFollows(std::unordered_map<int, int> allLeaderToFollower);
 
 	//SP follows*
-	void addAllFollowsStar(std::unordered_map<int, set<int>> allLeaderToFollowers);
+	void addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers);
 
 	//SP parent
 	void addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren);
@@ -62,7 +60,7 @@ public:
 	//QPS statement
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(string stmtType);
+	std::set<int> getAllStmtNumsByType(std::string stmtType);
 
 	//QPS follow
 	int getFollowsLeaderNum(int followerNum);
@@ -129,17 +127,17 @@ public:
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
 	//QPS pattern
-	string getPatternVarFromStmt(int assignStmtNum);
+	std::string getPatternVarFromStmt(int assignStmtNum);
 
-	set<int> getPatternStmtsFromVar(string lhsVarName);
+	std::set<int> getPatternStmtsFromVar(std::string lhsVarName);
 
-	set<vector<string>> getPatternPostfixesFromStmt(int assignStmtNum);
+	std::set<std::vector<std::string>> getPatternPostfixesFromStmt(int assignStmtNum);
 
-	set<int> getPatternStmtsFromPostfix(vector<string> rhsPostfix);
+	std::set<int> getPatternStmtsFromPostfix(std::vector<std::string> rhsPostfix);
 
-	set<vector<string>> getPatternPostfixesFromVar(string lhsVarName);
+	std::set<std::vector<std::string>> getPatternPostfixesFromVar(std::string lhsVarName);
 
-	set<string> getPatternVarsFromPostfix(vector<string> rhsPostfix);
+	std::set<std::string> getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix);
 
 private:
 	EntityTable<std::string> procTable;

@@ -6,8 +6,6 @@
 
 #include <unordered_map>
 
-using namespace std;
-
 class StatementTable {
 public:
 	StatementTable();

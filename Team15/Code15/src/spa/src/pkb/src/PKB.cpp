@@ -30,7 +30,7 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 }
 
 //SP statement
-void PKB::addAllStmts(std::unordered_map<string, std::set<int>> stmtNums) {
+void PKB::addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums) {
 	stmtTable.addAllStatementsByType(stmtNums);
 	stmtTable.addAllStatementsRegardlessOfType(stmtNums);
 }
@@ -100,7 +100,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(string stmtType) { // TODO: @Galen please review
+std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
@@ -225,26 +225,26 @@ bool PKB::areInModifiesProcRelationship(std::string procName, std::string varNam
 }
 
 //QPS pattern
-string PKB::getPatternVarFromStmt(int assignStmtNum) {
+std::string PKB::getPatternVarFromStmt(int assignStmtNum) {
 	return patternTable.getVarFromStmt(assignStmtNum);
 }
 
-set<int> PKB::getPatternStmtsFromVar(string lhsVarName) {
+std::set<int> PKB::getPatternStmtsFromVar(std::string lhsVarName) {
 	return patternTable.getStmtsFromVar(lhsVarName);
 }
 
-set<vector<string>> PKB::getPatternPostfixesFromStmt(int assignStmtNum) {
+std::set<std::vector<std::string>> PKB::getPatternPostfixesFromStmt(int assignStmtNum) {
 	return patternTable.getPostfixesFromStmt(assignStmtNum);
 }
 
-set<int> PKB::getPatternStmtsFromPostfix(vector<string> rhsPostfix) {
+std::set<int> PKB::getPatternStmtsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getStmtsFromPostfix(rhsPostfix);
 }
 
-set<vector<string>> PKB::getPatternPostfixesFromVar(string lhsVarName) {
+std::set<std::vector<std::string>> PKB::getPatternPostfixesFromVar(std::string lhsVarName) {
 	return patternTable.getPostfixesFromVar(lhsVarName);
 }
 
-set<string> PKB::getPatternVarsFromPostfix(vector<string> rhsPostfix) {
+std::set<std::string> PKB::getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getVarsFromPostfix(rhsPostfix);
 }

@@ -3,8 +3,6 @@
 #include <string>
 #include <set>
 
-using namespace std;
-
 template <typename E>
 class EntityTable {
 public:
