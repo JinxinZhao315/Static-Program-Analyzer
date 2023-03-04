@@ -45,7 +45,10 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     std::string leftType = Utility::getReferenceType(leftArg);
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
-
+    if (leftArg == rightArg) {
+        result.setResultTrue(false);
+        return result;
+    }
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isFollowEmpty = pkb.isFollowsEmpty(); //
@@ -132,6 +135,10 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
         result.setSecondArg(rightArg, resultSynonValues);
         // Synon - Synon
     } else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
+        if (leftArg == rightArg) {
+            result.setResultTrue(false);
+            return result;
+        }
         string leftDeType = synonymTable.find(leftArg)->second;
         string rightDeType = synonymTable.find(rightArg)->second;
         resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
