@@ -12,6 +12,8 @@ PKB::PKB() {
 	usesStmtTable = AbstractionTable<int, std::string>();
 	usesProcTable = AbstractionTable<std::string, std::string>();
 	patternTable = PatternTable();
+	whilePatternTable = PatternTable();
+	ifPatternTable = PatternTable();
 	callsTable = AbstractionTable<std::string, std::string>();
 	callsStarTable = AbstractionTable<std::string, std::string>();
 }
@@ -77,9 +79,19 @@ void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::strin
 	modifiesProcTable.addAllOneToManyAbstractions(allProcToVars);
 }
 
-//SP pattern
+//SP assign pattern
 void PKB::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
-	patternTable.addAllPatterns(lhsVarToRhsLine);
+	patternTable.addAllAssignPatterns(lhsVarToRhsLine);
+}
+
+//SP while pattern
+void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
+	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
+}
+
+//SP if pattern
+void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
+	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
 }
 
 //SP calls
@@ -236,7 +248,7 @@ bool PKB::areInModifiesProcRelationship(std::string procName, std::string varNam
 	return modifiesProcTable.inOneToManyRelationship(procName, varName);
 }
 
-//QPS pattern
+//QPS assign pattern
 std::string PKB::getPatternVarFromStmt(int assignStmtNum) {
 	return patternTable.getVarFromStmt(assignStmtNum);
 }
@@ -259,6 +271,32 @@ std::set<std::vector<std::string>> PKB::getPatternPostfixesFromVar(std::string l
 
 std::set<std::string> PKB::getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getVarsFromPostfix(rhsPostfix);
+}
+
+//QPS while pattern
+std::set<int> PKB::getWhileStmtsWithVars() {
+	return whilePatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getWhileStmtsFromVar(std::string controlVarName) {
+	return whilePatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getWhileVarsFromStmt(int whileStmtNum) {
+	return whilePatternTable.getVarsFromStmt(whileStmtNum);
+}
+
+//QPS if pattern
+std::set<int> PKB::getIfStmtsWithVars() {
+	return ifPatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
+	return ifPatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getIfVarsFromStmt(int ifStmtNum) {
+	return ifPatternTable.getVarsFromStmt(ifStmtNum);
 }
 
 //QPS calls

@@ -45,8 +45,14 @@ public:
 	//SP modifies procedure-variable
 	void addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
-	//SP pattern
+	//SP assign pattern
 	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+
+	//SP while pattern
+	void addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine);
+
+	//SP if pattern
+	void addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine);
 
 	//SP calls
 	void addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
@@ -132,7 +138,7 @@ public:
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
-	//QPS pattern
+	//QPS assign pattern
 	std::string getPatternVarFromStmt(int assignStmtNum);
 
 	std::set<int> getPatternStmtsFromVar(std::string lhsVarName);
@@ -144,6 +150,20 @@ public:
 	std::set<std::vector<std::string>> getPatternPostfixesFromVar(std::string lhsVarName);
 
 	std::set<std::string> getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix);
+
+	//QPS while pattern
+	std::set<int> getWhileStmtsWithVars();
+	
+	std::set<int> getWhileStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getWhileVarsFromStmt(int whileStmtNum);
+
+	//QPS if pattern
+	std::set<int> getIfStmtsWithVars();
+
+	std::set<int> getIfStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getIfVarsFromStmt(int ifStmtNum);
 
 	//QPS calls
 	std::set<std::string> getCallsCallerNames(std::string calleeName);
@@ -177,6 +197,8 @@ private:
 	AbstractionTable<int, std::string> modifiesStmtTable;
 	AbstractionTable<std::string, std::string> modifiesProcTable;
 	PatternTable patternTable;
+	PatternTable whilePatternTable;
+	PatternTable ifPatternTable;
 	AbstractionTable<std::string, std::string> callsTable;
 	AbstractionTable<std::string, std::string> callsStarTable;
 };
