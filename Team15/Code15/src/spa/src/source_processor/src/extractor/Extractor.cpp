@@ -78,11 +78,11 @@ unordered_map<string, set<Line>> Extractor::getAssignsRS() {
     return this->assignsRS;
 }
 
-set<Line> Extractor::getIfRS() {
+unordered_map<string, set<Line>> Extractor::getIfRS() {
     return this->ifRS;
 }
 
-set<Line> Extractor::getWhileRS() {
+unordered_map<string, set<Line>> Extractor::getWhileRS() {
     return this->whileRS;
 }
 

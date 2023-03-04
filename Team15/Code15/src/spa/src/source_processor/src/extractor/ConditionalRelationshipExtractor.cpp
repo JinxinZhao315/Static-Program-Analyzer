@@ -21,8 +21,21 @@ vector<string> getCondition(const string& conditionType, const vector<string>& t
     return *condition;
 }
 
-set<Line> extractConditionalRS(const string& conditionType, const vector<Line>& program, const set<string>& variables) {
-    set<Line> conditionalRS;
+void getLineVariables(const set<string>& variables, const vector<string>& tokens, unordered_map<string, set<Line>>* conditionalRS, Line newLine) {
+    set<string> lineVariables;
+    for(const auto& token : tokens) {
+        if(variables.find(token) != variables.end()) {
+            if (conditionalRS->count(token) == 0) {
+                conditionalRS->emplace(token, set<Line>({newLine}));
+            } else {
+                conditionalRS->at(token).insert(newLine);
+            }
+        }
+    }
+}
+
+unordered_map<string, set<Line>> extractConditionalRS(const string& conditionType, const vector<Line>& program, const set<string>& variables) {
+    unordered_map<string, set<Line>> conditionalRS;
     for(auto line : program) {
         int lineNumber = line.getLineNumber();
         string type = line.getType();
@@ -31,7 +44,7 @@ set<Line> extractConditionalRS(const string& conditionType, const vector<Line>& 
         vector<string> condition = getCondition(conditionType, tokens);
         vector<string> postfixCondition = convertToPostfix(condition, variables);
         Line newLine = Line(lineNumber, postfixCondition);
-        conditionalRS.insert(newLine);
+        getLineVariables(variables, tokens, &conditionalRS, newLine);
     }
     return conditionalRS;
 }

@@ -28,8 +28,8 @@ public:
     unordered_map<int, set<int>> getParentStarRS();
 
     unordered_map<string, set<Line>> getAssignsRS();
-    set<Line> getIfRS();
-    set<Line> getWhileRS();
+    unordered_map<string, set<Line>> getIfRS();
+    unordered_map<string, set<Line>> getWhileRS();
 
     unordered_map<int, set<string>> getModifiesRS();
     unordered_map<string, set<string>> getProcedureModifiesRS();
@@ -57,8 +57,8 @@ private:
     unordered_map<int, set<string>> usesRS;
 
     unordered_map<string, set<Line>> assignsRS;
-    set<Line> ifRS;
-    set<Line> whileRS;
+    unordered_map<string, set<Line>> ifRS;
+    unordered_map<string, set<Line>> whileRS;
 
     set<string> procedures;
     set<string> constants;
