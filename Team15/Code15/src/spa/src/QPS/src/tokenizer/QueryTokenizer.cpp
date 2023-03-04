@@ -47,7 +47,9 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
 	return varTable;
 }
 
-void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClause,
+void QueryTokenizer::tokenizeClauses(std::string input,
+                                     std::multimap<std::string, std::string> varTable,
+                                     SelectClause& selectClause,
                                      std::vector<SuchThatClause>& suchThatClauseVec,
                                      std::vector<PatternClause>& patternClauseVec) {
 	std::string keyword = extractKeyword(input);
@@ -61,7 +63,7 @@ void QueryTokenizer::tokenizeClauses(std::string input, SelectClause& selectClau
 			tokenizeSuchThatClause(input, suchThatClauseVec);
 		}
 		else if (keyword == "pattern") {
-			tokenizePatternClause(input, patternClauseVec);
+			tokenizePatternClause(input, varTable, patternClauseVec);
 		}
 		else {
 			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
@@ -116,26 +118,58 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 
 
 
-void QueryTokenizer::tokenizePatternClause(std::string& input, std::vector<PatternClause>& patternClauseVec) {
+void QueryTokenizer::tokenizePatternClause(std::string& input,
+                                           std::multimap<std::string, std::string> varTable,
+                                           std::vector<PatternClause>& patternClauseVec) {
 	std::size_t nextLeftPar = input.find_first_of("(");
-	std::size_t nextComma = input.find_first_of(",");
+	std::size_t firstComma = input.find_first_of(",");
+    std::size_t lastComma = input.find_last_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
-	if (nextLeftPar == std::string::npos || nextComma == std::string::npos || nextRightPar == std::string::npos) {
+	if (nextLeftPar == std::string::npos || firstComma == std::string::npos || nextRightPar == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
+	if (nextRightPar <= firstComma + 1 || firstComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-	std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::WHITESPACES);
-    std::string leftArg = Utility::trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1),
-                                        Utility::WHITESPACES);
-    std::string rightArg = Utility::trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1),
-                                         Utility::WHITESPACES);
-	if (!syntaxChecker.validatePattern(synonym, leftArg, rightArg)) {
-		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
-	}
-	input = input.substr(nextRightPar + 1);
-	patternClauseVec.push_back(PatternClause(synonym, leftArg, rightArg));
+    std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::WHITESPACES);
+    std::string synonymType = varTable.find(synonym)->second;
+
+    std::string firstArg;
+    std::string secondArg;
+    std::string thirdArg = "";
+
+    if (synonymType == "if") {
+        // 3 arguments case
+        if (firstComma == lastComma) {
+            throw PQLSyntaxError("PQL syntax error: Only 1 comma in pattern clause if type");
+        }
+        firstArg = Utility::trim(input.substr(nextLeftPar + 1, firstComma - nextLeftPar - 1),
+                                             Utility::WHITESPACES);
+        secondArg = Utility::trim(input.substr(firstComma + 1, lastComma - firstComma - 1),
+                                              Utility::WHITESPACES);
+        thirdArg = Utility::trim(input.substr(lastComma + 1, nextRightPar - lastComma - 1),
+                                              Utility::WHITESPACES);
+    } else {
+        // 2 arguments case
+        if (! (synonymType == "assign" || synonymType == "while")) {
+            throw PQLSemanticError("PQL Semantic error: pattern clause synonym type is not assign, while or if");
+        }
+
+        if (firstComma != lastComma) {
+            throw PQLSyntaxError("PQL syntax error: Too many commas in pattern clause assign and while type");
+        }
+
+        firstArg = Utility::trim(input.substr(nextLeftPar + 1, firstComma - nextLeftPar - 1),
+                                             Utility::WHITESPACES);
+        secondArg = Utility::trim(input.substr(firstComma + 1, nextRightPar - firstComma - 1),
+                                              Utility::WHITESPACES);
+    }
+
+    if (!syntaxChecker.validatePattern(synonym, synonymType, firstArg, secondArg, thirdArg)) {
+        throw PQLSyntaxError("PQL syntax error: Invalid pattern clause if syntax");
+    }
+    input = input.substr(nextRightPar + 1);
+    patternClauseVec.push_back(PatternClause(synonym, firstArg, secondArg, thirdArg));
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {

@@ -79,3 +79,13 @@ TEST_CASE("PQLSemanticChecker negative test 14: Parent* invalid right type") {
 	REQUIRE_THROWS_AS(preprocessor.preprocess("procedure p; assign a1, a2; variable v; Select a such that Parent*(11, v)"), PQLSemanticError);
 	REQUIRE_THROWS_AS(preprocessor.preprocess("procedure p; assign a1, a2; variable v; Select a such that Parent*(11, p)"), PQLSemanticError);
 }
+
+TEST_CASE("PQLSemanticChecker negative test 15: pattern invalid synon type") {
+    PQLPreprocessor preprocessor;
+    REQUIRE_THROWS_AS(preprocessor.preprocess("stmt s; Select s pattern s (_,_)"), PQLSemanticError);
+}
+
+TEST_CASE("PQLSemanticChecker negative test 15: pattern invalid first arg synon type") {
+    PQLPreprocessor preprocessor;
+    REQUIRE_THROWS_AS(preprocessor.preprocess("while w; stmt s; Select w pattern w (s,_)"), PQLSemanticError);
+}

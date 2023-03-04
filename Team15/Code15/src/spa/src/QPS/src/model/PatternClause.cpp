@@ -3,24 +3,28 @@
 PatternClause::PatternClause() {}
 
 PatternClause::PatternClause(std::string patternSynonym,
-    std::string leftArg, std::string rightArg) {
+    std::string firstArg, std::string secondArg, std::string thrirdArg) {
     this->patternSynonym = patternSynonym;
-    this->leftArg = leftArg;
-    this->rightArg = rightArg;
+    this->firstArg = firstArg;
+    this->secondArg = secondArg;
+    this->thirdArg = thrirdArg;
 }
-
 
 
 std::string PatternClause::getPatternSynonym() {
     return this->patternSynonym;
 }
 
-std::string PatternClause::getLeftArg() {
-    return this->leftArg;
+std::string PatternClause::getFirstArg() {
+    return this->firstArg;
 }
 
-std::string PatternClause::getRightArg() {
-    return this->rightArg;
+std::string PatternClause::getSecondArg() {
+    return this->secondArg;
+}
+
+std::string PatternClause::getThirdArg() {
+    return this->thirdArg;
 }
 
 PatternClause::~PatternClause() {}

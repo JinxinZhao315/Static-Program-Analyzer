@@ -72,8 +72,8 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                                    std::multimap<std::string, std::string> &synonymTable) {
 
     string patternSynon = patternClause.getPatternSynonym();
-    string leftArg = patternClause.getLeftArg();
-    string rightArg = patternClause.getRightArg();
+    string leftArg = patternClause.getFirstArg();
+    string rightArg = patternClause.getSecondArg();
     string leftType = Utility::getReferenceType(leftArg);
     string rightType = Utility::getReferenceType(rightArg);
     Result result;
