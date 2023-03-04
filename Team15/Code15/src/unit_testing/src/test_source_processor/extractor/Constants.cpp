@@ -8,19 +8,28 @@ const vector<Line> mainProgram = {
         Line({"}"}, "}"),
 };
 
+const set<string> mainProgramVariables = {"flag"};
+
 const vector<Line> onlyCallStatements = {
         Line({"procedure", "main", "{"}, "procedure"),
         Line(2, {"call", "computeCentroid", ";"}, "call"),
         Line(3, {"call", "printResults", ";"}, "call"),
         Line({"}"}, "}"),
 };
+
+const set<string> onlyCallStatementsVariables;
+
 const vector<Line> singleAssignmentSelfIncrement = {
         Line(6, {"count", "=", "count", "+", "1", ";"}, "=")
 };
 
+const set<string> singleAssignmentSelfIncrementVariables = {"count"};
+
 const vector<Line> singleAssignmentAddVariable = {
         Line(7, {"cenX", "=", "cenX", "+", "x", ";"}, "=")
 };
+
+const set<string> singleAssignmentAddVariableVariables = {"cenX", "x"};
 
 const vector<Line> whileLoop = {
         Line(5, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
@@ -30,6 +39,8 @@ const vector<Line> whileLoop = {
         Line(9, {"call", "readPoint", ";"}, "call"),
         Line({"}"}, "}"),
 };
+
+const set<string> whileLoopVariables = {"x", "y", "count", "cenX", "cenY"};
 
 const vector<Line> whileLoop2 = {
         Line(4, {"call", "readPoint", ";"}, "call"),
@@ -41,6 +52,8 @@ const vector<Line> whileLoop2 = {
         Line({"}"}, "}"),
         Line(10, {"call", "readPoint", ";"}, "call"),
 };
+
+const set<string> whileLoop2Variables = {"x", "y", "count", "cenX", "cenY"};
 
 const vector<Line> computeCentroid = {
         Line({"procedure", "computeCentroid", "{"}, "procedure"),
@@ -64,6 +77,8 @@ const vector<Line> computeCentroid = {
         Line({"}"}, "}"),
 };
 
+const set<string> computeCentroidVariables = {"x", "y", "count", "cenX", "cenY", "flag", "normSq"};
+
 const vector<Line> ifElse = {
         Line(19, {"if", "(", "count", "==", "0", ")", "{"}, "if"),
         Line(20, {"flag", "=", "1", ";"}, "="),
@@ -72,6 +87,8 @@ const vector<Line> ifElse = {
         Line(22, {"cenY", "=", "cenY", "/", "count", ";"}, "="),
         Line({"}"}, "}"),
 };
+
+const set<string> ifElseVariables = {"count", "cenX", "cenY", "flag"};
 
 const vector<Line> ifElse2 = {
         Line(18, {"call", "readPoint", ";"}, "call"),
@@ -83,6 +100,8 @@ const vector<Line> ifElse2 = {
         Line({"}"}, "}"),
         Line(23, {"normSq", "=", "cenX", "*", "cenX", "+", "cenY", "*", "cenY", ";"}, "="),
 };
+
+const set<string> ifElse2Variables = {"count", "cenX", "cenY", "flag", "normSq"};
 
 const vector<Line> superNested = {
         Line({"procedure", "proc1", "{"}, "procedure"),
@@ -111,12 +130,16 @@ const vector<Line> superNested = {
         Line({"}"}, "}"),
 };
 
+const set<string> superNestedVariables = {"a", "b", "c"};
+
 const vector<Line> readPoint = {
         Line({"procedure", "readPoint", "{"}, "procedure"),
         Line(4, {"read", "x", ";"}, "read"),
         Line(5, {"read", "y", ";"}, "read"),
         Line({"}"}, "}"),
 };
+
+const set<string> readPointVariables = {"x", "y"};
 
 const vector<Line> program = {
         Line({"procedure", "main", "{"}, "procedure"),
@@ -155,6 +178,8 @@ const vector<Line> program = {
         Line({"}"}, "}"),
 };
 
+const set<string> programVariables = {"flag", "x", "y", "cenX", "cenY", "normSq", "count", "normSq"};
+
 const vector<Line> source2 = {
         Line({"procedure", "proc1", "{"}, "procedure"),
         Line(1, {"v", "=", "0", ";"}, "="),
@@ -188,6 +213,8 @@ const vector<Line> source2 = {
         Line({"}"}, "}")
 };
 
+const set<string> source2Variables = {"v", "w", "x", "y", "z", "a", "b", "c", "d", "e", "f", "v", "count"};
+
 const vector<Line> source4 = {
         Line({"procedure", "proc1", "{"}, "procedure"),
         Line(1, {"a", "=", "0", ";"}, "="),
@@ -215,6 +242,8 @@ const vector<Line> source4 = {
         Line({"}"}, "}")
 };
 
+const set<string> source4Variables = {"a", "b", "c"};
+
 const vector<Line> source6 = {
         Line({"procedure", "proc1", "{"}, "procedure"),
         Line(1, {"while", "(", "a", "<", "50", ")", "{"}, "while"),
@@ -239,3 +268,5 @@ const vector<Line> source6 = {
         Line({"}"}, "}"),
         Line({"}"}, "}")
 };
+
+const set<string> source6Variables = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"};
