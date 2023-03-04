@@ -2,7 +2,7 @@
 
 PatternTable::PatternTable() = default;
 
-void PatternTable::addPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes) {
+void PatternTable::addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes) {
 	mapStmtToVar(assignStmtNum, lhsVarName);
 	mapVarToStmts(lhsVarName, assignStmtNum);
 	mapStmtToPostfixes(assignStmtNum, rhsPostfixes);
@@ -11,7 +11,7 @@ void PatternTable::addPattern(int assignStmtNum, std::string lhsVarName, std::se
 	mapPostfixToVars(rhsPostfixes, lhsVarName);
 }
 
-void PatternTable::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
+void PatternTable::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
 	for (const auto& [var, lines] : lhsVarToRhsLine) {
 		for (Line line : lines) {
 			int stmtNum = line.getLineNumber();
@@ -26,6 +26,21 @@ void PatternTable::addAllPatterns(std::unordered_map<std::string, std::set<Line>
 	}
 }
 
+void PatternTable::addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine) {
+	for (const auto& [var, lines] : controlVarToWhileOrIfLine) {
+		for (Line line : lines) {
+			int stmtNum = line.getLineNumber();
+			addStmt(stmtNum);
+			mapStmtToVars(stmtNum, var);
+			mapVarToStmts(var, stmtNum);
+		}
+	}
+}
+
+std::set<int> PatternTable::getAllStmts() {
+	return allStmtsSet;
+}
+
 std::string PatternTable::getVarFromStmt(int assignStmtNum) {
 	auto pair = stmtToVarMap.find(assignStmtNum);
 	if (pair == stmtToVarMap.end()) {
@@ -34,8 +49,16 @@ std::string PatternTable::getVarFromStmt(int assignStmtNum) {
 	return pair->second;
 }
 
-std::set<int> PatternTable::getStmtsFromVar(std::string lhsVarName) {
-	auto pair = varToStmtsMap.find(lhsVarName);
+std::set<std::string> PatternTable::getVarsFromStmt(int whileOrIfStmtNum) {
+	auto pair = stmtToVarsMap.find(whileOrIfStmtNum);
+	if (pair == stmtToVarsMap.end()) {
+		return {};
+	}
+	return pair->second;
+}
+
+std::set<int> PatternTable::getStmtsFromVar(std::string varName) {
+	auto pair = varToStmtsMap.find(varName);
 	if (pair == varToStmtsMap.end()) {
 		return {};
 	}
@@ -74,17 +97,31 @@ std::set<std::string> PatternTable::getVarsFromPostfix(std::vector<std::string> 
 	return pair->second;
 }
 
+void PatternTable::addStmt(int stmtNum) {
+	allStmtsSet.insert(stmtNum);
+}
+
 void PatternTable::mapStmtToVar(int assignStmtNum, std::string lhsVarName) {
 	stmtToVarMap[assignStmtNum] = lhsVarName;
 }
 
-void PatternTable::mapVarToStmts(std::string lhsVarName, int assignStmtNum) {
-	auto pair = varToStmtsMap.find(lhsVarName);
-	if (pair == varToStmtsMap.end()) {
-		varToStmtsMap[lhsVarName] = { assignStmtNum };
+void PatternTable::mapStmtToVars(int whileOrIfStmtNum, std::string controlVarName) {
+	auto pair = stmtToVarsMap.find(whileOrIfStmtNum);
+	if (pair == stmtToVarsMap.end()) {
+		stmtToVarsMap[whileOrIfStmtNum] = { controlVarName };
 	}
 	else {
-		pair->second.insert(assignStmtNum);
+		pair->second.insert(controlVarName);
+	}
+}
+
+void PatternTable::mapVarToStmts(std::string varName, int stmtNum) {
+	auto pair = varToStmtsMap.find(varName);
+	if (pair == varToStmtsMap.end()) {
+		varToStmtsMap[varName] = { stmtNum };
+	}
+	else {
+		pair->second.insert(stmtNum);
 	}
 }
 

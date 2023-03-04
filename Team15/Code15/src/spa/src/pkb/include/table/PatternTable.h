@@ -12,13 +12,19 @@ class PatternTable {
 public:
 	PatternTable();
 
-	void addPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes);
+	void addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes);
 
-	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+
+	void addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine);
+
+	std::set<int> getAllStmts();
 
 	std::string getVarFromStmt(int assignStmtNum);
 
-	std::set<int> getStmtsFromVar(std::string lhsVarName);
+	std::set<std::string> getVarsFromStmt(int whileOrIfStmtNum);
+
+	std::set<int> getStmtsFromVar(std::string varName);
 
 	std::set<std::vector<std::string>> getPostfixesFromStmt(int assignStmtNum);
 
@@ -28,9 +34,13 @@ public:
 
 	std::set<std::string> getVarsFromPostfix(std::vector<std::string> rhsPostfix);
 
+	void addStmt(int stmtNum);
+
 	void mapStmtToVar(int assignStmtNum, std::string lhsVarName);
 
-	void mapVarToStmts(std::string lhsVarName, int assignStmtNum);
+	void mapStmtToVars(int whileOrIfStmtNum, std::string controlVarName);
+
+	void mapVarToStmts(std::string varName, int stmtNum);
 
 	void mapStmtToPostfixes(int assignStmtNum, std::set<std::vector<std::string>> rhsPostfixes);
 
@@ -49,7 +59,9 @@ public:
 	void mapOnePostfixToVars(std::vector<std::string> rhsPostfix, std::string lhsVarName);
 
 private:
+	std::set<int> allStmtsSet;
 	std::map<int, std::string> stmtToVarMap;
+	std::map<int, std::set<std::string>> stmtToVarsMap;
 	std::map<std::string, std::set<int>> varToStmtsMap;
 	std::map<int, std::set<std::vector<std::string>>> stmtToPostfixesMap;
 	std::map<std::vector<std::string>, std::set<int>> postfixToStmtsMap;
