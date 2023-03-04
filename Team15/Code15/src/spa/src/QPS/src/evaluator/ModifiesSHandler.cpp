@@ -9,19 +9,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 	std::string leftType = Utility::getReferenceType(leftArg);
 	std::string rightType = Utility::getReferenceType(rightArg);
 	Result result;
-	//std::set<std::string> getModifiesVarsFromStmt(int stmtNum);
 
-	//std::set<int> getModifiesStmtsFromVar(std::string varName);
-
-	//std::set<std::string> getModifiesVarsFromProc(std::string procName);
-
-	//std::set<std::string> getModifiesProcsFromVar(std::string varName);
-
-	//bool areInModifiesStmtRelationship(int stmtNum, std::string varName);
-
-	// bool areInModifiesProcRelationship(std::string procName, std::string varName);
-
-	// Find everything defined in source modified by a statement line defined in source.
 	if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
 		//input statement line number, return all vars modified in statement line.
 		std::set<std::string> modifiesSet = pkb.getModifiesVarsFromStmt(stoi(leftArg));
