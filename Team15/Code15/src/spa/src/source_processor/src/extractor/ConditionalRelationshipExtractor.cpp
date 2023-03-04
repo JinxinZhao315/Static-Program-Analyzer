@@ -21,15 +21,7 @@ vector<string> getCondition(const string& conditionType, const vector<string>& t
     return *condition;
 }
 
-void test(const vector<string>& condition) {
-    cout << "DEBUGGING IF AND WHILE EXTRACTION" << endl;
-    for(const auto& c : condition) {
-        cout << c << " ";
-    }
-    cout << endl;
-}
-
-set<Line> extractConditionalRS(string conditionType, const vector<Line>& program, const set<string>& variables) {
+set<Line> extractConditionalRS(const string& conditionType, const vector<Line>& program, const set<string>& variables) {
     set<Line> conditionalRS;
     for(auto line : program) {
         int lineNumber = line.getLineNumber();

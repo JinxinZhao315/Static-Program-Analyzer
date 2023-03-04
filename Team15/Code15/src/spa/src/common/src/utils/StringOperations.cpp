@@ -44,14 +44,16 @@ set<string> getVariablesFromStatement(const vector<string>& tokens, const set<st
 int precedence(const string& c) {
     if(c == "||") {
         return 1;
+    } else if (c == "<" || c == ">" || c == "<=" || c == ">=" || c == "==" || c == "!=") {
+        return 2;
     } else if (c == "&&") {
-        return 2;
-    } else if (c == "-" || c == "+") {
-        return 1;
-    } else if (c == "*" || c == "/" || c == "%") {
-        return 2;
-    } else if (c == "^") {
         return 3;
+    } else if (c == "-" || c == "+") {
+        return 4;
+    } else if (c == "*" || c == "/" || c == "%") {
+        return 5;
+    } else if (c == "^") {
+        return 6;
     }
     return -1;
 }
