@@ -16,7 +16,9 @@ pair<vector<string>, vector<string>> getLHSandRHSofAssignStatement(vector<string
 string getVarNameFromReadStatement(vector<string> tokens);
 string getVarNameFromPrintStatement(vector<string> tokens);
 string getSecondToken(vector<string> tokens);
-set<string> getVariablesFromStatement(vector<string> tokens, const set<string>& variables);
+set<string> getVariablesFromStatement(const vector<string>& tokens, const set<string>& variables);
+string getProcedureNameFromProcedureStatement(vector<string> tokens);
+string getProcedureNameFromCallStatement(vector<string> tokens);
 int precedence(const string& c);
 bool isOperator(string c);
 bool isNumber(const string& num);
