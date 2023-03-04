@@ -30,6 +30,9 @@ bool Result::isFirstArgSynonym() {
 //    this->isFirstArgAvailable = true;
 //}
 
+ResultTable Result::getClauseResult() {
+    return this->clauseResult;
+}
 
 
 //getter and setter for right arg
@@ -56,4 +59,12 @@ void Result::setClauseResult(bool isFirstArgAvailable, bool isSecondArgAvailable
     this->isFirstArgAvailable = isFirstArgAvailable;
     this->isSecondArgAvailable = isSecondArgAvailable;
     this->clauseResult = tempResult;
+    int i = 0;
+    if (isFirstArgAvailable) {
+        firstArgName = tempResult.getSynList()[i];
+        i++;
+    }
+    if (isSecondArgAvailable) {
+        secondArgName = tempResult.getSynList()[i];
+    }
 }

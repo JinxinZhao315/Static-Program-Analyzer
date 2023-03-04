@@ -47,6 +47,8 @@ public:
     bool isSecondArgSynonym();
     
     void setClauseResult(bool isFirstArgAvailable, bool isSecondArgAvailable, ResultTable tempResult);
+
+    ResultTable getClauseResult();
 };
 
 
