@@ -12,7 +12,8 @@ public:
     bool validateDesignEntity(std::string designEntity);
 	bool validateStmtRef(std::string input);
 	bool validateEntRef(std::string input);
-	bool validatePattern(std::string assign, std::string leftArg, std::string rightArg);
+    bool validatePattern(std::string synonym, std::string synonymType,
+                         std::string firstArg, std::string secondArg, std::string thirdArg);
 	bool validateExprSpec(std::string input);
 private:
 	std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";

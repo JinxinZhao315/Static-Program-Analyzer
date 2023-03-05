@@ -25,16 +25,20 @@ bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
     return true;
 }
 
-
-bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string leftArg, std::string rightArg) {
-	/*if (PQLSyntaxChecker::relationshipSet.find(relationship) != PQLSyntaxChecker::relationshipSet.end()) {
-		return false;
-	}*/
-	if (Utility::getReferenceType(synonym) != Utility::SYNONYM) {
-		return false;
-	}
-	return validateEntRef(leftArg) && validateExprSpec(rightArg);
+bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string synonymType, std::string firstArg,
+                                       std::string secondArg, std::string thirdArg) {
+    if (Utility::getReferenceType(synonym) != Utility::SYNONYM) {
+        return false;
+    }
+    if (synonymType == "assign") {
+        return validateEntRef(firstArg) && validateExprSpec(secondArg);
+    } else if (synonymType == "while") {
+        return validateEntRef(firstArg) && secondArg == Utility::UNDERSCORE;
+    } else { // if (synonymType == "if")
+        return validateEntRef(firstArg) && secondArg == Utility::UNDERSCORE && thirdArg == Utility::UNDERSCORE;
+    }
 }
+
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
     std::string type = Utility::getReferenceType(input);

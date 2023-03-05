@@ -88,6 +88,15 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         if (patternFlag == false) {
             return false;
         }
+
+        // If firstArg is a synonym, it must be a variable synonym
+        std::string firstArg = patternClause.getFirstArg();
+        std::string firstArgType = Utility::getReferenceType(firstArg);
+        if (firstArgType == Utility::SYNONYM) {
+            if (varTable.find(firstArg)-> second != "variable") {
+                return false;
+            }
+        }
     }
 
     return true;

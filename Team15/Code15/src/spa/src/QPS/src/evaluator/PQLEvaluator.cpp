@@ -136,13 +136,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 resultTable.combineTable(result.getClauseResult());
             }
 
-            //if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            //    //modifiesPHandler.combineResult(resultTable, result);
-            //}
-            //else {
-            //    resultTable.combineTable(result.getClauseResult());
-            //}
-
             if (resultTable.isTableEmpty()) {
 
                 isEarlyExit = true;
@@ -163,34 +156,19 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         if (result.isResultTrue() == false)
         {
             resultTable.clearResultTable();
-            isEarlyExit = true;
+
             break;
         }
 
         resultTable.combineTable(result.getClauseResult());
         if (resultTable.isTableEmpty()) {
 
-            isEarlyExit = true;
-
             break;
         }
     }
 
-    // return the values of the selected synonym in ResultTable
-//    std::string retStr;
+
     set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-//    if (retSet.empty())
-//    {
-//        retStr = "None";
-//    }
-//    else
-//    {
-//        retStr = std::accumulate(begin(retSet),
-//                                 end(retSet),
-//                                 string{},
-//                                 [](const string &a, const string &b)
-//                                 { return a.empty() ? b : a + ',' + b; });
-//    }
 
     return retSet;
 }

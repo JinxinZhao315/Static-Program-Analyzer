@@ -235,3 +235,25 @@ TEST_CASE("PQLSyntaxChecker negative test 13: Uses right input type") {
 	Query query;
 	REQUIRE_THROWS_AS(query = preprocessor.preprocess("assign a; Select a such that Uses(a, 11)"), PQLSyntaxError);
 }
+
+TEST_CASE("PQLSyntaxChecker negative test 14: pattern clause assign comma") {
+    PQLPreprocessor preprocessor;
+    Query query;
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("assign a; Select a pattern a (_,_,_)"), PQLSyntaxError);
+}
+
+TEST_CASE("PQLSyntaxChecker negative test 15: pattern clause while") {
+    PQLPreprocessor preprocessor;
+    Query query;
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("while w; Select w pattern w (_,_,_)"), PQLSyntaxError);
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("while w; Select w pattern w (_,\"x\")"), PQLSyntaxError);
+}
+
+TEST_CASE("PQLSyntaxChecker negative test 16: pattern clause if") {
+    PQLPreprocessor preprocessor;
+    Query query;
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,_)"), PQLSyntaxError);
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,_,\"x\")"), PQLSyntaxError);
+    REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,\"t\",\"x\")"), PQLSyntaxError);
+}
+

@@ -62,11 +62,11 @@ public:
 
     void deleteTuple(int index);
 
-    void ResultTable::insertTuple(std::vector<std::string> tuple);
+    void insertTuple(std::vector<std::string> tuple);
 
     std::vector<std::string> mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex);
 
-    std::vector<std::string> ResultTable::getTuple(int index);
+    std::vector<std::string> getTuple(int index);
 
 
     //bool isSynonymPresent(std::string key);

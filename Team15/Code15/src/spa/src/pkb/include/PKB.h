@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pkb/include/table/AbstractionTable.h"
+#include "pkb/include/table/RelationshipTable.h"
 #include "pkb/include/table/EntityTable.h"
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
@@ -46,7 +46,7 @@ public:
 	void addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
 	//SP assign pattern
-	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
 
 	//SP while pattern
 	void addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine);
@@ -139,17 +139,17 @@ public:
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
 	//QPS assign pattern
-	std::string getPatternVarFromStmt(int assignStmtNum);
+	std::string getAssignVarFromStmt(int assignStmtNum);
 
-	std::set<int> getPatternStmtsFromVar(std::string lhsVarName);
+	std::set<int> getAssignStmtsFromVar(std::string lhsVarName);
 
-	std::set<std::vector<std::string>> getPatternPostfixesFromStmt(int assignStmtNum);
+	std::set<std::vector<std::string>> getAssignExprsFromStmt(int assignStmtNum);
 
-	std::set<int> getPatternStmtsFromPostfix(std::vector<std::string> rhsPostfix);
+	std::set<int> getAssignStmtsFromExpr(std::vector<std::string> rhsExpr);
 
-	std::set<std::vector<std::string>> getPatternPostfixesFromVar(std::string lhsVarName);
+	std::set<std::vector<std::string>> getAssignExprsFromVar(std::string lhsVarName);
 
-	std::set<std::string> getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix);
+	std::set<std::string> getAssignVarsFromExpr(std::vector<std::string> rhsExpr);
 
 	//QPS while pattern
 	std::set<int> getWhileStmtsWithVars();
@@ -188,17 +188,17 @@ private:
 	EntityTable<std::string> varTable;
 	EntityTable<std::string> constTable;
 	StatementTable stmtTable;
-	AbstractionTable<int, int> followsTable;
-	AbstractionTable<int, int> followsStarTable;
-	AbstractionTable<int, int> parentTable;
-	AbstractionTable<int, int> parentStarTable;
-	AbstractionTable<int, std::string> usesStmtTable;
-	AbstractionTable<std::string, std::string> usesProcTable;
-	AbstractionTable<int, std::string> modifiesStmtTable;
-	AbstractionTable<std::string, std::string> modifiesProcTable;
-	PatternTable patternTable;
+	RelationshipTable<int, int> followsTable;
+	RelationshipTable<int, int> followsStarTable;
+	RelationshipTable<int, int> parentTable;
+	RelationshipTable<int, int> parentStarTable;
+	RelationshipTable<int, std::string> usesStmtTable;
+	RelationshipTable<std::string, std::string> usesProcTable;
+	RelationshipTable<int, std::string> modifiesStmtTable;
+	RelationshipTable<std::string, std::string> modifiesProcTable;
+	PatternTable assignPatternTable;
 	PatternTable whilePatternTable;
 	PatternTable ifPatternTable;
-	AbstractionTable<std::string, std::string> callsTable;
-	AbstractionTable<std::string, std::string> callsStarTable;
+	RelationshipTable<std::string, std::string> callsTable;
+	RelationshipTable<std::string, std::string> callsStarTable;
 };
