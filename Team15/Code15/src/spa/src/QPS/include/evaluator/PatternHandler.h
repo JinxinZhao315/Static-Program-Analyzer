@@ -16,6 +16,7 @@ public:
     set<string> findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch);
     bool findIsMatch(vector<string> rhsTokensVec, string substrToMatch);
     bool findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec);
+    set<int> getPatternFromPkb(string patternSynonType, string arg);
     pair<bool,string> trimPattern(string input);
 
     // TODO: These functions should be in common file

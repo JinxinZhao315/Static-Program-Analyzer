@@ -159,6 +159,18 @@ TEST_CASE("Overall test : source1.txt 13 SemanticError") {
     set<string> expectedResult = { "SemanticError" };
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source1.txt 14") {
+    string filename = source1_filename;
+    string queryStr = "while w; Select w pattern w (_,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { };
+    REQUIRE(result == expectedResult);
+}
+
+
+
 TEST_CASE("Overall test : source2.txt 1") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
@@ -304,6 +316,39 @@ TEST_CASE("Overall test : source2.txt 14") {
     set<string> expectedResult = {"22"};
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source2.txt 15") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+
+    string queryStr = "while w; Select w pattern w (_,_)";
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"19"};
+    REQUIRE(result == expectedResult);
+
+    string queryStr1 = "if i; Select i pattern i (_,_,_)";
+    set<string> result1 = testDriver(filename, queryStr1);
+    set<string> expectedResult1 = {"13"};
+    REQUIRE(result1 == expectedResult1);
+}
+
+TEST_CASE("Overall test : source2.txt 16") {
+    // Enter source of SIMPLE code
+    string filename = source2_filename;
+
+    string queryStr = "while w; variable v; Select v pattern w (v,_)";
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"count"};
+    REQUIRE(result == expectedResult);
+
+    string queryStr1 = "if i; variable v; Select v pattern i (v,_,_)";
+    set<string> result1 = testDriver(filename, queryStr1);
+    set<string> expectedResult1 = {"v"};
+    REQUIRE(result1 == expectedResult1);
+}
+
+
+
 
 TEST_CASE("Overall test : source3.txt 1") {
     // Enter source of SIMPLE code
