@@ -7,6 +7,8 @@
 
 TEST_CASE("Parent Integer Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -18,6 +20,7 @@ TEST_CASE("Parent Integer Underscore test") {
     pkb.addStmt("read", 3);
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(1, _)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -35,6 +38,8 @@ TEST_CASE("Parent Integer Underscore test") {
 
 TEST_CASE("Parent* Integer Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -50,6 +55,7 @@ TEST_CASE("Parent* Integer Underscore test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(1, _)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -69,6 +75,8 @@ TEST_CASE("Parent* Integer Underscore test") {
 
 TEST_CASE("Parent Underscore Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -81,6 +89,7 @@ TEST_CASE("Parent Underscore Integer test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(_, 1)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -100,6 +109,8 @@ TEST_CASE("Parent Underscore Integer test") {
 
 TEST_CASE("Parent* Underscore Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -115,6 +126,7 @@ TEST_CASE("Parent* Underscore Integer test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(_, 1)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -132,6 +144,8 @@ TEST_CASE("Parent* Underscore Integer test") {
 
 TEST_CASE("Parent Integer Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -144,6 +158,7 @@ TEST_CASE("Parent Integer Integer test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, {1});
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(2, 1)", pkb);
     REQUIRE(retStr1 == "none");
@@ -161,6 +176,8 @@ TEST_CASE("Parent Integer Integer test") {
 
 TEST_CASE("Parent* Integer Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -176,6 +193,7 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(2, 1)", pkb);
     REQUIRE(retStr1 == "none");
@@ -193,6 +211,8 @@ TEST_CASE("Parent* Integer Integer test") {
 
 TEST_CASE("Parent Synonym Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -205,6 +225,7 @@ TEST_CASE("Parent Synonym Integer test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(w, 1)", pkb);
     REQUIRE(retStr1 == "2,4");
@@ -218,6 +239,8 @@ TEST_CASE("Parent Synonym Integer test") {
 
 TEST_CASE("Parent* Synonym Integer test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -233,6 +256,7 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(a, 1)", pkb);
     REQUIRE(retStr1 == "none");
@@ -250,6 +274,8 @@ TEST_CASE("Parent* Synonym Integer test") {
 
 TEST_CASE("Parent Integer Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -262,6 +288,7 @@ TEST_CASE("Parent Integer Synonym test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(1, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -278,6 +305,8 @@ TEST_CASE("Parent Integer Synonym test") {
 
 TEST_CASE("Parent* Integer Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -293,6 +322,7 @@ TEST_CASE("Parent* Integer Synonym test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(1, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -310,6 +340,8 @@ TEST_CASE("Parent* Integer Synonym test") {
 
 TEST_CASE("Parent Synonym Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -322,6 +354,7 @@ TEST_CASE("Parent Synonym Synonym test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(w, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -341,6 +374,8 @@ TEST_CASE("Parent Synonym Synonym test") {
 
 TEST_CASE("Parent* Synonym Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -356,6 +391,7 @@ TEST_CASE("Parent* Synonym Synonym test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent*(w, a)", pkb);
     REQUIRE(retStr1 == "2");
@@ -373,6 +409,8 @@ TEST_CASE("Parent* Synonym Synonym test") {
 
 TEST_CASE("Parent Synonym Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -385,6 +423,7 @@ TEST_CASE("Parent Synonym Underscore test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(w, _)", pkb);
     REQUIRE(retStr1 == "1,5");
@@ -398,6 +437,8 @@ TEST_CASE("Parent Synonym Underscore test") {
 
 TEST_CASE("Parent* Synonym Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -413,6 +454,7 @@ TEST_CASE("Parent* Synonym Underscore test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent*(w, _)", pkb);
     REQUIRE(retStr1 == "1,5");
@@ -424,6 +466,8 @@ TEST_CASE("Parent* Synonym Underscore test") {
 
 TEST_CASE("Parent Underscore Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -436,6 +480,7 @@ TEST_CASE("Parent Underscore Synonym test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, { 1 });
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(_, w)", pkb);
     REQUIRE(retStr1 == "1");
@@ -449,6 +494,8 @@ TEST_CASE("Parent Underscore Synonym test") {
 
 TEST_CASE("Parent* Underscore Synonym test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -464,6 +511,7 @@ TEST_CASE("Parent* Underscore Synonym test") {
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent*(_, w)", pkb);
     REQUIRE(retStr1 == "1");
@@ -475,6 +523,8 @@ TEST_CASE("Parent* Underscore Synonym test") {
 
 TEST_CASE("Parent/Parent* Underscore Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("while", 1);
     pkb.addStmt("=", 2);
 
@@ -487,10 +537,12 @@ TEST_CASE("Parent/Parent* Underscore Underscore test") {
     pkb.addStmt("=", 4);
     pkb.addStmt("while", 5);
     pkb.addParent(5, {1});
+    */
 
     PKB pkbEmpty;
-    pkbEmpty.addStmt("call", 1);
-    pkbEmpty.addStmt("print", 2);
+    //pkbEmpty.addStmt("call", 1);
+    //pkbEmpty.addStmt("print", 2);
+    
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(_, _)", pkb);
     REQUIRE(retStr1 == "1,5");

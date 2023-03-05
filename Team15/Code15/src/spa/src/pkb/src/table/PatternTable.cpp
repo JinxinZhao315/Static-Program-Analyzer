@@ -2,7 +2,7 @@
 
 PatternTable::PatternTable() = default;
 
-void PatternTable::addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes) {
+void PatternTable::addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes) {
 	mapStmtToVar(assignStmtNum, lhsVarName);
 	mapVarToStmts(lhsVarName, assignStmtNum);
 	mapStmtToPostfixes(assignStmtNum, rhsPostfixes);
@@ -11,11 +11,11 @@ void PatternTable::addPattern(int assignStmtNum, string lhsVarName, set<vector<s
 	mapPostfixToVars(rhsPostfixes, lhsVarName);
 }
 
-void PatternTable::addAllPatterns(unordered_map<string, set<Line>> lhsVarToRhsLine) {
+void PatternTable::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
 	for (const auto& [var, lines] : lhsVarToRhsLine) {
 		for (Line line : lines) {
 			int stmtNum = line.getLineNumber();
-			vector<string> postfix = line.getTokens();
+			std::vector<std::string> postfix = line.getTokens();
 			mapStmtToVar(stmtNum, var);
 			mapVarToStmts(var, stmtNum);
 			mapStmtToOnePostfix(stmtNum, postfix);
@@ -26,7 +26,22 @@ void PatternTable::addAllPatterns(unordered_map<string, set<Line>> lhsVarToRhsLi
 	}
 }
 
-string PatternTable::getVarFromStmt(int assignStmtNum) {
+void PatternTable::addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine) {
+	for (const auto& [var, lines] : controlVarToWhileOrIfLine) {
+		for (Line line : lines) {
+			int stmtNum = line.getLineNumber();
+			addStmt(stmtNum);
+			mapStmtToVars(stmtNum, var);
+			mapVarToStmts(var, stmtNum);
+		}
+	}
+}
+
+std::set<int> PatternTable::getAllStmts() {
+	return allStmtsSet;
+}
+
+std::string PatternTable::getVarFromStmt(int assignStmtNum) {
 	auto pair = stmtToVarMap.find(assignStmtNum);
 	if (pair == stmtToVarMap.end()) {
 		return "0";
@@ -34,15 +49,23 @@ string PatternTable::getVarFromStmt(int assignStmtNum) {
 	return pair->second;
 }
 
-set<int> PatternTable::getStmtsFromVar(string lhsVarName) {
-	auto pair = varToStmtsMap.find(lhsVarName);
+std::set<std::string> PatternTable::getVarsFromStmt(int whileOrIfStmtNum) {
+	auto pair = stmtToVarsMap.find(whileOrIfStmtNum);
+	if (pair == stmtToVarsMap.end()) {
+		return {};
+	}
+	return pair->second;
+}
+
+std::set<int> PatternTable::getStmtsFromVar(std::string varName) {
+	auto pair = varToStmtsMap.find(varName);
 	if (pair == varToStmtsMap.end()) {
 		return {};
 	}
 	return pair->second;
 }
 
-set<vector<string>> PatternTable::getPostfixesFromStmt(int assignStmtNum) {
+std::set<std::vector<std::string>> PatternTable::getPostfixesFromStmt(int assignStmtNum) {
 	auto pair = stmtToPostfixesMap.find(assignStmtNum);
 	if (pair == stmtToPostfixesMap.end()) {
 		return {};
@@ -50,7 +73,7 @@ set<vector<string>> PatternTable::getPostfixesFromStmt(int assignStmtNum) {
 	return pair->second;
 }
 
-set<int> PatternTable::getStmtsFromPostfix(vector<string> rhsPostfix) {
+std::set<int> PatternTable::getStmtsFromPostfix(std::vector<std::string> rhsPostfix) {
 	auto pair = postfixToStmtsMap.find(rhsPostfix);
 	if (pair == postfixToStmtsMap.end()) {
 		return {};
@@ -58,7 +81,7 @@ set<int> PatternTable::getStmtsFromPostfix(vector<string> rhsPostfix) {
 	return pair->second;
 }
 
-set<vector<string>> PatternTable::getPostfixesFromVar(string lhsVarName) {
+std::set<std::vector<std::string>> PatternTable::getPostfixesFromVar(std::string lhsVarName) {
 	auto pair = varToPostfixesMap.find(lhsVarName);
 	if (pair == varToPostfixesMap.end()) {
 		return {};
@@ -66,7 +89,7 @@ set<vector<string>> PatternTable::getPostfixesFromVar(string lhsVarName) {
 	return pair->second;
 }
 
-set<string> PatternTable::getVarsFromPostfix(vector<string> rhsPostfix) {
+std::set<std::string> PatternTable::getVarsFromPostfix(std::vector<std::string> rhsPostfix) {
 	auto pair = postfixToVarsMap.find(rhsPostfix);
 	if (pair == postfixToVarsMap.end()) {
 		return {};
@@ -74,21 +97,35 @@ set<string> PatternTable::getVarsFromPostfix(vector<string> rhsPostfix) {
 	return pair->second;
 }
 
-void PatternTable::mapStmtToVar(int assignStmtNum, string lhsVarName) {
+void PatternTable::addStmt(int stmtNum) {
+	allStmtsSet.insert(stmtNum);
+}
+
+void PatternTable::mapStmtToVar(int assignStmtNum, std::string lhsVarName) {
 	stmtToVarMap[assignStmtNum] = lhsVarName;
 }
 
-void PatternTable::mapVarToStmts(string lhsVarName, int assignStmtNum) {
-	auto pair = varToStmtsMap.find(lhsVarName);
-	if (pair == varToStmtsMap.end()) {
-		varToStmtsMap[lhsVarName] = { assignStmtNum };
+void PatternTable::mapStmtToVars(int whileOrIfStmtNum, std::string controlVarName) {
+	auto pair = stmtToVarsMap.find(whileOrIfStmtNum);
+	if (pair == stmtToVarsMap.end()) {
+		stmtToVarsMap[whileOrIfStmtNum] = { controlVarName };
 	}
 	else {
-		pair->second.insert(assignStmtNum);
+		pair->second.insert(controlVarName);
 	}
 }
 
-void PatternTable::mapStmtToPostfixes(int assignStmtNum, set<vector<string>> rhsPostfixes) {
+void PatternTable::mapVarToStmts(std::string varName, int stmtNum) {
+	auto pair = varToStmtsMap.find(varName);
+	if (pair == varToStmtsMap.end()) {
+		varToStmtsMap[varName] = { stmtNum };
+	}
+	else {
+		pair->second.insert(stmtNum);
+	}
+}
+
+void PatternTable::mapStmtToPostfixes(int assignStmtNum, std::set<std::vector<std::string>> rhsPostfixes) {
 	auto pair = stmtToPostfixesMap.find(assignStmtNum);
 	if (pair == stmtToPostfixesMap.end()) {
 		stmtToPostfixesMap[assignStmtNum] = rhsPostfixes;
@@ -98,7 +135,7 @@ void PatternTable::mapStmtToPostfixes(int assignStmtNum, set<vector<string>> rhs
 	}
 }
 
-void PatternTable::mapStmtToOnePostfix(int assignStmtNum, vector<string> rhsPostfix) {
+void PatternTable::mapStmtToOnePostfix(int assignStmtNum, std::vector<std::string> rhsPostfix) {
 	auto pair = stmtToPostfixesMap.find(assignStmtNum);
 	if (pair == stmtToPostfixesMap.end()) {
 		stmtToPostfixesMap[assignStmtNum] = { rhsPostfix };
@@ -108,8 +145,8 @@ void PatternTable::mapStmtToOnePostfix(int assignStmtNum, vector<string> rhsPost
 	}
 }
 
-void PatternTable::mapPostfixToStmts(set<vector<string>> rhsPostfixes, int assignStmtNum) {
-	for (vector<string> postfix : rhsPostfixes) {
+void PatternTable::mapPostfixToStmts(std::set<std::vector<std::string>> rhsPostfixes, int assignStmtNum) {
+	for (std::vector<std::string> postfix : rhsPostfixes) {
 		auto pair = postfixToStmtsMap.find(postfix);
 		if (pair == postfixToStmtsMap.end()) {
 			postfixToStmtsMap[postfix] = { assignStmtNum };
@@ -120,7 +157,7 @@ void PatternTable::mapPostfixToStmts(set<vector<string>> rhsPostfixes, int assig
 	}
 }
 
-void PatternTable::mapOnePostfixToStmts(vector<string> rhsPostfix, int assignStmtNum) {
+void PatternTable::mapOnePostfixToStmts(std::vector<std::string> rhsPostfix, int assignStmtNum) {
 	auto pair = postfixToStmtsMap.find(rhsPostfix);
 	if (pair == postfixToStmtsMap.end()) {
 		postfixToStmtsMap[rhsPostfix] = { assignStmtNum };
@@ -130,7 +167,7 @@ void PatternTable::mapOnePostfixToStmts(vector<string> rhsPostfix, int assignStm
 	}
 }
 
-void PatternTable::mapVarToPostfixes(string lhsVarName, set<vector<string>> rhsPostfixes) {
+void PatternTable::mapVarToPostfixes(std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes) {
 	auto pair = varToPostfixesMap.find(lhsVarName);
 	if (pair == varToPostfixesMap.end()) {
 		varToPostfixesMap[lhsVarName] = rhsPostfixes;
@@ -140,7 +177,7 @@ void PatternTable::mapVarToPostfixes(string lhsVarName, set<vector<string>> rhsP
 	}
 }
 
-void PatternTable::mapVarToOnePostfix(string lhsVarName, vector<string> rhsPostfix) {
+void PatternTable::mapVarToOnePostfix(std::string lhsVarName, std::vector<std::string> rhsPostfix) {
 	auto pair = varToPostfixesMap.find(lhsVarName);
 	if (pair == varToPostfixesMap.end()) {
 		varToPostfixesMap[lhsVarName] = { rhsPostfix };
@@ -150,8 +187,8 @@ void PatternTable::mapVarToOnePostfix(string lhsVarName, vector<string> rhsPostf
 	}
 }
 
-void PatternTable::mapPostfixToVars(set<vector<string>> rhsPostfixes, string lhsVarName) {
-	for (vector<string> postfix : rhsPostfixes) {
+void PatternTable::mapPostfixToVars(std::set<std::vector<std::string>> rhsPostfixes, std::string lhsVarName) {
+	for (std::vector<std::string> postfix : rhsPostfixes) {
 		auto pair = postfixToVarsMap.find(postfix);
 		if (pair == postfixToVarsMap.end()) {
 			postfixToVarsMap[postfix] = { lhsVarName };
@@ -162,7 +199,7 @@ void PatternTable::mapPostfixToVars(set<vector<string>> rhsPostfixes, string lhs
 	}
 }
 
-void PatternTable::mapOnePostfixToVars(vector<string> rhsPostfix, string lhsVarName) {
+void PatternTable::mapOnePostfixToVars(std::vector<std::string> rhsPostfix, std::string lhsVarName) {
 	auto pair = postfixToVarsMap.find(rhsPostfix);
 	if (pair == postfixToVarsMap.end()) {
 		postfixToVarsMap[rhsPostfix] = { lhsVarName };

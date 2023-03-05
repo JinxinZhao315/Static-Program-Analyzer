@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <set>
 
-using namespace std;
-
 template <typename L, typename R>
 class AbstractionTable {
 public:

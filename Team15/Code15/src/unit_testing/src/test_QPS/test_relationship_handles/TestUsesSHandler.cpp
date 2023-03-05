@@ -1,18 +1,16 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 using namespace std;
-
-
 
 string testUses(string queryStr);
 
 string testUses(string queryStr) {
     PKB pkb;
-
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
@@ -28,6 +26,7 @@ string testUses(string queryStr) {
     pkb.addStmt("print", 3);
     pkb.addVar("t");
     pkb.addUsesStmt(3, {"t"});
+    */
 
     // Line 1: k = x + y;
     // Line 2: m = i + j;

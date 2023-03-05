@@ -12,124 +12,96 @@ PKB::PKB() {
 	usesStmtTable = AbstractionTable<int, std::string>();
 	usesProcTable = AbstractionTable<std::string, std::string>();
 	patternTable = PatternTable();
+	whilePatternTable = PatternTable();
+	ifPatternTable = PatternTable();
+	callsTable = AbstractionTable<std::string, std::string>();
+	callsStarTable = AbstractionTable<std::string, std::string>();
 }
 
 //SP procedure
-void PKB::addProc(std::string procName) {
-	procTable.addEntity(procName);
-}
-
 void PKB::addAllProcs(std::set<std::string> procNames) {
 	procTable.addAllEntities(procNames);
 }
 
 //SP variable
-void PKB::addVar(std::string varName) {
-	varTable.addEntity(varName);
-}
-
 void PKB::addAllVars(std::set<std::string> varNames) {
 	varTable.addAllEntities(varNames);
 }
 
 //SP constant
-void PKB::addConst(std::string constVal) {
-	constTable.addEntity(constVal);
-}
-
 void PKB::addAllConsts(std::set<std::string> constVals) {
 	constTable.addAllEntities(constVals);
 }
 
 //SP statement
-void PKB::addStmt(string stmtType, int stmtNum) { // TODO: @Galen please review
-    stmtTable.addStatementNumber(stmtType, stmtNum);
-}
-
-void PKB::addAllStmts(std::unordered_map<string, std::set<int>> stmtNums) {
+void PKB::addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums) {
 	stmtTable.addAllStatementsByType(stmtNums);
 	stmtTable.addAllStatementsRegardlessOfType(stmtNums);
 }
 
 //SP follows
-void PKB::addFollows(int leaderNum, int followerNum) {
-	followsTable.addOneToOneAbstraction(leaderNum, followerNum);
-}
-
 void PKB::addAllFollows(std::unordered_map<int, int> allLeaderToFollower) {
 	followsTable.addAllOneToOneAbstractions(allLeaderToFollower);
 }
 
 //SP follows*
-void PKB::addFollowsStar(int leaderNum, std::set<int> followerNums) {
-	followsStarTable.addOneToManyAbstraction(leaderNum, followerNums);
-}
-
 void PKB::addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers) {
 	followsStarTable.addAllOneToManyAbstractions(allLeaderToFollowers);
 }
 
 //SP parent
-void PKB::addParent(int parentNum, std::set<int> childrenNum) {
-	parentTable.addOneSidedOnetoManyAbstractions(parentNum, childrenNum);
-}
-
 void PKB::addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren) {
 	parentTable.addAllOneSidedOnetoManyAbstractions(allParentToChildren);
 }
 
 //SP parent*
-void PKB::addParentStar(int parentNum, std::set<int> childrenNums) {
-	parentStarTable.addOneToManyAbstraction(parentNum, childrenNums);
-}
-
 void PKB::addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren) {
 	parentStarTable.addAllOneToManyAbstractions(allParentToChildren);
 }
 
 //SP uses statement-variable
-void PKB::addUsesStmt(int stmtNum, std::set<std::string> varNames) {
-	usesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
-}
-
 void PKB::addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
 	usesStmtTable.addAllOneToManyAbstractions(allStmtToVars);
 }
 
 //SP uses procedure-variable
-void PKB::addUsesProc(std::string procName, std::set<std::string> varNames) {
-	usesProcTable.addOneToManyAbstraction(procName, varNames);
-}
-
 void PKB::addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
 	usesProcTable.addAllOneToManyAbstractions(allProcToVars);
 }
 
 //SP modifies statement-variable
-void PKB::addModifiesStmt(int stmtNum, std::set<std::string> varNames) {
-	modifiesStmtTable.addOneToManyAbstraction(stmtNum, varNames);
-}
-
 void PKB::addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
 	modifiesStmtTable.addAllOneToManyAbstractions(allStmtToVars);
 }
 
 //SP modifies procedure-variable
-void PKB::addModifiesProc(std::string procName, std::set<std::string> varNames) {
-	modifiesProcTable.addOneToManyAbstraction(procName, varNames);
-}
-
 void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
 	modifiesProcTable.addAllOneToManyAbstractions(allProcToVars);
 }
 
-//SP pattern
-void PKB::addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes) {
-	patternTable.addPattern(assignStmtNum, lhsVarName, rhsPostfixes);
+//SP assign pattern
+void PKB::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
+	patternTable.addAllAssignPatterns(lhsVarToRhsLine);
 }
 
-void PKB::addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
-	patternTable.addAllPatterns(lhsVarToRhsLine);
+//SP while pattern
+void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
+	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
+}
+
+//SP if pattern
+void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
+	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
+}
+
+//SP calls
+void PKB::addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
+	callsTable.addAllOneToManyAbstractions(allCallertoCallees);
+}
+
+//SP calls*
+void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
+	callsStarTable.addAllOneToManyAbstractions(allCallertoCallees);
 }
 
 //QPS procedure
@@ -152,7 +124,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(string stmtType) { // TODO: @Galen please review
+std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
@@ -276,27 +248,87 @@ bool PKB::areInModifiesProcRelationship(std::string procName, std::string varNam
 	return modifiesProcTable.inOneToManyRelationship(procName, varName);
 }
 
-//QPS pattern
-string PKB::getPatternVarFromStmt(int assignStmtNum) {
+//QPS assign pattern
+std::string PKB::getPatternVarFromStmt(int assignStmtNum) {
 	return patternTable.getVarFromStmt(assignStmtNum);
 }
 
-set<int> PKB::getPatternStmtsFromVar(string lhsVarName) {
+std::set<int> PKB::getPatternStmtsFromVar(std::string lhsVarName) {
 	return patternTable.getStmtsFromVar(lhsVarName);
 }
 
-set<vector<string>> PKB::getPatternPostfixesFromStmt(int assignStmtNum) {
+std::set<std::vector<std::string>> PKB::getPatternPostfixesFromStmt(int assignStmtNum) {
 	return patternTable.getPostfixesFromStmt(assignStmtNum);
 }
 
-set<int> PKB::getPatternStmtsFromPostfix(vector<string> rhsPostfix) {
+std::set<int> PKB::getPatternStmtsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getStmtsFromPostfix(rhsPostfix);
 }
 
-set<vector<string>> PKB::getPatternPostfixesFromVar(string lhsVarName) {
+std::set<std::vector<std::string>> PKB::getPatternPostfixesFromVar(std::string lhsVarName) {
 	return patternTable.getPostfixesFromVar(lhsVarName);
 }
 
-set<string> PKB::getPatternVarsFromPostfix(vector<string> rhsPostfix) {
+std::set<std::string> PKB::getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix) {
 	return patternTable.getVarsFromPostfix(rhsPostfix);
+}
+
+//QPS while pattern
+std::set<int> PKB::getWhileStmtsWithVars() {
+	return whilePatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getWhileStmtsFromVar(std::string controlVarName) {
+	return whilePatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getWhileVarsFromStmt(int whileStmtNum) {
+	return whilePatternTable.getVarsFromStmt(whileStmtNum);
+}
+
+//QPS if pattern
+std::set<int> PKB::getIfStmtsWithVars() {
+	return ifPatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
+	return ifPatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getIfVarsFromStmt(int ifStmtNum) {
+	return ifPatternTable.getVarsFromStmt(ifStmtNum);
+}
+
+//QPS calls
+std::set<std::string> PKB::getCallsCallerNames(std::string calleeName) {
+	return callsTable.getManyLeft(calleeName);
+}
+
+std::set<std::string> PKB::getCallsCalleeNames(std::string callerName) {
+	return callsTable.getManyRight(callerName);
+}
+
+bool PKB::areInCallsRelationship(std::string callerName, std::string calleeName) {
+	return callsTable.inOneToManyRelationship(callerName, calleeName);
+}
+
+bool PKB::isCallsEmpty() {
+	return callsTable.isEmpty();
+}
+
+//QPS calls*
+std::set<std::string> PKB::getCallsStarCallerNames(std::string calleeName) {
+	return callsStarTable.getManyLeft(calleeName);
+}
+
+std::set<std::string> PKB::getCallsStarCalleeNames(std::string callerName) {
+	return callsStarTable.getManyRight(callerName);
+}
+
+bool PKB::areInCallsStarRelationship(std::string callerName, std::string calleeName) {
+	return callsStarTable.inOneToManyRelationship(callerName, calleeName);
+}
+
+bool PKB::isCallsStarEmpty() {
+	return callsStarTable.isEmpty();
 }

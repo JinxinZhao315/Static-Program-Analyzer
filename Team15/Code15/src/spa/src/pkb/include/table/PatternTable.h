@@ -8,53 +8,63 @@
 
 #include "common/include/models/Line.h"
 
-using namespace std;
-
 class PatternTable {
 public:
 	PatternTable();
 
-	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
+	void addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes);
 
-	void addAllPatterns(unordered_map<string, set<Line>> lhsVarToRhsLine);
+	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
 
-	string getVarFromStmt(int assignStmtNum);
+	void addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine);
 
-	set<int> getStmtsFromVar(string lhsVarName);
+	std::set<int> getAllStmts();
 
-	set<vector<string>> getPostfixesFromStmt(int assignStmtNum);
+	std::string getVarFromStmt(int assignStmtNum);
 
-	set<int> getStmtsFromPostfix(vector<string> rhsPostfix);
+	std::set<std::string> getVarsFromStmt(int whileOrIfStmtNum);
 
-	set<vector<string>> getPostfixesFromVar(string lhsVarName);
+	std::set<int> getStmtsFromVar(std::string varName);
 
-	set<string> getVarsFromPostfix(vector<string> rhsPostfix);
+	std::set<std::vector<std::string>> getPostfixesFromStmt(int assignStmtNum);
 
-	void mapStmtToVar(int assignStmtNum, string lhsVarName);
+	std::set<int> getStmtsFromPostfix(std::vector<std::string> rhsPostfix);
 
-	void mapVarToStmts(string lhsVarName, int assignStmtNum);
+	std::set<std::vector<std::string>> getPostfixesFromVar(std::string lhsVarName);
 
-	void mapStmtToPostfixes(int assignStmtNum, set<vector<string>> rhsPostfixes);
+	std::set<std::string> getVarsFromPostfix(std::vector<std::string> rhsPostfix);
 
-	void mapStmtToOnePostfix(int assignStmtNum, vector<string> rhsPostfix);
+	void addStmt(int stmtNum);
 
-	void mapPostfixToStmts(set<vector<string>> rhsPostfixes, int assignStmtNum);
+	void mapStmtToVar(int assignStmtNum, std::string lhsVarName);
 
-	void mapOnePostfixToStmts(vector<string> rhsPostfix, int assignStmtNum);
+	void mapStmtToVars(int whileOrIfStmtNum, std::string controlVarName);
 
-	void mapVarToPostfixes(string lhsVarName, set<vector<string>> rhsPostfixes);
+	void mapVarToStmts(std::string varName, int stmtNum);
 
-	void mapVarToOnePostfix(string lhsVarName, vector<string> rhsPostfix);
+	void mapStmtToPostfixes(int assignStmtNum, std::set<std::vector<std::string>> rhsPostfixes);
 
-	void mapPostfixToVars(set<vector<string>> rhsPostfixes, string lhsVarName);
+	void mapStmtToOnePostfix(int assignStmtNum, std::vector<std::string> rhsPostfix);
 
-	void mapOnePostfixToVars(vector<string> rhsPostfix, string lhsVarName);
+	void mapPostfixToStmts(std::set<std::vector<std::string>> rhsPostfixes, int assignStmtNum);
+
+	void mapOnePostfixToStmts(std::vector<std::string> rhsPostfix, int assignStmtNum);
+
+	void mapVarToPostfixes(std::string lhsVarName, std::set<std::vector<std::string>> rhsPostfixes);
+
+	void mapVarToOnePostfix(std::string lhsVarName, std::vector<std::string> rhsPostfix);
+
+	void mapPostfixToVars(std::set<std::vector<std::string>> rhsPostfixes, std::string lhsVarName);
+
+	void mapOnePostfixToVars(std::vector<std::string> rhsPostfix, std::string lhsVarName);
 
 private:
-	map<int, string> stmtToVarMap;
-	map<string, set<int>> varToStmtsMap;
-	map<int, set<vector<string>>> stmtToPostfixesMap;
-	map<vector<string>, set<int>> postfixToStmtsMap;
-	map<string, set<vector<string>>> varToPostfixesMap;
-	map<vector<string>, set<string>> postfixToVarsMap;
+	std::set<int> allStmtsSet;
+	std::map<int, std::string> stmtToVarMap;
+	std::map<int, std::set<std::string>> stmtToVarsMap;
+	std::map<std::string, std::set<int>> varToStmtsMap;
+	std::map<int, std::set<std::vector<std::string>>> stmtToPostfixesMap;
+	std::map<std::vector<std::string>, std::set<int>> postfixToStmtsMap;
+	std::map<std::string, std::set<std::vector<std::string>>> varToPostfixesMap;
+	std::map<std::vector<std::string>, std::set<std::string>> postfixToVarsMap;
 };

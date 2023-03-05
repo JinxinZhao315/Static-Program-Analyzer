@@ -8,6 +8,8 @@
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
 
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
@@ -39,6 +41,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
     pkb.addFollowsStar(2, set<int>({3,4,5}));
     pkb.addFollowsStar(3, set<int>({4,5}));
     pkb.addFollowsStar(4, set<int>({5}));
+    */
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
@@ -79,6 +82,8 @@ TEST_CASE("Follows/Follow* and pattern test") {
 TEST_CASE("Follows/Follow* and pattern linked synons test") {
     PKB pkb;
 
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
@@ -105,7 +110,7 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
 
     pkb.addFollowsStar(1, set<int>({2,3}));
     pkb.addFollowsStar(2, set<int>({3}));
-
+    */
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
@@ -129,7 +134,9 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
 
 TEST_CASE("ModifiesS / UsesS and pattern test") {
     PKB pkb;
-
+    
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addVar("x");
     pkb.addVar("y");
@@ -156,6 +163,7 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     pkb.addPattern(3, "n", rhsSet3);
     pkb.addModifiesStmt(3, {"n"});
     pkb.addUsesStmt(3, {"y"});
+    */
 
     // Line 1: k = x + y;
     // Line 2: m = t + 2;

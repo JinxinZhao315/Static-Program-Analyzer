@@ -4,12 +4,12 @@
 #include <set>
 #include "catch.hpp"
 #include <assert.h>
-#include <memory> 
+#include <memory>
 #include "pkb/include/PKB.h"
 
 using namespace std;
 
-//ResultTable resultTableGenerator(int sampleNum) {
+// ResultTable resultTableGenerator(int sampleNum) {
 //	ResultTable resultTable;
 //	if (sampleNum == 1) {
 //		SynonymLinkageMap s1Ins4LinkageMap({ { "s2", std::set<std::string>({"5", "6"})} });
@@ -34,16 +34,16 @@ using namespace std;
 //	}
 //	else if (sampleNum == 2) {
 //		SynonymLinkageMap s1Ins4LinkageMap({ { "s2", std::set<std::string>({"5"})} });
-//		SynonymLinkageMap s1Ins5LinkageMap({ 
+//		SynonymLinkageMap s1Ins5LinkageMap({
 //			{ "s2", std::set<std::string>({"6"})},
 //			{ "s3", std::set<std::string>({"7"})} });
 //
-//		SynonymLinkageMap s2Ins5LinkageMap({ 
+//		SynonymLinkageMap s2Ins5LinkageMap({
 //			{ "s1", std::set<std::string>({"4"})},
 //			{ "s3", std::set<std::string>({"7"})} });
 //		SynonymLinkageMap s2Ins6LinkageMap({ { "s1", std::set<std::string>({"5"})} });
 //
-//		SynonymLinkageMap s2Ins7LinkageMap({ 
+//		SynonymLinkageMap s2Ins7LinkageMap({
 //			{ "s1", std::set<std::string>({"5"})},
 //			{ "s2", std::set<std::string>({"5"})} });
 //		std::unordered_map<std::string,
@@ -86,9 +86,9 @@ using namespace std;
 //		resultTable = ResultTable(testTable);
 //	}
 //	return resultTable;
-//}
+// }
 //
-//Result resultGenerator(int sampleNum) {
+// Result resultGenerator(int sampleNum) {
 //	Result result;
 //	if (sampleNum == 1) {
 //		SynonymLinkageMap currS2Ins5LinkageMap = SynonymLinkageMap();
@@ -113,7 +113,7 @@ using namespace std;
 //		SynonymLinkageMap currS1Ins6LinkageMap = SynonymLinkageMap({ { "s2", std::set<std::string>({"3"})} });
 //		SynonymLinkageMap currS2Ins3LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"6"})} });
 //		SynonymLinkageMap currS2Ins4LinkageMap = SynonymLinkageMap({ { "s1", std::set<std::string>({"5"})} });
-//		
+//
 //		std::unordered_map<std::string, SynonymLinkageMap> currLeftResult = {
 //				{"5", currS1Ins5LinkageMap},
 //				{"6", currS1Ins6LinkageMap}
@@ -152,9 +152,9 @@ using namespace std;
 //		result.setSecondArg("s2", currRightResult);
 //	}
 //	return result;
-//}
+// }
 //
-//TEST_CASE("Test combineResult function in ClauseHandler") {
+// TEST_CASE("Test combineResult function in ClauseHandler") {
 //	PKB pkb;
 //	ClauseHandler clauseHandler(pkb);
 //
@@ -173,9 +173,9 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s1").count("4") == 0);
 //	REQUIRE(resultTable.getSynonymEntry("s2").at("5").getLinkedSynValueSet("s2").count("4") == 0);
 //	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet("s2").count("4") == 0);
-//}
+// }
 //
-//TEST_CASE("Test resultTableCheckAndAdd function in ClauseHandler") {
+// TEST_CASE("Test resultTableCheckAndAdd function in ClauseHandler") {
 //	PKB pkb;
 //	pkb.addVar("x");
 //	pkb.addVar("y");
@@ -187,9 +187,9 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("v1").count("x") == 1);
 //	REQUIRE(resultTable.getSynonymEntry("v1").count("y") == 1);
 //	REQUIRE(resultTable.getSynonymEntry("v1").count("k") == 1);
-//}
+// }
 //
-//TEST_CASE("Test combineTwoSynResult function in ClauseHandler") {
+// TEST_CASE("Test combineTwoSynResult function in ClauseHandler") {
 //	SynonymLinkageMap s1Ins5LinkageMap({
 //		{ "s2", {"6", "7"}},
 //		{ "s3", {"9"} }
@@ -243,9 +243,9 @@ using namespace std;
 //
 //	//in the table, 6 in s2 should be deleted
 //	REQUIRE(resultTable.getSynonymEntry("s2").count("6") == 0);
-//}
+// }
 //
-//TEST_CASE("Test combineTwoSynResult function in ClauseHandler 2") {
+// TEST_CASE("Test combineTwoSynResult function in ClauseHandler 2") {
 //	SynonymLinkageMap s1Ins6LinkageMap({ { "s2", std::set<std::string>({"8"})} });
 //	SynonymLinkageMap s1Ins7LinkageMap({ { "s2", std::set<std::string>({"9"})} });
 //	SynonymLinkageMap s1Ins8LinkageMap({ { "s2", std::set<std::string>({"8"})} });
@@ -303,9 +303,9 @@ using namespace std;
 //
 //	REQUIRE(resultTable.getSynonymEntry("s2").find("9")->second.getLinkageMap().find("s1")->second.size() == 1);
 //	REQUIRE(resultTable.getSynonymEntry("s2").find("9")->second.getLinkageMap().find("s1")->second.count("7") == 1);
-//}
+// }
 //
-//TEST_CASE("Test combineOneSynResult function in ClauseHandler 1: table intersect synonym key from curr result") {
+// TEST_CASE("Test combineOneSynResult function in ClauseHandler 1: table intersect synonym key from curr result") {
 //	std::unordered_map<std::string,
 //		std::unordered_map<std::string, SynonymLinkageMap>> testTable = {
 //			{"s1", {
@@ -316,7 +316,7 @@ using namespace std;
 //			}
 //	};
 //	ResultTable resultTable(testTable);
-//	
+//
 //	std::unordered_map<std::string, SynonymLinkageMap> currResult = {
 //				{"6", SynonymLinkageMap()},
 //				{"7", SynonymLinkageMap()},
@@ -329,12 +329,12 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s1").find("8") == resultTable.getSynonymEntry("s1").end());
 //	REQUIRE(resultTable.getSynonymEntry("s1").find("6") != resultTable.getSynonymEntry("s1").end());
 //	REQUIRE(resultTable.getSynonymEntry("s1").find("7") != resultTable.getSynonymEntry("s1").end());
-//}
+// }
 //
-//TEST_CASE("Test combineOneSynResult function in ClauseHandler 2: synonym has linkage to other synonym") {
-//	SynonymLinkageMap s1Ins5LinkageMap({ 
+// TEST_CASE("Test combineOneSynResult function in ClauseHandler 2: synonym has linkage to other synonym") {
+//	SynonymLinkageMap s1Ins5LinkageMap({
 //		{"s2", std::set<std::string>({"6", "7", "8"}) },
-//		{"s3", std::set<std::string>({"6"})} 
+//		{"s3", std::set<std::string>({"6"})}
 //		});
 //	SynonymLinkageMap s1Ins6LinkageMap({ { "s2", std::set<std::string>({"7", "8"})}});
 //	SynonymLinkageMap s1Ins7LinkageMap({ { "s2", std::set<std::string>({"8"})} });
@@ -381,12 +381,12 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s2").find("8")->second.getLinkageMap().find("s1")->second.count("5") == 0);
 //	//instance 6 in s3 should also delete 5, and since 6 in s3 only contains one link and it is deleted, 6 should be deleted
 //	REQUIRE(resultTable.getSynonymEntry("s3").count("6") == 0);
-//}
+// }
 //
-//TEST_CASE("Test combineOneSynResult function in ClauseHandler 3: there are 2 step links") {
+// TEST_CASE("Test combineOneSynResult function in ClauseHandler 3: there are 2 step links") {
 //	SynonymLinkageMap s1Ins5LinkageMap({ { "s2", std::set<std::string>({"6"}) }});
 //
-//	SynonymLinkageMap s2Ins6LinkageMap({ 
+//	SynonymLinkageMap s2Ins6LinkageMap({
 //		{ "s1", std::set<std::string>({"5"})},
 //		{ "s3", std::set<std::string>({"7"})} });
 //
@@ -421,9 +421,9 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s2").count("6") == 0);
 //	//instance 7 in s3 should also be deleted
 //	REQUIRE(resultTable.getSynonymEntry("s3").count("7") == 0);
-//}
+// }
 //
-//TEST_CASE("Test filterCurrResult function in ClauseHandler") {
+// TEST_CASE("Test filterCurrResult function in ClauseHandler") {
 //	PKB pkb;
 //	ClauseHandler clauseHandler(pkb);
 //
@@ -438,9 +438,9 @@ using namespace std;
 //	REQUIRE(firstArgVal.count("6") == 0);
 //	REQUIRE(secondArgVal.size() == 1);
 //	REQUIRE(secondArgVal.count("3") == 0);
-//}
+// }
 //
-//TEST_CASE("Test filterResultTable function in ClauseHandler") {
+// TEST_CASE("Test filterResultTable function in ClauseHandler") {
 //	PKB pkb;
 //	ClauseHandler clauseHandler(pkb);
 //
@@ -454,9 +454,9 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s1").size() == 0);
 //	REQUIRE(resultTable.getSynonymEntry("s2").size() == 0);
 //	REQUIRE(resultTable.getSynonymEntry("s3").size() == 0);
-//}
+// }
 //
-//TEST_CASE("Test filterCurrResultLinkageSet function in ClauseHandler") {
+// TEST_CASE("Test filterCurrResultLinkageSet function in ClauseHandler") {
 //	PKB pkb;
 //	ClauseHandler clauseHandler(pkb);
 //
@@ -473,9 +473,9 @@ using namespace std;
 //	REQUIRE(secondArgVal.size() == 1);
 //	REQUIRE(secondArgVal.count("6") == 1);
 //
-//}
+// }
 //
-//TEST_CASE("Test filterResultTableLinkageSet function in ClauseHandler") {
+// TEST_CASE("Test filterResultTableLinkageSet function in ClauseHandler") {
 //	PKB pkb;
 //	ClauseHandler clauseHandler(pkb);
 //
@@ -493,7 +493,7 @@ using namespace std;
 //	REQUIRE(resultTable.getSynonymEntry("s2").size() == 1);
 //	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet(firstArgName).size() == 1);
 //	REQUIRE(resultTable.getSynonymEntry("s2").at("6").getLinkedSynValueSet(firstArgName).count("5") == 1);
-//}
+// }
 //
 ////TEST_CASE("Test filterOneSynWithLinkage function in ClauseHandler") {
 ////	PKB pkb;
@@ -514,7 +514,7 @@ using namespace std;
 ////
 ////}
 //
-//TEST_CASE("Test deleteSynTableEntry function in ClauseHandler") {
+// TEST_CASE("Test deleteSynTableEntry function in ClauseHandler") {
 //	SynonymLinkageMap s1Ins5LinkageMap({ { "s2", {"7", "8"} } });
 //	SynonymLinkageMap s2Ins7LinkageMap({ { "s1", std::set<std::string>({"5"})} });
 //	SynonymLinkageMap s2Ins8LinkageMap({ { "s1", std::set<std::string>({"5"})} });
