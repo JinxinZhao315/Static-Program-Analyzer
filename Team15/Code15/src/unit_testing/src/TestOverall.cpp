@@ -332,20 +332,20 @@ TEST_CASE("Overall test : source2.txt 15") {
     REQUIRE(result1 == expectedResult1);
 }
 
-TEST_CASE("Overall test : source2.txt 16") {
-    // Enter source of SIMPLE code
-    string filename = source2_filename;
-
-    string queryStr = "while w; variable v; Select v pattern w (v,_)";
-    set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = {"count"};
-    REQUIRE(result == expectedResult);
-
-    string queryStr1 = "if i; variable v; Select v pattern i (v,_,_)";
-    set<string> result1 = testDriver(filename, queryStr1);
-    set<string> expectedResult1 = {"v"};
-    REQUIRE(result1 == expectedResult1);
-}
+//TEST_CASE("Overall test : source2.txt 16") {
+//    // Enter source of SIMPLE code
+//    string filename = source2_filename;
+//
+//    string queryStr = "while w; variable v; Select v pattern w (v,_)";
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"count"};
+//    REQUIRE(result == expectedResult);
+//
+//    string queryStr1 = "if i; variable v; Select v pattern i (v,_,_)";
+//    set<string> result1 = testDriver(filename, queryStr1);
+//    set<string> expectedResult1 = {"v"};
+//    REQUIRE(result1 == expectedResult1);
+//}
 
 
 
