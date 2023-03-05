@@ -28,7 +28,7 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllParentStar(extractor->getParentStarRS());
     pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllUsesStmt(extractor->getUsesRS());
-    pkb->addAllPatterns(extractor->getAssignsRS());
+    pkb->addAllAssignPatterns(extractor->getAssignsRS());
     // TODO: update this after PKB api is updated
     extractor->getProcedureUsesRS();
     extractor->getProcedureModifiesRS();

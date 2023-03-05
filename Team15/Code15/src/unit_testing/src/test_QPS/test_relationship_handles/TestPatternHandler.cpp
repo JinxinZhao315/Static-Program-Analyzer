@@ -18,7 +18,7 @@ void testPatternFillPkb(PKB& pkb) {
     Line line2 = Line(2, vector<string>({"1", "2", "+"}), "=");
     patterns.insert(make_pair("k", set<Line>({line1})));
     patterns.insert(make_pair("m", set<Line>({line2})));
-    pkb.addAllPatterns(patterns);
+    pkb.addAllAssignPatterns(patterns);
 
     // Line1: k = x + y
     // Line 2: m = 1 + 2;
@@ -45,7 +45,7 @@ void testPatternFillPkb2(PKB& pkb) {
     assignPatterns.insert(make_pair("m", set<Line>({line3})));
     assignPatterns.insert(make_pair("y", set<Line>({line5})));
     assignPatterns.insert(make_pair("x", set<Line>({line7})));
-    pkb.addAllPatterns(assignPatterns);
+    pkb.addAllAssignPatterns(assignPatterns);
 
     unordered_map<string, set<Line>> ifPatterns;
     Line line1 = Line(1, vector<string>({"x", "5", ">"}), "if");

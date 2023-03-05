@@ -6,10 +6,10 @@ PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
 set<string> PatternHandler::findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch) {
     set <string> ret;
-    for (vector<string> rhsPostfix : allRHS) {
-        bool isMatch = findIsMatch(rhsPostfix, substrToMatch);
+    for (vector<string> rhsExpr : allRHS) {
+        bool isMatch = findIsMatch(rhsExpr, substrToMatch);
         if (isMatch) {
-            set<int> lineNumSet = pkb.getPatternStmtsFromPostfix(rhsPostfix);
+            set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhsExpr);
             for (int num : lineNumSet) {
                 ret.insert(to_string(num));
             }
@@ -71,7 +71,7 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
 set<int> PatternHandler::getPatternFromPkb(string patternSynonType, string arg) {
     set<int> lineNumSet;
     if (patternSynonType == "assign") {
-        lineNumSet = pkb.getPatternStmtsFromVar(arg);
+        lineNumSet = pkb.getAssignStmtsFromVar(arg);
     } else if (patternSynonType == "while") {
         lineNumSet = pkb.getWhileStmtsFromVar(arg);
     } else { // if (patternSynonType == "if")
@@ -108,7 +108,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
 
             for (string lineNum : patternSynonLineNums) {
-                set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(stoi(lineNum));
+                set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
                 set<string> matchingLines = findMatchingLineNums(allRHS, secondArg);
                 if (!matchingLines.empty()) {
                     patternSynonVals.push_back(lineNum);
@@ -140,7 +140,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         } else if (secondType == Utility::UNDERSCORED_EXPR) {
 
             for (string currFirstVal: currFirstSynonValues) {
-                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currFirstVal);
+                set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(currFirstVal);
                 set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
                 if (!matchingLines.empty()) {
                     for (string lineStr : matchingLines) {
@@ -166,7 +166,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             }
 
         } else if (secondType == Utility::UNDERSCORED_EXPR) {
-            set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(firstArgTrimmed);
+            set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
             set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
             for (string lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
