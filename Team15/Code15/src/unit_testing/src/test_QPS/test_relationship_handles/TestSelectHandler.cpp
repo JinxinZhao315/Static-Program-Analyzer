@@ -49,11 +49,12 @@ TEST_CASE("Select Handler test 1") {
     SelectHandler selectHandler = SelectHandler(pkb);
     std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
+    set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName);
     REQUIRE(selectedVarName == "r");
-    REQUIRE(resultTable.getSynonymEntry("r").size() == 3);
-    REQUIRE(resultTable.getSynonymEntry("r").count("3") == 1);
-    REQUIRE(resultTable.getSynonymEntry("r").count("7") == 1);
-    REQUIRE(resultTable.getSynonymEntry("r").count("8") == 1);
+    REQUIRE(retSet.size() == 3);
+    REQUIRE(retSet.count("3") == 1);
+    REQUIRE(retSet.count("7") == 1);
+    REQUIRE(retSet.count("8") == 1);
 }
 
 TEST_CASE("Select Handler test 2") {
@@ -79,11 +80,12 @@ TEST_CASE("Select Handler test 2") {
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
+        set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName);
         REQUIRE(selectedVarName == "c");
-        REQUIRE(resultTable.getSynonymEntry("c").size() == 4);
-        REQUIRE(resultTable.getSynonymEntry("c").count("10") == 1);
-        REQUIRE(resultTable.getSynonymEntry("c").count("11") == 1);
-        REQUIRE(resultTable.getSynonymEntry("c").count("12") == 1);
-        REQUIRE(resultTable.getSynonymEntry("c").count("13") == 1);
+        REQUIRE(retSet.size() == 4);
+        REQUIRE(retSet.count("10") == 1);
+        REQUIRE(retSet.count("11") == 1);
+        REQUIRE(retSet.count("12") == 1);
+        REQUIRE(retSet.count("13") == 1);
 
 }

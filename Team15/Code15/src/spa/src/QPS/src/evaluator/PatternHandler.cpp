@@ -46,6 +46,7 @@ bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMat
     }
 }
 
+// Use sliding window to determine if substr is a subset of fullstr
 bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec) {
     size_t subStrSize = substrVec.size();
     size_t fullStrSize = fullstrVec.size();
@@ -67,163 +68,112 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
     return false;
 }
 
+set<int> PatternHandler::getPatternFromPkb(string patternSynonType, string arg) {
+    set<int> lineNumSet;
+    if (patternSynonType == "assign") {
+        lineNumSet = pkb.getPatternStmtsFromVar(arg);
+    } else if (patternSynonType == "while") {
+        lineNumSet = pkb.getWhileStmtsFromVar(arg);
+    } else { // if (patternSynonType == "if")
+        lineNumSet = pkb.getIfStmtsFromVar(arg);
+    }
+    return lineNumSet;
+}
+
 
 Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
                                    std::multimap<std::string, std::string> &synonymTable) {
 
     string patternSynon = patternClause.getPatternSynonym();
-    string leftArg = patternClause.getLeftArg();
-    string rightArg = patternClause.getRightArg();
-    string leftType = Utility::getReferenceType(leftArg);
-    string rightType = Utility::getReferenceType(rightArg);
+    string firstArg = patternClause.getFirstArg();
+    string secondArg = patternClause.getSecondArg();
+    string firstType = Utility::getReferenceType(firstArg);
+    string secondType = Utility::getReferenceType(secondArg);
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
 
     resultTableCheckAndAdd(patternSynon, resultTable, patternType);
 
-    // Is the values of patternSynon in result table empty?
-    // If yes, set result to false
-    if (!resultTable.isSynonymPresent(patternSynon)) {
-        result.setResultTrue(false);
-        return result;
-    }
+    if (firstType == Utility::UNDERSCORE) {
 
+        std::vector<std::string> patternSynonVals;
 
-    if (leftType == Utility::UNDERSCORE) {
-
-        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
-
-        if (rightType == Utility::UNDERSCORE) {
+        if (secondType == Utility::UNDERSCORE) {
 
             // result maintains current values of patternSynon
-            patternSynonVals = resultTable.getSynonymEntry(patternSynon);
+            patternSynonVals = resultTable.getSynValues(patternSynon);
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
+        } else if (secondType == Utility::UNDERSCORED_EXPR) {
 
-            set<string> patternSynonLineNums = resultTable.getStringSetFromKey(patternSynon);
+            std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
 
             for (string lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getPatternPostfixesFromStmt(stoi(lineNum));
-                set<string> matchingLines = findMatchingLineNums(allRHS, rightArg);
+                set<string> matchingLines = findMatchingLineNums(allRHS, secondArg);
                 if (!matchingLines.empty()) {
-                    patternSynonVals.insert(make_pair(
-                            lineNum,
-                            SynonymLinkageMap()));
+                    patternSynonVals.push_back(lineNum);
                 }
             }
         }
 
-        result.setFirstArg(patternSynon, patternSynonVals);
+        result.setClauseResult(true, false, ResultTable(patternSynonVals, patternSynon));
 
-    } else if (leftType == Utility::SYNONYM) {
+    } else if (firstType == Utility::SYNONYM) {
 
-        string leftDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        std::set<string> currLeftSynonValues = resultTable.getStringSetFromKey(leftArg);
+        string firstDeType = synonymTable.find(firstArg)->second;
+        resultTableCheckAndAdd(firstArg, resultTable, firstDeType);
+        std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
-        // Does the Design Entity type represented by left synonym exist in PKB?
-        // If not, set result to false
-        if (currLeftSynonValues.empty()) {
-            result.setResultTrue(false);
-            return result;
-        }
+        ResultTable tempResultTable({patternSynon, firstArg });
 
-        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
-        std::unordered_map<std::string, SynonymLinkageMap> leftSynonVals;
+        if (secondType == Utility::UNDERSCORE) {
 
-        if (rightType == Utility::UNDERSCORE) {
-
-            for (string currLeftVal: currLeftSynonValues) {
-                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
-                // If right Arg is wildcard, every RHS in matchingRHS is a match. So no need to call findMatchingLines function.
-                // If matchingRHS is not empty, it means leftArg (must be a var) is the LHS of some assignment(s)
-                if (!matchingRHS.empty()) {
-                    if (leftSynonVals.find(currLeftVal) == leftSynonVals.end()) {
-                        leftSynonVals.insert(make_pair(currLeftVal, SynonymLinkageMap()));
-                    }
-                    set<int> lineNumSet = pkb.getPatternStmtsFromVar(currLeftVal);
-                    for (int num : lineNumSet) {
+            for (string currFirstVal: currFirstSynonValues) {
+                    set<int> lineNumSet = getPatternFromPkb(patternType, currFirstVal);
+                    // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal ( a variable)
+                    for (int num : lineNumSet) { // Each num is a possible value of pattern synon
                         string numStr = to_string(num);
-                        if (patternSynonVals.find(numStr) == patternSynonVals.end()) {
-                            patternSynonVals.insert(make_pair(numStr, SynonymLinkageMap()));
-                        }
-                        patternSynonVals.find(numStr)->second.insertLinkage(leftArg, currLeftVal);
-                        leftSynonVals.find(currLeftVal)->second.insertLinkage(patternSynon, numStr);
-                        //leftSynonVals.insert(currLeftVal);
-                        //patternSynonVals.insert(to_string(num));
+                        tempResultTable.insertTuple({numStr, currFirstVal});
                     }
-
-                }
             }
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
+        } else if (secondType == Utility::UNDERSCORED_EXPR) {
 
-            for (string currLeftVal: currLeftSynonValues) {
-                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currLeftVal);
-                set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
+            for (string currFirstVal: currFirstSynonValues) {
+                set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(currFirstVal);
+                set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
                 if (!matchingLines.empty()) {
-
-                    if (leftSynonVals.find(currLeftVal) == leftSynonVals.end()) {
-                        leftSynonVals.insert(make_pair(currLeftVal, SynonymLinkageMap()));
-                    }
                     for (string lineStr : matchingLines) {
-                        if (patternSynonVals.find(lineStr) == patternSynonVals.end()) {
-                            patternSynonVals.insert(make_pair(lineStr, SynonymLinkageMap()));
-                        }
-                        patternSynonVals.find(lineStr)->second.insertLinkage(leftArg, currLeftVal);
-                        leftSynonVals.find(currLeftVal)->second.insertLinkage(patternSynon, lineStr);
-                        //leftSynonVals.insert(currLeftVal);
-                        //patternSynonVals.insert(lineStr);
+                        tempResultTable.insertTuple({lineStr, currFirstVal });
                     }
-
                 }
             }
         }
 
-        result.setFirstArg(patternSynon, patternSynonVals);
-        result.setSecondArg(leftArg, leftSynonVals);
+        result.setClauseResult(true, true, tempResultTable);
 
-    } else if (leftType == Utility::QUOTED_IDENT) {
+    } else if (firstType == Utility::QUOTED_IDENT) {
 
-        // Do SIMPLE expressions with LHS == stated leftArg exist in PKB?
-        // If not, set result to false
-        string leftArgTrimmed = trimPattern(leftArg).second;
-        set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(leftArgTrimmed);
+        string firstArgTrimmed = trimPattern(firstArg).second;
+        std::vector<std::string> patternSynonVals;
 
-        if (matchingRHS.empty()) {
-            result.setResultTrue(false);
-            return result;
-        }
+        if (secondType == Utility::UNDERSCORE) {
 
-        std::unordered_map<std::string, SynonymLinkageMap> patternSynonVals;
-
-        if (rightType == Utility::UNDERSCORE) {
-
-            set<int> lineNumSet = pkb.getPatternStmtsFromVar(leftArgTrimmed);
+            set<int> lineNumSet = getPatternFromPkb(patternType, firstArgTrimmed);
+            // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
             for (int num : lineNumSet) {
-                patternSynonVals.insert(make_pair(
-                        to_string(num),
-                        SynonymLinkageMap()
-                        ));
+                patternSynonVals.push_back(to_string(num));
             }
 
-        } else if (rightType == Utility::UNDERSCORED_EXPR) {
-
-            set<string> matchingLines = findMatchingLineNums(matchingRHS, rightArg);
-            if (matchingLines.empty()) {
-                result.setResultTrue(false);
-                return result;
-            } else {
-                for (string lineStr : matchingLines) {
-                    patternSynonVals.insert(make_pair(
-                            lineStr,
-                            SynonymLinkageMap()
-                    ));
-                }
+        } else if (secondType == Utility::UNDERSCORED_EXPR) {
+            set<vector<string>> matchingRHS = pkb.getPatternPostfixesFromVar(firstArgTrimmed);
+            set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
+            for (string lineStr : matchingLines) {
+                patternSynonVals.push_back(lineStr);
             }
         }
 
-        result.setFirstArg(patternSynon, patternSynonVals);
+        result.setClauseResult(true, false, ResultTable(patternSynonVals, patternSynon));
 
     } else {
         throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
