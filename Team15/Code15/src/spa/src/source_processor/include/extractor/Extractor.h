@@ -3,9 +3,9 @@
 #include "CommonExtractorHeader.h"
 #include "FollowsRelationshipExtractor.h"
 #include "ParentsRelationshipExtractor.h"
-#include "ModifiesRelationshipExtractor.h"
+#include "ModifiesUsesCallsRelationshipExtractor.h"
 #include "AssignsRelationshipExtractor.h"
-#include "UsesRelationshipExtractor.h"
+#include "ConditionalRelationshipExtractor.h"
 #include "ConstantExtractor.h"
 #include "ProcedureExtractor.h"
 #include "VariableExtractor.h"
@@ -27,9 +27,18 @@ public:
     unordered_map<int, set<int>> getParentRS();
     unordered_map<int, set<int>> getParentStarRS();
 
-    unordered_map<int, set<string>> getModifiesRS();
-    unordered_map<int, set<string>> getUsesRS();
     unordered_map<string, set<Line>> getAssignsRS();
+    unordered_map<string, set<Line>> getIfRS();
+    unordered_map<string, set<Line>> getWhileRS();
+
+    unordered_map<int, set<string>> getModifiesRS();
+    unordered_map<string, set<string>> getProcedureModifiesRS();
+
+    unordered_map<int, set<string>> getUsesRS();
+    unordered_map<string, set<string>> getProcedureUsesRS();
+
+    unordered_map<string, set<string>> getCallsRS();
+    unordered_map<string, set<string>> getCallsStarRS();
 
 private:
     unordered_map<int, set<int>> parentsRS;
@@ -38,9 +47,18 @@ private:
     unordered_map<int, int> followsRS;
     unordered_map<int, set<int>> followsStarRS;
 
+    unordered_map<string, set<string>> procedureModifiesRS;
+    unordered_map<string, set<string>> procedureUsesRS;
+
+    unordered_map<string, set<string>> callsRS;
+    unordered_map<string, set<string>> callsStarRS;
+
     unordered_map<int, set<string>> modifiesRS;
     unordered_map<int, set<string>> usesRS;
+
     unordered_map<string, set<Line>> assignsRS;
+    unordered_map<string, set<Line>> ifRS;
+    unordered_map<string, set<Line>> whileRS;
 
     set<string> procedures;
     set<string> constants;

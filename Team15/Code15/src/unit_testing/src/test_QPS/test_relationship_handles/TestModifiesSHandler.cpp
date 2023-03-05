@@ -14,6 +14,8 @@ using namespace std;
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -26,6 +28,7 @@ TEST_CASE("ModifiesS Integer Underscore test") {
     pkb.addModifiesStmt(1, set1);
 
     pkb.addStmt("read", 3);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, _)", pkb);
     
@@ -47,6 +50,8 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
 TEST_CASE("ModifiesS Integer IdentString test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -63,6 +68,7 @@ TEST_CASE("ModifiesS Integer IdentString test") {
     set<string> set3({ "x" });
 
     pkb.addModifiesStmt(3, set3);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, \"k\")", pkb);
     
@@ -84,6 +90,8 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
 TEST_CASE("ModifiesS Integer Variable test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -100,6 +108,7 @@ TEST_CASE("ModifiesS Integer Variable test") {
     set<string> set3({ "x" });
 
     pkb.addModifiesStmt(3, set3);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, b)", pkb);
     
@@ -124,6 +133,8 @@ TEST_CASE("ModifiesS Integer Variable test") {
 
 TEST_CASE("ModifiesS Statement Variable test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -140,6 +151,7 @@ TEST_CASE("ModifiesS Statement Variable test") {
     set<string> set3({ "x" });
 
     pkb.addModifiesStmt(3, set3);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, b)", pkb);
     
@@ -158,6 +170,8 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
 TEST_CASE("ModifiesS Statement IdentString test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -174,6 +188,7 @@ TEST_CASE("ModifiesS Statement IdentString test") {
     set<string> set3({ "x" });
 
     pkb.addModifiesStmt(3, set3);
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, \"k\")", pkb);
     
@@ -195,6 +210,8 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
 TEST_CASE("ModifiesS Statement Underscore test") {
     PKB pkb;
+    //do not add one by one to pkb
+    /*
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
 
@@ -212,7 +229,7 @@ TEST_CASE("ModifiesS Statement Underscore test") {
 
     set<string> set3({ "x" });
     pkb.addModifiesStmt(3, set3);
-
+    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, _)", pkb);
     

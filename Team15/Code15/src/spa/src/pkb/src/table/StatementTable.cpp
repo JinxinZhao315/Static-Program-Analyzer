@@ -27,6 +27,6 @@ std::set<int> StatementTable::getAllStatementNumbers() {
 	return statementTable;
 }
 
-std::set<int> StatementTable::getAllStatementNumbersByType(string statementType) {
+std::set<int> StatementTable::getAllStatementNumbersByType(std::string statementType) {
 	return statementByTypeTable[statementType];
 }
