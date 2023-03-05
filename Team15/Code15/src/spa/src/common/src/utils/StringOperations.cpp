@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "common/include/utils/StringOperations.h"
 
 pair<vector<string>, vector<string>> getLHSandRHSofAssignStatement(vector<string> tokens) {
@@ -10,20 +12,28 @@ pair<vector<string>, vector<string>> getLHSandRHSofAssignStatement(vector<string
 }
 
 string getVarNameFromReadStatement(vector<string> tokens) {
-    return getSecondToken(tokens);
+    return getSecondToken(std::move(tokens));
 }
 
 string getVarNameFromPrintStatement(vector<string> tokens) {
-    return getSecondToken(tokens);
+    return getSecondToken(std::move(tokens));
+}
+
+string getProcedureNameFromProcedureStatement(vector<string> tokens) {
+    return getSecondToken(std::move(tokens));
+}
+
+string getProcedureNameFromCallStatement(vector<string> tokens) {
+    return getSecondToken(std::move(tokens));
 }
 
 string getSecondToken(vector<string> tokens) {
     return tokens[1];
 }
 
-set<string> getVariablesFromStatement(vector<string> tokens, const set<string>& variables) {
+set<string> getVariablesFromStatement(const vector<string>& tokens, const set<string>& variables) {
     set<string> result;
-    for (string token : tokens) {
+    for (const string& token : tokens) {
         if (variables.count(token) > 0) {
             result.insert(token);
         }
@@ -32,12 +42,18 @@ set<string> getVariablesFromStatement(vector<string> tokens, const set<string>& 
 }
 
 int precedence(const string& c) {
-    if (c == "-" || c == "+") {
+    if(c == "||") {
         return 1;
-    } else if (c == "*" || c == "/" || c == "%") {
+    } else if (c == "<" || c == ">" || c == "<=" || c == ">=" || c == "==" || c == "!=") {
         return 2;
-    } else if (c == "^") {
+    } else if (c == "&&") {
         return 3;
+    } else if (c == "-" || c == "+") {
+        return 4;
+    } else if (c == "*" || c == "/" || c == "%") {
+        return 5;
+    } else if (c == "^") {
+        return 6;
     }
     return -1;
 }

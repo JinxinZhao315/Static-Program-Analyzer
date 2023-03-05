@@ -26,7 +26,8 @@ TEST_CASE("Select Handler test 1") {
     varTable.insert(pair<std::string, std::string>("p", "procedure"));
 
     PKB pkb;
-  
+    //do not add one by one to pkb
+    /*
     pkb.addProc("p");
     pkb.addStmt("=", 1);
     pkb.addStmt("=", 2);
@@ -43,6 +44,7 @@ TEST_CASE("Select Handler test 1") {
     pkb.addConst("11");
     pkb.addConst("12");
     pkb.addConst("13");
+    */
 
     SelectHandler selectHandler = SelectHandler(pkb);
     std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
@@ -67,11 +69,13 @@ TEST_CASE("Select Handler test 2") {
         ResultTable resultTable = ResultTable();
 
         PKB pkb;
-
+        //do not add one by one to pkb
+        /*
         pkb.addConst("10");
         pkb.addConst("11");
         pkb.addConst("12");
         pkb.addConst("13");
+        */
 
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name

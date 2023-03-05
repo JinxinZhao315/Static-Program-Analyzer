@@ -5,76 +5,60 @@
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
 
-using namespace std;
-
 class PKB {
 public:
 	PKB();
 
 	//SP procedure
-	void addProc(std::string procName);
-
 	void addAllProcs(std::set<std::string> procNames);
 
 	//SP variable
-	void addVar(std::string varName);
-
 	void addAllVars(std::set<std::string> varNames);
 
 	//SP constant
-	void addConst(std::string constVal);
-
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addStmt(std::string stmtType, int stmtNum);
-
-	void addAllStmts(unordered_map<std::string, set<int>> stmtNums);
+	void addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums);
 
 	//SP follows
-	void addFollows(int leaderNum, int followerNum);
-
 	void addAllFollows(std::unordered_map<int, int> allLeaderToFollower);
 
 	//SP follows*
-	void addFollowsStar(int leaderNum, std::set<int> followerNums);
-
-	void addAllFollowsStar(std::unordered_map<int, set<int>> allLeaderToFollowers);
+	void addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers);
 
 	//SP parent
-	void addParent(int parentNum, std::set<int> childrenNum);
-
 	void addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren);
 
 	//SP parent*
-	void addParentStar(int parentNum, std::set<int> childrenNums);
-
 	void addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren);
 
 	//SP uses statement-variable
-	void addUsesStmt(int stmtNum, std::set<std::string> varNames);
-
 	void addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars);
 
 	//SP uses procedure-variable
-	void addUsesProc(std::string procName, std::set<std::string> varNames);
-
 	void addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
 	//SP modifies statement-variable
-	void addModifiesStmt(int stmtNum, std::set<std::string> varNames);
-
 	void addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars);
 
 	//SP modifies procedure-variable
-	void addModifiesProc(std::string procName, std::set<std::string> varNames);
-
 	void addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
-	//SP pattern
-	void addPattern(int assignStmtNum, string lhsVarName, set<vector<string>> rhsPostfixes);
-
+	//SP assign pattern
 	void addAllPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+
+	//SP while pattern
+	void addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine);
+
+	//SP if pattern
+	void addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine);
+
+	//SP calls
+	void addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
+
+	//SP calls*
+	void addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
 
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
@@ -88,7 +72,7 @@ public:
 	//QPS statement
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(string stmtType);
+	std::set<int> getAllStmtNumsByType(std::string stmtType);
 
 	//QPS follow
 	int getFollowsLeaderNum(int followerNum);
@@ -154,18 +138,50 @@ public:
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
-	//QPS pattern
-	string getPatternVarFromStmt(int assignStmtNum);
+	//QPS assign pattern
+	std::string getPatternVarFromStmt(int assignStmtNum);
 
-	set<int> getPatternStmtsFromVar(string lhsVarName);
+	std::set<int> getPatternStmtsFromVar(std::string lhsVarName);
 
-	set<vector<string>> getPatternPostfixesFromStmt(int assignStmtNum);
+	std::set<std::vector<std::string>> getPatternPostfixesFromStmt(int assignStmtNum);
 
-	set<int> getPatternStmtsFromPostfix(vector<string> rhsPostfix);
+	std::set<int> getPatternStmtsFromPostfix(std::vector<std::string> rhsPostfix);
 
-	set<vector<string>> getPatternPostfixesFromVar(string lhsVarName);
+	std::set<std::vector<std::string>> getPatternPostfixesFromVar(std::string lhsVarName);
 
-	set<string> getPatternVarsFromPostfix(vector<string> rhsPostfix);
+	std::set<std::string> getPatternVarsFromPostfix(std::vector<std::string> rhsPostfix);
+
+	//QPS while pattern
+	std::set<int> getWhileStmtsWithVars();
+	
+	std::set<int> getWhileStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getWhileVarsFromStmt(int whileStmtNum);
+
+	//QPS if pattern
+	std::set<int> getIfStmtsWithVars();
+
+	std::set<int> getIfStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getIfVarsFromStmt(int ifStmtNum);
+
+	//QPS calls
+	std::set<std::string> getCallsCallerNames(std::string calleeName);
+
+	std::set<std::string> getCallsCalleeNames(std::string callerName);
+
+	bool areInCallsRelationship(std::string callerName, std::string calleeName);
+
+	bool isCallsEmpty();
+
+	//QPS calls*
+	std::set<std::string> getCallsStarCallerNames(std::string calleeName);
+
+	std::set<std::string> getCallsStarCalleeNames(std::string callerName);
+
+	bool areInCallsStarRelationship(std::string callerName, std::string calleeName);
+
+	bool isCallsStarEmpty();
 
 private:
 	EntityTable<std::string> procTable;
@@ -181,4 +197,8 @@ private:
 	AbstractionTable<int, std::string> modifiesStmtTable;
 	AbstractionTable<std::string, std::string> modifiesProcTable;
 	PatternTable patternTable;
+	PatternTable whilePatternTable;
+	PatternTable ifPatternTable;
+	AbstractionTable<std::string, std::string> callsTable;
+	AbstractionTable<std::string, std::string> callsStarTable;
 };
