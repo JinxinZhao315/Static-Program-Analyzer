@@ -35,7 +35,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (std::string currSynonVal : currSynonValues) {
 			// check whether given procedure modifies historical variables in source.
 			bool isModifies = pkb.areInModifiesProcRelationship(leftArg, currSynonVal);
 			if (isModifies) {
@@ -57,7 +57,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (std::string currSynonVal : currSynonValues) {
 
 			std::set<std::string> modifiesSet = pkb.getModifiesVarsFromProc(currSynonVal);
 
@@ -80,7 +80,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (std::string currSynonVal : currSynonValues) {
 			// check whether given procedure uses historical variables in source.
 			bool isModifies = pkb.areInModifiesProcRelationship(currSynonVal, Utility::trim_double_quotes(rightArg));
 			if (isModifies) {
