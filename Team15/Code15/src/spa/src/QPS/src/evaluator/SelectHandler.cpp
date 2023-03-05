@@ -5,7 +5,7 @@ SelectHandler::SelectHandler(PKB& pkb) : ClauseHandler(pkb){}
 std::string SelectHandler::evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable) {
     std::string varName = selectClause.getVarName();
     std::string varType = varTable.find(varName)->second;
-    Result result;
+    //Result result;
     resultTableCheckAndAdd(varName, resultTable, varType);
     
     //std::set<std::string> resultSet = ClauseHandler::getResultFromPKB(this->pkb, varType);

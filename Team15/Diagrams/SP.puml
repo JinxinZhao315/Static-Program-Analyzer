@@ -1,0 +1,45 @@
+@startuml
+-> SourceProcessor: parseProgram(filePath)
+activate SourceProcessor
+
+SourceProcessor -> Parser: parseProgram(filePath)
+activate Parser
+
+Parser --> SourceProcessor
+deactivate Parser
+
+SourceProcessor -> Tokeniser: feedLines(lines)
+activate Tokeniser
+
+Tokeniser --> SourceProcessor
+deactivate Tokeniser
+
+SourceProcessor -> Extractor: extract(tokenisedLines)
+activate Extractor
+
+SourceProcessor <-- Extractor
+deactivate Extractor
+
+<-- SourceProcessor
+deactivate SourceProcessor
+
+
+
+-> SourceProcessor: storeDataInPKB(pkb)
+activate SourceProcessor
+
+SourceProcessor -> ProgramKnowledgeBase: addAllEntities(dataStructure)
+activate ProgramKnowledgeBase
+
+SourceProcessor <-- ProgramKnowledgeBase
+deactivate ProgramKnowledgeBase
+
+SourceProcessor -> ProgramKnowledgeBase: addAllAbstractions(dataStructure)
+activate ProgramKnowledgeBase
+
+SourceProcessor <-- ProgramKnowledgeBase
+deactivate ProgramKnowledgeBase
+
+<-- SourceProcessor
+deactivate SourceProcessor
+@enduml
