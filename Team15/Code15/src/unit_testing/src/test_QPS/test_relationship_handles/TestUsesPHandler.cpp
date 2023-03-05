@@ -15,7 +15,7 @@ string testUsesP(string queryStr) {
     return retStr;
 }
 
-TEST_CASE("UsesS empty pkb") {
+TEST_CASE("UsesP empty pkb") {
     PKB pkb;
     PQLDriver driver = PQLDriver(pkb);
 
@@ -35,7 +35,7 @@ TEST_CASE("UsesS empty pkb") {
     REQUIRE(retStr3 == "none");
 }
 
-TEST_CASE("UsesS (int, quoted_ident)") {
+TEST_CASE("UsesP (int, quoted_ident)") {
 
     string retStr1 = testUsesP("assign a; Select a such that Uses(1, \"x\")");
     //cout << retStr1 << endl;
@@ -50,7 +50,7 @@ TEST_CASE("UsesS (int, quoted_ident)") {
     REQUIRE(retStr2 == "none");
 }
 
-TEST_CASE("UsesS (int, _)") {
+TEST_CASE("UsesP (int, _)") {
 
     string retStr1 = testUsesP("assign a; Select a such that Uses(1,_)");
     //cout << retStr1 << endl;
@@ -58,7 +58,7 @@ TEST_CASE("UsesS (int, _)") {
 
 }
 
-TEST_CASE("UsesS (int, synon)") {
+TEST_CASE("UsesP (int, synon)") {
 
     string retStr1 = testUsesP("variable v; Select v such that Uses(1,v)");
     //cout << retStr1 << endl;
@@ -70,7 +70,7 @@ TEST_CASE("UsesS (int, synon)") {
 
 }
 
-TEST_CASE("UsesS semantic error test") {
+TEST_CASE("UsesP semantic error test") {
 
     string retStr1 = testUsesP("assign a; Select a such that Uses(_, \"x\")");
     //cout << retStr1 << endl;
@@ -78,7 +78,7 @@ TEST_CASE("UsesS semantic error test") {
 
 }
 
-TEST_CASE("UsesS (synon, _)") {
+TEST_CASE("UsesP (synon, _)") {
     string retStr1 = testUsesP("assign a; Select a such that Uses(a,_)");
     //cout << retStr1 << endl;
     REQUIRE(retStr1 == "1,2");
@@ -92,7 +92,7 @@ TEST_CASE("UsesS (synon, _)") {
     REQUIRE(retStr2 == "i,j,k,m,t,x,y");
 }
 
-TEST_CASE("UsesS (synon, quoted_ident)") {
+TEST_CASE("UsesP (synon, quoted_ident)") {
     string retStr1 = testUsesP("assign a; Select a such that Uses(a,\"x\")");
     //cout << retStr1 << endl;
     REQUIRE(retStr1 == "1");
@@ -102,7 +102,7 @@ TEST_CASE("UsesS (synon, quoted_ident)") {
     REQUIRE(retStr2 == "3");
 }
 
-TEST_CASE("UsesS (synon, synon)") {
+TEST_CASE("UsesP (synon, synon)") {
     string retStr1 = testUsesP("assign a; variable v; Select a such that Uses(a,v)");
     //cout << retStr1 << endl;
     REQUIRE(retStr1 == "1,2");
