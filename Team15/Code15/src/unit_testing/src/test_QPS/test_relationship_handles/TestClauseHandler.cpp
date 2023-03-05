@@ -4,7 +4,7 @@
 #include <set>
 #include "catch.hpp"
 #include <assert.h>
-#include <memory> 
+#include <memory>
 #include "pkb/include/PKB.h"
 
 using namespace std;

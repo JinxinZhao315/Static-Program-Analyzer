@@ -6,19 +6,24 @@
 class PatternClause {
 private:
     std::string patternSynonym;
-    std::string leftArg;
-    std::string rightArg;
+    std::string firstArg;
+    std::string secondArg;
+    std::string thirdArg;
+
 public:
 	PatternClause();
 
 	PatternClause(std::string patternSynonym,
-		std::string leftArg, std::string rightArg);
+		std::string firstArg, std::string secondArg, std::string thirdArg);
 
     std::string getPatternSynonym();
 
-	std::string getLeftArg();
+	std::string getFirstArg();
 
-	std::string getRightArg();
+	std::string getSecondArg();
+
+    std::string getThirdArg();
+
 
 	~PatternClause();
 };

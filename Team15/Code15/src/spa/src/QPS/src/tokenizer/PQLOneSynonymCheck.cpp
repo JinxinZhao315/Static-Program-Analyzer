@@ -51,21 +51,24 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
     // Pattern Clause
     for (PatternClause patternClause: patternClauseVec) {
-        std::string patternLeftArg = patternClause.getLeftArg();
-        std::string patternRightArg = patternClause.getRightArg();
-    	std::string patternLeftType = Utility::getReferenceType(patternClause.getLeftArg());
-    	std::string patternRightType = Utility::getReferenceType(patternClause.getRightArg());
-        if (patternLeftType == Utility::SYNONYM && varTable.count(patternLeftArg) != 1) {
+        // In a pattern clause, only the pattern synonym and the first argument can be synonyms
+        std::string patternSynonym = patternClause.getPatternSynonym();
+        std::string patternFirstArg = patternClause.getFirstArg();
+        std::string patternSynonymType = Utility::getReferenceType(patternSynonym);
+    	std::string patternFirstType = Utility::getReferenceType(patternFirstArg);
+
+        if (patternSynonymType == Utility::SYNONYM && varTable.count(patternSynonym) != 1) {
             return false;
         }
 
-        if (patternRightType == Utility::SYNONYM && varTable.count(patternRightArg) != 1) {
+        if (patternFirstType == Utility::SYNONYM && varTable.count(patternFirstArg) != 1) {
             return false;
         }
+
         // Further Check: syn - assign must be declared as a synonym of an assignment(design entity assign)
-        if (patternRightType == Utility::SYNONYM && varTable.find(patternRightArg)->second != "assign") {
-            return false;
-        }
+//        if (patternSecondType == Utility::SYNONYM && varTable.find(patternSecondArg)->second != "assign") {
+//            return false;
+//        }
     }
 
 

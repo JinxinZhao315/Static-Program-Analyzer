@@ -112,38 +112,75 @@ TEST_CASE("PQLPreprocessor query object test follows(_,_)") {
     }
 }
 
-TEST_CASE("PQLPreprocessor query object test with pattern 1") {
-    try {
-        PQLPreprocessor preprocessor;
-        Query query = Query();
+TEST_CASE("PQLPreprocessor query object test pattern 1") {
 
-        query = preprocessor.preprocess("assign a; Select a pattern a (_,_\"x\"_)");
+    PQLPreprocessor preprocessor;
+    Query query = Query();
 
-        std::multimap<std::string, std::string> varTable = query.getSynonymTable();
-        string type = varTable.find("a")->second;
-        REQUIRE(type == "assign");
-        std::cout << "type: " << type << std::endl;
+    query = preprocessor.preprocess("assign a; Select a pattern a (_,_\"x\"_)");
 
-        SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getVarName();
-        REQUIRE(varName == "a");
-        std::cout << "varName: " << varName << std::endl;
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    string type = varTable.find("a")->second;
+    REQUIRE(type == "assign");
 
-        vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
-        for (PatternClause cl : patternClauseVec) {
+    SelectClause selectClause = query.getSelectClause();
+    string varName = selectClause.getVarName();
+    REQUIRE(varName == "a");
 
-            std::cout << "pattern synon: " << cl.getPatternSynonym() << endl;
-            REQUIRE(cl.getPatternSynonym() == "a");
-
-            std::cout << "left arg " << cl.getLeftArg() << endl;
-            REQUIRE(cl.getLeftArg() == "_");
-
-            std::cout << "right arg " << cl.getRightArg() << endl;
-            REQUIRE(cl.getRightArg() == "_\"x\"_");
-        }
+    vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    for (PatternClause cl : patternClauseVec) {
+        REQUIRE(cl.getPatternSynonym() == "a");
+        REQUIRE(cl.getFirstArg() == "_");
+        REQUIRE(cl.getSecondArg() == "_\"x\"_");
+        REQUIRE(cl.getThirdArg() == "");
     }
-    catch (PQLSyntaxError e) {
-        std::cout << "syntax should be correct, but syntax checker give error!" << std::endl;
+
+}
+
+TEST_CASE("PQLPreprocessor query object test pattern if 1") {
+
+    PQLPreprocessor preprocessor;
+
+    Query query = preprocessor.preprocess("if ifs; variable v; Select ifs pattern ifs (v,_,_)");
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    string type = varTable.find("ifs")->second;
+    REQUIRE(type == "if");
+    string type2 = varTable.find("v")->second;
+    REQUIRE(type2 == "variable");
+
+    SelectClause selectClause = query.getSelectClause();
+    string varName = selectClause.getVarName();
+    REQUIRE(varName == "ifs");
+
+    vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    for (PatternClause cl : patternClauseVec) {
+        REQUIRE(cl.getPatternSynonym() == "ifs");
+        REQUIRE(cl.getFirstArg() == "v");
+        REQUIRE(cl.getSecondArg() == "_");
+        REQUIRE(cl.getThirdArg() == "_");
     }
 }
 
+TEST_CASE("PQLPreprocessor query object test while 1") {
+
+    PQLPreprocessor preprocessor;
+
+    Query query = preprocessor.preprocess("while w; variable v; Select w pattern w (v,_)");
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    string type = varTable.find("w")->second;
+    REQUIRE(type == "while");
+    string type2 = varTable.find("v")->second;
+    REQUIRE(type2 == "variable");
+
+    SelectClause selectClause = query.getSelectClause();
+    string varName = selectClause.getVarName();
+    REQUIRE(varName == "w");
+
+    vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    for (PatternClause cl : patternClauseVec) {
+        REQUIRE(cl.getPatternSynonym() == "w");
+        REQUIRE(cl.getFirstArg() == "v");
+        REQUIRE(cl.getSecondArg() == "_");
+        REQUIRE(cl.getThirdArg() == "");
+    }
+}

@@ -19,7 +19,7 @@ Query PQLPreprocessor::preprocess(std::string input) {
 	std::pair<std::string, std::string> declarationClausePair = tokenizer.tokenizeQuery(input);
 	varTable = tokenizer.tokenizeDeclaration(declarationClausePair.first);
     query.setSynonymTable(varTable);
-	tokenizer.tokenizeClauses(declarationClausePair.second, selectClause, suchThatClauseVec, patternClauseVec);
+	tokenizer.tokenizeClauses(declarationClausePair.second, varTable, selectClause, suchThatClauseVec, patternClauseVec);
     query.setSelectClause(selectClause);
     query.setSuchThatClauseVec(suchThatClauseVec);
     query.setPatternClauseVec(patternClauseVec);
