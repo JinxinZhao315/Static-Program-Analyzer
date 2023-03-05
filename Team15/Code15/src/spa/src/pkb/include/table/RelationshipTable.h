@@ -4,38 +4,38 @@
 #include <set>
 
 template <typename L, typename R>
-class AbstractionTable {
+class RelationshipTable {
 public:
-	inline AbstractionTable() = default;
+	inline RelationshipTable() = default;
 
-	inline void addOneToOneAbstraction(L left, R right) {
+	inline void addOneToOneRelationship(L left, R right) {
 		addLeftToOneRight(left, right);
 		addRightToOneLeft(left, right);
 	}
 
-	inline void addOneToManyAbstraction(L left, std::set<R> right) {
+	inline void addOneToManyRelationship(L left, std::set<R> right) {
 		addLeftToManyRight(left, right);
 		addRightToManyLeft(left, right);
 	}
 
-	inline void addOneSidedOnetoManyAbstractions(L left, std::set<R> rights) {
+	inline void addOneSidedOnetoManyRelationship(L left, std::set<R> rights) {
 		addLeftToManyRight(left, rights);
 		for (R right : rights) {
 			addRightToOneLeft(left, right);
 		}
 	}
 
-	inline void addAllOneToOneAbstractions(std::unordered_map<L, R> oneToOneAbstractions) {
+	inline void addAllOneToOneRelationships(std::unordered_map<L, R> oneToOneAbstractions) {
 		leftToOneRightMap = oneToOneAbstractions;
 		flipOneToOne(oneToOneAbstractions);
 	}
 
-	inline void addAllOneToManyAbstractions(std::unordered_map<L, std::set<R> > oneToManyAbstractions) {
+	inline void addAllOneToManyRelationships(std::unordered_map<L, std::set<R> > oneToManyAbstractions) {
 		leftToManyRightMap = oneToManyAbstractions;
 		flipOneToMany(oneToManyAbstractions);
 	}
 
-	inline void addAllOneSidedOnetoManyAbstractions(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
+	inline void addAllOneSidedOnetoManyRelationships(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
 		leftToManyRightMap = oneToManyAbstractions;
 		flipOneSidedOneToMany(oneToManyAbstractions);
 	}
