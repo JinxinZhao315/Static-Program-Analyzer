@@ -11,35 +11,44 @@ string testUsesP(string queryStr);
 
 string testUsesP(string queryStr) {
     PKB pkb;
+    unordered_map<string, set<string>> procVarMap;
+    pkb.addAllProcs({ "main", "proc1" });
+    pkb.addAllVars("a", "b", "c");
+    procVarMap.emplace("main", { "a", "b" });
+    procVarMap.emplace("proc1", { "c" });
+    pkb.addAllUsesProc(procVarMap);
+    pkb.addAllStmts();
+    PQLDriver driver = PQLDriver(pkb);
     string retStr = TestUtility::testDriver(queryStr, pkb);
     return retStr;
 }
 
 TEST_CASE("UsesP empty pkb") {
     PKB pkb;
+
     PQLDriver driver = PQLDriver(pkb);
 
-    string retStr = TestUtility::testDriver("assign a; Select a such that Uses(1, \"x\")", pkb);
+    string retStr = TestUtility::testDriver("assign a; Select a such that Uses(\"main\", \"x\")", pkb);
     REQUIRE(retStr == "none");
 
-    string retStr1 = TestUtility::testDriver("assign a; Select a such that Uses(1,_)", pkb);
+    string retStr1 = TestUtility::testDriver("assign a; Select a such that Uses(\"main\",_)", pkb);
     //cout << retStr1 << endl;
     REQUIRE(retStr1 == "none");
 
-    string retStr2 = TestUtility::testDriver("variable v; Select v such that Uses(1,v)", pkb);
+    string retStr2 = TestUtility::testDriver("variable v; Select v such that Uses(\"main\",v)", pkb);
     //cout << retStr2 << endl;
     REQUIRE(retStr2 == "none");
 
-    string retStr3 = TestUtility::testDriver("assign a; variable v; Select a such that Uses(a,v)", pkb);
+    string retStr3 = TestUtility::testDriver("assign a; variable v; procedure p; Select a such that Uses(p,v)", pkb);
     //cout << retStr3 << endl;
     REQUIRE(retStr3 == "none");
 }
 
-TEST_CASE("UsesP (int, quoted_ident)") {
+TEST_CASE("UsesP (quoted_ident, quoted_ident)") {
 
-    string retStr1 = testUsesP("assign a; Select a such that Uses(1, \"x\")");
+    string retStr1 = testUsesP("procedure a; Select a such that Uses(\"main\", \"a\")");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "1,2");
+    REQUIRE(retStr1 == "main,proc1");
 
     string retStr3 = testUsesP("assign a; Select a such that Uses(3, \"t\")");
     //cout << retStr3 << endl;

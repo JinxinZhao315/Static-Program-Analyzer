@@ -14,22 +14,6 @@ TEST_CASE("PatternHandler a(_,_) test empty pkb") {
 
 TEST_CASE("PatternHandler a(_,_) test filled pkb") {
     PKB pkb;
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    vector<string> rhs = {"x", "y", "+"};
-    set<vector<string>> rhsSet = {rhs};
-    pkb.addPattern(1, "k", rhsSet);
-
-    pkb.addStmt("=", 2);
-    pkb.addVar("m");
-    vector<string> rhs2 = {"1", "2", "+"};
-    set<vector<string>> rhsSet2 = {rhs2};
-    pkb.addPattern(2, "m", rhsSet2);
-    */
-
-    // Line1: k = x + y
-    // Line 2: m = 1 + 2;
 
     string retStr = TestUtility::testDriver("assign a; Select a pattern a (_,_)", pkb);
     //cout << retStr << endl;
