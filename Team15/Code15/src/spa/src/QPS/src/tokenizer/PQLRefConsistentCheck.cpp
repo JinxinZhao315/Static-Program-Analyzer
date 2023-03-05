@@ -45,13 +45,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             if (suchThatLeftType == Utility::QUOTED_IDENT) {
                 suchThatFlag = refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == Utility::INTEGER) {
+            else if (suchThatLeftType == Utility::INTEGER) {
                 suchThatFlag = refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == Utility::UNDERSCORE) {
+            else if (suchThatLeftType == Utility::UNDERSCORE) {
                 suchThatFlag = false;
             }
-            if (suchThatLeftType == "procedure") {
+            else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure		
                 suchThatFlag = refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
@@ -63,13 +63,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             if (suchThatLeftType == Utility::QUOTED_IDENT) {
                 suchThatFlag = refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == Utility::INTEGER) {
+            else if (suchThatLeftType == Utility::INTEGER) {
                 suchThatFlag = refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
             }
-            if (suchThatLeftType == Utility::UNDERSCORE) {
+            else if (suchThatLeftType == Utility::UNDERSCORE) {
                 suchThatFlag = false;
             }
-            if (suchThatLeftType == "procedure") {
+            else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure
                 suchThatFlag = refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
             }

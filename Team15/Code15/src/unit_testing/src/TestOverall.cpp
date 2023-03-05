@@ -159,6 +159,38 @@ TEST_CASE("Overall test : source1.txt 13 SemanticError") {
     set<string> expectedResult = { "SemanticError" };
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source1.txt 14") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "stmt s; procedure p; variable v; Select p such that Uses(p, v)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "proc1" };
+    REQUIRE(result == expectedResult);
+}
+
+//TEST_CASE("Overall test : source1.txt 15") {
+//    // Enter source of SIMPLE code
+//    string filename = source1_filename;
+//    string queryStr = "stmt s; procedure p; variable v; Select p such that Uses(p, v)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "proc1" };
+//    REQUIRE(result == expectedResult);
+//}
+
+TEST_CASE("Overall test : source1.txt 16") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "stmt s; procedure p; variable v; read r; Select r such that Uses(\"proc1\", v)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "12" };
+    REQUIRE(result == expectedResult);
+}
+
+
 TEST_CASE("Overall test : source2.txt 1") {
     // Enter source of SIMPLE code
     string filename = source2_filename;

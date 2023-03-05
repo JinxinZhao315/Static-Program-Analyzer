@@ -13,7 +13,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	// Find everything defined in source modified by a procedure defined in source.
 	if (leftType == Utility::QUOTED_IDENT && rightType == Utility::UNDERSCORE) {
 		//input procedure name, return all vars modified in procedure.
-		std::set<std::string> usesSet = pkb.getModifiesVarsFromProc(leftArg);
+		std::set<std::string> usesSet = pkb.getModifiesVarsFromProc(Utility::trim_double_quotes(leftArg));
 		if (usesSet.empty()) {
 			result.setResultTrue(false);
 			return result;
@@ -22,7 +22,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	// Find ident string in source program which is modified by a procedure defined in source.
 	else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
 		// identString of format \"x\"
-		bool isModifies = pkb.areInModifiesProcRelationship(leftArg, Utility::trim_double_quotes(rightArg));
+		bool isModifies = pkb.areInModifiesProcRelationship(Utility::trim_double_quotes(leftArg), Utility::trim_double_quotes(rightArg));
 		if (!isModifies) {
 			result.setResultTrue(false);
 			return result;
@@ -37,7 +37,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 
 		for (std::string currSynonVal : currSynonValues) {
 			// check whether given procedure modifies historical variables in source.
-			bool isModifies = pkb.areInModifiesProcRelationship(leftArg, currSynonVal);
+			bool isModifies = pkb.areInModifiesProcRelationship(Utility::trim_double_quotes(leftArg), currSynonVal);
 			if (isModifies) {
 				resultSynonValues.push_back(currSynonVal);
 			}

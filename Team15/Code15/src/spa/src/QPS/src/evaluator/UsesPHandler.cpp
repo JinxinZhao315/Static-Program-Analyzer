@@ -14,7 +14,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	if (leftType == Utility::QUOTED_IDENT && rightType == Utility::UNDERSCORE) {
 		//input statement line number, return all vars modified in statement line.
 		//std::set<std::string> usesSet = pkb.getUsesVarsFromStmt(stoi(leftArg));
-		std::set<std::string> usesSet = pkb.getUsesVarsFromProc(leftArg);
+		std::set<std::string> usesSet = pkb.getUsesVarsFromProc(Utility::trim_double_quotes(leftArg));
 		if (usesSet.empty()) {
 			result.setResultTrue(false);
 			return result;
@@ -23,7 +23,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	// Find ident string in source program which is used by a procedure defined in source.
 	else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
 		// identString of format \"x\"
-		bool isUses = pkb.areInUsesProcRelationship(leftArg, Utility::trim_double_quotes(rightArg));
+		bool isUses = pkb.areInUsesProcRelationship(Utility::trim_double_quotes(leftArg), Utility::trim_double_quotes(rightArg));
 		if (!isUses) {
 			result.setResultTrue(false);
 			return result;
@@ -38,7 +38,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 
 		for (auto currSynonVal : currSynonValues) {
 			// check whether given procedure uses historical variables in source.
-			bool isUses = pkb.areInUsesProcRelationship(leftArg, currSynonVal);
+			bool isUses = pkb.areInUsesProcRelationship(Utility::trim_double_quotes(leftArg), currSynonVal);
 			if (isUses) {
 				resultSynonValues.push_back(currSynonVal);
 			}

@@ -47,18 +47,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 break;
             }
         }
-        /*else if (relationship == "Uses") 
-        {
-            UsesHandler usesHandler = UsesHandler(pkb);
-            Result result = usesHandler.evalUses(suchThatCl, resultTable, varTable);
-            if (result.isResultTrue() == false) {
-                resultTable.deleteKeyValuePair(selectedVarName);
-                resultTable.insertKeyValuePair(selectedVarName, {});
-                isEarlyExit = true;
-                break;
-            }
-            usesHandler.combineResult(resultTable, result);
-        }*/
 
        else if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
@@ -86,15 +74,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
-            //ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
             ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
 
             if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure") ) {
-                //modifiesPHandler = ModifiesPHandler(pkb);
-                //result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+                result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
             }
             else {
- 
                 result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
             }
 
@@ -108,13 +94,10 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
                 break;
             }
-
-            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-                //modifiesPHandler.combineResult(resultTable, result);
-            }
             else {
                 resultTable.combineTable(result.getClauseResult());
             }
+
             if (resultTable.isTableEmpty()) {
 
                 isEarlyExit = true;
@@ -128,12 +111,11 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
-            //ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            UsesPHandler usesPHandler = UsesPHandler(pkb);
             UsesSHandler usesSHandler = UsesSHandler(pkb);
 
             if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-                //modifiesPHandler = ModifiesPHandler(pkb);
-                //result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+                result = usesPHandler.evalUsesP(suchThatCl, resultTable, synonymTable);
             }
             else {
 
@@ -150,13 +132,16 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
                 break;
             }
-
-            if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-                //modifiesPHandler.combineResult(resultTable, result);
-            }
             else {
                 resultTable.combineTable(result.getClauseResult());
             }
+
+            //if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            //    //modifiesPHandler.combineResult(resultTable, result);
+            //}
+            //else {
+            //    resultTable.combineTable(result.getClauseResult());
+            //}
 
             if (resultTable.isTableEmpty()) {
 
