@@ -29,11 +29,12 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllUsesStmt(extractor->getUsesRS());
     pkb->addAllAssignPatterns(extractor->getAssignsRS());
-    // TODO: update this after PKB api is updated
-    extractor->getProcedureUsesRS();
-    extractor->getProcedureModifiesRS();
-    extractor->getCallsRS();
-    extractor->getCallsStarRS();
+    pkb->addAllIfPatterns(extractor->getIfRS());
+    pkb->addAllWhilePatterns(extractor->getWhileRS());
+    pkb->addAllUsesProc(extractor->getProcedureUsesRS());
+    pkb->addAllModifiesProc(extractor->getProcedureModifiesRS());
+    pkb->addAllCalls(extractor->getCallsRS());
+    pkb->addAllCallsStar(extractor->getCallsStarRS());
 }
 
 void SourceProcessor::printParsedProgram() {
