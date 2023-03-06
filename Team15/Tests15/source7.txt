@@ -1,26 +1,31 @@
 procedure Loid {
-print wes;
-ost = x / 15;
-y = 5;
-z = ost + 1;
-call Anya;
+    print wes;
+    ost = x / 15;
+    y = 5;
+    z = ost + 1;
+    call Anya;
 
-while (wes < 0) {
-if (wes > 15) then {
-read z; 
+    while (wes < 0) {
+        if (wes > 15) then {
+            read z;
+        } else {
+            call Anya;
+        }
+        x = z - wes;
+    }
+    read wes;
 }
- else {
- call Anya; }
- x = z - wes; }
- read wes; }
 
 procedure Anya {
- if (ost > wes) then {
- wes = z * 5; 
-call Yor; }
- else {
- ost = 10; }}
+    if (ost > wes) then {
+        wes = z * 5;
+        call Yor;
+    } else {
+        ost = 10;
+    }
+}
 
 procedure Yor {
- read x;
- print y; }
+    read x;
+    print y;
+}
