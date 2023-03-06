@@ -190,6 +190,16 @@ TEST_CASE("Overall test : source1.txt 16") {
     REQUIRE(result == expectedResult);
 }
 
+//TEST_CASE("Overall test : source1.txt 17") {
+//    // Enter source of SIMPLE code
+//    string filename = source1_filename;
+//    string queryStr = "while w; Select w such that Modifies (_,_)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { };
+//    REQUIRE(result == expectedResult);
+//}
+
 
 TEST_CASE("Overall test : source2.txt 1") {
     // Enter source of SIMPLE code
