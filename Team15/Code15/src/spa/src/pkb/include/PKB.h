@@ -75,9 +75,9 @@ public:
 	std::set<int> getAllStmtNumsByType(std::string stmtType);
 
 	//QPS follow
-	int getFollowsLeaderNum(int followerNum);
+	int getFollowsLeaderNum(int followerNum, int invalidLeaderNum);
 
-	int getFollowsFollowerNum(int leaderNum);
+	int getFollowsFollowerNum(int leaderNum, int invalidFollowerNum);
 
 	bool areInFollowsRelationship(int leaderNum, int followerNum);
 
@@ -93,7 +93,7 @@ public:
 	bool isFollowsStarEmpty();
 
 	//QPS parent
-	int getParentParentNum(int childNum);
+	int getParentParentNum(int childNum, int invalidParentNum);
 
 	std::set<int> getParentChildrenNum(int parentNum);
 

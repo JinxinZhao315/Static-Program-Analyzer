@@ -129,12 +129,12 @@ std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
 }
 
 //QPS follow
-int PKB::getFollowsLeaderNum(int followerNum) {
-	return followsTable.getOneLeft(followerNum);
+int PKB::getFollowsLeaderNum(int followerNum, int invalidLeaderNum) {
+	return followsTable.getOneLeft(followerNum, invalidLeaderNum);
 }
 
-int PKB::getFollowsFollowerNum(int leaderNum) {
-	return followsTable.getOneRight(leaderNum);
+int PKB::getFollowsFollowerNum(int leaderNum, int invalidFollowerNum) {
+	return followsTable.getOneRight(leaderNum, invalidFollowerNum);
 }
 
 bool PKB::areInFollowsRelationship(int leaderNum, int followerNum) {
@@ -163,8 +163,8 @@ bool PKB::isFollowsStarEmpty() {
 }
 
 //QPS parent
-int PKB::getParentParentNum(int childNum) {
-	return parentTable.getOneLeft(childNum);
+int PKB::getParentParentNum(int childNum, int invalidParentNum) {
+	return parentTable.getOneLeft(childNum, invalidParentNum);
 }
 
 std::set<int> PKB::getParentChildrenNum(int parentNum) {
