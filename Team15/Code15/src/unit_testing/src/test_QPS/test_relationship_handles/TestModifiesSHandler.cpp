@@ -14,6 +14,15 @@ using namespace std;
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    pkb.addAllModifiesStmt({ {1, set1} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -50,6 +59,16 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
 TEST_CASE("ModifiesS Integer IdentString test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    set<string> set3({ "x" });
+    pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -90,6 +109,17 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
 TEST_CASE("ModifiesS Integer Variable test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    set<string> set3({ "x" });
+    pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -133,6 +163,17 @@ TEST_CASE("ModifiesS Integer Variable test") {
 
 TEST_CASE("ModifiesS Statement Variable test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    set<string> set3({ "x" });
+    pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -170,6 +211,16 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
 TEST_CASE("ModifiesS Statement IdentString test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    set<string> set3({ "x" });
+    pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -210,6 +261,18 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 
 TEST_CASE("ModifiesS Statement Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    set<string> set1({ "k" });
+    set<string> set2({ "y" });
+    set<string> set3({ "x" });
+    pkb.addAllModifiesStmt({ {1, set1}, {2, set2}, {3, set3} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);

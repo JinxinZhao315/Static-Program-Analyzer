@@ -7,6 +7,30 @@
 
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3, 4, 5 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "t", "i", "j"});
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
+    Line line2 = Line(2, vector<string>({ "1", "2", "+" }), "=");
+    patterns.insert(make_pair("k", set<Line>({ line1 })));
+    patterns.insert(make_pair("m", set<Line>({ line2 })));
+    pkb.addAllAssignPatterns(patterns);
+
+    unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3, 4, 5} },
+            {2, {3, 4, 5} },
+            {3, {4, 5} },
+            {4, {5} }
+    };
+    pkb.addAllFollowsStar(followsStar);
 
     //do not add one by one to pkb
     /*
@@ -82,6 +106,30 @@ TEST_CASE("Follows/Follow* and pattern test") {
 TEST_CASE("Follows/Follow* and pattern linked synons test") {
     PKB pkb;
 
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "n"});
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
+    Line line2 = Line(2, vector<string>({ "1", "2", "+" }), "=");
+    Line line3 = Line(3, vector<string>({ "2", "3", "+" }), "=");
+    patterns.insert(make_pair("k", set<Line>({ line1 })));
+    patterns.insert(make_pair("m", set<Line>({ line2 })));
+    patterns.insert(make_pair("n", set<Line>({ line3 })));
+    pkb.addAllAssignPatterns(patterns);
+
+    unordered_map<int, int> follows = { {1, 2}, {2, 3} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3} },
+            {2, {3} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);
@@ -134,6 +182,35 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
 
 TEST_CASE("ModifiesS / UsesS and pattern test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "t", "n" });
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
+    Line line2 = Line(2, vector<string>({ "t", "2", "+" }), "=");
+    Line line3 = Line(3, vector<string>({ "2", "y", "+" }), "=");
+    patterns.insert(make_pair("k", set<Line>({ line1 })));
+    patterns.insert(make_pair("m", set<Line>({ line2 })));
+    patterns.insert(make_pair("n", set<Line>({ line3 })));
+    pkb.addAllAssignPatterns(patterns);
+
+    unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3, 4, 5} },
+            {2, {3, 4, 5} },
+            {3, {4, 5} },
+            {4, {5} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
+    pkb.addAllModifiesStmt({ {1, {"k"}}, {2, {"m"}}, {3, {"n"}} });
+    pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"t"}}, {3, {"y"}}});
     
     //do not add one by one to pkb
     /*
