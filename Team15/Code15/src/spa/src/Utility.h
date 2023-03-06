@@ -84,9 +84,14 @@ public:
     };
 
     inline static const bool validateExpr(std::string input) {
+        //TODO: need to tokenize trimmed, then check that
+        // 1) Only allowed operators are present (+, -, *, /, %)
+        // 2) Operators are inbetween terms
+        // 3) Only round brackets are allowed, and must be closed
         std::string trimmed = trim(input, UNDERSCORE);
         trimmed = trim(trimmed, QUOTE);
         trimmed = trim(trimmed, WHITESPACES);
+        // This only checks for dangling operators at start or end of str
         if (!std::regex_match(trimmed.substr(0,1), std::regex("[a-zA-Z0-9]"))) {
             return false;
         }
