@@ -68,3 +68,8 @@ print p;
 Select p pattern p(_,_)
 SemanticError
 5000
+15 - uses procedure
+procedure p; variable v;
+Select p such that Uses(p, v)
+proc1
+5000
