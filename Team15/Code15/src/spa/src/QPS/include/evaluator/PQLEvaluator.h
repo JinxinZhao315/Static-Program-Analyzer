@@ -10,6 +10,7 @@
 #include "QPS/include/evaluator/ModifiesSHandler.h"
 #include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/UsesSHandler.h"
+#include "QPS/include/evaluator/UsesPHandler.h"
 #include "Utility.h"
 #include <numeric>
 #include <string>

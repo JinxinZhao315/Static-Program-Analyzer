@@ -94,6 +94,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
     resultTableCheckAndAdd(patternSynon, resultTable, patternType);
 
+
     if (firstType == Utility::UNDERSCORE) {
 
         std::vector<std::string> patternSynonVals;
@@ -112,6 +113,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 set<string> matchingLines = findMatchingLineNums(allRHS, secondArg);
                 if (!matchingLines.empty()) {
                     patternSynonVals.push_back(lineNum);
+
                 }
             }
         }
@@ -125,6 +127,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
         ResultTable tempResultTable({patternSynon, firstArg });
+
 
         if (secondType == Utility::UNDERSCORE) {
 
@@ -145,6 +148,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 if (!matchingLines.empty()) {
                     for (string lineStr : matchingLines) {
                         tempResultTable.insertTuple({lineStr, currFirstVal });
+
                     }
                 }
             }
@@ -156,6 +160,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         string firstArgTrimmed = trimPattern(firstArg).second;
         std::vector<std::string> patternSynonVals;
+
 
         if (secondType == Utility::UNDERSCORE) {
 

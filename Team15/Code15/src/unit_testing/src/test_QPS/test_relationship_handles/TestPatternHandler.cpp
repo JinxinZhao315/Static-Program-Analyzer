@@ -76,7 +76,9 @@ TEST_CASE("PatternHandler a(_,_) test empty pkb") {
 
 TEST_CASE("PatternHandler a(_,_) test filled pkb") {
     PKB pkb;
+
     testPatternFillPkb(pkb);
+
 
     string retStr = TestUtility::testDriver("assign a; Select a pattern a (_,_)", pkb);
     REQUIRE(retStr == "1,2");
