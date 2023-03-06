@@ -26,12 +26,12 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string sample_source2 = "../../../../../../Tests15/Sample_source2.txt";
-string source1_filename = "../../../../../../Tests15/source1.txt";
-string source2_filename = "../../../../../../Tests15/source2.txt";
-string source3_filename = "../../../../../../Tests15/source3.txt";
-string source4_filename = "../../../../../../Tests15/source4.txt";
-string source7_filename = "../../../../../../Tests15/source7.txt";
+string sample_source2 = "../../../../Tests15/Sample_source2.txt";
+string source1_filename = "../../../../Tests15/source1.txt";
+string source2_filename = "../../../../Tests15/source2.txt";
+string source3_filename = "../../../../Tests15/source3.txt";
+string source4_filename = "../../../../Tests15/source4.txt";
+string source7_filename = "../../../../Tests15/source7.txt";
 
 TEST_CASE("Overall test : Sample_source2.txt 0") {
     // Enter source of SIMPLE code
@@ -649,7 +649,7 @@ TEST_CASE("Overall test : source7.txt 1") {
     string queryStr = "stmt s; procedure p; Select p such that Uses(p, \"y\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = {"Loid,Anya,Yor"};
+    set<string> expectedResult = {"Loid", "Anya", "Yor"};
     REQUIRE(result == expectedResult);
 }
 
@@ -659,6 +659,6 @@ TEST_CASE("Overall test : source7.txt 2") {
     string queryStr = "stmt s; procedure p; Select p such that Modifies(p, \"x\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "Loid,Anya,Yor" };
+    set<string> expectedResult = {"Loid", "Anya", "Yor"};
     REQUIRE(result == expectedResult);
 }
