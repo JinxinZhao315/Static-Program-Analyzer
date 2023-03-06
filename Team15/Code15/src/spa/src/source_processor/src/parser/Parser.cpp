@@ -43,11 +43,15 @@ string Parser::removeAllWhitespace(std::string str) {
 vector<string> Parser::separateLines(string str) {
     vector<string> lines;
     string line;
-    for (char c: str) {
+    for (int i = 0; i < str.size(); i++) {
+        char c = str[i];
         if (c == '{' || c == '}' || c == ';') {
             line += c;
             lines.push_back(line);
             line.clear();
+            if (i + 1 < str.size() && str[i + 1] == ' ') {
+                i++;
+            }
         } else {
             line += c;
         }
