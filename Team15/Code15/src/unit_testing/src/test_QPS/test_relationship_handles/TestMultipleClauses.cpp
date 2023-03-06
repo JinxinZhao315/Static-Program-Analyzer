@@ -184,7 +184,7 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     PKB pkb;
 
     unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k", "m", "t", "n" });
@@ -198,16 +198,6 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     patterns.insert(make_pair("n", set<Line>({ line3 })));
     pkb.addAllAssignPatterns(patterns);
 
-    unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
-    pkb.addAllFollows(follows);
-
-    unordered_map<int, std::set<int>> followsStar = {
-            {1, {2, 3, 4, 5} },
-            {2, {3, 4, 5} },
-            {3, {4, 5} },
-            {4, {5} }
-    };
-    pkb.addAllFollowsStar(followsStar);
 
     pkb.addAllModifiesStmt({ {1, {"k"}}, {2, {"m"}}, {3, {"n"}} });
     pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"t"}}, {3, {"y"}}});
