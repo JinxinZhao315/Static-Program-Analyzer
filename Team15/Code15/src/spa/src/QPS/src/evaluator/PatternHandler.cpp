@@ -116,7 +116,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             }
         }
 
-        result.setClauseResult(true, false, ResultTable(patternSynonVals, patternSynon));
+        result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
     } else if (firstType == Utility::SYNONYM) {
 
@@ -150,7 +150,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             }
         }
 
-        result.setClauseResult(true, true, tempResultTable);
+        result.setClauseResult(tempResultTable);
 
     } else if (firstType == Utility::QUOTED_IDENT) {
 
@@ -173,7 +173,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             }
         }
 
-        result.setClauseResult(true, false, ResultTable(patternSynonVals, patternSynon));
+        result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
     } else {
         throw std::runtime_error("Unhandled left or right arg type in PatternHandler");

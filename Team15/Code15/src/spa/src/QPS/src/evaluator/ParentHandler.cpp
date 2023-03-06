@@ -109,7 +109,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+        result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 
         // Wilcard/Int - Synon
     }
@@ -139,7 +139,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+        result.setClauseResult(ResultTable(resultSynonValues, rightArg));
 
         // Synon - Synon
     }
@@ -168,7 +168,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(true, true, tempResultTable);
+        result.setClauseResult(tempResultTable);
     }
     else {
         throw std::runtime_error("Unhandled left or right arg type in ParentHandler");
