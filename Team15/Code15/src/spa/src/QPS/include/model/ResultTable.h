@@ -34,7 +34,9 @@ public:
     //result table with multi synonyms and multi tuples
     ResultTable(std::vector<std::vector<std::string>> resultTable, std::vector<std::string> synList);
 
+    int getRowNum();
 
+    int getColNum();
 
 
 
@@ -47,6 +49,8 @@ public:
     void combineTable(ResultTable resultTable);
 
     bool isTableEmpty();
+
+    bool isSynListEmpty();
 
     std::vector<std::vector<std::string>> getResultTable();
 

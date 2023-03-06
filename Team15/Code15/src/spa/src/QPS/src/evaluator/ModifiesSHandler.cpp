@@ -114,8 +114,6 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
 		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-		//std::vector<std::string> leftResultValues;
-		//std::vector<std::string> rightResultValues;
 		ResultTable tempResultTable({ leftArg, rightArg });
 
 		for (int i = 0; i < currLeftValues.size(); i++) {
@@ -124,33 +122,6 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 				tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
 			}
 		}
-		//for (string currLeftVal : currLeftValues) {
-		//	for (string currRightVal : currRightValues) {
-		//		bool isRightModifiesLeft = pkb.areInModifiesStmtRelationship(stoi(currLeftVal), currRightVal); 
-		//		if (isRightModifiesLeft) {
-		//			tempResultTable.insertTuple({ currLeftVal, currRightVal });
-		//			//if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-		//			//	SynonymLinkageMap leftLinkedSynonymCollection;
-		//			//	leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-		//			//	leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-		//			//}
-		//			//else {
-		//			//	leftResultValues.find(currLeftVal)->second
-		//			//		.insertLinkage(rightArg, currRightVal);
-		//			//}
-
-		//			//if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-		//			//	SynonymLinkageMap rightLinkedSynonymCollection;
-		//			//	rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-		//			//	rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-		//			//}
-		//			//else {
-		//			//	rightResultValues.find(currRightVal)->second
-		//			//		.insertLinkage(leftArg, currLeftVal);
-		//			//}
-		//		}
-		//	}
-		//}
 
 		if (tempResultTable.isTableEmpty()) {
 			result.setResultTrue(false);

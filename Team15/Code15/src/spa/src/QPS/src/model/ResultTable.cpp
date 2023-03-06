@@ -42,18 +42,21 @@ std::vector<std::string> ResultTable::getSynList() {
 }
 
 void ResultTable::combineTable(ResultTable tempResultTable) {
-    /*if(resultTable.find(synonymName) == resultTable.end()) {
-        this->resultTable.insert(std::make_pair<>(synonymName, synonymInstanceCollection));
-    };*/
-    if (isTableEmpty()) {
+    //the table has just been initialized
+    if (isSynListEmpty()) {
         this->resultTable = tempResultTable.resultTable;
         this->synList = tempResultTable.synList;
         this->rowNum = tempResultTable.rowNum;
         this->colNum = tempResultTable.colNum;
     }
-    //to combine the resultTable that clause handler evaluate to true
-    else if (tempResultTable.isTableEmpty()) {
+    //no tuple in resultTable satisfy the requirement now, 
+    //or the tempResultTable  has just been initialized, no change should be made
+    else if (isTableEmpty() || tempResultTable.isSynListEmpty()) {
         return;
+    }
+    //tempResultTable is empty, should also set the current resultTable to empty
+    else if (tempResultTable.isTableEmpty()) {
+        clearResultTable();
     }
     else {
         
@@ -98,7 +101,11 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
 }
 
 bool ResultTable::isTableEmpty() {
-    return this->resultTable.size() == 0 || this->synList.size() == 0;
+    return this->colNum == 0;
+}
+
+bool ResultTable::isSynListEmpty() {
+    return this->rowNum == 0;
 }
 
 std::vector<std::vector<std::string>> ResultTable::getResultTable() {
@@ -128,7 +135,7 @@ void ResultTable::clearResultTable() {
     for (int i = 0; i < rowNum; i++) {
         this->resultTable[i] = {};
     }
-    rowNum = 0;
+    colNum = 0;
 }
 
 bool ResultTable::isSynExist(std::string synName) {
@@ -151,17 +158,24 @@ bool ResultTable::isTupleMatch(std::vector<std::string> oldTuple, std::vector<st
 
 void ResultTable::deleteTuple(int index) {
     //traverse every row of the table
-    for (int i = 0; i < resultTable.size(); i++) {
-        this->resultTable[i].erase(resultTable[i].begin() + index);
+    if (index >= 0 && index < colNum) {
+        for (int i = 0; i < resultTable.size(); i++) {
+            this->resultTable[i].erase(resultTable[i].begin() + index);
+        }
+        colNum--;
     }
-    colNum--;
 }
 
 void ResultTable::insertTuple(std::vector<std::string> tuple) {
-    for (int i = 0; i < resultTable.size(); i++) {
-        this->resultTable[i].push_back(tuple[i]);
+    if (tuple.size() == rowNum) {
+        for (int i = 0; i < resultTable.size(); i++) {
+            this->resultTable[i].push_back(tuple[i]);
+        }
+        colNum++;
     }
-    colNum++;
+    else {
+        //should we throw exception?
+    }
 }
 
 std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex) {
@@ -182,9 +196,13 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
+int ResultTable::getRowNum() {
+    return this->rowNum;
+}
 
-
-
+int ResultTable::getColNum() {
+    return this->colNum;
+}
 
 
 //bool ResultTable::isSynonymPresent(std::string key) {

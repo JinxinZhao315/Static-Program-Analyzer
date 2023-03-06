@@ -88,8 +88,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(leftArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
             for (auto currSynonVal : currSynonValues) {
@@ -120,8 +118,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
             for (auto currSynonVal : currSynonValues) {
@@ -143,7 +139,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        //result.setSecondArg(rightArg, resultSynonValues);
         result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
 
         // Synon - Synon
@@ -160,8 +155,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
@@ -171,47 +164,10 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             }
         }
 
-        //for (string currLeftVal : currLeftValues) {
-        //    for (string currRightVal : currRightValues) {
-        //        bool isRightParentStarLeft = getIsParentFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
-        //        if (isRightParentStarLeft) {
-        //            tempResultTable.insertTuple({ currLeftVal, currRightVal });
-
-        //           /* if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-        //                SynonymLinkageMap leftLinkedSynonymCollection;
-        //                leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-        //                leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-        //            }
-        //            else {
-        //                leftResultValues.find(currLeftVal)->second
-        //                    .insertLinkage(rightArg, currRightVal);
-        //            }
-
-        //            if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-        //                SynonymLinkageMap rightLinkedSynonymCollection;
-        //                rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-        //                rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-        //            }
-        //            else {
-        //                rightResultValues.find(currRightVal)->second
-        //                    .insertLinkage(leftArg, currLeftVal);
-        //            }*/
-        //        }
-        //    }
-        //}
-
-        //if (leftResultValues.empty() || rightResultValues.empty()) {
-        //    result.setResultTrue(false);
-        //    return result;
-        //}
-
         if (tempResultTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
-
-        //result.setFirstArg(leftArg, leftResultValues);
-        //result.setSecondArg(rightArg, rightResultValues);
         result.setClauseResult(true, true, tempResultTable);
     }
     else {
