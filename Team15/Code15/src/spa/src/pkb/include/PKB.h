@@ -60,6 +60,12 @@ public:
 	//SP calls*
 	void addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
 
+	//SP next
+	void addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts);
+
+	//SP next*
+	void addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts);
+
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
 
@@ -102,9 +108,9 @@ public:
 	bool isParentEmpty();
 
 	//QPS parent*
-	std::set<int> getParentStarParentNums(int child);
+	std::set<int> getParentStarParentNums(int childNum);
 
-	std::set<int> getParentStarChildNums(int parent);
+	std::set<int> getParentStarChildNums(int parentNum);
 
 	bool areInParentStarRelationship(int parentNum, int childNum);
 
@@ -183,6 +189,20 @@ public:
 
 	bool isCallsStarEmpty();
 
+	//QPS next
+	int getNextPreviousNum(int nextNum, int invalidPreviousNum);
+
+	std::set<int> getNextNextNum(int previousNum);
+
+	bool areInNextRelationship(int previousNum, int nextNum);
+
+	//QPS next*
+	std::set<int> getNextStarPreviousNums(int nextNum);
+
+	std::set<int> getNextStarNextNums(int previousNum);
+
+	bool areInNextStarRelationship(int previousNum, int nextNum);
+
 private:
 	EntityTable<std::string> procTable;
 	EntityTable<std::string> varTable;
@@ -201,4 +221,6 @@ private:
 	PatternTable ifPatternTable;
 	RelationshipTable<std::string, std::string> callsTable;
 	RelationshipTable<std::string, std::string> callsStarTable;
+	RelationshipTable<int, int> nextTable;
+	RelationshipTable<int, int> nextStarTable;
 };

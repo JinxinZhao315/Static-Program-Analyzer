@@ -16,6 +16,8 @@ PKB::PKB() {
 	ifPatternTable = PatternTable();
 	callsTable = RelationshipTable<std::string, std::string>();
 	callsStarTable = RelationshipTable<std::string, std::string>();
+	nextTable = RelationshipTable<int, int>();
+	nextStarTable = RelationshipTable<int, int>();
 }
 
 //SP procedure
@@ -104,6 +106,16 @@ void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>>
 	callsStarTable.addAllOneToManyRelationships(allCallertoCallees);
 }
 
+//SP next
+void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
+	nextTable.addAllOneSidedOnetoManyRelationships(allPreviousToNexts);
+}
+
+//SP next*
+void PKB::addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
+	nextStarTable.addAllOneToManyRelationships(allPreviousToNexts);
+}
+
 //QPS procedure
 std::set<std::string> PKB::getAllProcNames() {
 	return procTable.getAllEntities();
@@ -180,12 +192,12 @@ bool PKB::isParentEmpty() {
 }
 
 //QPS parent*
-std::set<int> PKB::getParentStarParentNums(int child) {
-	return parentStarTable.getManyLeft(child);
+std::set<int> PKB::getParentStarParentNums(int childNum) {
+	return parentStarTable.getManyLeft(childNum);
 }
 
-std::set<int> PKB::getParentStarChildNums(int parent) {
-	return parentStarTable.getManyRight(parent);
+std::set<int> PKB::getParentStarChildNums(int parentNum) {
+	return parentStarTable.getManyRight(parentNum);
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
@@ -331,4 +343,30 @@ bool PKB::areInCallsStarRelationship(std::string callerName, std::string calleeN
 
 bool PKB::isCallsStarEmpty() {
 	return callsStarTable.isEmpty();
+}
+
+//QPS next
+int PKB::getNextPreviousNum(int nextNum, int invalidPreviousNum) {
+	return nextTable.getOneLeft(nextNum, invalidPreviousNum);
+}
+
+std::set<int> PKB::getNextNextNum(int previousNum) {
+	return nextTable.getManyRight(previousNum);
+}
+
+bool PKB::areInNextRelationship(int previousNum, int nextNum) {
+	return nextTable.inOneToOneRelationship(previousNum, nextNum);
+}
+
+//QPS next*
+std::set<int> PKB::getNextStarPreviousNums(int nextNum) {
+	return nextStarTable.getManyLeft(nextNum);
+}
+
+std::set<int> PKB::getNextStarNextNums(int previousNum) {
+	return nextStarTable.getManyRight(previousNum);
+}
+
+bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
+	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
 }
