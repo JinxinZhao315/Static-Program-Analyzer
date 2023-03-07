@@ -60,11 +60,11 @@ public:
 
 private:
 	std::set<int> allStmtsSet;
-	std::map<int, std::string> stmtToVarMap;
-	std::map<int, std::set<std::string>> stmtToVarsMap;
-	std::map<std::string, std::set<int>> varToStmtsMap;
-	std::map<int, std::set<std::vector<std::string>>> stmtToExprsMap;
+	std::unordered_map<int, std::string> stmtToVarMap;
+	std::unordered_map<int, std::set<std::string>> stmtToVarsMap;
+	std::unordered_map<std::string, std::set<int>> varToStmtsMap;
+	std::unordered_map<int, std::set<std::vector<std::string>>> stmtToExprsMap;
 	std::map<std::vector<std::string>, std::set<int>> exprToStmtsMap;
-	std::map<std::string, std::set<std::vector<std::string>>> varToExprsMap;
+	std::unordered_map<std::string, std::set<std::vector<std::string>>> varToExprsMap;
 	std::map<std::vector<std::string>, std::set<std::string>> exprToVarsMap;
 };
