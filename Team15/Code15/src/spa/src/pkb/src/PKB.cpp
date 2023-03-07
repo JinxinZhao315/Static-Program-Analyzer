@@ -18,6 +18,8 @@ PKB::PKB() {
 	callsStarTable = RelationshipTable<std::string, std::string>();
 	nextTable = RelationshipTable<int, int>();
 	nextStarTable = RelationshipTable<int, int>();
+	affectsTable = RelationshipTable<int, int>();
+	affectsStarTable = RelationshipTable<int, int>();
 }
 
 //SP procedure
@@ -114,6 +116,16 @@ void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) 
 //SP next*
 void PKB::addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
 	nextStarTable.addAllOneToManyRelationships(allPreviousToNexts);
+}
+
+//SP affects
+void PKB::addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers) {
+	affectsTable.addAllOneToManyRelationships(allModifierToUsers);
+}
+
+//SP affects*
+void PKB::addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers) {
+	affectsStarTable.addAllOneToManyRelationships(allModifierToUsers);
 }
 
 //QPS procedure
@@ -350,7 +362,7 @@ int PKB::getNextPreviousNum(int nextNum, int invalidPreviousNum) {
 	return nextTable.getOneLeft(nextNum, invalidPreviousNum);
 }
 
-std::set<int> PKB::getNextNextNum(int previousNum) {
+std::set<int> PKB::getNextNextNums(int previousNum) {
 	return nextTable.getManyRight(previousNum);
 }
 
@@ -369,4 +381,30 @@ std::set<int> PKB::getNextStarNextNums(int previousNum) {
 
 bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
 	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
+}
+
+//SP affects
+std::set<int> PKB::getAffectsModifierNums(int userNum) {
+	return affectsTable.getManyLeft(userNum);
+}
+
+std::set<int> PKB::getAffectsUserNums(int modifierNum) {
+	return affectsTable.getManyRight(modifierNum);
+}
+
+bool PKB::areInAffectsRelationship(int modifierNum, int userNum) {
+	return affectsTable.inOneToManyRelationship(modifierNum, userNum);
+}
+
+//SP affects*
+std::set<int> PKB::getAffectsStarModifierNums(int userNum) {
+	return affectsStarTable.getManyLeft(userNum);
+}
+
+std::set<int> PKB::getAffectsStarUserNums(int modifierNum) {
+	return affectsStarTable.getManyRight(modifierNum);
+}
+
+bool PKB::areInAffectsStarRelationship(int modifierNum, int userNum) {
+	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
 }
