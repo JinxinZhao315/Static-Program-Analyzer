@@ -191,7 +191,7 @@ int PKB::getParentParentNum(int childNum, int invalidParentNum) {
 	return parentTable.getOneLeft(childNum, invalidParentNum);
 }
 
-std::set<int> PKB::getParentChildrenNum(int parentNum) {
+std::set<int> PKB::getParentChildNums(int parentNum) {
 	return parentTable.getManyRight(parentNum);
 }
 

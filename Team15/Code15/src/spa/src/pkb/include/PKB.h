@@ -107,7 +107,7 @@ public:
 	//QPS parent
 	int getParentParentNum(int childNum, int invalidParentNum);
 
-	std::set<int> getParentChildrenNum(int parentNum);
+	std::set<int> getParentChildNums(int parentNum);
 
 	bool areInParentRelationship(int parentNum, int childNum);
 
