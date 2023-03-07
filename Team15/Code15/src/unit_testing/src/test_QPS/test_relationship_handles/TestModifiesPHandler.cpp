@@ -41,7 +41,7 @@ TEST_CASE("ModifiesP (quoted_ident, quoted_ident)") {
 
     string retStr1 = testModifiesP("procedure a; Select a such that Modifies(\"main\", \"a\")");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "main,proc1");
+    REQUIRE(retStr1 == "main,proc1,proc2");
 
     string retStr2 = testModifiesP("assign a; Select a such that Modifies(\"main\", \"t\")");
     //cout << retStr3 << endl;
@@ -71,11 +71,11 @@ TEST_CASE("ModifiesP (quoted_ident, _)") {
 
     string retStr1 = testModifiesP("procedure p; Select p such that Modifies(\"main\",_)");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "main,proc1");
+    REQUIRE(retStr1 == "main,proc1,proc2");
 
     string retStr2 = testModifiesP("variable v; Select v such that Modifies(\"proc1\",_)");
     //cout << retStr2 << endl;
-    REQUIRE(retStr2 == "a,b,c");
+    REQUIRE(retStr2 == "a,b,c,d,e");
 
     string retStr3 = testModifiesP("variable v; Select v such that Modifies(\"proc2\",_)");
     //cout << retStr2 << endl;

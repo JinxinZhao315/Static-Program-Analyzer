@@ -12,6 +12,32 @@ TEST_CASE("Follows* test")
     {
         PKB pkb;
 
+        unordered_map<string, set<int>> stmts;
+        stmts.insert(make_pair("read", set<int>({ 1, 2, 3, 4, 5 })));
+        pkb.addAllStmts(stmts);
+
+        unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
+        pkb.addAllFollows(follows);
+
+        unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3, 4, 5} },
+            {2, {3, 4, 5} },
+            {3, {4, 5} },
+            {4, {5} } 
+        };
+        pkb.addAllFollowsStar(followsStar);
+        /*
+
+pkb.addFollows(1, 2);
+pkb.addFollows(2, 3);
+pkb.addFollows(3, 4);
+pkb.addFollows(4, 5);
+
+pkb.addFollowsStar(1, set<int>({2,3,4,5}));
+pkb.addFollowsStar(2, set<int>({3,4,5}));
+pkb.addFollowsStar(3, set<int>({4,5}));
+pkb.addFollowsStar(4, set<int>({5}));
+*/
         // Synon-int
         string retStr = TestUtility::testDriver("read s1; Select s1 such that Follows*(s1, 5)", pkb);
         
@@ -69,9 +95,6 @@ TEST_CASE("Follows test 1")
 {
     try
     {
-
-        PKB pkb;
-
         //do not add one by one to pkb
         /*
         pkb.addStmt("read", 1);
@@ -79,12 +102,19 @@ TEST_CASE("Follows test 1")
         pkb.addStmt("read", 3);
         pkb.addStmt("read", 4);
         pkb.addStmt("read", 5);
-
         pkb.addFollows(1, 2);
         pkb.addFollows(2, 3);
         pkb.addFollows(3, 4);
         pkb.addFollows(4, 5);
         */
+        PKB pkb;
+
+        unordered_map<string, set<int>> stmts;
+        stmts.insert(make_pair("read", set<int>({ 1, 2, 3, 4, 5 })));
+        pkb.addAllStmts(stmts);
+
+        unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
+        pkb.addAllFollows(follows);
 
         // (_, int)
         string retStr1 = TestUtility::testDriver("read s1; Select s1 such that Follows(_,3)", pkb);
@@ -142,6 +172,14 @@ TEST_CASE("Follows test 2")
     {
 
         PKB pkb;
+
+        unordered_map<string, set<int>> stmts;
+        stmts.insert(make_pair("read", set<int>({ 1, 3, 4, 5 })));
+        stmts.insert(make_pair("call", set<int>({ 2 })));
+        pkb.addAllStmts(stmts);
+
+        unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
+        pkb.addAllFollows(follows);
 
         //do not add one by one to pkb
         /*

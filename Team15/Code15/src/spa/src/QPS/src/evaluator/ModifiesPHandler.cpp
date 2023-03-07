@@ -47,7 +47,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+		result.setClauseResult(ResultTable(resultSynonValues, rightArg));
 	}
 	//Left type is a procedure defined in QPS, find whether given procedure has some modifies to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
@@ -70,7 +70,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+		result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 	}
 	//Left type is a procedure defined in QPS, find whether given procedure modifies given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
@@ -92,7 +92,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+		result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 	}
 	//Left type is a procedure defined in QPS, right type is a varible defined in QPS, find all pairs of procedure p defined in source and varible v 
 	// defined in source such that p modifies v. 
@@ -120,7 +120,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 			return result;
 		}
 
-		result.setClauseResult(true, true, tempResultTable);
+		result.setClauseResult(tempResultTable);
 	}
 	//Do we need to throw exception if type doesn't match? As all semantics are checked already.
 	return result;
