@@ -8,14 +8,15 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_LEADER) {
-            int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
-            //if return null, leader == 0 but not -1
-            if (leader != 0) {
+            int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
+            //if leader does not exist, return -1
+            if (leader != -1) {
                 ret.insert(leader);
             }
         } else { //if (type == GET_FOLLOWER)
-            int follower = pkb.getFollowsFollowerNum(stoi(arg));//
-            if (follower != 0) {
+            int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
+            //if follower does not exist, return -1
+            if (follower != -1) {
                 ret.insert(follower);
             }
         }

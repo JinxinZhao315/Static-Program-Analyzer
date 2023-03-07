@@ -40,18 +40,18 @@ public:
 		flipOneSidedOneToMany(oneToManyAbstractions);
 	}
 
-	inline R getOneRight(L left) {
+	inline R getOneRight(L left, R invalidRight) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
-			return NULL;
+			return invalidRight;
 		}
 		return pair->second;
 	}
 
-	inline L getOneLeft(R right) {
+	inline L getOneLeft(R right, L invalidLeft) {
 		auto pair = rightToOneLeftMap.find(right);
 		if (pair == rightToOneLeftMap.end()) {
-			return NULL;
+			return invalidLeft;
 		}
 		return pair->second;
 	}

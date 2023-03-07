@@ -8,13 +8,14 @@ std::set<int> ParentHandler::getParentFromPKB(bool isStar, string type, string a
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_PARENT) {
-            int parent = pkb.getParentParentNum(stoi(arg)); //
-            if (parent != NULL) {
+            int parent = pkb.getParentParentNum(stoi(arg), -1);
+            //if parent does not exist, return -1
+            if (parent != -1) {
                 ret.insert(parent);
             }
         }
         else { //if (type == GET_CHILD)
-            std::set<int> children = pkb.getParentChildrenNum(stoi(arg));//
+            std::set<int> children = pkb.getParentChildNums(stoi(arg));
             if (!children.empty()) {
                 ret.insert(children.begin(), children.end());
             }
