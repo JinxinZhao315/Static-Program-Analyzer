@@ -17,4 +17,3 @@ procedure proc4 {
 
 procedure proc5 {
   x = 0; }
-  
