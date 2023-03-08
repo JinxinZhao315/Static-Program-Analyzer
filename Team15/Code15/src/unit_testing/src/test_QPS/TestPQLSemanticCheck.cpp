@@ -16,6 +16,7 @@ TEST_CASE("PQLSemanticChecker negative test 1: undefined syn") {
 	PQLPreprocessor preprocessor;
 	REQUIRE_THROWS_AS(preprocessor.preprocess("assign a; Select a1 such that Follows(a, 11)"), PQLSemanticError);
 	REQUIRE_THROWS_AS(preprocessor.preprocess("assign a; Select a such that Follows(a2, 11)"), PQLSemanticError);
+	REQUIRE_THROWS_AS(preprocessor.preprocess("assign a; Select <a,b> such that Follows(a, 11)"), PQLSemanticError);
 
 }
 TEST_CASE("PQLSemanticChecker negative test 2: repeated syn a") {

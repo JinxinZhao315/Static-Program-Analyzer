@@ -12,7 +12,14 @@ bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::strin
 	}
 	else if (relationship == "Uses" || relationship == "Modifies") {
 		return (validateStmtRef(leftArg) || validateEntRef(leftArg)) && validateEntRef(rightArg);
-	}
+    }
+    else if (relationship == "Calls" || relationship == "Calls*") {
+        return validateEntRef(leftArg) && validateEntRef(rightArg);
+    }
+    else if (relationship == "Next" || relationship == "Next*" ||
+        relationship == "Affects" || relationship == "Affects*") {
+        return validateStmtRef(leftArg) && validateStmtRef(rightArg);
+    }
 	else {
 		return false;
 	}

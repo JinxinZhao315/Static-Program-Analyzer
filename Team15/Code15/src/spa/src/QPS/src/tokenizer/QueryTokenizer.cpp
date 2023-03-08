@@ -6,8 +6,9 @@ QueryTokenizer::QueryTokenizer() {
 
 std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string input) {
 	size_t lastSemicolon = input.find_last_of(';');
+	//no declaration, can be "Select BOOLEAN"
 	if (lastSemicolon == std::string::npos) {
-		throw PQLSyntaxError("PQL syntax error: No synonym declaration");
+		return std::make_pair("", input);
 	}
 	else {
 		std::string declaration = Utility::trim(input.substr(0, lastSemicolon + 1), Utility::WHITESPACES);
@@ -73,18 +74,34 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 
 void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& selectClause) {
 	std::size_t synonymEndIndex = input.find_first_of(Utility::WHITESPACES);
-	std::string synonym;
-	if (synonymEndIndex == std::string::npos) {
-		synonym = input;
+	std::vector<std::string> synList;
+	if (input.size() > 0 && input[0] == '<') {
+
+		size_t rightAnglePos = input.find(">");
+		if (rightAnglePos == std::string::npos) {
+			throw PQLSyntaxError("PQL syntax error: Invalid synonym list");
+		}
+		synList = tokenizeCsv(input.substr(1, rightAnglePos - 1));
+		input = Utility::trim(input.substr(rightAnglePos + 1), Utility::WHITESPACES);
+	}
+	//single clause, no whitespace on the left, so no other clauses except Select
+	else if (synonymEndIndex == std::string::npos) {
+		if (!syntaxChecker.validateSynonym(input)) {
+			throw PQLSyntaxError("PQL syntax error: Invalid synonym");
+		};
+		synList.push_back(input);
 		input = "";
-	} else {
-		synonym = input.substr(0, synonymEndIndex);
+	}
+	else {
+		std::string synonym = input.substr(0, synonymEndIndex);
+		if (!syntaxChecker.validateSynonym(synonym)) {
+			throw PQLSyntaxError("PQL syntax error: Invalid synonym");
+		};
+		synList.push_back(synonym);
 		input = Utility::trim(input.substr(synonymEndIndex + 1), Utility::WHITESPACES);
 	}
-	if (!syntaxChecker.validateSynonym(synonym)) {
-		throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-	};
-	selectClause = SelectClause(synonym);
+	
+	selectClause = SelectClause(synList);
 }
 
 void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec) {

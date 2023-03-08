@@ -22,9 +22,19 @@ TEST_CASE("PQLSyntaxChecker positive test 3: key word as syn name") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign pattern; Select pattern such that Follows(pattern,11)"));
-	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign variable; Select variable such that Follows(variable,11)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign assign; Select assign such that Follows(assign,11)"));
 }
-TEST_CASE("PQLSyntaxChecker positive test 4: Follows valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 4: different format of Select Clause") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1; Select a1"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign BOOLEAN; Select BOOLEAN"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("Select BOOLEAN"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2, a3; Select <a1, a2, a3>"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select <		 a1 ,   a2  >"));
+	//REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a; Select<a, a>"));
+}
+TEST_CASE("PQLSyntaxChecker positive test 5: Follows valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows(a1,11)"));
@@ -37,7 +47,7 @@ TEST_CASE("PQLSyntaxChecker positive test 4: Follows valid arg") {
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows(_,_)"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows(_,a1)"));
 }
-TEST_CASE("PQLSyntaxChecker positive test 5: Follows* valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 6: Follows* valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows*(a1,11)"));
@@ -50,7 +60,7 @@ TEST_CASE("PQLSyntaxChecker positive test 5: Follows* valid arg") {
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows*(_,_)"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Follows*(_,a1)"));
 }
-TEST_CASE("PQLSyntaxChecker positive test 6: Parent* valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 7: Parent* valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent(a1,11)"));
@@ -63,7 +73,7 @@ TEST_CASE("PQLSyntaxChecker positive test 6: Parent* valid arg") {
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent(_,_)"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent(_,a1)"));
 }
-TEST_CASE("PQLSyntaxChecker positive test 7: Parent* valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 8: Parent* valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent*(a1,11)"));
@@ -76,7 +86,20 @@ TEST_CASE("PQLSyntaxChecker positive test 7: Parent* valid arg") {
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent*(_,_)"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent*(_,a1)"));
 }
-TEST_CASE("PQLSyntaxChecker positive test 8: Uses valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 9: Calls valid arg") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, \"proc\")"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, \"proc\")"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", \"proc\")"));
+}
+TEST_CASE("PQLSyntaxChecker positive test 9: Uses valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	int count = 0;
@@ -129,7 +152,7 @@ TEST_CASE("PQLSyntaxChecker positive test 8: Uses valid arg") {
 	catch (PQLSemanticError e) { REQUIRE(true); }
 	
 }
-TEST_CASE("PQLSyntaxChecker positive test 9: Modifies valid arg") {
+TEST_CASE("PQLSyntaxChecker positive test 10: Modifies valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	try { preprocessor.preprocess("assign a1, a2; Select a1 such that Modifies(a1,_)"); }
@@ -257,3 +280,10 @@ TEST_CASE("PQLSyntaxChecker negative test 16: pattern clause if") {
     REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,\"t\",\"x\")"), PQLSyntaxError);
 }
 
+TEST_CASE("PQLSyntaxChecker positive test 17: Calls invalid arg") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, 11)"), PQLSyntaxError);
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, p1)"), PQLSyntaxError);
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, !@#)"), PQLSyntaxError);
+}

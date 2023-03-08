@@ -13,7 +13,7 @@ class SelectHandler : public ClauseHandler {
 
 public:
     SelectHandler(PKB &pkb);
-    std::string evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
+    std::vector<std::string> evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
 
 private:
     ResultTable resultTable;

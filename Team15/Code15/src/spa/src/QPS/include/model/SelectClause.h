@@ -5,13 +5,15 @@
 
 class SelectClause {
 private:
-    std::string varName;
+    std::vector<std::string> synNames;
 public:
 	SelectClause();
 
-	SelectClause(std::string varName);
+	SelectClause(std::string synName);
+
+	SelectClause(std::vector<std::string> synNames);
 
 	~SelectClause();
 
-	std::string getVarName();
+	std::vector<std::string> getSynNameVec();
 };
