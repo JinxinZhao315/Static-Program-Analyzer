@@ -54,14 +54,10 @@ TEST_CASE("convertToPostfix_similarVarNames_shouldReturnPostfix") {
     REQUIRE(result == expected);
 }
 
-//TEST_CASE("convertToPostfix_simpleExpressionWithSimilarVarName_shouldReturnPostfix") {
-//    vector<string> tokens = {"x", "+", "y", "+", "z", "+", "xy", "+", "yz"};
-//    set<string> variables = {"x", "y", "z", "xy", "yz", "+", "+", "+", "+"};
-//}
 
 TEST_CASE("convertToPostfix_incrementVarByOne_shouldReturnPostfix") {
-    vector<string> tokens = {"x", "+", "1"};
     set<string> variables = {"x"};
+    vector<string> tokens = {"x", "+", "1"};
     auto result = convertToPostfix(tokens, variables);
     vector<string> expected = {"x", "1", "+"};
     REQUIRE(result == expected);
@@ -72,5 +68,47 @@ TEST_CASE("convertToPostfix_addVar_shouldReturnPostfix") {
     set<string> variables = {"x"};
     auto result = convertToPostfix(tokens, variables);
     vector<string> expected = {"x", "x", "+"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_emptyString") {
+    string input;
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = {};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_oneVar") {
+    string input = "x";
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = {"x"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_addVar") {
+    string input = "x + x";
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = {"x", "+", "x"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_addVarNoWhitespace") {
+    string input = "x+x";
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = {"x", "+", "x"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_addLongVarNoWhitespace") {
+    string input = "abc+xyz-a+1+test+1000";
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = { "abc", "+", "xyz", "-", "a", "+", "1", "+", "test", "+", "1000" };
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("simplifiedTokenise_removeSemiColon") {
+    string input = "abc+xyz-a+1+test+1000;";
+    auto result = simplifiedTokenise(input);
+    vector<string> expected = { "abc", "+", "xyz", "-", "a", "+", "1", "+", "test", "+", "1000" };
     REQUIRE(result == expected);
 }
