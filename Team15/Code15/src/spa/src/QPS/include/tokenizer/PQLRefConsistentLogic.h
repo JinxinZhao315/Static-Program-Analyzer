@@ -22,13 +22,15 @@ private:
 
 	std::unordered_map<std::string,
 		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> logicMap;
-	std::unordered_set<std::string> procSet;
+	std::unordered_set<std::string> procUsesModifiesSet;
 	std::unordered_set<std::string> stmtSet;
 	std::unordered_set<std::string> stmtModifiesSet;
 	std::unordered_set<std::string> stmtUsesSet;
 	std::unordered_set<std::string> varSet;
+	std::unordered_set<std::string> procCallsSet;
 
-	void createProcRef();
+	void createUsesModifiesProcRef();
+	void createCallsProcRef();
 	void createStmtRef();
 	void createStmtRefModifies();
 	void createStmtRefUses();

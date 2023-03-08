@@ -143,6 +143,28 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 break;
             }
         }
+        /*else if (relationship == "Calls" || relationship == "Calls*") {
+
+            CallsHandler callsHandler = CallsHandler(pkb);
+            bool isStar = relationship == "Calls" ? false : true;
+            Result result = callsHandler.evalCalls(isStar, suchThatCl, resultTable, synonymTable);
+            if (result.isResultTrue() == false)
+            {
+
+                resultTable.clearResultTable();
+
+                isEarlyExit = true;
+
+                break;
+            }
+            resultTable.combineTable(result.getClauseResult());
+            if (resultTable.isTableEmpty()) {
+
+                isEarlyExit = true;
+
+                break;
+            }
+        }*/
     }
     for (PatternClause patternCl : patternVec)
     {
