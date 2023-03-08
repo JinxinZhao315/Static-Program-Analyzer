@@ -139,12 +139,6 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::set<std::string> ResultTable::getStringSetFromKey(std::string synName) {
-    std::vector<std::string> synValuesVec = getSynValues(synName);
-    std::set<std::string> synValuesSet(synValuesVec.begin(), synValuesVec.end());
-    return synValuesSet;
-}
-
 std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> selectedSynNames) {
     if (selectedSynNames.size() > 1) {
         std::vector<int> synNameIndex;

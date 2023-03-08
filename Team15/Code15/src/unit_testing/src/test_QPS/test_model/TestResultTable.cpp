@@ -85,7 +85,14 @@ TEST_CASE("Test resultTable constructor 4") {
 }
 
 TEST_CASE("Test getTuple") {
-	ResultTable resultTable = resultTableGenerator(1);
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList = { "a1", "a2", "a3" };
+	
+	ResultTable resultTable = ResultTable(tempTable, synList);
 	std::vector<std::string> resultTuple = resultTable.getTuple(0);
 	std::vector<std::string> expectedResult = {"1", "5", "9"};
 	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
@@ -103,7 +110,14 @@ TEST_CASE("Test mergeTuple") {
 
 
 TEST_CASE("Test insertTuple") {
-	ResultTable resultTable = resultTableGenerator(1);
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList = { "a1", "a2", "a3" };
+
+	ResultTable resultTable = ResultTable(tempTable, synList);
 	resultTable.insertTuple({ "4", "8", "13" });
 	REQUIRE(resultTable.getColNum() == 5);
 	std::vector<std::string> resultTuple = resultTable.getTuple(4);
@@ -112,7 +126,14 @@ TEST_CASE("Test insertTuple") {
 }
 
 TEST_CASE("Test deleteTuple") {
-	ResultTable resultTable = resultTableGenerator(1);
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList = { "a1", "a2", "a3" };
+
+	ResultTable resultTable = ResultTable(tempTable, synList);
 	resultTable.deleteTuple(2);
 	REQUIRE(resultTable.getColNum() == 3);
 	std::vector<std::string> resultTuple = resultTable.getTuple(1);
@@ -124,16 +145,64 @@ TEST_CASE("Test deleteTuple") {
 	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
 }
 
-TEST_CASE("Test getStringSetFromKey") {
-	ResultTable resultTable = resultTableGenerator(2);
-	std::set<std::string> result = resultTable.getStringSetFromKey("a1");
+TEST_CASE("Test SelectedResult 1") {
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList = { "a1", "a2" };
+
+	ResultTable resultTable = ResultTable(tempTable, synList);
+	std::set<std::string> result = resultTable.getSelectedResult({"a1"});
 	REQUIRE(result.size() == 1 );
 	REQUIRE(result.count("1") == 1);
 }
 
+TEST_CASE("Test SelectedResult 2 multiple return synonyms") {
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList = { "a1", "a2" };
+	ResultTable resultTable(tempTable, synList);
+	std::set<std::string> result = resultTable.getSelectedResult({ "a1", "a2"});
+
+	std::set<std::string> expectedResult = { "1 5", "1 6", "1 7", "1 8" };
+	REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Test SelectedResult 3 multiple return same synonyms") {
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "1", "2", "2"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList = { "a1", "a2" };
+	ResultTable resultTable(tempTable, synList);
+	std::set<std::string> result = resultTable.getSelectedResult({ "a1", "a2", "a2" });
+
+	std::set<std::string> expectedResult = { "1 5 5", "1 6 6", "2 7 7", "2 8 8"};
+	REQUIRE(result == expectedResult);
+}
+
 TEST_CASE("Test combineTable 1: no common synonym") {
-	ResultTable resultTable = resultTableGenerator(1);
-	ResultTable tempResultTable = resultTableGenerator(3);
+	std::vector<std::vector<std::string>> currTempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> currSynList = { "a1", "a2", "a3" };
+
+	ResultTable resultTable = ResultTable(currTempTable, currSynList);
+
+
+	std::vector<std::vector<std::string>> newTempTable = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> newSynList = { "b1", "b2" };
+
+	ResultTable tempResultTable = ResultTable(newTempTable, newSynList);
+
 	resultTable.combineTable(tempResultTable);
 	REQUIRE(resultTable.getColNum() == 16);
 	REQUIRE(resultTable.getRowNum() == 5);
@@ -145,16 +214,40 @@ TEST_CASE("Test combineTable 1: no common synonym") {
 }
 
 TEST_CASE("Test combineTable 2: one common synonym") {
-	ResultTable resultTable = resultTableGenerator(2);
-	ResultTable tempResultTable = resultTableGenerator(4);
+	std::vector<std::vector<std::string>> tempTable1 = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList1 = { "a1", "a2" };
+	ResultTable resultTable = ResultTable(tempTable1, synList1);
+
+	std::vector<std::vector<std::string>> tempTable2 = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList2 = { "a1", "b1" }; 
+	ResultTable tempResultTable = ResultTable(tempTable2, synList2);
+
 	resultTable.combineTable(tempResultTable);
 	REQUIRE(resultTable.getColNum() == 16);
 	REQUIRE(resultTable.getRowNum() == 3);
 }
 
 TEST_CASE("Test combineTable 3: two common synonyms") {
-	ResultTable resultTable = resultTableGenerator(1);
-	ResultTable tempResultTable = resultTableGenerator(2);
+	std::vector<std::vector<std::string>> tempTable1 = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList1 = { "a1", "a2", "a3" };
+	ResultTable resultTable = ResultTable(tempTable1, synList1);
+
+	std::vector<std::vector<std::string>> tempTable2 = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList2 = { "a1", "a2" };
+	ResultTable tempResultTable = ResultTable(tempTable2, synList2);
 	resultTable.combineTable(tempResultTable);
 	REQUIRE(resultTable.getColNum() == 1);
 	REQUIRE(resultTable.getRowNum() == 3);
@@ -165,7 +258,14 @@ TEST_CASE("Test combineTable 4: resultTable just initialized to combine with tem
 	REQUIRE(resultTable.getColNum() == 0);
 	REQUIRE(resultTable.getRowNum() == 0);
 	REQUIRE(resultTable.isTableEmpty() == true);
-	ResultTable tempResultTable = resultTableGenerator(1);
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList = { "a1", "a2", "a3" };
+
+	ResultTable tempResultTable = ResultTable(tempTable, synList);
 	resultTable.combineTable(tempResultTable);
 	REQUIRE(resultTable.getColNum() == 4);
 	REQUIRE(resultTable.getRowNum() == 3);
@@ -173,7 +273,14 @@ TEST_CASE("Test combineTable 4: resultTable just initialized to combine with tem
 }
 
 TEST_CASE("Test combineTable 5: empty tempResultTable") {
-	ResultTable resultTable = resultTableGenerator(1);
+	std::vector<std::vector<std::string>> tempTable = {
+			{"1", "2", "3", "4"},
+			{"5", "6", "7", "8"},
+			{"9", "10", "11", "12"}
+	};
+	std::vector<std::string> synList = { "a1", "a2", "a3" };
+
+	ResultTable resultTable = ResultTable(tempTable, synList);
 	REQUIRE(resultTable.getColNum() == 4);
 	REQUIRE(resultTable.getRowNum() == 3);
 	REQUIRE(resultTable.isTableEmpty() == false);
@@ -185,11 +292,24 @@ TEST_CASE("Test combineTable 5: empty tempResultTable") {
 }
 
 TEST_CASE("Test combineTable 6: common synonym but no intersection, resultTable should be empty, synList should be the union") {
-	ResultTable resultTable = resultTableGenerator(2);
+	std::vector<std::vector<std::string>> tempTable1 = {
+			{"1", "1", "1", "1"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList1 = { "a1", "a2" };
+	ResultTable resultTable = ResultTable(tempTable1, synList1);
+
 	REQUIRE(resultTable.getColNum() == 4);
 	REQUIRE(resultTable.getRowNum() == 2);
 	REQUIRE(resultTable.isTableEmpty() == false);
-	ResultTable tempResultTable = resultTableGenerator(5);
+
+	std::vector<std::vector<std::string>> tempTable2 = {
+			{"2", "2", "2", "2"},
+			{"5", "6", "7", "8"}
+	};
+	std::vector<std::string> synList2 = { "a1", "b1" };
+
+	ResultTable tempResultTable = ResultTable(tempTable2, synList2);
 	resultTable.combineTable(tempResultTable);
 	REQUIRE(resultTable.getColNum() == 0);
 	REQUIRE(resultTable.getRowNum() == 3);

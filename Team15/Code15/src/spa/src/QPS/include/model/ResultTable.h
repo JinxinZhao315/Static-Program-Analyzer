@@ -56,7 +56,6 @@ public:
 
     std::vector<std::string> getSynValues(std::string synName);
 
-    std::set<std::string> getStringSetFromKey(std::string synName);
 
     void clearResultTable();
 
