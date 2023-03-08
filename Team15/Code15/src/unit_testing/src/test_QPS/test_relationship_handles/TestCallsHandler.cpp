@@ -102,17 +102,17 @@ TEST_CASE("Calls/Calls* syntax error test") {
 
     string retStr1 = testCalls("assign a; Select a such that Calls(a, \"x\")");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "SyntaxError");
+    REQUIRE(retStr1 == "SemanticError");
 
     string retStr2 = testCalls("variable v; Select v such that Calls(_, v)");
     //cout << retStr1 << endl;
-    REQUIRE(retStr2 == "SyntaxError");
+    REQUIRE(retStr2 == "SemanticError");
 }
 
 TEST_CASE("Calls/Calls* (procedure, quoted_ident)") {
     string retStr1 = testCalls("procedure a; Select a such that Calls(a, \"proc2\")");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "main");
+    REQUIRE(retStr1 == "main,proc1");
 
     string retStr2 = testCalls("procedure p; Select p such that Calls(p, \"main\")");
     //cout << retStr3 << endl;
