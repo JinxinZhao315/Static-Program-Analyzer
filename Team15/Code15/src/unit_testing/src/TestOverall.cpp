@@ -750,7 +750,7 @@ TEST_CASE("Overall test : source7.txt 6") {
 TEST_CASE("Overall test : source7.txt 7") {
     // Enter source of SIMPLE code
     string filename = source7_filename;
-    string queryStr = "stmt s; procedure p; Select q such that Calls(p, q)";
+    string queryStr = "stmt s; procedure p,q; Select q such that Calls(p, q)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "Anya", "Yor" };

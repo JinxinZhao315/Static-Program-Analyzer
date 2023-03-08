@@ -143,7 +143,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
                 break;
             }
         }
-        /*else if (relationship == "Calls" || relationship == "Calls*") {
+        else if (relationship == "Calls" || relationship == "Calls*") {
 
             CallsHandler callsHandler = CallsHandler(pkb);
             bool isStar = relationship == "Calls" ? false : true;
@@ -164,7 +164,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
                 break;
             }
-        }*/
+        }
     }
     for (PatternClause patternCl : patternVec)
     {
