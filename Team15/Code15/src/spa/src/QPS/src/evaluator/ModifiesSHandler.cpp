@@ -46,7 +46,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+		result.setClauseResult(ResultTable(resultSynonValues, rightArg));
 	}
 	//Left type is a statement defined in QPS, find whether given statement has some modifications to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
@@ -69,7 +69,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+		result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 	}
 	//Left type is a statement defined in QPS, find whether given statement modifies given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
@@ -91,7 +91,7 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 			result.setResultTrue(false);
 			return result;
 		}
-		result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+		result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 	}
 	//Left type is a statement defined in QPS, right type is a varible defined in QPS, find all pairs of statement s defined in source and varible v 
 	// defined in source such that s modifies v. 
@@ -102,8 +102,6 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
 		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-		//std::vector<std::string> leftResultValues;
-		//std::vector<std::string> rightResultValues;
 		ResultTable tempResultTable({ leftArg, rightArg });
 
 		for (int i = 0; i < currLeftValues.size(); i++) {
@@ -112,40 +110,13 @@ Result ModifiesSHandler::evalModifiesS(SuchThatClause suchThatClause, ResultTabl
 				tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
 			}
 		}
-		//for (string currLeftVal : currLeftValues) {
-		//	for (string currRightVal : currRightValues) {
-		//		bool isRightModifiesLeft = pkb.areInModifiesStmtRelationship(stoi(currLeftVal), currRightVal); 
-		//		if (isRightModifiesLeft) {
-		//			tempResultTable.insertTuple({ currLeftVal, currRightVal });
-		//			//if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-		//			//	SynonymLinkageMap leftLinkedSynonymCollection;
-		//			//	leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-		//			//	leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-		//			//}
-		//			//else {
-		//			//	leftResultValues.find(currLeftVal)->second
-		//			//		.insertLinkage(rightArg, currRightVal);
-		//			//}
-
-		//			//if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-		//			//	SynonymLinkageMap rightLinkedSynonymCollection;
-		//			//	rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-		//			//	rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-		//			//}
-		//			//else {
-		//			//	rightResultValues.find(currRightVal)->second
-		//			//		.insertLinkage(leftArg, currLeftVal);
-		//			//}
-		//		}
-		//	}
-		//}
 
 		if (tempResultTable.isTableEmpty()) {
 			result.setResultTrue(false);
 			return result;
 		}
 
-		result.setClauseResult(true, true, tempResultTable);
+		result.setClauseResult(tempResultTable);
 	}
 	//Do we need to throw exception if type doesn't match? As all semantics are checked already.
 	return result;

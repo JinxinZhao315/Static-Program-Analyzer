@@ -103,7 +103,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+        result.setClauseResult(ResultTable(resultSynonValues, leftArg));
         // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
 
@@ -129,27 +129,11 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
                 }
             }
         }
-
-        //if (leftType == Utility::UNDERSCORE) {
-        //    for (auto currSynonVal: currSynonValues) {
-        //        std::set<int> leaderSet = getFollowsFromPKB(isStar, GET_LEADER, currSynonVal.first); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
-        //        if (!leaderSet.empty()) {
-        //            resultSynonValues.insert(currSynonVal);
-        //        }
-        //    }
-        //} else if (leftType == Utility::INTEGER) {
-        //    for (auto currSynonVal: currSynonValues) {
-        //        bool isRightFollowLeft = getIsFollowsFromPKB(isStar, leftArg, currSynonVal.first); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
-        //        if (isRightFollowLeft) {
-        //            resultSynonValues.insert(currSynonVal);
-        //        }
-        //    }
-        //}
         if (resultSynonValues.empty()) {
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+        result.setClauseResult(ResultTable(resultSynonValues, rightArg));
         // Synon - Synon
     } 
     else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
@@ -164,7 +148,10 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+<<<<<<< HEAD
 
+=======
+>>>>>>> fa909e379f9ea8135c09e2e0b70b4c0e36f73b30
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
@@ -179,7 +166,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             return result;
         }
 
-        result.setClauseResult(true, true,tempResultTable);
+        result.setClauseResult(tempResultTable);
     } else {
         throw std::runtime_error("Unhandled left or right arg type in FollowsHandler");
     }

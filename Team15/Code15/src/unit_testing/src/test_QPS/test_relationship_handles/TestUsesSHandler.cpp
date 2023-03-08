@@ -9,6 +9,15 @@ string testUsesS(string queryStr);
 
 string testUsesS(string queryStr) {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("print", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "i", "j", "t"});
+
+    pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"i", "j"}}, {3, {"t"}}});
     //do not add one by one to pkb
     /*
     pkb.addStmt("=", 1);

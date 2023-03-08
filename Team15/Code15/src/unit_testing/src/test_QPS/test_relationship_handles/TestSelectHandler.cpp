@@ -5,7 +5,6 @@
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/evaluator/SelectHandler.h"
-#include "PKBStub.h"
 
 #include "catch.hpp"
 
@@ -25,26 +24,21 @@ TEST_CASE("Select Handler test 1") {
     varTable.insert(pair<std::string, std::string>("ca", "call"));
     varTable.insert(pair<std::string, std::string>("p", "procedure"));
 
+
     PKB pkb;
-    //do not add one by one to pkb
-    /*
-    pkb.addProc("p");
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("read", 7);
-    pkb.addStmt("read", 8);
-    pkb.addStmt("if", 4);
-    pkb.addStmt("while", 5);
-    pkb.addStmt("call", 6);
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("z");
-    pkb.addConst("10");
-    pkb.addConst("11");
-    pkb.addConst("12");
-    pkb.addConst("13");
-    */
+    pkb.addAllProcs(set<string>({ "p" }));
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
+    stmts.insert(make_pair("read", set<int>({ 3, 7, 8 })));
+    stmts.insert(make_pair("if", set<int>({ 4 })));
+    stmts.insert(make_pair("while", set<int>({ 5 })));
+    stmts.insert(make_pair("call", set<int>({ 6 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars(set<string>({ "x", "y", "z" }));
+    pkb.addAllConsts(set<string>({ "10", "11", "12", "13"}));
+
 
     SelectHandler selectHandler = SelectHandler(pkb);
     std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
@@ -69,13 +63,8 @@ TEST_CASE("Select Handler test 2") {
         ResultTable resultTable = ResultTable();
 
         PKB pkb;
-        //do not add one by one to pkb
-        /*
-        pkb.addConst("10");
-        pkb.addConst("11");
-        pkb.addConst("12");
-        pkb.addConst("13");
-        */
+
+        pkb.addAllConsts(set<string>({ "10", "11", "12", "13" }));
 
         SelectHandler selectHandler = SelectHandler(pkb);
         std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
