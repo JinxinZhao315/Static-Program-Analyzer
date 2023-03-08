@@ -11,6 +11,7 @@
 #include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/UsesSHandler.h"
 #include "QPS/include/evaluator/UsesPHandler.h"
+#include "QPS/include/evaluator/CallsHandler.h"
 #include "Utility.h"
 #include <numeric>
 #include <string>

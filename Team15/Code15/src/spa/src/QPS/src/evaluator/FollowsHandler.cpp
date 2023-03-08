@@ -46,10 +46,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     std::string leftType = Utility::getReferenceType(leftArg);
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
-    if (leftArg == rightArg) {
-        result.setResultTrue(false);
-        return result;
-    }
+
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isFollowEmpty = pkb.isFollowsEmpty(); //
@@ -151,6 +148,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
