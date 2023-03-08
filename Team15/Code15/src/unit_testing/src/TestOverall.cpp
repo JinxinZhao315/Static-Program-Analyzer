@@ -662,3 +662,83 @@ TEST_CASE("Overall test : source7.txt 2") {
     set<string> expectedResult = {"Loid", "Anya", "Yor"};
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source7.txt 3") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls(p, p)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 4") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls*(\"Loid\", \"Loid\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 5") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls*(\"Loid\", p)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"Anya", "Yor"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 6") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls(\"Loid\", p)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "Anya" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 7") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select q such that Calls(p, q)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "Anya", "Yor" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 8") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls(p, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "Loid", "Anya"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 9") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls(_, p)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "Anya", "Yor" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source7.txt 10") {
+    // Enter source of SIMPLE code
+    string filename = source7_filename;
+    string queryStr = "stmt s; procedure p; Select p such that Calls*(_, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "Loid","Anya", "Yor" };
+    REQUIRE(result == expectedResult);
+}
