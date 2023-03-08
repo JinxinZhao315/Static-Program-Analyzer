@@ -46,10 +46,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     std::string leftType = Utility::getReferenceType(leftArg);
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
-    if (leftArg == rightArg) {
-        result.setResultTrue(false);
-        return result;
-    }
+
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isFollowEmpty = pkb.isFollowsEmpty(); //
@@ -167,8 +164,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
+
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
@@ -177,39 +173,6 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
                 tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
             }
         }
-
-        //for (auto currLeftVal: currLeftValues) {
-        //    for (auto currRightVal: currRightValues) {
-        //        bool isRightFollowLeft = getIsFollowsFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
-        //        if (isRightFollowLeft) {
-        //            tempResultTable.insertTuple({ currLeftVal, currRightVal });
-
-        //            //if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-        //            //    SynonymLinkageMap leftLinkedSynonymCollection;
-        //            //    leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-        //            //    leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-        //            //}
-        //            //else {
-        //            //    leftResultValues.find(currLeftVal)->second
-        //            //        .insertLinkage(rightArg, currRightVal);
-        //            //}
-
-        //            //if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-        //            //    SynonymLinkageMap rightLinkedSynonymCollection;
-        //            //    rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-        //            //    rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-        //            //}
-        //            //else {
-        //            //    rightResultValues.find(currRightVal)->second
-        //            //        .insertLinkage(leftArg, currLeftVal);
-        //            //}
-        //            //
-        //            //leftResultValues.insert(currLeftVal);
-        //            //rightResultValues.insert(currRightVal);
-        //        }
-
-        //    }
-        //}
 
         if (tempResultTable.isTableEmpty()) {
             result.setResultTrue(false);
