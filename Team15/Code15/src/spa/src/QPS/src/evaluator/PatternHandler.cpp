@@ -4,10 +4,10 @@
 PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
 
-set<string> PatternHandler::findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch) {
+set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, set<vector<string>> allRHS, string substrToMatch) {
     set <string> ret;
     for (vector<string> rhsExpr : allRHS) {
-        bool isMatch = findIsMatch(rhsExpr, substrToMatch);
+        bool isMatch = findIsMatch(isPartialMatch, rhsExpr, substrToMatch);
         if (isMatch) {
             set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhsExpr);
             for (int num : lineNumSet) {
@@ -34,10 +34,9 @@ vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int sta
 }
 
 
-bool PatternHandler::findIsMatch(vector<string> rhsTokensVec, string substrToMatch) {
-    pair<bool, string> trimmedPair = trimPattern(substrToMatch);
-    bool isPartialMatch = trimmedPair.first;
-    vector<string> substrTokens = tokenise(trimmedPair.second);
+bool PatternHandler::findIsMatch( bool isPartialMatch, vector<string> rhsTokensVec, string substrToMatch) {
+    string trimmed = trimExpr(substrToMatch);
+    vector<string> substrTokens = tokenise(trimmed);
     vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
     if (!isPartialMatch) {
         return rhsTokensVec == substrPostfix;
@@ -94,6 +93,13 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
     resultTableCheckAndAdd(patternSynon, resultTable, patternType);
 
+    bool isPartialMatch;
+    if (secondType == Utility::UNDERSCORED_EXPR) {
+        isPartialMatch = true;
+    } else  { // secondType = EXPR (full match) or UNDERSCORED (this bool is then useless)
+        isPartialMatch = false;
+    }
+
 
     if (firstType == Utility::UNDERSCORE) {
 
@@ -104,13 +110,12 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             // result maintains current values of patternSynon
             patternSynonVals = resultTable.getSynValues(patternSynon);
 
-        } else if (secondType == Utility::UNDERSCORED_EXPR) {
-
+        } else {
             std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
 
             for (string lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
-                set<string> matchingLines = findMatchingLineNums(allRHS, secondArg);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
                 if (!matchingLines.empty()) {
                     patternSynonVals.push_back(lineNum);
 
@@ -140,11 +145,11 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                     }
             }
 
-        } else if (secondType == Utility::UNDERSCORED_EXPR) {
+        } else {
 
             for (string currFirstVal: currFirstSynonValues) {
                 set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(currFirstVal);
-                set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, matchingRHS, secondArg);
                 if (!matchingLines.empty()) {
                     for (string lineStr : matchingLines) {
                         tempResultTable.insertTuple({lineStr, currFirstVal });
@@ -158,7 +163,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
     } else if (firstType == Utility::QUOTED_IDENT) {
 
-        string firstArgTrimmed = trimPattern(firstArg).second;
+        string firstArgTrimmed = trimExpr(firstArg);
         std::vector<std::string> patternSynonVals;
 
 
@@ -170,9 +175,9 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 patternSynonVals.push_back(to_string(num));
             }
 
-        } else if (secondType == Utility::UNDERSCORED_EXPR) {
+        } else {
             set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
-            set<string> matchingLines = findMatchingLineNums(matchingRHS, secondArg);
+            set<string> matchingLines = findMatchingLineNums(isPartialMatch, matchingRHS, secondArg);
             for (string lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
             }
@@ -189,43 +194,12 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
 
 
-// Return a pair, where first element boolean = true if input is asking for partial match (e.g. _"x"_)
-//, and false if input is aksing for full match (e.g. "x")
-// Second element string is input trimmed of underscore and quotes
-pair<bool,string> PatternHandler::trimPattern(string input) {
+std::string PatternHandler::trimExpr(string input) {
     std::string trimmed = input;
-
-    // Trim underscore
-    std::size_t firstUnderscore = trimmed.find_first_not_of(Utility::UNDERSCORE);
-    bool isLeftUnderscore = false;
-    bool isRightUnderscore = false;
-
-    // trim left
-    if (firstUnderscore != std::string::npos) {
-        trimmed = trimmed.substr(firstUnderscore);
-        isLeftUnderscore = true;
-    }
-    // trim right
-    std::size_t lastUnderscore = trimmed.find_last_not_of(Utility::UNDERSCORE);
-    if (lastUnderscore != std::string::npos) {
-        trimmed = trimmed.substr(0, lastUnderscore + 1);
-        isRightUnderscore = true;
-    }
-
-    // XOR of isLeftUnderscore and isRightUnderscore
-    // This should never trigger if syntax checking works correctly
-    if (!isLeftUnderscore != !isRightUnderscore) {
-        throw PQLSyntaxError("PQL syntax error: Incorrect partial matching format in pattern clause");
-    }
-
-    // Under valid syntax, either isLeftUnderscore and isRightUnderscore are both false, or both true
-    bool isPartialMatch = isLeftUnderscore && isRightUnderscore;
-
+    trimmed = Utility::trim(trimmed, Utility::UNDERSCORE);
     trimmed = Utility::trim(trimmed, Utility::QUOTE);
     trimmed = Utility::trim(trimmed, Utility::WHITESPACES);
-
-    return make_pair(isPartialMatch, trimmed);
-
+    return trimmed;
 }
 
 

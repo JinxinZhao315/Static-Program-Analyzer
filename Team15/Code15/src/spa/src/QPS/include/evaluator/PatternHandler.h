@@ -13,11 +13,11 @@ class PatternHandler:  public ClauseHandler {
 public:
     PatternHandler(PKB& pkb);
     Result evalPattern(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
-    set<string> findMatchingLineNums(set<vector<string>> allRHS, string substrToMatch);
-    bool findIsMatch(vector<string> rhsTokensVec, string substrToMatch);
+    set<string> findMatchingLineNums(bool isPartialMatch, set<vector<string>> allRHS, string substrToMatch);
+    bool findIsMatch(bool isPartialMatch, vector<string> rhsTokensVec, string substrToMatch);
     bool findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec);
     set<int> getPatternFromPkb(string patternSynonType, string arg);
-    pair<bool,string> trimPattern(string input);
+    string trimExpr(string input);
 
     // TODO: These functions should be in common file
     vector<string>  convertToPostfix(vector<string> input, int startIndex);

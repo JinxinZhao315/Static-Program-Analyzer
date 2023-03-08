@@ -43,6 +43,7 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string synonymT
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
     std::string type = Utility::getReferenceType(input);
 	return type == Utility::EXPR ||
+            type == Utility::QUOTED_IDENT || // Because when expr only has 1 variable name e.g. x1, it also matches quoted ident
             type == Utility::UNDERSCORED_EXPR ||
             type == Utility::UNDERSCORE;
 }

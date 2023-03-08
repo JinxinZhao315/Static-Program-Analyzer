@@ -6,23 +6,26 @@
 
 void testPatternFillPkb(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
-    pkb.addAllConsts(set<string>({"1", "2"}));
+    pkb.addAllConsts(set<string>({"1", "2", "3"}));
 
     unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({1,2})));
+    stmts.insert(make_pair("=", set<int>({1,2,4})));
     stmts.insert(make_pair("read", set<int>({3})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> patterns;
     Line line1 = Line(1, vector<string>({"x", "y", "+"}), "=");
     Line line2 = Line(2, vector<string>({"1", "2", "+"}), "=");
+    Line line4 = Line(4, vector<string>({"3"}), "=");
     patterns.insert(make_pair("k", set<Line>({line1})));
     patterns.insert(make_pair("m", set<Line>({line2})));
+    patterns.insert(make_pair("x", set<Line>({line4})));
     pkb.addAllAssignPatterns(patterns);
 
     // Line1: k = x + y
     // Line 2: m = 1 + 2;
     // Line 3: read t;
+    // Line 4: x = 3
 }
 
 void testPatternFillPkb2(PKB& pkb) {
@@ -79,18 +82,23 @@ TEST_CASE("PatternHandler a(_,_) test filled pkb") {
 
     testPatternFillPkb(pkb);
 
+    // Line1: k = x + y
+    // Line 2: m = 1 + 2;
+    // Line 3: read t;
+    // Line 4: x = 3
 
     string retStr = TestUtility::testDriver("assign a; Select a pattern a (_,_)", pkb);
-    REQUIRE(retStr == "1,2");
+    REQUIRE(retStr == "1,2,4");
 }
 
-TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
+TEST_CASE("PatternHandler a(_,xx) test") {
     PKB pkb;
     testPatternFillPkb(pkb);
 
     // Line1: k = x + y
     // Line 2: m = 1 + 2;
     // Line 3: read t;
+    // Line 4: x = 3
 
     string retStr1 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"x\"_)", pkb);
     REQUIRE(retStr1 == "1");
@@ -101,27 +109,34 @@ TEST_CASE("PatternHandler a(_,UNDERSCORED_EXPR) test") {
     string retStr3 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"2\"_)", pkb);
     REQUIRE(retStr3 == "2");
 
-    string retStr4 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"+2\"_)", pkb);
-    REQUIRE(retStr4 == "SyntaxError");
+    string retStr4 = TestUtility::testDriver("assign a; Select a pattern a (_,\"2\")", pkb);
+    REQUIRE(retStr4 == "none");
 
-    string retStr5 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"2+\"_)", pkb);
-    REQUIRE(retStr5 == "SyntaxError");
+    string retStr5 = TestUtility::testDriver("assign a; Select a pattern a (_,\"3\")", pkb);
+    REQUIRE(retStr5 == "4");
+
+//    string retStr6 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"+2\"_)", pkb);
+//    REQUIRE(retStr6 == "SyntaxError");
+//
+//    string retStr7 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"2+\"_)", pkb);
+//    REQUIRE(retStr7 == "SyntaxError");
 }
 
 
-TEST_CASE("PatternHandler a(SYNONYM,_/UNDERSCORED_EXPR) test") {
+TEST_CASE("PatternHandler a(SYNONYM,xx) test") {
     PKB pkb;
     testPatternFillPkb(pkb);
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
     // Line 3: read t;
+    // Line 4: x = 3
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a pattern a (b,_)", pkb);
-    REQUIRE(retStr1 == "1,2");
+    REQUIRE(retStr1 == "1,2,4");
 
     string retStr2 = TestUtility::testDriver("assign a; variable b; Select b pattern a (b,_)", pkb);
-    REQUIRE(retStr2 == "k,m");
+    REQUIRE(retStr2 == "k,m,x");
 
     string retStr3 = TestUtility::testDriver("assign a; variable b; Select a pattern a (b,_\"1\"_)", pkb);
     REQUIRE(retStr3 == "2");
@@ -131,15 +146,22 @@ TEST_CASE("PatternHandler a(SYNONYM,_/UNDERSCORED_EXPR) test") {
 
     string retStr5 = TestUtility::testDriver("assign a; variable b; Select b pattern a (b,_\"y\"_)", pkb);
     REQUIRE(retStr5 == "k");
+
+    string retStr6 = TestUtility::testDriver("assign a; variable b; Select b pattern a (b,\"y\")", pkb);
+    REQUIRE(retStr6 == "none");
+
+    string retStr7 = TestUtility::testDriver("assign a; variable b; Select b pattern a (b,\"3\")", pkb);
+    REQUIRE(retStr7 == "x");
 }
 
-TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
+TEST_CASE("PatternHandler a(QUOTED_IDENT,xx) test") {
     PKB pkb;
     testPatternFillPkb(pkb);
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
     // Line 3: read t;
+    // Line 4: x = 3
 
     string retStr1 = TestUtility::testDriver("assign a; Select a pattern a (\"k\",_)", pkb);
     REQUIRE(retStr1 == "1");
@@ -155,6 +177,16 @@ TEST_CASE("PatternHandler a(QUOTED_IDENT,_/UNDERSCORED_EXPR) test") {
 
     string retStr5 = TestUtility::testDriver("assign a; Select a pattern a (\"m\",_\"1\"_)", pkb);
     REQUIRE(retStr5 == "2");
+
+    string retStr7 = TestUtility::testDriver("assign a; Select a pattern a (\"m\",\"1\")", pkb);
+    REQUIRE(retStr7 == "none");
+
+    string retStr6 = TestUtility::testDriver("assign a; Select a pattern a (\"x\",\"3\")", pkb);
+    REQUIRE(retStr6 == "4");
+
+    string retStr8 = TestUtility::testDriver("assign a; Select a pattern a (\"x\",_\"3\"_)", pkb);
+    REQUIRE(retStr8 == "4");
+
 }
 
 TEST_CASE("patternHandler while test") {

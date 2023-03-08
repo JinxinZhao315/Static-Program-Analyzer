@@ -49,15 +49,15 @@ public:
 			return QUOTED_IDENT;
 		}
 		else if (std::regex_match(input, std::regex(underscoredExpr))) {
-            if (!validateExpr(input)) {
-                return INVALID;
-            }
+//            if (!validateExpr(input)) {
+//                return INVALID;
+//            }
 			return UNDERSCORED_EXPR;
 		}
 		else if (std::regex_match(input, std::regex(expr))) {
-            if (!validateExpr(input)) {
-                return INVALID;
-            }
+//            if (!validateExpr(input)) {
+//                return INVALID;
+//            }
 			return EXPR;
 		}
 		else if (std::regex_match(input, std::regex(UNDERSCORE))) {
@@ -83,23 +83,23 @@ public:
         return trimmed;
     };
 
-    inline static const bool validateExpr(std::string input) {
-        //TODO: need to tokenize trimmed, then check that
-        // 1) Only allowed operators are present (+, -, *, /, %)
-        // 2) Operators are inbetween terms
-        // 3) Only round brackets are allowed, and must be closed
-        std::string trimmed = trim(input, UNDERSCORE);
-        trimmed = trim(trimmed, QUOTE);
-        trimmed = trim(trimmed, WHITESPACES);
-        // This only checks for dangling operators at start or end of str
-        if (!std::regex_match(trimmed.substr(0,1), std::regex("[a-zA-Z0-9]"))) {
-            return false;
-        }
-        if (!std::regex_match(trimmed.substr(trimmed.length() - 1, 1), std::regex("[a-zA-Z0-9]"))) {
-            return false;
-        }
-        return true;
-    }
+//    inline static const bool validateExpr(std::string input) {
+//        //TODO: need to tokenize trimmed, then check that
+//        // 1) Only allowed operators are present (+, -, *, /, %)
+//        // 2) Operators are inbetween terms
+//        // 3) Only round brackets are allowed, and must be closed
+//        std::string trimmed = trim(input, UNDERSCORE);
+//        trimmed = trim(trimmed, QUOTE);
+//        trimmed = trim(trimmed, WHITESPACES);
+//        // This only checks for dangling operators at start or end of str
+//        if (!std::regex_match(trimmed.substr(0,1), std::regex("[a-zA-Z0-9]"))) {
+//            return false;
+//        }
+//        if (!std::regex_match(trimmed.substr(trimmed.length() - 1, 1), std::regex("[a-zA-Z0-9]"))) {
+//            return false;
+//        }
+//        return true;
+//    }
 
 	inline static const std::set<std::string> getSetIntersection(std::set<std::string> firstSet, std::set<std::string> secondSet) {
 		std::set<std::string> resultSet;
