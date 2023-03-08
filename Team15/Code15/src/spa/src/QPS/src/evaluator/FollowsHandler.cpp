@@ -148,10 +148,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-<<<<<<< HEAD
 
-=======
->>>>>>> fa909e379f9ea8135c09e2e0b70b4c0e36f73b30
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
