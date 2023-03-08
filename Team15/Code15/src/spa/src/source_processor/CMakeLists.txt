@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20.2)
 project(source_processor)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 

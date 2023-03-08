@@ -77,6 +77,9 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
                 suchThatFlag = refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
             }
         }
+        if (suchThatRefType == "Calls" || suchThatRefType == "Calls*") {
+            suchThatFlag = refConsistentLogic->hasRef("Calls", suchThatLeftType, suchThatRightType);
+        }
         if (suchThatFlag == false) {
             return false;
         }

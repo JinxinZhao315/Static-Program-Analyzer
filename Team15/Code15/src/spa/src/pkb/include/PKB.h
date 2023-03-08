@@ -60,6 +60,18 @@ public:
 	//SP calls*
 	void addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
 
+	//SP next
+	void addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts);
+
+	//SP next*
+	void addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts);
+
+	//SP affects
+	void addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers);
+
+	//SP affects*
+	void addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
+
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
 
@@ -75,9 +87,9 @@ public:
 	std::set<int> getAllStmtNumsByType(std::string stmtType);
 
 	//QPS follow
-	int getFollowsLeaderNum(int followerNum);
+	int getFollowsLeaderNum(int followerNum, int invalidLeaderNum);
 
-	int getFollowsFollowerNum(int leaderNum);
+	int getFollowsFollowerNum(int leaderNum, int invalidFollowerNum);
 
 	bool areInFollowsRelationship(int leaderNum, int followerNum);
 
@@ -93,18 +105,18 @@ public:
 	bool isFollowsStarEmpty();
 
 	//QPS parent
-	int getParentParentNum(int childNum);
+	int getParentParentNum(int childNum, int invalidParentNum);
 
-	std::set<int> getParentChildrenNum(int parentNum);
+	std::set<int> getParentChildNums(int parentNum);
 
 	bool areInParentRelationship(int parentNum, int childNum);
 
 	bool isParentEmpty();
 
 	//QPS parent*
-	std::set<int> getParentStarParentNums(int child);
+	std::set<int> getParentStarParentNums(int childNum);
 
-	std::set<int> getParentStarChildNums(int parent);
+	std::set<int> getParentStarChildNums(int parentNum);
 
 	bool areInParentStarRelationship(int parentNum, int childNum);
 
@@ -183,6 +195,34 @@ public:
 
 	bool isCallsStarEmpty();
 
+	//QPS next
+	int getNextPreviousNum(int nextNum, int invalidPreviousNum);
+
+	std::set<int> getNextNextNums(int previousNum);
+
+	bool areInNextRelationship(int previousNum, int nextNum);
+
+	//QPS next*
+	std::set<int> getNextStarPreviousNums(int nextNum);
+
+	std::set<int> getNextStarNextNums(int previousNum);
+
+	bool areInNextStarRelationship(int previousNum, int nextNum);
+
+	//SP affects
+	std::set<int> getAffectsModifierNums(int userNum);
+
+	std::set<int> getAffectsUserNums(int modifierNum);
+
+	bool areInAffectsRelationship(int modifierNum, int userNum);
+
+	//SP affects*
+	std::set<int> getAffectsStarModifierNums(int userNum);
+
+	std::set<int> getAffectsStarUserNums(int modifierNum);
+
+	bool areInAffectsStarRelationship(int modifierNum, int userNum);
+
 private:
 	EntityTable<std::string> procTable;
 	EntityTable<std::string> varTable;
@@ -201,4 +241,8 @@ private:
 	PatternTable ifPatternTable;
 	RelationshipTable<std::string, std::string> callsTable;
 	RelationshipTable<std::string, std::string> callsStarTable;
+	RelationshipTable<int, int> nextTable;
+	RelationshipTable<int, int> nextStarTable;
+	RelationshipTable<int, int> affectsTable;
+	RelationshipTable<int, int> affectsStarTable;
 };

@@ -1,8 +1,14 @@
 #include "QPS/include/tokenizer/PQLRefConsistentLogic.h"
 
-void PQLRefConsistentLogic::createProcRef() {
-	procSet.emplace(PROCEDURE);
-	procSet.emplace(INDENT_STRING);
+void PQLRefConsistentLogic::createUsesModifiesProcRef() {
+	procUsesModifiesSet.emplace(PROCEDURE);
+	procUsesModifiesSet.emplace(INDENT_STRING);
+}
+
+void PQLRefConsistentLogic::createCallsProcRef() {
+	procCallsSet.emplace(PROCEDURE);
+	procCallsSet.emplace(INDENT_STRING);
+	procCallsSet.emplace(UNDERSCORE);
 }
 
 void PQLRefConsistentLogic::createStmtRef() {
@@ -44,19 +50,22 @@ void PQLRefConsistentLogic::createVarRef() {
 }
 
 PQLRefConsistentLogic::PQLRefConsistentLogic() {
-	createProcRef();
+	createUsesModifiesProcRef();
+	createCallsProcRef();
 	createStmtRef();
 	createStmtRefModifies();
 	createStmtRefUses();
 	createVarRef();
-	logicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procSet, varSet));
+	logicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
 	logicMap.emplace("ModifiesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
-	logicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procSet, varSet));
+	logicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
 	logicMap.emplace("UsesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtUsesSet, varSet));
 	logicMap.emplace("Follows", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 	logicMap.emplace("Follows*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 	logicMap.emplace("Parent", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 	logicMap.emplace("Parent*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	logicMap.emplace("Calls", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
+	logicMap.emplace("Calls*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
 }
 
 bool PQLRefConsistentLogic::hasRef(std::string relation, std::string leftType, std::string rightType) {

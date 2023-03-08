@@ -7,6 +7,16 @@
 
 TEST_CASE("Parent Integer Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -38,6 +48,18 @@ TEST_CASE("Parent Integer Underscore test") {
 
 TEST_CASE("Parent* Integer Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -75,6 +97,16 @@ TEST_CASE("Parent* Integer Underscore test") {
 
 TEST_CASE("Parent Underscore Integer test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -109,6 +141,17 @@ TEST_CASE("Parent Underscore Integer test") {
 
 TEST_CASE("Parent* Underscore Integer test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -144,6 +187,15 @@ TEST_CASE("Parent* Underscore Integer test") {
 
 TEST_CASE("Parent Integer Integer test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -176,6 +228,17 @@ TEST_CASE("Parent Integer Integer test") {
 
 TEST_CASE("Parent* Integer Integer test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -211,6 +274,15 @@ TEST_CASE("Parent* Integer Integer test") {
 
 TEST_CASE("Parent Synonym Integer test") {
     PKB pkb;
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -239,6 +311,17 @@ TEST_CASE("Parent Synonym Integer test") {
 
 TEST_CASE("Parent* Synonym Integer test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -274,6 +357,16 @@ TEST_CASE("Parent* Synonym Integer test") {
 
 TEST_CASE("Parent Integer Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -305,6 +398,17 @@ TEST_CASE("Parent Integer Synonym test") {
 
 TEST_CASE("Parent* Integer Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -340,6 +444,16 @@ TEST_CASE("Parent* Integer Synonym test") {
 
 TEST_CASE("Parent Synonym Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -374,6 +488,18 @@ TEST_CASE("Parent Synonym Synonym test") {
 
 TEST_CASE("Parent* Synonym Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -409,6 +535,17 @@ TEST_CASE("Parent* Synonym Synonym test") {
 
 TEST_CASE("Parent Synonym Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -437,6 +574,18 @@ TEST_CASE("Parent Synonym Underscore test") {
 
 TEST_CASE("Parent* Synonym Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -466,6 +615,16 @@ TEST_CASE("Parent* Synonym Underscore test") {
 
 TEST_CASE("Parent Underscore Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -494,6 +653,18 @@ TEST_CASE("Parent Underscore Synonym test") {
 
 TEST_CASE("Parent* Underscore Synonym test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
+
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);
@@ -523,6 +694,17 @@ TEST_CASE("Parent* Underscore Synonym test") {
 
 TEST_CASE("Parent/Parent* Underscore Underscore test") {
     PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
+    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
+    stmts.insert(make_pair("read", set<int>({ 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k" });
+
+    pkb.addAllParent({ {1, {2}}, {5, {1}} });
+    pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
     pkb.addStmt("while", 1);

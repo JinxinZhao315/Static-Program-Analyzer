@@ -8,14 +8,15 @@ std::set<int> FollowsHandler::getFollowsFromPKB(bool isStar, string type, string
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_LEADER) {
-            int leader = pkb.getFollowsLeaderNum(stoi(arg)); //
-            //if return null, leader == 0 but not -1
-            if (leader != 0) {
+            int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
+            //if leader does not exist, return -1
+            if (leader != -1) {
                 ret.insert(leader);
             }
         } else { //if (type == GET_FOLLOWER)
-            int follower = pkb.getFollowsFollowerNum(stoi(arg));//
-            if (follower != 0) {
+            int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
+            //if follower does not exist, return -1
+            if (follower != -1) {
                 ret.insert(follower);
             }
         }
@@ -45,10 +46,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     std::string leftType = Utility::getReferenceType(leftArg);
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
-    if (leftArg == rightArg) {
-        result.setResultTrue(false);
-        return result;
-    }
+
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isFollowEmpty = pkb.isFollowsEmpty(); //
@@ -105,7 +103,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+        result.setClauseResult(ResultTable(resultSynonValues, leftArg));
         // Wilcard/Int - Synon
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
 
@@ -131,27 +129,11 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
                 }
             }
         }
-
-        //if (leftType == Utility::UNDERSCORE) {
-        //    for (auto currSynonVal: currSynonValues) {
-        //        std::set<int> leaderSet = getFollowsFromPKB(isStar, GET_LEADER, currSynonVal.first); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
-        //        if (!leaderSet.empty()) {
-        //            resultSynonValues.insert(currSynonVal);
-        //        }
-        //    }
-        //} else if (leftType == Utility::INTEGER) {
-        //    for (auto currSynonVal: currSynonValues) {
-        //        bool isRightFollowLeft = getIsFollowsFromPKB(isStar, leftArg, currSynonVal.first); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
-        //        if (isRightFollowLeft) {
-        //            resultSynonValues.insert(currSynonVal);
-        //        }
-        //    }
-        //}
         if (resultSynonValues.empty()) {
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+        result.setClauseResult(ResultTable(resultSynonValues, rightArg));
         // Synon - Synon
     } 
     else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
@@ -166,8 +148,7 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
+
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
@@ -177,45 +158,12 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
             }
         }
 
-        //for (auto currLeftVal: currLeftValues) {
-        //    for (auto currRightVal: currRightValues) {
-        //        bool isRightFollowLeft = getIsFollowsFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
-        //        if (isRightFollowLeft) {
-        //            tempResultTable.insertTuple({ currLeftVal, currRightVal });
-
-        //            //if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-        //            //    SynonymLinkageMap leftLinkedSynonymCollection;
-        //            //    leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-        //            //    leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-        //            //}
-        //            //else {
-        //            //    leftResultValues.find(currLeftVal)->second
-        //            //        .insertLinkage(rightArg, currRightVal);
-        //            //}
-
-        //            //if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-        //            //    SynonymLinkageMap rightLinkedSynonymCollection;
-        //            //    rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-        //            //    rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-        //            //}
-        //            //else {
-        //            //    rightResultValues.find(currRightVal)->second
-        //            //        .insertLinkage(leftArg, currLeftVal);
-        //            //}
-        //            //
-        //            //leftResultValues.insert(currLeftVal);
-        //            //rightResultValues.insert(currRightVal);
-        //        }
-
-        //    }
-        //}
-
         if (tempResultTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
 
-        result.setClauseResult(true, true,tempResultTable);
+        result.setClauseResult(tempResultTable);
     } else {
         throw std::runtime_error("Unhandled left or right arg type in FollowsHandler");
     }

@@ -8,13 +8,14 @@ std::set<int> ParentHandler::getParentFromPKB(bool isStar, string type, string a
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_PARENT) {
-            int parent = pkb.getParentParentNum(stoi(arg)); //
-            if (parent != NULL) {
+            int parent = pkb.getParentParentNum(stoi(arg), -1);
+            //if parent does not exist, return -1
+            if (parent != -1) {
                 ret.insert(parent);
             }
         }
         else { //if (type == GET_CHILD)
-            std::set<int> children = pkb.getParentChildrenNum(stoi(arg));//
+            std::set<int> children = pkb.getParentChildNums(stoi(arg));
             if (!children.empty()) {
                 ret.insert(children.begin(), children.end());
             }
@@ -88,8 +89,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(leftArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
             for (auto currSynonVal : currSynonValues) {
@@ -111,7 +110,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(true, false, ResultTable(resultSynonValues, leftArg));
+        result.setClauseResult(ResultTable(resultSynonValues, leftArg));
 
         // Wilcard/Int - Synon
     }
@@ -120,8 +119,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> currSynonValues = resultTable.getSynonymEntry(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
             for (auto currSynonVal : currSynonValues) {
@@ -143,8 +140,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             result.setResultTrue(false);
             return result;
         }
-        //result.setSecondArg(rightArg, resultSynonValues);
-        result.setClauseResult(false, true, ResultTable(resultSynonValues, rightArg));
+        result.setClauseResult(ResultTable(resultSynonValues, rightArg));
 
         // Synon - Synon
     }
@@ -160,8 +156,6 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-        //std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
-        //std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;
         ResultTable tempResultTable({ leftArg, rightArg });
 
         for (int i = 0; i < currLeftValues.size(); i++) {
@@ -171,48 +165,11 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             }
         }
 
-        //for (string currLeftVal : currLeftValues) {
-        //    for (string currRightVal : currRightValues) {
-        //        bool isRightParentStarLeft = getIsParentFromPKB(isStar, currLeftVal, currRightVal); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
-        //        if (isRightParentStarLeft) {
-        //            tempResultTable.insertTuple({ currLeftVal, currRightVal });
-
-        //           /* if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-        //                SynonymLinkageMap leftLinkedSynonymCollection;
-        //                leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-        //                leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-        //            }
-        //            else {
-        //                leftResultValues.find(currLeftVal)->second
-        //                    .insertLinkage(rightArg, currRightVal);
-        //            }
-
-        //            if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-        //                SynonymLinkageMap rightLinkedSynonymCollection;
-        //                rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-        //                rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-        //            }
-        //            else {
-        //                rightResultValues.find(currRightVal)->second
-        //                    .insertLinkage(leftArg, currLeftVal);
-        //            }*/
-        //        }
-        //    }
-        //}
-
-        //if (leftResultValues.empty() || rightResultValues.empty()) {
-        //    result.setResultTrue(false);
-        //    return result;
-        //}
-
         if (tempResultTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
-
-        //result.setFirstArg(leftArg, leftResultValues);
-        //result.setSecondArg(rightArg, rightResultValues);
-        result.setClauseResult(true, true, tempResultTable);
+        result.setClauseResult(tempResultTable);
     }
     else {
         throw std::runtime_error("Unhandled left or right arg type in ParentHandler");

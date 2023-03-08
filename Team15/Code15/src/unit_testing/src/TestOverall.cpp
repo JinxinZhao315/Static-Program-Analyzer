@@ -649,7 +649,7 @@ TEST_CASE("Overall test : source7.txt 1") {
     string queryStr = "stmt s; procedure p; Select p such that Uses(p, \"y\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = {"Loid,Anya,Yor"};
+    set<string> expectedResult = {"Loid", "Anya", "Yor"};
     REQUIRE(result == expectedResult);
 }
 
@@ -659,6 +659,6 @@ TEST_CASE("Overall test : source7.txt 2") {
     string queryStr = "stmt s; procedure p; Select p such that Modifies(p, \"x\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "Loid,Anya,Yor" };
+    set<string> expectedResult = {"Loid", "Anya", "Yor"};
     REQUIRE(result == expectedResult);
 }
