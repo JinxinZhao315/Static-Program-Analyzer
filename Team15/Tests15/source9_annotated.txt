@@ -1,0 +1,19 @@
+procedure proc1 {
+//1  a = 99;
+//2  call proc2; }
+
+procedure proc2 {
+//3  b = a + 1;
+//4  call proc3; }
+
+procedure proc3 {
+//5  print a;
+//6  print b;
+//7  call proc4; }
+
+procedure proc4 {
+//8  read v;
+//9  read w;
+//10 x = v / 3;
+//11 y = w / 4;
+//12 z = v - w * x; }
