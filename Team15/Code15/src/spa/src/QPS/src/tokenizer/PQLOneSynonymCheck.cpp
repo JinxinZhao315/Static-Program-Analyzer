@@ -28,9 +28,35 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	// Select Clause
 	// toDo remove type attribute in selectClause
 	// Check if haven't been defined after checking all synonyms declared once.
-    for (std::string synName : selectClause.getSynNameVec()) {
-        if (varTable.count(synName) != 1) {
-            return false;
+    std::vector<std::string> synNameVec = selectClause.getSynNameVec();
+    //if (synNameVec.size() > 1) {
+    //    for (std::string synName : synNameVec) {
+    //        if (varTable.count(synName) != 1) {//multiple synonyms, can't be BOOLEAN
+    //            return false;
+    //        }
+    //    }
+    //}
+    //else {//size == 1
+    //    if (synNameVec[0] == "BOOLEAN" && varTable.count(synNameVec[0]) > 1) {//if single syn and BOOLEAN, count can be 0 or 1
+    //        return false;
+    //    }
+    //    else if (synNameVec[0] != "BOOLEAN" && varTable.count(synNameVec[0]) != 1) {//single syn, count can only be 1
+    //        return false;
+    //    }
+    //}
+    for (std::string synName : synNameVec) {
+        if (synNameVec.size() > 1) {
+            if (varTable.count(synName) != 1) {//multiple synonyms, can't be BOOLEAN
+                return false;
+            }
+        }
+        else {//synNameVec.size == 1
+            if (synName == "BOOLEAN" && varTable.count(synName) > 1) {//if single syn and BOOLEAN, count can be 0 or 1
+                return false;
+            }
+            else if (synName != "BOOLEAN" && varTable.count(synName) != 1) {//single syn, count can only be 1
+                return false;
+            }
         }
     }
 

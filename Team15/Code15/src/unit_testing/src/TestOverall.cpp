@@ -83,9 +83,7 @@ TEST_CASE("Overall test : source1.txt 4") {
     REQUIRE(result == expectedResult);
 }
 
-
-
-TEST_CASE("Overall test : source1.txt 7") {
+TEST_CASE("Overall test : source1.txt 5") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "print pr; Select pr such that Uses(pr, \"x\")";
@@ -94,7 +92,7 @@ TEST_CASE("Overall test : source1.txt 7") {
     set<string> expectedResult = { "18" };
     REQUIRE(result == expectedResult);
 }
-TEST_CASE("Overall test : source1.txt 8") {
+TEST_CASE("Overall test : source1.txt 6") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; Select s such that Follows(16, s)";
@@ -103,7 +101,7 @@ TEST_CASE("Overall test : source1.txt 8") {
     set<string> expectedResult = { "17" };
     REQUIRE(result == expectedResult);
 }
-TEST_CASE("Overall test : source1.txt 9") {
+TEST_CASE("Overall test : source1.txt 7") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; Select s such that Follows(s, 15)";
@@ -112,7 +110,7 @@ TEST_CASE("Overall test : source1.txt 9") {
     set<string> expectedResult = { "14" };
     REQUIRE(result == expectedResult);
 }
-TEST_CASE("Overall test : source1.txt 10") {
+TEST_CASE("Overall test : source1.txt 8") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "read re; variable v; Select v such that Modifies(re, v)";
@@ -121,7 +119,7 @@ TEST_CASE("Overall test : source1.txt 10") {
     set<string> expectedResult = { "g" };
     REQUIRE(result == expectedResult);
 }
-TEST_CASE("Overall test : source1.txt 11") {
+TEST_CASE("Overall test : source1.txt 9") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "print pr; variable v; Select v such that Uses(pr, v)";
@@ -131,7 +129,7 @@ TEST_CASE("Overall test : source1.txt 11") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 12 SyntaxError") {
+TEST_CASE("Overall test : source1.txt 10 SyntaxError") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "variable v; Select v;";
@@ -141,7 +139,7 @@ TEST_CASE("Overall test : source1.txt 12 SyntaxError") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 12 SemanticError") {
+TEST_CASE("Overall test : source1.txt 11 SemanticError") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "print p; Select p pattern p(_,_)";
@@ -151,7 +149,7 @@ TEST_CASE("Overall test : source1.txt 12 SemanticError") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 13 SemanticError") {
+TEST_CASE("Overall test : source1.txt 12 SemanticError") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; Select s pattern s(_,_)";
@@ -161,7 +159,7 @@ TEST_CASE("Overall test : source1.txt 13 SemanticError") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 14") {
+TEST_CASE("Overall test : source1.txt 13") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; procedure p; variable v; Select p such that Uses(p, v)";
@@ -171,7 +169,7 @@ TEST_CASE("Overall test : source1.txt 14") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 15") {
+TEST_CASE("Overall test : source1.txt 14") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; procedure p; variable v; read r; Select r such that Uses(\"proc1\", v)";
@@ -181,7 +179,7 @@ TEST_CASE("Overall test : source1.txt 15") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 16") {
+TEST_CASE("Overall test : source1.txt 15") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "while w; Select w pattern w (_,_)";
@@ -191,7 +189,7 @@ TEST_CASE("Overall test : source1.txt 16") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source1.txt 17") {
+TEST_CASE("Overall test : source1.txt 16") {
     // Enter source of SIMPLE code
     string filename = source1_filename;
     string queryStr = "stmt s; procedure p; variable v; read r; Select r such that Modifies(\"proc1\", \"a\")";
@@ -206,6 +204,52 @@ TEST_CASE("Overall test : source1.txt 17") {
     expectedResult = { "12" };
     REQUIRE(result == expectedResult);
 }
+
+
+
+TEST_CASE("Overall test : source1.txt 17 Select Multiple synonyms") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "assign a1, a2; Select <a1, a2> such that Follows(a1, a2)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { 
+        "1 2", "2 3", "3 4", "4 5", "5 6", "6 7", 
+        "7 8", "8 9", "9 10", "10 11", 
+        "13 14", "14 15", "15 16", "16 17"};
+    REQUIRE(result == expectedResult);
+
+    queryStr = "assign a1, a2; Select <a1> such that Follows(a1, a2)";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = { "1", "2", "3", "4", "5", "6", "7", "8", 
+        "9", "10", "13", "14", "15", "16"};
+    REQUIRE(result == expectedResult);
+
+    queryStr = "assign a1, a2; Select <a1, a2> such that Parent(a1, a2)";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = {};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source1.txt 18 Select BOOLEAN") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "assign a1, a2; Select BOOLEAN such that Follows(a1, a2)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"TRUE"};
+    REQUIRE(result == expectedResult);
+
+    queryStr = "assign a1, a2; Select BOOLEAN such that Parent(a1, a2)";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = {"FALSE"};
+    REQUIRE(result == expectedResult);
+}
+
+
 
 
 TEST_CASE("Overall test : source2.txt 1") {
