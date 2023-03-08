@@ -86,6 +86,19 @@ TEST_CASE("PQLSyntaxChecker positive test 8: Parent* valid arg") {
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent*(_,_)"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select a1 such that Parent*(_,a1)"));
 }
+TEST_CASE("PQLSyntaxChecker positive test 9: Calls valid arg") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, \"proc\")"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(_, \"proc\")"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", p2)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", _)"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(\"proc\", \"proc\")"));
+}
 TEST_CASE("PQLSyntaxChecker positive test 9: Uses valid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -267,3 +280,10 @@ TEST_CASE("PQLSyntaxChecker negative test 16: pattern clause if") {
     REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,\"t\",\"x\")"), PQLSyntaxError);
 }
 
+TEST_CASE("PQLSyntaxChecker positive test 17: Calls invalid arg") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, 11)"), PQLSyntaxError);
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, p1)"), PQLSyntaxError);
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, !@#)"), PQLSyntaxError);
+}
