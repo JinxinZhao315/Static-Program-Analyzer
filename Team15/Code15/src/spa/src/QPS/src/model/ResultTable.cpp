@@ -37,9 +37,8 @@ ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std:
 }
 
 
-std::vector<std::string> ResultTable::getSynList() {
-    return this->synList;
-}
+
+
 
 void ResultTable::combineTable(ResultTable tempResultTable) {
     //the table has just been initialized
@@ -49,8 +48,7 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
         this->rowNum = tempResultTable.rowNum;
         this->colNum = tempResultTable.colNum;
     }
-    //no tuple in resultTable satisfy the requirement now, 
-    //or the tempResultTable  has just been initialized, no change should be made
+    //to combine the resultTable that clause handler evaluate to true
     else if (isTableEmpty() || tempResultTable.isSynListEmpty()) {
         return;
     }
@@ -59,7 +57,7 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
         clearResultTable();
     }
     else {
-        
+
         //index of the old synonym if they match the synonym in the new result
         std::vector<int> commonSynIndex;
         std::vector<std::string> tempSynList = tempResultTable.getSynList();
@@ -100,16 +98,24 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
     }
 }
 
-bool ResultTable::isTableEmpty() {
-    return this->colNum == 0;
-}
 
-bool ResultTable::isSynListEmpty() {
-    return this->rowNum == 0;
+
+
+
+std::vector<std::string> ResultTable::getSynList() {
+    return this->synList;
 }
 
 std::vector<std::vector<std::string>> ResultTable::getResultTable() {
     return this->resultTable;
+}
+
+int ResultTable::getRowNum() {
+    return this->rowNum;
+}
+
+int ResultTable::getColNum() {
+    return this->colNum;
 }
 
 std::vector<std::string> ResultTable::getSynValues(std::string synName) {
@@ -125,17 +131,70 @@ std::vector<std::string> ResultTable::getSynValues(std::string synName) {
     return this->resultTable[index];
 }
 
+std::vector<std::string> ResultTable::getTuple(int index) {
+    std::vector<std::string> resultTuple;
+    for (int i = 0; i < rowNum; i++) {
+        resultTuple.push_back(resultTable[i][index]);
+    }
+    return resultTuple;
+}
+
 std::set<std::string> ResultTable::getStringSetFromKey(std::string synName) {
     std::vector<std::string> synValuesVec = getSynValues(synName);
     std::set<std::string> synValuesSet(synValuesVec.begin(), synValuesVec.end());
     return synValuesSet;
 }
 
-void ResultTable::clearResultTable() {
-    for (int i = 0; i < rowNum; i++) {
-        this->resultTable[i] = {};
+std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> selectedSynNames) {
+    if (selectedSynNames.size() > 1) {
+        std::vector<int> synNameIndex;
+        //get the index of each synName in synList
+        for (int i = 0; i < selectedSynNames.size(); i++) {
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedSynNames[i]);
+            synNameIndex.push_back(it - synList.begin());
+        }
+
+        std::set<std::string> multiSynResult;
+        for (int i = 0; i < colNum; i++) {
+            std::string tuple;
+            for (int j = 0; j < selectedSynNames.size(); j++) {
+                tuple += resultTable[synNameIndex[j]][i] + " ";
+            }
+            //pop the last white space
+            tuple.pop_back();
+            multiSynResult.insert(tuple);
+        }
+        return multiSynResult;
     }
-    colNum = 0;
+    else if (selectedSynNames.size() == 1) {
+        //BOOLEAN is a synonym
+        if (selectedSynNames[0] != "BOOLEAN" || isSynExist("BOOLEAN")) {
+            std::vector<std::string> selectedSynVec = getSynValues(selectedSynNames[0]);
+            std::set<std::string> selectedSynResult(selectedSynVec.begin(), selectedSynVec.end());
+            return selectedSynResult;
+        }
+        //BOOLEAN is BOOLEAN
+        else {
+            if (isTableEmpty()) {
+                return { "FALSE" };
+            }
+            else {
+                return { "TRUE" };
+            }
+
+        }
+    }
+}
+
+
+
+//return true if there is no tuple in the table
+bool ResultTable::isTableEmpty() {
+    return this->colNum == 0;
+}
+
+bool ResultTable::isSynListEmpty() {
+    return this->rowNum == 0;
 }
 
 bool ResultTable::isSynExist(std::string synName) {
@@ -156,6 +215,17 @@ bool ResultTable::isTupleMatch(std::vector<std::string> oldTuple, std::vector<st
     return true;
 }
 
+
+
+
+
+void ResultTable::clearResultTable() {
+    for (int i = 0; i < rowNum; i++) {
+        this->resultTable[i] = {};
+    }
+    colNum = 0;
+}
+
 void ResultTable::deleteTuple(int index) {
     //traverse every row of the table
     if (index >= 0 && index < colNum) {
@@ -174,7 +244,7 @@ void ResultTable::insertTuple(std::vector<std::string> tuple) {
         colNum++;
     }
     else {
-        //should we throw exception?
+        //should throw exception ???
     }
 }
 
@@ -188,86 +258,5 @@ std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTup
     return resultTuple;
 }
 
-std::vector<std::string> ResultTable::getTuple(int index) {
-    std::vector<std::string> resultTuple;
-    for (int i = 0; i < rowNum; i++) {
-        resultTuple.push_back(resultTable[i][index]);
-    }
-    return resultTuple;
-}
-
-int ResultTable::getRowNum() {
-    return this->rowNum;
-}
-
-int ResultTable::getColNum() {
-    return this->colNum;
-}
 
 
-//bool ResultTable::isSynonymPresent(std::string key) {
-//    if (this->resultTable.find(key) == this->resultTable.end()) {
-//        return false;
-//    } else {
-//        return true;
-//    }
-//}
-////
-//std::unordered_map<std::string, SynonymLinkageMap>& ResultTable::getSynonymEntry(std::string key) {
-//    return this->resultTable.find(key)->second;
-//}
-//
-//std::set<std::string> ResultTable::getStringSetFromKey(std::string synonymName) {
-//    std::unordered_map<std::string, SynonymLinkageMap> synonymResult = this->resultTable.find(synonymName)->second;
-//    std::set<std::string> synonymStringSet;
-//    for (auto synonymInstance : synonymResult) {
-//        synonymStringSet.insert(synonymInstance.first);
-//    }
-//    return synonymStringSet;
-//}
-//
-//
-//
-////void ResultTable::insertKeyValuePair(std::string key, std::set<std::string> value) {
-////    this->resultTable.insert({key, value});
-////}
-//
-//int ResultTable::getSizeOfResultTable() {
-//    return resultTable.size();
-//} 
-//
-//bool ResultTable::isKeyPresent(std::string key) {
-//    if (this->resultTable.find(key) == this->resultTable.end()) {
-//        return false;
-//    }
-//    else {
-//        return true;
-//    }
-//}
-//void ResultTable::deleteSynonymInstance(std::string synonymName, std::string synonymInstance) {
-//    this->resultTable.at(synonymName).erase(synonymInstance);
-//}
-////
-////void ResultTable::deleteKeyValuePair(std::string key) {
-////    this->resultTable.erase(key);
-//
-////}
-//
-////delete for early exit, no linkage being deleted
-//void ResultTable::deleteKeyValuePair(std::string key) {
-//    this->resultTable.erase(key);
-//}
-//
-//void ResultTable::resetKeySetEmpty(std::string selectedVarName) {
-//    deleteKeyValuePair(selectedVarName);
-//    insertSynonymEntry(selectedVarName, {});
-//}
-//
-//bool ResultTable::existSynonymWithNoValue() {
-//    for (auto synonym : resultTable) {
-//        if (synonym.second.empty()) {
-//            return true;
-//        }
-//    }
-//    return false;
-//}

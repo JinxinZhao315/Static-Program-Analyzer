@@ -4,10 +4,14 @@ SelectClause::SelectClause() {}
 
 SelectClause::~SelectClause() {}
 
-SelectClause::SelectClause(std::string varName) {
-    this->varName = varName;
+SelectClause::SelectClause(std::string synName) {
+    this->synNames.push_back(synName);
 }
 
-std::string SelectClause::getVarName() {
-    return this->varName;
+SelectClause::SelectClause(std::vector<std::string> synNames) {
+    this->synNames = synNames;
+}
+
+std::vector<std::string> SelectClause::getSynNameVec() {
+    return this->synNames;
 }

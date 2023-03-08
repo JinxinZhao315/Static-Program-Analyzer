@@ -72,32 +72,7 @@ public:
 
     std::vector<std::string> getTuple(int index);
 
-
-    //bool isSynonymPresent(std::string key);
-
-    
-
-    //int getSizeOfResultTable();
-
-    
-
-    
-    
-
-
-    
-
-    
-
-    //void insertKeyValuePair(std::string key, std::set<std::string> value);
-    //std::unordered_map<std::string, SynonymLinkageMap>& getSynonymEntry(std::string key);
-    //void deleteKeyValuePair(std::string key);
-    //void resetKeySetEmpty(std::string);
-    //bool isKeyPresent(std::string key);
-
-    //std::set<std::string> getStringSetFromKey(std::string synonymName);
-    //void deleteSynonymInstance(std::string synonymName, std::string synonymInstance);
-    //bool existSynonymWithNoValue();
+    std::set<std::string> getSelectedResult(std::vector<std::string> selectedSynNames);
 };
 
 

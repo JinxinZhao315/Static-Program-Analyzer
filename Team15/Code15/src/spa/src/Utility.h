@@ -68,6 +68,7 @@ public:
 		}
 	};
 
+	//remove exprToTrim in the front and end
     inline static const std::string trim(std::string input, std::string exprToTrim) {
         std::string trimmed = input;
         std::size_t firstWhitespace = trimmed.find_first_not_of(exprToTrim);

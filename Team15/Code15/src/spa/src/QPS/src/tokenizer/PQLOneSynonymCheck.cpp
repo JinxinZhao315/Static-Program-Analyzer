@@ -28,9 +28,11 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	// Select Clause
 	// toDo remove type attribute in selectClause
 	// Check if haven't been defined after checking all synonyms declared once.
-	if (varTable.count(selectClause.getVarName()) != 1) {
-		return false;
-	}
+    for (std::string synName : selectClause.getSynNameVec()) {
+        if (varTable.count(synName) != 1) {
+            return false;
+        }
+    }
 
     // to do check whether integer or underscore(non synonym)
     // SuchThat Clause

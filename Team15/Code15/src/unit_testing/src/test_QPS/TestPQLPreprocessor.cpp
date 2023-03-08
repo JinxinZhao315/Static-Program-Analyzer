@@ -21,7 +21,7 @@ TEST_CASE("PQLPreprocessor query object test 1") {
         assert(type == "assign");
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getVarName();
+        string varName = selectClause.getSynNameVec()[0];
         assert(varName == "a");
 
         vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
@@ -53,7 +53,7 @@ TEST_CASE("PQLPreprocessor query object test follows*(synon,_)") {
         std::cout << "var table correct" << std::endl;
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getVarName();
+        string varName = selectClause.getSynNameVec()[0];
         assert(varName == "s1");
         std::cout << "select correct" << std::endl;
 
@@ -89,7 +89,7 @@ TEST_CASE("PQLPreprocessor query object test follows(_,_)") {
         std::cout << "var table correct" << std::endl;
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getVarName();
+        string varName = selectClause.getSynNameVec()[0];
         assert(varName == "s1");
         std::cout << "select correct" << std::endl;
 
@@ -124,7 +124,7 @@ TEST_CASE("PQLPreprocessor query object test pattern 1") {
     REQUIRE(type == "assign");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getVarName();
+    string varName = selectClause.getSynNameVec()[0];
     REQUIRE(varName == "a");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
@@ -149,7 +149,7 @@ TEST_CASE("PQLPreprocessor query object test pattern if 1") {
     REQUIRE(type2 == "variable");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getVarName();
+    string varName = selectClause.getSynNameVec()[0];
     REQUIRE(varName == "ifs");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
@@ -173,7 +173,7 @@ TEST_CASE("PQLPreprocessor query object test while 1") {
     REQUIRE(type2 == "variable");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getVarName();
+    string varName = selectClause.getSynNameVec()[0];
     REQUIRE(varName == "w");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();

@@ -41,10 +41,10 @@ TEST_CASE("Select Handler test 1") {
 
 
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+    std::vector<std::string> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-    set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-    REQUIRE(selectedVarName == "r");
+    set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName[0]);
+    REQUIRE(selectedVarName[0] == "r");
     REQUIRE(retSet.size() == 3);
     REQUIRE(retSet.count("3") == 1);
     REQUIRE(retSet.count("7") == 1);
@@ -67,10 +67,10 @@ TEST_CASE("Select Handler test 2") {
         pkb.addAllConsts(set<string>({ "10", "11", "12", "13" }));
 
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::string selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+        std::vector<std::string> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-        set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName);
-        REQUIRE(selectedVarName == "c");
+        set<std::string> retSet = resultTable.getStringSetFromKey(selectedVarName[0]);
+        REQUIRE(selectedVarName[0] == "c");
         REQUIRE(retSet.size() == 4);
         REQUIRE(retSet.count("10") == 1);
         REQUIRE(retSet.count("11") == 1);
