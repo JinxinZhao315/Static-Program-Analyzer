@@ -4,111 +4,33 @@
 PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
 
-set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, set<vector<string>> allRHS, string substrToMatch) {
+set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, const set<vector<string>>& allRHS, const vector<string>& substrTokens) {
     set <string> ret;
-    for (vector<string> rhsExpr : allRHS) {
-        bool isMatch = findIsMatch(isPartialMatch, rhsExpr, substrToMatch);
+    for (const vector<string>& rhsTokensVec : allRHS) {
+        bool isMatch;
+        if (!isPartialMatch) {
+            isMatch = rhsTokensVec == substrTokens;
+        } else {
+            isMatch =  findIsPartialMatch(rhsTokensVec, substrTokens);
+        }
         if (isMatch) {
-            set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhsExpr);
+            set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhsTokensVec);
             for (int num : lineNumSet) {
                 ret.insert(to_string(num));
             }
         }
     }
     return ret;
-
 }
 
-vector<string> PatternHandler::simplifiedTokenise(string input) {
-    vector<string> tokens;
-    std::string current_token;
-
-    for (int i = 0; i < input.size(); i++) {
-        char c = input[i];
-        if (c == '+' || c == '-' || c == '*' || c == '/'
-            || c == '%' || c == '(' || c == ')') {
-            if (!current_token.empty()) {
-                tokens.push_back(current_token);
-                current_token.clear();
-            }
-            tokens.emplace_back(1, c);
-        } else if (isalnum(c)) {
-            current_token.push_back(c);
-        } else {
-            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
-        }
-    }
-
-    if (!current_token.empty()) {
-        tokens.push_back(current_token);
-    }
-    return tokens;
-}
-
-bool PatternHandler::isValidExprTerm(string token) {
-    return regex_match(token, regex(Utility::synonymFormat)) // SynonymFormat is the same as a legal var format in SIMPLE
-           || regex_match(token, regex(Utility::integerFormat));
-}
-
-
-vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
-    vector<string> result;
-    stack<string> s;
-    if (tokens.empty()) {
-        throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
-    }
-    // To prevent dangling operators like expr = "+2"
-    if (! (isValidExprTerm(tokens.front()) && isValidExprTerm(tokens.back()))) {
-        throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
-    }
-    for (string token : tokens) {
-        if (isValidExprTerm(token)) {
-            result.push_back(token);
-        } else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
-            while (!s.empty() && precedence(s.top()) >= precedence(token)) {
-                result.push_back(s.top());
-                s.pop();
-            }
-            s.push(token);
-        } else if (token == "(") {
-            s.push(token);
-        } else if (token == ")") {
-            while (s.top() != "(") {
-                result.push_back(s.top());
-                s.pop();
-            }
-            s.pop();
-        } else {
-            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
-        }
-    }
-    while (!s.empty()) {
-        if (s.top() == "(") {
-            throw PQLSyntaxError("PQL Syntax Error: Unclosed bracket in pattern expression");
-        }
-        result.push_back(s.top());
-        s.pop();
-    }
-    return result;
-}
-
-
-
-bool PatternHandler::findIsMatch(bool isPartialMatch, vector<string> rhsTokensVec, string substrToMatch) {
-    string trimmed = trimExpr(substrToMatch);
-    vector<string> substrTokens = simplifiedTokenise(trimmed);
-    vector<string> substrPostfix = simplifiedConvertToPostfix(substrTokens);
-    if (!isPartialMatch) {
-        return rhsTokensVec == substrPostfix;
-    } else {
-        return findIsPartialMatch(rhsTokensVec, substrPostfix);
-    }
-}
 
 // Use sliding window to determine if substr is a subset of fullstr
 bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec) {
     size_t subStrSize = substrVec.size();
     size_t fullStrSize = fullstrVec.size();
+    if (subStrSize > fullStrSize) {
+        return false;
+    }
     for (size_t windowStart = 0; windowStart <= fullStrSize - subStrSize; windowStart++)
     {
         for (size_t i = 0; i < subStrSize; i++)
@@ -127,7 +49,7 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
     return false;
 }
 
-vector<string> PatternHandler::getStmtsFromPkb(string patternSynonType, string arg, string type) {
+vector<string> PatternHandler::getStmtsFromPkb(const string& patternSynonType, const string& arg, const string& type) {
     set<int> lineNumSet;
     vector<string> strVec;
     if (type == GET_FROM_VAR) {
@@ -173,6 +95,12 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         isPartialMatch = false;
     }
 
+    vector<string> secondArgPostfix;
+    if (secondType == Utility::EXPR || secondType == Utility::UNDERSCORED_EXPR) {
+        string secondArgTrimmed = trimExpr(secondArg);
+        vector<string> argTokens = simplifiedTokenise(secondArgTrimmed);
+        secondArgPostfix = simplifiedConvertToPostfix(argTokens);
+    }
 
     if (firstType == Utility::UNDERSCORE) {
 
@@ -180,7 +108,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         if (secondType == Utility::UNDERSCORE) {
             if (patternType == "assign") {
-                // result maintains current values of patternSynon, which is a assign synon
+                // Result maintains current values of patternSynon, which is a assign synon
                 // No need to call PKB since all eligible assign synon values are already in resultTable
                 patternSynonVals = resultTable.getSynValues(patternSynon);
             } else {
@@ -190,9 +118,11 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         } else {
             std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
 
-            for (string lineNum : patternSynonLineNums) {
+            for (const string& lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
+                // TODO: Potential speed up here. Since we're only checking if matchingLines is empty or not,
+                //  can ask pkb to just return a bool, instead of getting the whole set out
                 if (!matchingLines.empty()) {
                     patternSynonVals.push_back(lineNum);
 
@@ -213,23 +143,22 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         if (secondType == Utility::UNDERSCORE) {
 
-            for (string currFirstVal: currFirstSynonValues) {
+            for (const string& currFirstVal: currFirstSynonValues) {
                     vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
                     // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
-                    for (string numStr : lineNumVec) { // Each num is a possible value of pattern synon
+                    for (const string& numStr : lineNumVec) { // Each num is a possible value of pattern synon
                         tempResultTable.insertTuple({numStr, currFirstVal});
                     }
             }
 
         } else {
 
-            for (string currFirstVal: currFirstSynonValues) {
+            for (const string& currFirstVal: currFirstSynonValues) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromVar(currFirstVal);
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
                 if (!matchingLines.empty()) {
-                    for (string lineStr : matchingLines) {
+                    for (const string& lineStr : matchingLines) {
                         tempResultTable.insertTuple({lineStr, currFirstVal });
-
                     }
                 }
             }
@@ -250,8 +179,8 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         } else {
             set<vector<string>> allRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
-            set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
-            for (string lineStr : matchingLines) {
+            set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
+            for (const string& lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
             }
         }
@@ -265,6 +194,79 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
     return result;
 }
 
+
+// ------- Helper functions -----
+vector<string> PatternHandler::simplifiedTokenise(const string& input) {
+    vector<string> tokens;
+    std::string current_token;
+
+    for (char c : input) {
+        if (c == '+' || c == '-' || c == '*' || c == '/'
+            || c == '%' || c == '(' || c == ')') {
+            if (!current_token.empty()) {
+                tokens.push_back(current_token);
+                current_token.clear();
+            }
+            tokens.emplace_back(1, c);
+        } else if (isalnum(c)) {
+            current_token.push_back(c);
+        } else {
+            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
+        }
+    }
+
+    if (!current_token.empty()) {
+        tokens.push_back(current_token);
+    }
+    return tokens;
+}
+
+bool PatternHandler::isValidExprTerm(const string& token) {
+    return regex_match(token, regex(Utility::synonymFormat)) // SynonymFormat is the same as a legal var format in SIMPLE
+           || regex_match(token, regex(Utility::integerFormat));
+}
+
+
+vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
+    vector<string> result;
+    stack<string> s;
+    if (tokens.empty()) {
+        throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
+    }
+    // To prevent dangling operators like expr = "+2"
+    if (! (isValidExprTerm(tokens.front()) && isValidExprTerm(tokens.back()))) {
+        throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
+    }
+    for (const string& token : tokens) {
+        if (isValidExprTerm(token)) {
+            result.push_back(token);
+        } else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
+            while (!s.empty() && precedence(s.top()) >= precedence(token)) {
+                result.push_back(s.top());
+                s.pop();
+            }
+            s.push(token);
+        } else if (token == "(") {
+            s.push(token);
+        } else if (token == ")") {
+            while (s.top() != "(") {
+                result.push_back(s.top());
+                s.pop();
+            }
+            s.pop();
+        } else {
+            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
+        }
+    }
+    while (!s.empty()) {
+        if (s.top() == "(") {
+            throw PQLSyntaxError("PQL Syntax Error: Unclosed bracket in pattern expression");
+        }
+        result.push_back(s.top());
+        s.pop();
+    }
+    return result;
+}
 
 
 std::string PatternHandler::trimExpr(string input) {

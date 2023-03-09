@@ -72,6 +72,31 @@ void testPatternFillPkb2(PKB& pkb) {
     // Line7:  x = x - 1}
 }
 
+
+void testPatternFillPkb3(PKB& pkb) {
+    pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
+    pkb.addAllConsts(set<string>({"1", "2", "3", "4", "5"}));
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({1,2,4})));
+    stmts.insert(make_pair("read", set<int>({3})));
+    pkb.addAllStmts(stmts);
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({"x", "y", "4", "+", "+"}), "=");
+    Line line2 = Line(2, vector<string>({"1", "2", "+", "3", "+"}), "=");
+    Line line4 = Line(4, vector<string>({"1", "3", "5", "*", "+"}), "=");
+    patterns.insert(make_pair("k", set<Line>({line1})));
+    patterns.insert(make_pair("m", set<Line>({line2})));
+    patterns.insert(make_pair("x", set<Line>({line4})));
+    pkb.addAllAssignPatterns(patterns);
+
+    // Line1:  k = x + (y + 4)
+    // Line 2: m = 1 + 2 + 3;
+    // Line 3: read t;
+    // Line 4: x = 1 + 3 * 5
+}
+
 TEST_CASE("Tokeniser and ConvertToPostfix test") {
     PKB pkb;
     PatternHandler handler = PatternHandler(pkb);
@@ -275,13 +300,36 @@ TEST_CASE("patternHandler if test") {
 
 }
 
-TEST_CASE("PatternHandler with operators test 1") {
+TEST_CASE("PatternHandler assign with operators test 1") {
     PKB pkb;
-    testPatternFillPkb(pkb);
+    testPatternFillPkb3(pkb);
 
-    // Line1: k = x + y
-    // Line 2: m = 1 + 2;
+    // Line1:  k = x + (y + 4)
+    // Line 2: m = 1 + 2 + 3;
     // Line 3: read t;
-    // Line 4: x = 3
+    // Line 4: x = 1 + 3 * 5
 
+    string retStr1 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"x+y\"_)", pkb);
+    REQUIRE(retStr1 == "none");
+
+    string retStr2 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"y+4\"_)", pkb);
+    REQUIRE(retStr2 == "1");
+
+    string retStr3 = TestUtility::testDriver("assign a; Select a pattern a (_,\"y+4\")", pkb);
+    REQUIRE(retStr3 == "none");
+
+    string retStr4 = TestUtility::testDriver("assign a; Select a pattern a (_,_\"1+2\"_)", pkb);
+    REQUIRE(retStr4 == "2");
+
+    string retStr8 = TestUtility::testDriver("assign a; Select a pattern a (_,\"1+2\")", pkb);
+    REQUIRE(retStr8 == "none");
+
+    string retStr5 = TestUtility::testDriver("assign a; variable b; Select b pattern a (b,\"1+2+3\")", pkb);
+    REQUIRE(retStr5 == "m");
+
+    string retStr6 = TestUtility::testDriver("assign a; Select a pattern a (\"x\",_\"1+3\"_)", pkb);
+    REQUIRE(retStr6 == "none");
+
+    string retStr7 = TestUtility::testDriver("assign a; Select a pattern a (\"x\",_\"3*5\"_)", pkb);
+    REQUIRE(retStr7 == "4");
 }
