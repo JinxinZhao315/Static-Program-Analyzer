@@ -6,7 +6,7 @@ none
 2 - usesp
 procedure p;
 Select p such that Uses(p, "b")
-proc1, proc2, proc3
+proc1, proc2, proc3, proc5
 5000
 2 - usesp
 procedure p;
@@ -36,7 +36,7 @@ proc1
 8 - modifiesp
 procedure p;
 Select p such that Modifies(p, "w")
-proc1, proc2, proc3, proc4
+proc1, proc2, proc3, proc4, proc5
 5000
 9 - modifiesp
 variable v;
