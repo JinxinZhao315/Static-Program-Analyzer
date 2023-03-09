@@ -201,7 +201,9 @@ vector<string> PatternHandler::simplifiedTokenise(const string& input) {
     std::string current_token;
 
     for (char c : input) {
-        if (c == '+' || c == '-' || c == '*' || c == '/'
+        if (c == ' ' || c == '\t' || c == '\n') {
+            continue;
+        } else if (c == '+' || c == '-' || c == '*' || c == '/'
             || c == '%' || c == '(' || c == ')') {
             if (!current_token.empty()) {
                 tokens.push_back(current_token);
