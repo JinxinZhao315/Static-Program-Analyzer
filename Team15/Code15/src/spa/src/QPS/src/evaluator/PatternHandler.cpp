@@ -19,25 +19,85 @@ set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, set<vector
 
 }
 
+vector<string> PatternHandler::simplifiedTokenise(string input) {
+    vector<string> tokens;
+    std::string current_token;
 
-// This implementation is only for MS1 since there's no operators in pattern right arg
-vector<string> PatternHandler::tokenise(string input) {
-    vector<string> ret;
-    ret.push_back(input);
-    return ret;
+    for (int i = 0; i < input.size(); i++) {
+        char c = input[i];
+        if (c == '+' || c == '-' || c == '*' || c == '/'
+            || c == '%' || c == '(' || c == ')') {
+            if (!current_token.empty()) {
+                tokens.push_back(current_token);
+                current_token.clear();
+            }
+            tokens.emplace_back(1, c);
+        } else if (isalnum(c)) {
+            current_token.push_back(c);
+        } else {
+            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
+        }
+    }
 
+    if (!current_token.empty()) {
+        tokens.push_back(current_token);
+    }
+    return tokens;
 }
 
-// This implementation is only for MS1 since there's no operators in pattern right arg
-vector<string> PatternHandler::convertToPostfix(vector<string> inputVec, int startIndex) {
-    return inputVec;
+bool PatternHandler::isValidExprTerm(string token) {
+    return regex_match(token, regex(Utility::synonymFormat)) // SynonymFormat is the same as a legal var format in SIMPLE
+           || regex_match(token, regex(Utility::integerFormat));
 }
 
 
-bool PatternHandler::findIsMatch( bool isPartialMatch, vector<string> rhsTokensVec, string substrToMatch) {
+vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
+    vector<string> result;
+    stack<string> s;
+    if (tokens.empty()) {
+        throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
+    }
+    // To prevent dangling operators like expr = "+2"
+    if (! (isValidExprTerm(tokens.front()) && isValidExprTerm(tokens.back()))) {
+        throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
+    }
+    for (string token : tokens) {
+        if (isValidExprTerm(token)) {
+            result.push_back(token);
+        } else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
+            while (!s.empty() && precedence(s.top()) >= precedence(token)) {
+                result.push_back(s.top());
+                s.pop();
+            }
+            s.push(token);
+        } else if (token == "(") {
+            s.push(token);
+        } else if (token == ")") {
+            while (s.top() != "(") {
+                result.push_back(s.top());
+                s.pop();
+            }
+            s.pop();
+        } else {
+            throw PQLSyntaxError("PQL Syntax Error: Invalid symbol in pattern expression");
+        }
+    }
+    while (!s.empty()) {
+        if (s.top() == "(") {
+            throw PQLSyntaxError("PQL Syntax Error: Unclosed bracket in pattern expression");
+        }
+        result.push_back(s.top());
+        s.pop();
+    }
+    return result;
+}
+
+
+
+bool PatternHandler::findIsMatch(bool isPartialMatch, vector<string> rhsTokensVec, string substrToMatch) {
     string trimmed = trimExpr(substrToMatch);
-    vector<string> substrTokens = tokenise(trimmed);
-    vector<string> substrPostfix = convertToPostfix(substrTokens, 0);
+    vector<string> substrTokens = simplifiedTokenise(trimmed);
+    vector<string> substrPostfix = simplifiedConvertToPostfix(substrTokens);
     if (!isPartialMatch) {
         return rhsTokensVec == substrPostfix;
     } else {
@@ -67,16 +127,29 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
     return false;
 }
 
-set<int> PatternHandler::getPatternFromPkb(string patternSynonType, string arg) {
+vector<string> PatternHandler::getStmtsFromPkb(string patternSynonType, string arg, string type) {
     set<int> lineNumSet;
-    if (patternSynonType == "assign") {
-        lineNumSet = pkb.getAssignStmtsFromVar(arg);
-    } else if (patternSynonType == "while") {
-        lineNumSet = pkb.getWhileStmtsFromVar(arg);
-    } else { // if (patternSynonType == "if")
-        lineNumSet = pkb.getIfStmtsFromVar(arg);
+    vector<string> strVec;
+    if (type == GET_FROM_VAR) {
+        if (patternSynonType == "assign") {
+            lineNumSet = pkb.getAssignStmtsFromVar(arg);
+        } else if (patternSynonType == "while") {
+            lineNumSet = pkb.getWhileStmtsFromVar(arg);
+        } else { // if (patternSynonType == "if")
+            lineNumSet = pkb.getIfStmtsFromVar(arg);
+        }
+    } else { // type == GET_ALL
+        if (patternSynonType == "while") {
+            lineNumSet = pkb.getWhileStmtsWithVars();
+        } else { // if (patternSynonType == "if")
+            lineNumSet = pkb.getIfStmtsWithVars();
+        }
     }
-    return lineNumSet;
+
+    for (int num : lineNumSet) {
+        strVec.push_back(to_string(num));
+    }
+    return strVec;
 }
 
 
@@ -106,9 +179,13 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         std::vector<std::string> patternSynonVals;
 
         if (secondType == Utility::UNDERSCORE) {
-
-            // result maintains current values of patternSynon
-            patternSynonVals = resultTable.getSynValues(patternSynon);
+            if (patternType == "assign") {
+                // result maintains current values of patternSynon, which is a assign synon
+                // No need to call PKB since all eligible assign synon values are already in resultTable
+                patternSynonVals = resultTable.getSynValues(patternSynon);
+            } else {
+                patternSynonVals = getStmtsFromPkb(patternType, "", GET_ALL);
+            }
 
         } else {
             std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
@@ -137,10 +214,9 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         if (secondType == Utility::UNDERSCORE) {
 
             for (string currFirstVal: currFirstSynonValues) {
-                    set<int> lineNumSet = getPatternFromPkb(patternType, currFirstVal);
-                    // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal ( a variable)
-                    for (int num : lineNumSet) { // Each num is a possible value of pattern synon
-                        string numStr = to_string(num);
+                    vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
+                    // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
+                    for (string numStr : lineNumVec) { // Each num is a possible value of pattern synon
                         tempResultTable.insertTuple({numStr, currFirstVal});
                     }
             }
@@ -148,8 +224,8 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
         } else {
 
             for (string currFirstVal: currFirstSynonValues) {
-                set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(currFirstVal);
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, matchingRHS, secondArg);
+                set<vector<string>> allRHS = pkb.getAssignExprsFromVar(currFirstVal);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
                 if (!matchingLines.empty()) {
                     for (string lineStr : matchingLines) {
                         tempResultTable.insertTuple({lineStr, currFirstVal });
@@ -169,15 +245,12 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
 
         if (secondType == Utility::UNDERSCORE) {
 
-            set<int> lineNumSet = getPatternFromPkb(patternType, firstArgTrimmed);
+            patternSynonVals = getStmtsFromPkb(patternType, firstArgTrimmed, GET_FROM_VAR);
             // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
-            for (int num : lineNumSet) {
-                patternSynonVals.push_back(to_string(num));
-            }
 
         } else {
-            set<vector<string>> matchingRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
-            set<string> matchingLines = findMatchingLineNums(isPartialMatch, matchingRHS, secondArg);
+            set<vector<string>> allRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
+            set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArg);
             for (string lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
             }

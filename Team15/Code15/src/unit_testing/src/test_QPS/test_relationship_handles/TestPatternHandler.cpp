@@ -1,5 +1,6 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
+#include "exceptions/PQLSyntaxError.h"
 #include "TestUtility.h"
 
 #include "catch.hpp"
@@ -69,6 +70,32 @@ void testPatternFillPkb2(PKB& pkb) {
     // Line 5: y = y - 1}
     // Line 6: while ( x > 0) {
     // Line7:  x = x - 1}
+}
+
+TEST_CASE("Tokeniser and ConvertToPostfix test") {
+    PKB pkb;
+    PatternHandler handler = PatternHandler(pkb);
+    string input = "aa+bb*cc+dd";
+    vector<string> tokens = handler.simplifiedTokenise(input);
+    vector<string> result = handler.simplifiedConvertToPostfix(tokens);
+    vector<string> expected = {"aa", "bb", "cc", "*", "+", "dd", "+"};
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("Tokeniser and ConvertToPostfix test throw error") {
+    PKB pkb;
+    PatternHandler handler = PatternHandler(pkb);
+
+    string input = "+bb*cc+dd";
+    vector<string> tokens = handler.simplifiedTokenise(input);
+    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens), PQLSyntaxError);
+
+    string input2 = "bb*cc+(dd";
+    vector<string> tokens2 = handler.simplifiedTokenise(input2);
+    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens2), PQLSyntaxError);
+
+    string input3 = "{aa+bb*cc}+dd";
+    REQUIRE_THROWS_AS(handler.simplifiedTokenise(input3), PQLSyntaxError);
 }
 
 TEST_CASE("PatternHandler a(_,_) test empty pkb") {
@@ -245,5 +272,16 @@ TEST_CASE("patternHandler if test") {
 
     string retStr4 = TestUtility::testDriver("if i; Select i pattern i (\"t\",_)", pkb);
     REQUIRE(retStr4 == "SyntaxError");
+
+}
+
+TEST_CASE("PatternHandler with operators test 1") {
+    PKB pkb;
+    testPatternFillPkb(pkb);
+
+    // Line1: k = x + y
+    // Line 2: m = 1 + 2;
+    // Line 3: read t;
+    // Line 4: x = 3
 
 }
