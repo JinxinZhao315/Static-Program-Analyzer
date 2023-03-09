@@ -1,0 +1,10 @@
+procedure proc1 {
+//1  if (1 == 2) then {
+//2    while (3 == 4) {
+//3      x = 1; } }
+  else {
+//4    if (x == 1) then {
+//5      while (y == x) {
+//6        z = 2; } }
+    else {
+//7      y = 3; } } }
