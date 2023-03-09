@@ -23,4 +23,3 @@ int precedence(const string& c);
 bool isOperator(string c);
 bool isNumber(const string& num);
 vector<string> convertToPostfix(const vector<string>& tokens, const set<string>& variables);
-vector<string> simplifiedTokenise(string input);

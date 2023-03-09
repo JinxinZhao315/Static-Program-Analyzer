@@ -33,6 +33,13 @@ string source3_filename = "../../../../../../Tests15/source3.txt";
 string source4_filename = "../../../../../../Tests15/source4.txt";
 string source7_filename = "../../../../../../Tests15/source7.txt";
 
+//string sample_source2 = "../../../../Tests15/Sample_source2.txt";
+//string source1_filename = "../../../../Tests15/source1.txt";
+//string source2_filename = "../../../../Tests15/source2.txt";
+//string source3_filename = "../../../../Tests15/source3.txt";
+//string source4_filename = "../../../../Tests15/source4.txt";
+//string source7_filename = "../../../../Tests15/source7.txt";
+
 TEST_CASE("Overall test : Sample_source2.txt 0") {
     // Enter source of SIMPLE code
     string filename = sample_source2;
@@ -318,11 +325,23 @@ TEST_CASE("Overall test : source2.txt 6") {
 TEST_CASE("Overall test : source2.txt 7") {
     // Enter source of SIMPLE code
     string filename = source2_filename;
-    string queryStr = "assign a; Select a pattern a(\"w\", _\"b\"_)";
 
-    set<string> result = testDriver(filename, queryStr);
+    set<string> result = testDriver(filename, "assign a; Select a pattern a(\"w\", _\"b\"_)");
     set<string> expectedResult = { "14", "22" };
     REQUIRE(result == expectedResult);
+
+    set<string> result1 = testDriver(filename, "assign a; Select a pattern a(\"w\", \"b\")");
+    set<string> expectedResult1 = { };
+    REQUIRE(result1 == expectedResult1);
+
+    set<string> result2 = testDriver(filename, "assign a; Select a pattern a(_, \"0\")");
+    set<string> expectedResult2 = {"1", "2", "3", "4", "5", "18"};
+    REQUIRE(result2 == expectedResult2);
+
+    set<string> result3 = testDriver(filename, "assign a; variable v; Select v pattern a(v, \"0\")");
+    set<string> expectedResult3 = { "v", "w", "x", "y", "z", "count" };
+    REQUIRE(result3 == expectedResult3);
+
 }
 
 TEST_CASE("Overall test : source2.txt 8") {

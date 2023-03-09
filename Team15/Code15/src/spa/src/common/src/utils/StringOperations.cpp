@@ -97,32 +97,3 @@ vector<string> convertToPostfix(const vector<string>& tokens, const set<string>&
     return result;
 }
 
-vector<string> simplifiedTokenise(string input) {
-    vector<string> tokens;
-    std::string current_token;
-
-    for (int i = 0; i < input.size(); i++) {
-        char c = input[i];
-        if (c == ';') {
-            continue;
-        } else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '=') {
-            if (!current_token.empty()) {
-                tokens.push_back(current_token);
-                current_token.clear();
-            }
-            tokens.emplace_back(1, c);
-        } else if (isalnum(c)) {
-            current_token.push_back(c);
-        } else {
-            if (!current_token.empty()) {
-                tokens.push_back(current_token);
-                current_token.clear();
-            }
-        }
-    }
-
-    if (!current_token.empty()) {
-        tokens.push_back(current_token);
-    }
-    return tokens;
-}
