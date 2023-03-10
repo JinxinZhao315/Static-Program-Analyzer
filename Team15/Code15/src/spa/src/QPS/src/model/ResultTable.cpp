@@ -139,20 +139,58 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> selectedSynNames) {
-    if (selectedSynNames.size() > 1) {
+std::string ResultTable::getElemValue(int synIndex, int colIndex, Elem elem, PKB &pkb) {
+    //attrbute is in the table
+    if (elem.isElemSynonym() || elem.getAttrName() == "stmt#" || elem.getAttrName() == "value") {
+        return resultTable[synIndex][colIndex];
+    }
+    else if (elem.getAttrSynType() == "call") {
+        int callLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
+        if (calledProcName == "-1") {
+            //should throw error
+        }
+        return calledProcName;
+    }
+    else if (elem.getAttrSynType() == "read") {
+        int readLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
+        if (readVarName == "-1") {
+            //should throw error
+        }
+        return readVarName;
+    }
+    else if (elem.getAttrSynType() == "print") {
+        int printLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
+        if (printVarName == "-1") {
+            //should throw error
+        }
+        return printVarName;
+    }
+}
+
+std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb) {
+    if (selectedElem.size() > 1) {
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
-        for (int i = 0; i < selectedSynNames.size(); i++) {
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedSynNames[i]);
+        for (int i = 0; i < selectedElem.size(); i++) {
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[i].getSynName());
             synNameIndex.push_back(it - synList.begin());
         }
 
         std::set<std::string> multiSynResult;
         for (int i = 0; i < colNum; i++) {
             std::string tuple;
-            for (int j = 0; j < selectedSynNames.size(); j++) {
-                tuple += resultTable[synNameIndex[j]][i] + " ";
+            for (int j = 0; j < selectedElem.size(); j++) {
+                tuple += getElemValue(synNameIndex[j], i, selectedElem[j], pkb);
+                //if (selectedElem[j].isElemSynonym()) {
+                //    tuple += resultTable[synNameIndex[j]][i] + " ";
+                //}
+                //else {
+                //    tuple += getAttrValue()
+                //}
+                
             }
             //pop the last white space
             tuple.pop_back();
@@ -160,11 +198,15 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> se
         }
         return multiSynResult;
     }
-    else if (selectedSynNames.size() == 1) {
-        //BOOLEAN is a synonym
-        if (selectedSynNames[0] != "BOOLEAN" || isSynExist("BOOLEAN")) {
-            std::vector<std::string> selectedSynVec = getSynValues(selectedSynNames[0]);
-            std::set<std::string> selectedSynResult(selectedSynVec.begin(), selectedSynVec.end());
+    else if (selectedElem.size() == 1) {
+        //not BOOLEAN or BOOLEAN is a synonym
+        if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
+            int synIndex = it - synList.begin();
+            std::set<std::string> selectedSynResult;
+            for (int i = 0; i < colNum; i++) {
+                selectedSynResult.insert(getElemValue(synIndex, i, selectedElem[0], pkb));
+            }
             return selectedSynResult;
         }
         //BOOLEAN is BOOLEAN

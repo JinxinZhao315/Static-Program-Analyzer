@@ -25,7 +25,7 @@ public:
 		std::vector<SuchThatClause>& suchThatClauseVec,
 		std::vector<PatternClause>& patternClauseVec);
 	std::multimap<std::string, std::string> tokenizeDeclaration(std::string declaration);
-	void tokenizeSelectClause(std::string& input, SelectClause& selectClause);
+	void tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, SelectClause& selectClause);
 	void tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec);
 	void tokenizePatternClause(std::string& input, std::multimap<std::string, std::string> varTable, std::vector<PatternClause>& patternClauseVec);
 

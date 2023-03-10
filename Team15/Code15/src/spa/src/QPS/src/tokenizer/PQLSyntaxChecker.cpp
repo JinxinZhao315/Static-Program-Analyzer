@@ -69,3 +69,10 @@ bool PQLSyntaxChecker::validateEntRef(std::string input) {
             type == Utility::QUOTED_IDENT;
 }
 
+bool PQLSyntaxChecker::validateAttrRef(std::string input) {
+        std::size_t periodIndex = input.find_first_of(".");
+        std::string synName = input.substr(0, periodIndex);
+        std::string attrName = input.substr(periodIndex + 1);
+        //synonym is valid, attrName is valid
+        return validateSynonym(synName) && (Utility::attrNameSet.find(attrName) != Utility::attrNameSet.end());
+}

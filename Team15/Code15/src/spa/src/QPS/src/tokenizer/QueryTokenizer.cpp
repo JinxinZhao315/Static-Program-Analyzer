@@ -57,7 +57,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 	if (keyword != "Select") {
 		throw PQLSyntaxError("PQL syntax error: No 'select' keyword");
 	}
-	tokenizeSelectClause(input, selectClause);
+	tokenizeSelectClause(input, varTable, selectClause);
 	while (input.length() != 0) {
 		keyword = extractKeyword(input);
 		if (keyword == "such") {
@@ -72,36 +72,54 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 	}
 }
 
-void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& selectClause) {
-	std::size_t synonymEndIndex = input.find_first_of(Utility::WHITESPACES);
-	std::vector<std::string> synList;
+void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, 
+	SelectClause& selectClause) {
+	std::size_t elemEndIndex = input.find_first_of(Utility::WHITESPACES);
+	std::vector<std::string> elemStrList;
+	//multi clause
 	if (input.size() > 0 && input[0] == '<') {
-
-		size_t rightAnglePos = input.find(">");
+		size_t rightAnglePos = input.find_first_of(">");
 		if (rightAnglePos == std::string::npos) {
-			throw PQLSyntaxError("PQL syntax error: Invalid synonym list");
+			throw PQLSyntaxError("PQL syntax error: Invalid multi-element list format in select clause");
 		}
-		synList = tokenizeCsv(input.substr(1, rightAnglePos - 1));
+		elemStrList = tokenizeCsv(input.substr(1, rightAnglePos - 1));
 		input = Utility::trim(input.substr(rightAnglePos + 1), Utility::WHITESPACES);
 	}
-	//single clause, no whitespace on the left, so no other clauses except Select
-	else if (synonymEndIndex == std::string::npos) {
-		if (!syntaxChecker.validateSynonym(input)) {
-			throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		};
-		synList.push_back(input);
+	//single clause, no whitespace on the left, so no other clauses except Select single element
+	else if (elemEndIndex == std::string::npos) {
+		//if (!syntaxChecker.validateSynonym(input)) {
+		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
+		//};
+		elemStrList.push_back(input);
 		input = "";
 	}
+	//single clause, but other restriction after the select clause
 	else {
-		std::string synonym = input.substr(0, synonymEndIndex);
-		if (!syntaxChecker.validateSynonym(synonym)) {
-			throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		};
-		synList.push_back(synonym);
-		input = Utility::trim(input.substr(synonymEndIndex + 1), Utility::WHITESPACES);
+		std::string elem = input.substr(0, elemEndIndex);
+		//if (!syntaxChecker.validateSynonym(synonym)) {
+		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
+		//};
+		elemStrList.push_back(elem);
+		input = Utility::trim(input.substr(elemEndIndex + 1), Utility::WHITESPACES);
+	}
+	std::vector<Elem> elemList;
+	for (std::string elemStr : elemStrList) {
+		if (syntaxChecker.validateAttrRef(elemStr)) {
+			std::size_t periodIndex = elemStr.find_first_of(".");
+			std::string synName = elemStr.substr(0, periodIndex);
+			std::string attrName = elemStr.substr(periodIndex + 1);
+			Elem elem(AttrRef(synName, varTable.find(synName)->second, attrName));
+		}
+		else if (syntaxChecker.validateSynonym(elemStr)) {
+			Elem elem(elemStr);
+			elemList.push_back(elem);
+		}
+		else {
+			throw PQLSyntaxError("PQL syntax error: Invalid element format in Select Clause");
+		}
 	}
 	
-	selectClause = SelectClause(synList);
+	selectClause = SelectClause(elemList);
 }
 
 void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec) {

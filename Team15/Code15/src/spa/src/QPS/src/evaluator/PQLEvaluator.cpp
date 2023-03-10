@@ -12,7 +12,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     SelectHandler selectHandler = SelectHandler(pkb);
 
 
-    std::vector<std::string> selectedVarNames = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    std::vector<Elem> selectedVarNames = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
@@ -190,7 +190,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     }
 
 
-    set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames);
+    set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames, pkb);
 
     return retSet;
 }
