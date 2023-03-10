@@ -398,6 +398,10 @@ bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
 	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
 }
 
+void PKB::clearNextStarTable() {
+	nextStarTable.clearMaps();
+}
+
 //QPS affects
 std::set<int> PKB::getAffectsModifierNums(int userNum) {
 	return affectsTable.getManyLeft(userNum);
@@ -411,6 +415,10 @@ bool PKB::areInAffectsRelationship(int modifierNum, int userNum) {
 	return affectsTable.inOneToManyRelationship(modifierNum, userNum);
 }
 
+void PKB::clearAffectsTable() {
+	affectsTable.clearMaps();
+}
+
 //QPS affects*
 std::set<int> PKB::getAffectsStarModifierNums(int userNum) {
 	return affectsStarTable.getManyLeft(userNum);
@@ -422,6 +430,10 @@ std::set<int> PKB::getAffectsStarUserNums(int modifierNum) {
 
 bool PKB::areInAffectsStarRelationship(int modifierNum, int userNum) {
 	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
+}
+
+void PKB::clearAffectsStarTable() {
+	affectsStarTable.clearMaps();
 }
 
 //QPS with read

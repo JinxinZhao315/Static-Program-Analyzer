@@ -101,6 +101,13 @@ public:
 		return leftToOneRightMap.empty() && rightToOneLeftMap.empty() && leftToManyRightMap.empty() && rightToManyLeftMap.empty();
 	}
 
+	inline void clearMaps() {
+		clearLeftToOneRightMap();
+		clearRightToOneLeftMap();
+		clearLeftToManyRightMap();
+		clearRightToManyLeftMap();
+	}
+
 private:
 	std::unordered_map<L, R> leftToOneRightMap;
 	std::unordered_map<R, L> rightToOneLeftMap;
@@ -161,5 +168,21 @@ private:
 				addRightToOneLeft(left, right);
 			}
 		}
+	}
+
+	inline void clearLeftToOneRightMap() {
+		leftToOneRightMap.clear();
+	}
+
+	inline void clearRightToOneLeftMap() {
+		rightToOneLeftMap.clear();
+	}
+
+	inline void clearLeftToManyRightMap() {
+		leftToManyRightMap.clear();
+	}
+
+	inline void clearRightToManyLeftMap() {
+		rightToManyLeftMap.clear();
 	}
 };

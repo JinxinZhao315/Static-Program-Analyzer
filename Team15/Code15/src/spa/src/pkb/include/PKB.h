@@ -218,6 +218,8 @@ public:
 
 	bool areInNextStarRelationship(int previousNum, int nextNum);
 
+	void clearNextStarTable();
+
 	//QPS affects
 	std::set<int> getAffectsModifierNums(int userNum);
 
@@ -225,12 +227,16 @@ public:
 
 	bool areInAffectsRelationship(int modifierNum, int userNum);
 
+	void clearAffectsTable();
+
 	//QPS affects*
 	std::set<int> getAffectsStarModifierNums(int userNum);
 
 	std::set<int> getAffectsStarUserNums(int modifierNum);
 
 	bool areInAffectsStarRelationship(int modifierNum, int userNum);
+
+	void clearAffectsStarTable();
 
 	//QPS with read
 	std::string getWithReadVarName(int readLineNum, std::string invalidVarName);
