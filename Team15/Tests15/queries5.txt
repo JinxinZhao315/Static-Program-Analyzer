@@ -63,3 +63,204 @@ assign a; variable v1, v2;
 Select v1 such that Uses(8, v2) pattern a(v1, _"7"_)
 c
 5000
+14 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, "g - b / c")
+a
+5000
+15 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, _"g - b / c"_)
+a
+5000
+16 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, "g - b")
+none
+5000
+17 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, _"g - b"_)
+none
+5000
+18 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, "b / c")
+none
+5000
+19 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(v, _"b / c"_)
+a
+5000
+20 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, "g - b / c")
+a, b, c, d, e, f, g
+5000
+21 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, _"g - b / c"_)
+a, b, c, d, e, f, g
+5000
+22 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, "g - b")
+none
+5000
+23 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, _"g - b"_)
+none
+5000
+24 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, "b / c")
+none
+5000
+25 - assign pattern with operators
+assign a; variable v;
+Select v pattern a(_, _"b / c"_)
+a, b, c, d, e, f, g
+5000
+26 - assign pattern with operators
+assign a;
+Select a pattern a("a", "g - b / c")
+8
+5000
+27 - assign pattern with operators
+assign a;
+Select a pattern a("a", _"g - b / c"_)
+8
+5000
+28 - assign pattern with operators
+assign a; 
+Select a pattern a("a", "g - b")
+none
+5000
+29 - assign pattern with operators
+assign a;
+Select a pattern a("a", _"g - b"_)
+none
+5000
+30 - assign pattern with operators
+assign a;
+Select a pattern a("a", "b / c")
+none
+5000
+31 - assign pattern with operators
+assign a;
+Select a pattern a("a", _"b / c"_)
+8
+5000
+32 - assign pattern with operators
+assign a;
+Select a pattern a("b", "g - b / c")
+none
+5000
+33 - assign pattern with operators
+assign a;
+Select a pattern a("b", _"g - b / c"_)
+none
+5000
+34 - assign pattern with operators
+assign a;
+Select a pattern a("b", _"b / c"_)
+none
+5000
+35 - assign pattern with operators
+assign a;
+Select a such that Follows(16, a) pattern a("d", _"f - g"_)
+17
+5000
+36 - assign pattern with operators
+assign a;
+Select a such that Follows(a, 18) pattern a("d", _"f - g"_)
+17
+5000
+37 - assign pattern with operators
+assign a;
+Select a such that Follows*(15, a) pattern a("g", _"b + c"_)
+20
+5000
+38 - assign pattern with operators
+assign a;
+Select a such that Follows*(a, 20) pattern a("a", _"2 + a"_)
+15
+5000
+39 - assign pattern with operators
+assign a;
+Select a such that Parent(11, a) pattern a("d", _"e / f"_)
+14
+5000
+40 - assign pattern with operators
+assign a; stmt s;
+Select s such that Parent(s, a) pattern a("d", _"e / f"_)
+11
+5000
+41 - assign pattern with operators
+assign a;
+Select a such that Parent*(10, a) pattern a("f", _"c * d"_)
+19
+5000
+42 - assign pattern with operators
+assign a; stmt s;
+Select s such that Parent*(s, a) pattern a("f", _"c * d"_)
+10, 11
+5000
+43 - assign pattern with operators
+assign a; variable v;
+Select v such that Uses(8, v) pattern a(v, _"b + c"_)
+g
+5000
+44 - assign pattern with operators
+assign a; stmt s;
+Select a such that Follows(16, s) pattern a("a", _"2 + a"_)
+15
+5000
+45 - assign pattern with operators
+assign a; stmt s;
+Select a such that Follows(16, 18) pattern a("a", _"2 + a"_)
+none
+5000
+46 - assign pattern with operators
+assign a; stmt s;
+Select a such that Follows*(15, s) pattern a("c", _"7 * a"_)
+16
+5000
+47 - assign pattern with operators
+assign a; stmt s;
+Select a such that Follows*(15, s) pattern a("c", _"f - g"_)
+none
+5000
+48 - assign pattern with operators
+assign a; stmt s;
+Select a such that Parent(11, s) pattern a("b", _"1 + b"_)
+13
+5000
+49 - assign pattern with operators
+assign a; stmt s;
+Select a such that Parent(11, s) pattern a("d", _"1 + b"_)
+none
+5000
+50 - assign pattern with operators
+assign a; stmt s;
+Select a such that Parent*(10, s) pattern a("e", _"b * c"_)
+18
+5000
+51 - assign pattern with operators
+assign a; stmt s;
+Select a such that Parent*(10, 8) pattern a("e", _"b * c"_)
+none
+5000
+52 - assign pattern with operators
+assign a; variable v1, v2;
+Select v1 such that Modifies(9, v2) pattern a(v1, "a + b * c - d")
+e
+5000
+53 - assign pattern with operators
+assign a; variable v;
+Select v such that Modifies(9, "b") pattern a(v, "a + b * c - d")
+none
+5000
+
