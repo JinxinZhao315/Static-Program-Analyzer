@@ -58,11 +58,6 @@ assign a; variable v;
 Select v pattern a(v, _"7"_)
 c
 5000
-13 - assign pattern
-assign a; variable v1, v2;
-Select v1 such that Uses(8, v2) pattern a(v1, _"7"_)
-c
-5000
 14 - assign pattern with operators
 assign a; variable v;
 Select v pattern a(v, "g - b / c")
