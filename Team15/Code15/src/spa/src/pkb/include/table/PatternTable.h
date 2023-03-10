@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "common/include/models/Line.h"
+#include "pkb/include/table/VectorHasher.h"
 
 class PatternTable {
 public:
