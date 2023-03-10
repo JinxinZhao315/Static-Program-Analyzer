@@ -72,6 +72,15 @@ public:
 	//SP affects*
 	void addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
+	//SP with read
+	void addAllWithRead(unordered_map<int, std::string> readLineNumToVarName);
+
+	//SP with print
+	void addAllWithPrint(unordered_map<int, std::string> printLineNumToVarName);
+
+	//SP with call
+	void addAllWithCall(unordered_map<int, std::string> callLineNumToProcName);
+
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
 
@@ -209,19 +218,28 @@ public:
 
 	bool areInNextStarRelationship(int previousNum, int nextNum);
 
-	//SP affects
+	//QPS affects
 	std::set<int> getAffectsModifierNums(int userNum);
 
 	std::set<int> getAffectsUserNums(int modifierNum);
 
 	bool areInAffectsRelationship(int modifierNum, int userNum);
 
-	//SP affects*
+	//QPS affects*
 	std::set<int> getAffectsStarModifierNums(int userNum);
 
 	std::set<int> getAffectsStarUserNums(int modifierNum);
 
 	bool areInAffectsStarRelationship(int modifierNum, int userNum);
+
+	//QPS with read
+	std::string getWithReadVarName(int readLineNum, std::string invalidVarName);
+
+	//QPS with print
+	std::string getWithPrintVarName(int printLineNum, std::string invalidVarName);
+
+	//QPS with call
+	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
 
 private:
 	EntityTable<std::string> procTable;
@@ -245,4 +263,7 @@ private:
 	RelationshipTable<int, int> nextStarTable;
 	RelationshipTable<int, int> affectsTable;
 	RelationshipTable<int, int> affectsStarTable;
+	RelationshipTable<int, std::string> withReadTable;
+	RelationshipTable<int, std::string> withPrintTable;
+	RelationshipTable<int, std::string> withCallTable;
 };

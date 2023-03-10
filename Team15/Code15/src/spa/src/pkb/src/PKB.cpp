@@ -128,6 +128,21 @@ void PKB::addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierTo
 	affectsStarTable.addAllOneToManyRelationships(allModifierToUsers);
 }
 
+//SP with read
+void PKB::addAllWithRead(unordered_map<int, std::string> readLineNumToVarName) {
+	withReadTable.addAllOneToOneRelationships(readLineNumToVarName);
+}
+
+//SP with print
+void PKB::addAllWithPrint(unordered_map<int, std::string> printLineNumToVarName) {
+	withPrintTable.addAllOneToOneRelationships(printLineNumToVarName);
+}
+
+//SP with call
+void PKB::addAllWithCall(unordered_map<int, std::string> callLineNumToProcName) {
+	withCallTable.addAllOneToOneRelationships(callLineNumToProcName);
+}
+
 //QPS procedure
 std::set<std::string> PKB::getAllProcNames() {
 	return procTable.getAllEntities();
@@ -383,7 +398,7 @@ bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
 	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
 }
 
-//SP affects
+//QPS affects
 std::set<int> PKB::getAffectsModifierNums(int userNum) {
 	return affectsTable.getManyLeft(userNum);
 }
@@ -396,7 +411,7 @@ bool PKB::areInAffectsRelationship(int modifierNum, int userNum) {
 	return affectsTable.inOneToManyRelationship(modifierNum, userNum);
 }
 
-//SP affects*
+//QPS affects*
 std::set<int> PKB::getAffectsStarModifierNums(int userNum) {
 	return affectsStarTable.getManyLeft(userNum);
 }
@@ -407,4 +422,19 @@ std::set<int> PKB::getAffectsStarUserNums(int modifierNum) {
 
 bool PKB::areInAffectsStarRelationship(int modifierNum, int userNum) {
 	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
+}
+
+//QPS with read
+std::string PKB::getWithReadVarName(int readLineNum, std::string invalidVarName) {
+	return withReadTable.getOneRight(readLineNum, invalidVarName);
+}
+
+//QPS with print
+std::string PKB::getWithPrintVarName(int printLineNum, std::string invalidVarName) {
+	return withPrintTable.getOneRight(printLineNum, invalidVarName);
+}
+
+//QPS with call
+std::string PKB::getWithCallProcName(int callLineNum, std::string invalidProcName) {
+	return withCallTable.getOneRight(callLineNum, invalidProcName);
 }
