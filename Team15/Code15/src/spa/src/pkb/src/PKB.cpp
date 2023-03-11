@@ -116,16 +116,19 @@ void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) 
 //SP next*
 void PKB::addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
 	nextStarTable.addAllOneToManyRelationships(allPreviousToNexts);
+	nextStarTable.setToReady();
 }
 
 //SP affects
 void PKB::addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers) {
 	affectsTable.addAllOneToManyRelationships(allModifierToUsers);
+	affectsTable.setToReady();
 }
 
 //SP affects*
-void PKB::addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers) {
+void PKB::addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers) {
 	affectsStarTable.addAllOneToManyRelationships(allModifierToUsers);
+	affectsStarTable.setToReady();
 }
 
 //SP with read
@@ -387,53 +390,83 @@ bool PKB::areInNextRelationship(int previousNum, int nextNum) {
 
 //QPS next*
 std::set<int> PKB::getNextStarPreviousNums(int nextNum) {
-	return nextStarTable.getManyLeft(nextNum);
+	if (nextStarTable.checkReadiness()) {
+		return nextStarTable.getManyLeft(nextNum);
+	}
+	return nextStarTable.getManyLeft(nextNum);//TODO
 }
 
 std::set<int> PKB::getNextStarNextNums(int previousNum) {
-	return nextStarTable.getManyRight(previousNum);
+	if (nextStarTable.checkReadiness()) {
+		return nextStarTable.getManyRight(previousNum);
+	}
+	return nextStarTable.getManyRight(previousNum);//TODO
 }
 
 bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
-	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
+	if (nextStarTable.checkReadiness()) {
+		return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
+	}
+	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);//TODO
 }
 
 void PKB::clearNextStarTable() {
 	nextStarTable.clearMaps();
+	nextStarTable.setToUnready();
 }
 
 //QPS affects
 std::set<int> PKB::getAffectsModifierNums(int userNum) {
-	return affectsTable.getManyLeft(userNum);
+	if (affectsTable.checkReadiness()) {
+		return affectsTable.getManyLeft(userNum);
+	}
+	return affectsTable.getManyLeft(userNum);//TODO
 }
 
 std::set<int> PKB::getAffectsUserNums(int modifierNum) {
-	return affectsTable.getManyRight(modifierNum);
+	if (affectsTable.checkReadiness()) {
+		return affectsTable.getManyRight(modifierNum);
+	}
+	return affectsTable.getManyRight(modifierNum);//TODO
 }
 
 bool PKB::areInAffectsRelationship(int modifierNum, int userNum) {
-	return affectsTable.inOneToManyRelationship(modifierNum, userNum);
+	if (affectsTable.checkReadiness()) {
+		return affectsTable.inOneToManyRelationship(modifierNum, userNum);
+	}
+	return affectsTable.inOneToManyRelationship(modifierNum, userNum);//TODO
 }
 
 void PKB::clearAffectsTable() {
 	affectsTable.clearMaps();
+	affectsTable.setToUnready();
 }
 
 //QPS affects*
 std::set<int> PKB::getAffectsStarModifierNums(int userNum) {
-	return affectsStarTable.getManyLeft(userNum);
+	if (affectsStarTable.checkReadiness()) {
+		return affectsStarTable.getManyLeft(userNum);
+	}
+	return affectsStarTable.getManyLeft(userNum);//TODO
 }
 
 std::set<int> PKB::getAffectsStarUserNums(int modifierNum) {
-	return affectsStarTable.getManyRight(modifierNum);
+	if (affectsStarTable.checkReadiness()) {
+		return affectsStarTable.getManyRight(modifierNum);
+	}
+	return affectsStarTable.getManyRight(modifierNum);//TODO
 }
 
 bool PKB::areInAffectsStarRelationship(int modifierNum, int userNum) {
-	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
+	if (affectsStarTable.checkReadiness()) {
+		return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
+	}
+	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);//TODO
 }
 
 void PKB::clearAffectsStarTable() {
 	affectsStarTable.clearMaps();
+	affectsStarTable.setToUnready();
 }
 
 //QPS with read

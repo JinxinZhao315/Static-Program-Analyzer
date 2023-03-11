@@ -70,7 +70,7 @@ public:
 	void addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
 	//SP affects*
-	void addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
+	void addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
 	//SP with read
 	void addAllWithRead(unordered_map<int, std::string> readLineNumToVarName);
@@ -246,6 +246,12 @@ public:
 
 	//QPS with call
 	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
+
+	void requestAllNextStar();
+
+	void requestAllAffects();
+
+	void requestAllAffectsStar();
 
 private:
 	EntityTable<std::string> procTable;
