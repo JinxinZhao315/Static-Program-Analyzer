@@ -110,7 +110,7 @@ void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>>
 
 //SP next
 void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
-	nextTable.addAllOneSidedOnetoManyRelationships(allPreviousToNexts);
+	nextTable.addAllOneToManyRelationships(allPreviousToNexts);
 }
 
 //SP next*
@@ -376,8 +376,8 @@ bool PKB::isCallsStarEmpty() {
 }
 
 //QPS next
-int PKB::getPreviousStmtNum(int nextStmtNum, int invalidPreviousStmtNum) {
-	return nextTable.getOneLeft(nextStmtNum, invalidPreviousStmtNum);
+std::set<int> PKB::getPreviousStmtNums(int nextStmtNum) {
+	return nextTable.getManyLeft(nextStmtNum);
 }
 
 std::set<int> PKB::getNextStmtNums(int previousStmtNum) {
@@ -385,7 +385,7 @@ std::set<int> PKB::getNextStmtNums(int previousStmtNum) {
 }
 
 bool PKB::areInNextRelationship(int previousStmtNum, int nextStmtNum) {
-	return nextTable.inOneToOneRelationship(previousStmtNum, nextStmtNum);
+	return nextTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);
 }
 
 bool PKB::isNextEmpty() {
