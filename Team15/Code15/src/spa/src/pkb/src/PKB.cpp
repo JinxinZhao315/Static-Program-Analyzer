@@ -110,7 +110,7 @@ void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>>
 
 //SP next
 void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
-	nextTable.addAllOneSidedOnetoManyRelationships(allPreviousToNexts);
+	nextTable.addAllOneToManyRelationships(allPreviousToNexts);
 }
 
 //SP next*
@@ -376,95 +376,111 @@ bool PKB::isCallsStarEmpty() {
 }
 
 //QPS next
-int PKB::getNextPreviousNum(int nextNum, int invalidPreviousNum) {
-	return nextTable.getOneLeft(nextNum, invalidPreviousNum);
+std::set<int> PKB::getPreviousStmtNums(int nextStmtNum) {
+	return nextTable.getManyLeft(nextStmtNum);
 }
 
-std::set<int> PKB::getNextNextNums(int previousNum) {
-	return nextTable.getManyRight(previousNum);
+std::set<int> PKB::getNextStmtNums(int previousStmtNum) {
+	return nextTable.getManyRight(previousStmtNum);
 }
 
-bool PKB::areInNextRelationship(int previousNum, int nextNum) {
-	return nextTable.inOneToOneRelationship(previousNum, nextNum);
+bool PKB::areInNextRelationship(int previousStmtNum, int nextStmtNum) {
+	return nextTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);
+}
+
+bool PKB::isNextEmpty() {
+	return nextTable.isEmpty();
 }
 
 //QPS next*
-std::set<int> PKB::getNextStarPreviousNums(int nextNum) {
+std::set<int> PKB::getStarPreviousStmtNums(int nextStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getManyLeft(nextNum);
+		return nextStarTable.getManyLeft(nextStmtNum);
 	}
-	return nextStarTable.getManyLeft(nextNum);//TODO
+	return nextStarTable.getManyLeft(nextStmtNum);//TODO
 }
 
-std::set<int> PKB::getNextStarNextNums(int previousNum) {
+std::set<int> PKB::getStarNextStmtNums(int previousStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getManyRight(previousNum);
+		return nextStarTable.getManyRight(previousStmtNum);
 	}
-	return nextStarTable.getManyRight(previousNum);//TODO
+	return nextStarTable.getManyRight(previousStmtNum);//TODO
 }
 
-bool PKB::areInNextStarRelationship(int previousNum, int nextNum) {
+bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.inOneToManyRelationship(previousNum, nextNum);
+		return nextStarTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);
 	}
-	return nextStarTable.inOneToManyRelationship(previousNum, nextNum);//TODO
+	return nextStarTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);//TODO
 }
 
-void PKB::clearNextStarTable() {
+bool PKB::isNextStarEmpty() {
+	return nextStarTable.isEmpty();
+}
+
+void PKB::clearNextStar() {
 	nextStarTable.clearMaps();
 	nextStarTable.setToUnready();
 }
 
 //QPS affects
-std::set<int> PKB::getAffectsModifierNums(int userNum) {
+std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.getManyLeft(userNum);
+		return affectsTable.getManyLeft(userStmtNum);
 	}
-	return affectsTable.getManyLeft(userNum);//TODO
+	return affectsTable.getManyLeft(userStmtNum);//TODO
 }
 
-std::set<int> PKB::getAffectsUserNums(int modifierNum) {
+std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.getManyRight(modifierNum);
+		return affectsTable.getManyRight(modifierStmtNum);
 	}
-	return affectsTable.getManyRight(modifierNum);//TODO
+	return affectsTable.getManyRight(modifierStmtNum);//TODO
 }
 
-bool PKB::areInAffectsRelationship(int modifierNum, int userNum) {
+bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.inOneToManyRelationship(modifierNum, userNum);
+		return affectsTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);
 	}
-	return affectsTable.inOneToManyRelationship(modifierNum, userNum);//TODO
+	return affectsTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);//TODO
 }
 
-void PKB::clearAffectsTable() {
+bool PKB::isAffectsEmpty() {
+	return affectsTable.isEmpty();
+}
+
+void PKB::clearAffects() {
 	affectsTable.clearMaps();
 	affectsTable.setToUnready();
 }
 
 //QPS affects*
-std::set<int> PKB::getAffectsStarModifierNums(int userNum) {
+std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.getManyLeft(userNum);
+		return affectsStarTable.getManyLeft(userStmtNum);
 	}
-	return affectsStarTable.getManyLeft(userNum);//TODO
+	return affectsStarTable.getManyLeft(userStmtNum);//TODO
 }
 
-std::set<int> PKB::getAffectsStarUserNums(int modifierNum) {
+std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.getManyRight(modifierNum);
+		return affectsStarTable.getManyRight(modifierStmtNum);
 	}
-	return affectsStarTable.getManyRight(modifierNum);//TODO
+	return affectsStarTable.getManyRight(modifierStmtNum);//TODO
 }
 
-bool PKB::areInAffectsStarRelationship(int modifierNum, int userNum) {
+bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);
+		return affectsStarTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);
 	}
-	return affectsStarTable.inOneToManyRelationship(modifierNum, userNum);//TODO
+	return affectsStarTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);//TODO
 }
 
-void PKB::clearAffectsStarTable() {
+bool PKB::isAffectsStarEmpty() {
+	return affectsStarTable.isEmpty();
+}
+
+void PKB::clearAffectsStar() {
 	affectsStarTable.clearMaps();
 	affectsStarTable.setToUnready();
 }
