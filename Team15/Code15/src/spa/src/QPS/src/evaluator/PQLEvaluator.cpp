@@ -25,53 +25,20 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     for (SuchThatClause suchThatCl : suchThatVec)
     {
         std::string relationship = suchThatCl.getRelationShip();
+        Result result;
         if (relationship == "Follows" || relationship == "Follows*")
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            Result result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
-            if (result.isResultTrue() == false)
-            {
-
-                resultTable.clearResultTable();
-
-                isEarlyExit = true;
-
-                break;
-            }
-            resultTable.combineTable(result.getClauseResult());
-            if (resultTable.isTableEmpty()) {
-
-                isEarlyExit = true;
-
-                break;
-            }
+            result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
         }
 
        else if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
-            Result result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
-            if (result.isResultTrue() == false)
-            {
-
-                resultTable.clearResultTable();
-
-                isEarlyExit = true;
-
-                break;
-            }
-            resultTable.combineTable(result.getClauseResult());
-            if (resultTable.isTableEmpty()) {
-
-                isEarlyExit = true;
-
-                break;
-            }
+            result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
         }
         else if (relationship == "Modifies") {
-            Result result;
-
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
             ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
@@ -83,32 +50,8 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             else {
                 result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
             }
-
-
-            if (result.isResultTrue() == false)
-            {
-
-                resultTable.clearResultTable();
-
-                isEarlyExit = true;
-
-                break;
-            }
-            else {
-                resultTable.combineTable(result.getClauseResult());
-            }
-
-            if (resultTable.isTableEmpty()) {
-
-                isEarlyExit = true;
-
-                break;
-            }
-
         }
         else if (relationship == "Uses") {
-            Result result;
-
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
             UsesPHandler usesPHandler = UsesPHandler(pkb);
@@ -121,49 +64,35 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
                 result = usesSHandler.evalUsesS(suchThatCl, resultTable, synonymTable);
             }
-
-
-            if (result.isResultTrue() == false)
-            {
-
-                resultTable.clearResultTable();
-
-                isEarlyExit = true;
-
-                break;
-            }
-            else {
-                resultTable.combineTable(result.getClauseResult());
-            }
-
-            if (resultTable.isTableEmpty()) {
-
-                isEarlyExit = true;
-
-                break;
-            }
         }
         else if (relationship == "Calls" || relationship == "Calls*") {
 
             CallsHandler callsHandler = CallsHandler(pkb);
             bool isStar = relationship == "Calls" ? false : true;
-            Result result = callsHandler.evalCalls(isStar, suchThatCl, resultTable, synonymTable);
-            if (result.isResultTrue() == false)
-            {
+            result = callsHandler.evalCalls(isStar, suchThatCl, resultTable, synonymTable);   
+        }
+        else if (relationship == "Next" || relationship == "Next*") {
 
-                resultTable.clearResultTable();
+            NextHandler nextHandler = NextHandler(pkb);
+            bool isStar = relationship == "Next" ? false : true;
+            result = nextHandler.evalNext(isStar, suchThatCl, resultTable, synonymTable);
+           
+        }
+        if (result.isResultTrue() == false)
+        {
 
-                isEarlyExit = true;
+            resultTable.clearResultTable();
 
-                break;
-            }
-            resultTable.combineTable(result.getClauseResult());
-            if (resultTable.isTableEmpty()) {
+            isEarlyExit = true;
 
-                isEarlyExit = true;
+            break;
+        }
+        resultTable.combineTable(result.getClauseResult());
+        if (resultTable.isTableEmpty()) {
 
-                break;
-            }
+            isEarlyExit = true;
+
+            break;
         }
     }
     for (PatternClause patternCl : patternVec)

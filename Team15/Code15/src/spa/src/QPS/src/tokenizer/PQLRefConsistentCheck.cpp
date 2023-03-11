@@ -80,6 +80,9 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         if (suchThatRefType == "Calls" || suchThatRefType == "Calls*") {
             suchThatFlag = refConsistentLogic->hasRef("Calls", suchThatLeftType, suchThatRightType);
         }
+        if (suchThatRefType == "Next" || suchThatRefType == "Next*") {
+            suchThatFlag = refConsistentLogic->hasRef("Next", suchThatLeftType, suchThatRightType);
+        }
         if (suchThatFlag == false) {
             return false;
         }
