@@ -70,7 +70,16 @@ public:
 	void addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
 	//SP affects*
-	void addAddAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
+	void addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
+
+	//SP with read
+	void addAllWithRead(unordered_map<int, std::string> readLineNumToVarName);
+
+	//SP with print
+	void addAllWithPrint(unordered_map<int, std::string> printLineNumToVarName);
+
+	//SP with call
+	void addAllWithCall(unordered_map<int, std::string> callLineNumToProcName);
 
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
@@ -196,32 +205,61 @@ public:
 	bool isCallsStarEmpty();
 
 	//QPS next
-	int getNextPreviousNum(int nextNum, int invalidPreviousNum);
+	int getPreviousStmtNum(int nextStmtNum, int invalidPreviousStmtNum);
 
-	std::set<int> getNextNextNums(int previousNum);
+	std::set<int> getNextStmtNums(int previousStmtNum);
 
-	bool areInNextRelationship(int previousNum, int nextNum);
+	bool areInNextRelationship(int previousStmtNum, int nextStmtNum);
+
+	bool isNextEmpty();
 
 	//QPS next*
-	std::set<int> getNextStarPreviousNums(int nextNum);
+	std::set<int> getStarPreviousStmtNums(int nextStmtNum);
 
-	std::set<int> getNextStarNextNums(int previousNum);
+	std::set<int> getStarNextStmtNums(int previousStmtNum);
 
-	bool areInNextStarRelationship(int previousNum, int nextNum);
+	bool areInNextStarRelationship(int previousStmtNum, int nextStmtNum);
 
-	//SP affects
-	std::set<int> getAffectsModifierNums(int userNum);
+	bool isNextStarEmpty();
 
-	std::set<int> getAffectsUserNums(int modifierNum);
+	void clearNextStar();
 
-	bool areInAffectsRelationship(int modifierNum, int userNum);
+	//QPS affects
+	std::set<int> getAffectsModifierStmtNums(int userStmtNum);
 
-	//SP affects*
-	std::set<int> getAffectsStarModifierNums(int userNum);
+	std::set<int> getAffectsUserStmtNums(int modifierStmtNum);
 
-	std::set<int> getAffectsStarUserNums(int modifierNum);
+	bool areInAffectsRelationship(int modifierStmtNum, int userStmtNum);
 
-	bool areInAffectsStarRelationship(int modifierNum, int userNum);
+	bool isAffectsEmpty();
+
+	void clearAffects();
+
+	//QPS affects*
+	std::set<int> getAffectsStarModifierStmtNums(int userStmtNum);
+
+	std::set<int> getAffectsStarUserStmtNums(int modifierStmtNum);
+
+	bool areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum);
+
+	bool isAffectsStarEmpty();
+
+	void clearAffectsStar();
+
+	//QPS with read
+	std::string getWithReadVarName(int readLineNum, std::string invalidVarName);
+
+	//QPS with print
+	std::string getWithPrintVarName(int printLineNum, std::string invalidVarName);
+
+	//QPS with call
+	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
+
+	void requestAllNextStar();
+
+	void requestAllAffects();
+
+	void requestAllAffectsStar();
 
 private:
 	EntityTable<std::string> procTable;
@@ -245,4 +283,7 @@ private:
 	RelationshipTable<int, int> nextStarTable;
 	RelationshipTable<int, int> affectsTable;
 	RelationshipTable<int, int> affectsStarTable;
+	RelationshipTable<int, std::string> withReadTable;
+	RelationshipTable<int, std::string> withPrintTable;
+	RelationshipTable<int, std::string> withCallTable;
 };
