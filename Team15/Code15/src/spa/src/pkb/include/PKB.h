@@ -205,7 +205,7 @@ public:
 	bool isCallsStarEmpty();
 
 	//QPS next
-	int getPreviousStmtNum(int nextStmtNum, int invalidPreviousStmtNum);
+	std::set<int> getPreviousStmtNums(int nextStmtNum);
 
 	std::set<int> getNextStmtNums(int previousStmtNum);
 
