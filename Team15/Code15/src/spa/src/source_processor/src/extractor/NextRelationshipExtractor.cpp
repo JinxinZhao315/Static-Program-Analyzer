@@ -21,9 +21,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
             currentProcNextRS.clear();
         } else if(currLineNumber > 1) {
             currentProcNextRS[prevLineNumber].insert(currLineNumber);
-        } if (type == "if") {
-            // TODO: rethink this logic
-        } else if (type == "while") {
+        } if (type == "if" || type == "while") {
             // get the line number of the first line after the while
             int newLineNumber = currLineNumber;
             int nesting = 1;
@@ -33,14 +31,13 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
                 vector<string> newTokens = newLine.getTokens();
                 if (containsToken(newTokens, "{")) {
                     nesting++;
+                    if(newLineType == "else") {
+                        currentProcNextRS[currLineNumber].insert(newLineNumber + 1);
+                    }
                 } else if (newLineType == "}") {
                     nesting--;
                     if(nesting == 0) {
-                        for(auto entry : currentProcNextRS) {
-                            if(entry.second.find(currLineNumber) != entry.second.end()) {
-                                currentProcNextRS[entry.first].insert(newLineNumber + 1);
-                            }
-                        }
+                        currentProcNextRS[currLineNumber].insert(newLineNumber + 1);
                     }
                 }
                 if(hasLineNumber(newLineType)) {

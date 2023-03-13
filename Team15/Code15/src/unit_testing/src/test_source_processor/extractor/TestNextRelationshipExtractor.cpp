@@ -44,7 +44,7 @@ TEST_CASE("extractNextRelationship_noIfSingleWhile") {
             Line({"}"}, "}")
     };
     auto extractedNext = extractNextRS(lines);
-    unordered_map<int, set<int>> expectedNext = {{1,{2, 4}}, {2,{3}}, {3, {4}}};
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 4}}, {3, {4}}};
     REQUIRE(extractedNext == expectedNext);
 }
 
@@ -59,7 +59,7 @@ TEST_CASE("extractNextRelationship_singleIfNoElseNoWhile") {
             Line({"}"}, "}")
     };
     auto extractedNext = extractNextRS(lines);
-    unordered_map<int, set<int>> expectedNext = {{1,{2, 4}}, {2,{3}}, {3, {4}}};
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 4}}, {3, {4}}};
     REQUIRE(extractedNext == expectedNext);
 }
 
@@ -70,14 +70,11 @@ TEST_CASE("extractNextRelationship_singleIfWithElseNoWhile") {
             Line(2, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
             Line(3, {"c", "=", "c",  "-",  "1", ";", "}"}, "="),
             Line({"else", "{"}, "else"),
-            Line(4, {"c", "=", "c",  "-",  "1"}, "="),
-            Line({"}"}, "}"),
+            Line(4, {"c", "=", "c",  "-",  "1", ";", "}"}, "="),
             Line(5, {"read", "z", ";"}, "read"),
             Line({"}"}, "}")
     };
-
-    // shouldn't have 3, 4 should have 1, 4
     auto extractedNext = extractNextRS(lines);
-    unordered_map<int, set<int>> expectedNext = {{1 , {2, 4}}, {2, {3}}, {4, {5}}};
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 4}}, {3, {4}}, {4, {5}}};
     REQUIRE(extractedNext == expectedNext);
 }
