@@ -184,3 +184,17 @@ TEST_CASE("PQLPreprocessor query object test while 1") {
         REQUIRE(cl.getThirdArg() == "");
     }
 }
+
+TEST_CASE("PQLPreprocessor multiclause") {
+    PQLPreprocessor preprocessor;
+    string str = "assign a; Select a such that Follows(a,10) such that Uses(a, \"x\") pattern a (\"y\",_)";
+    Query query = preprocessor.preprocess(str);
+
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    string type = varTable.find("a")->second;
+    REQUIRE(type == "assign");
+    vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
+    REQUIRE(patternClauseVec.size() == 1);
+    REQUIRE(suchThatClauseVec.size() == 2);
+}
