@@ -1,5 +1,4 @@
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "QPS/include/tokenizer/QueryTokenizer.h"
 #include "QPS/include/tokenizer/PQLSemanticCheck.h"
@@ -185,7 +184,7 @@ TEST_CASE("PQLPreprocessor query object test while 1") {
     }
 }
 
-TEST_CASE("PQLPreprocessor multiclause") {
+TEST_CASE("PQLPreprocessor multi clause") {
     PQLPreprocessor preprocessor;
     string str = "assign a; Select a such that Follows(a,10) such that Uses(a, \"x\") pattern a (\"y\",_)";
     Query query = preprocessor.preprocess(str);
@@ -193,8 +192,73 @@ TEST_CASE("PQLPreprocessor multiclause") {
     std::multimap<std::string, std::string> varTable = query.getSynonymTable();
     string type = varTable.find("a")->second;
     REQUIRE(type == "assign");
+
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
     vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     REQUIRE(patternClauseVec.size() == 1);
     REQUIRE(suchThatClauseVec.size() == 2);
+
+    PatternClause pcl = patternClauseVec[0];
+    REQUIRE(pcl.getPatternSynonym() == "a");
+    REQUIRE(pcl.getFirstArg() == "\"y\"");
+    REQUIRE(pcl.getSecondArg() == "_");
+
+    SuchThatClause scl1 = suchThatClauseVec[0];
+    REQUIRE(scl1.getRelationShip() == "Follows");
+    REQUIRE(scl1.getLeftArg() == "a");
+    REQUIRE(scl1.getRightArg() == "10");
+
+    SuchThatClause scl2 = suchThatClauseVec[1];
+    REQUIRE(scl2.getRelationShip() == "Uses");
+    REQUIRE(scl2.getLeftArg() == "a");
+    REQUIRE(scl2.getRightArg() == "\"x\"");
+}
+
+TEST_CASE("PQLPreprocessor multi clause with and") {
+    PQLPreprocessor preprocessor;
+    string str = "assign a; Select a such that Follows(a,10) and Uses(a, \"x\") pattern a (\"y\",_) and a(_, \"xyz\")";
+    Query query = preprocessor.preprocess(str);
+
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    string type = varTable.find("a")->second;
+    REQUIRE(type == "assign");
+
+    vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
+    REQUIRE(patternClauseVec.size() == 2);
+    REQUIRE(suchThatClauseVec.size() == 2);
+
+    PatternClause pcl = patternClauseVec[0];
+    REQUIRE(pcl.getPatternSynonym() == "a");
+    REQUIRE(pcl.getFirstArg() == "\"y\"");
+    REQUIRE(pcl.getSecondArg() == "_");
+    REQUIRE(pcl.getThirdArg() == "");
+
+    PatternClause pcl2 = patternClauseVec[1];
+    REQUIRE(pcl2.getPatternSynonym() == "a");
+    REQUIRE(pcl2.getFirstArg() == "_");
+    REQUIRE(pcl2.getSecondArg() == "\"xyz\"");
+    REQUIRE(pcl.getThirdArg() == "");
+
+    SuchThatClause scl1 = suchThatClauseVec[0];
+    REQUIRE(scl1.getRelationShip() == "Follows");
+    REQUIRE(scl1.getLeftArg() == "a");
+    REQUIRE(scl1.getRightArg() == "10");
+
+    SuchThatClause scl2 = suchThatClauseVec[1];
+    REQUIRE(scl2.getRelationShip() == "Uses");
+    REQUIRE(scl2.getLeftArg() == "a");
+    REQUIRE(scl2.getRightArg() == "\"x\"");
+}
+
+TEST_CASE("PQLPreprocessor multi clause with and negative test") {
+    PQLPreprocessor preprocessor;
+    string str1 = "assign a; while w; Select a such that Parent* (w, a) and Modifies (a, \"x\") and such that Next* (1, a)";
+    REQUIRE_THROWS_AS(preprocessor.preprocess(str1), PQLSyntaxError);
+
+    string str2 = "assign a; while w; Select a such that Parent* (w, a) and pattern a (\"x\", _) such that Next* (1, a))";
+    REQUIRE_THROWS_AS(preprocessor.preprocess(str2), PQLSyntaxError);
+
+    string str3 = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Next* (1, a)";
+    REQUIRE_THROWS_AS(preprocessor.preprocess(str3), PQLSyntaxError);
 }

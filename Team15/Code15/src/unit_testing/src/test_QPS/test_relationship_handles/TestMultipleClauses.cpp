@@ -104,6 +104,58 @@ void testMulticlauseFillPkb3(PKB& pkb) {
     // Line 3: n = 2 + y
 }
 
+void testMulticlauseFillPkb4(PKB& pkb) {
+    pkb.addAllVars(set<string>({"x", "y", "n", "m"}));
+    pkb.addAllConsts(set<string>({"1", "0", "5"}));
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({2,3,5,7})));
+    stmts.insert(make_pair("if", set<int>({1})));
+    stmts.insert(make_pair("while", set<int>({4,6})));
+    pkb.addAllStmts(stmts);
+
+    unordered_map<string, set<Line>> assignPatterns;
+    Line line2 = Line(2, vector<string>({"n", "1", "+"}), "=");
+    Line line3 = Line(3, vector<string>({"m", "1", "-"}), "=");
+    Line line5 = Line(5, vector<string>({"y", "1", "-"}), "=");
+    Line line7 = Line(7, vector<string>({"x", "1", "-"}), "=");
+
+    assignPatterns.insert(make_pair("n", set<Line>({line2})));
+    assignPatterns.insert(make_pair("m", set<Line>({line3})));
+    assignPatterns.insert(make_pair("y", set<Line>({line5})));
+    assignPatterns.insert(make_pair("x", set<Line>({line7})));
+    pkb.addAllAssignPatterns(assignPatterns);
+
+    unordered_map<string, set<Line>> ifPatterns;
+    Line line1 = Line(1, vector<string>({"x", "5", ">"}), "if");
+    ifPatterns.insert(make_pair("x", set<Line>({line1})));
+    pkb.addAllIfPatterns(ifPatterns);
+
+    unordered_map<string, set<Line>> whilePatterns;
+    Line line4 = Line(4, vector<string>({"y", "0", ">"}), "while");
+    whilePatterns.insert(make_pair("y", set<Line>({line4})));
+    Line line6 = Line(6, vector<string>({"x", "0", ">"}), "while");
+    whilePatterns.insert(make_pair("x", set<Line>({line6})));
+    pkb.addAllWhilePatterns(whilePatterns);
+
+    unordered_map<int, int> follows = { {1, 4}, {4, 6} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {4, 6} },
+            {4, {6} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
+    // Line 1: if (x > 5) {
+    // Line 2: n = n + 1 } else {
+    // Line 3: m = m - 1}
+    // Line 4: while ( y > 0 ) {
+    // Line 5: y = y - 1}
+    // Line 6: while ( x > 0) {
+    // Line7:  x = x - 1}
+}
+
 TEST_CASE("Follows/Follow* and pattern test") {
     PKB pkb;
     testMulticlauseFillPkb1(pkb);
@@ -207,7 +259,7 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     REQUIRE(retStr10 == "SyntaxError");
 }
 
-TEST_CASE("Multiple such that & pattern clauses test") {
+TEST_CASE("Multiple such that & pattern clauses test 1") {
     PKB pkb;
     testMulticlauseFillPkb3(pkb);
 
@@ -215,10 +267,9 @@ TEST_CASE("Multiple such that & pattern clauses test") {
     // Line 2: m = t + 2;
     // Line 3: n = 2 + y
 
-    string retStr1 = TestUtility::testDriver("assign a; Select a such that Follows*(a,3) pattern a (\"k\",_) such that Uses(a,\"y\")", pkb);
+    string retStr1 = TestUtility::testDriver("assign a; Select a pattern a (\"k\",_) such that Follows*(a,3) and Uses(a,\"y\")", pkb);
     REQUIRE(retStr1 == "1");
 
-    string retStr2 = TestUtility::testDriver("assign a; variable v; Select v such that Follows*(1, a) pattern a (v,_\"2\"_) such that Uses(a,\"y\")", pkb);
+    string retStr2 = TestUtility::testDriver("assign a; variable v; Select v such that Follows*(1, a) and Uses(a,\"y\") pattern a (v,_\"2\"_)", pkb);
     REQUIRE(retStr2 == "n");
-
 }

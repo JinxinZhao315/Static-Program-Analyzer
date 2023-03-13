@@ -73,3 +73,13 @@ while w;
 Select w pattern w("d", _)
 35
 5000
+16 - while multi clause
+while w;
+Select w such that Parent*(w, 10) and Uses(w, "x") and Follows(6, w) pattern w ("x", _)
+8
+5000
+17 - if multi clause
+if i;
+Select i such that Parent(i, 11) and Modifies(i, "x") and Follows(i, 12) pattern i ("x", _, _)
+9
+5000
