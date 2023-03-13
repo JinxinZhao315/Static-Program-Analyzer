@@ -20,6 +20,9 @@ PKB::PKB() {
 	nextStarTable = RelationshipTable<int, int>();
 	affectsTable = RelationshipTable<int, int>();
 	affectsStarTable = RelationshipTable<int, int>();
+	withReadTable = RelationshipTable<int, std::string>();
+	withPrintTable = RelationshipTable<int, std::string>();
+	withCallTable = RelationshipTable<int, std::string>();
 }
 
 //SP procedure
