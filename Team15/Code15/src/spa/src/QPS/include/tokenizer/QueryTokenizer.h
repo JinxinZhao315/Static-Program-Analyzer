@@ -33,5 +33,9 @@ private:
     PQLSyntaxChecker syntaxChecker;
 //	std::string trim(std::string input);
 	std::string extractKeyword(std::string &input);
+    std::string peekKeyword(std::string input);
     std::vector<std::string> tokenizeCsv(std::string);
+    std::vector<std::string> relationships = {"Follows", "Follows*", "Parent", "Parent*",
+                                                    "Uses", "Modifies", "Calls", "Calls*",
+                                                    "Next", "Next*", "Affects", "Affects*"};
 };

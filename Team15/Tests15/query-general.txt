@@ -23,3 +23,18 @@ print p;
 Select p pattern p(_,_)
 SemanticError
 5000
+6 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and such that Next* (1, a)
+SyntaxError
+5000
+7 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) and pattern a ("x", _) such that Next* (1, a))
+SyntaxError
+5000
+8 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) pattern a ("x", _) and Next* (1, a)
+SyntaxError
+5000

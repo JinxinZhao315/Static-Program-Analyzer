@@ -220,16 +220,16 @@ TEST_CASE("Overall test : source1.txt 17 Select Multiple synonyms") {
     string queryStr = "assign a1, a2; Select <a1, a2> such that Follows(a1, a2)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { 
-        "1 2", "2 3", "3 4", "4 5", "5 6", "6 7", 
-        "7 8", "8 9", "9 10", "10 11", 
+    set<string> expectedResult = {
+        "1 2", "2 3", "3 4", "4 5", "5 6", "6 7",
+        "7 8", "8 9", "9 10", "10 11",
         "13 14", "14 15", "15 16", "16 17"};
     REQUIRE(result == expectedResult);
 
     queryStr = "assign a1, a2; Select <a1> such that Follows(a1, a2)";
 
     result = testDriver(filename, queryStr);
-    expectedResult = { "1", "2", "3", "4", "5", "6", "7", "8", 
+    expectedResult = { "1", "2", "3", "4", "5", "6", "7", "8",
         "9", "10", "13", "14", "15", "16"};
     REQUIRE(result == expectedResult);
 
@@ -803,5 +803,23 @@ TEST_CASE("Overall test : source7.txt 10") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "Loid","Anya", "Yor" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-ifwhile.txt 1") {
+    string filename = "../../../../Tests15/source-ifwhile.txt";
+    string queryStr = "while w; Select w such that Parent*(w, 10) and Uses(w, \"x\") and Follows(6, w) pattern w (\"x\", _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "8" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-ifwhile.txt 2") {
+    string filename = "../../../../Tests15/source-ifwhile.txt";
+    string queryStr = "if i; Select i such that Parent(i, 11) and Modifies(i, \"x\") and Follows(i, 12) pattern i (\"x\", _, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "9" };
     REQUIRE(result == expectedResult);
 }
