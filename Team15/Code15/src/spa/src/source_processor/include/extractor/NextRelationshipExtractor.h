@@ -2,4 +2,4 @@
 
 #include "CommonExtractorHeader.h"
 
-unordered_map<int, int> extractNextRS(const vector<Line>& program);
+unordered_map<int, set<int>> extractNextRS(const vector<Line>& program);
