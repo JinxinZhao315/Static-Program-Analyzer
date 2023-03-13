@@ -68,7 +68,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 			tokenizePatternClause(input, varTable, patternClauseVec);
 		}
 		else if (keyword == "with") {
-			tokenizeWithClause(input, withClauseVec);
+			tokenizeWithClause(input, withClauseVec, varTable);
 		}
 		else {
 			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
@@ -82,7 +82,7 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 		throw PQLSyntaxError("PQL syntax error: Invalid with clause, no \"=\" sign");
 	}
 	std::string firstArgStr = Utility::trim(input.substr(0, equalSignIndex), Utility::WHITESPACES);
-	Ref firstArg = tokenizeRef(firstArgStr);
+	Ref firstArg = tokenizeRef(firstArgStr, varTable);
 	input = Utility::trim(input.substr(equalSignIndex + 1), Utility::WHITESPACES);
 
 	std::size_t secondArgEndIndex = input.find_first_of(Utility::WHITESPACES);
@@ -94,15 +94,12 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 	}
 	else {
 		secondArgStr = input.substr(0, secondArgEndIndex);
-		input = Utility::trim(input.substr(equalSignIndex + 1), Utility::WHITESPACES);
+		input = Utility::trim(input.substr(secondArgEndIndex + 1), Utility::WHITESPACES);
 	}
-	Ref secondArg = tokenizeRef(secondArgStr);
+	Ref secondArg = tokenizeRef(secondArgStr, varTable);
+
 
 	withClauseVec.push_back(WithClause(firstArg, secondArg));
-
-
-	
-
 }
 
 void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, 

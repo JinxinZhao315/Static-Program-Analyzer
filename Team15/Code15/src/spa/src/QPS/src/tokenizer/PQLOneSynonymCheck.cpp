@@ -13,6 +13,7 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	SelectClause selectClause = query.getSelectClause();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
+    std::vector<WithClause> withClauseVec = query.getWithClauseVec();
 
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
@@ -97,6 +98,22 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 //        if (patternSecondType == Utility::SYNONYM && varTable.find(patternSecondArg)->second != "assign") {
 //            return false;
 //        }
+    }
+
+    //attrRef synName should be in varTable
+    for (WithClause withClause : withClauseVec) {
+        if (withClause.getFirstArg().isRefAttrRef()) {
+            std::string firstArg = withClause.getFirstArg().getAttrRef().getSynName();
+            if (varTable.count(firstArg) != 1) {
+                return false;
+            }
+        }
+        if (withClause.getSecondArg().isRefAttrRef()) {
+            std::string secondArg = withClause.getSecondArg().getAttrRef().getSynName();
+            if (varTable.count(secondArg) != 1) {
+                return false;
+            }
+        }
     }
 
 

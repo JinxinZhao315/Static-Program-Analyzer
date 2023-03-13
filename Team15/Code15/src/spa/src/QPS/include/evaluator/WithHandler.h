@@ -4,7 +4,7 @@
 
 #pragma once
 
-class WithHandler {
+class WithHandler: public ClauseHandler {
 private:
 
 public:

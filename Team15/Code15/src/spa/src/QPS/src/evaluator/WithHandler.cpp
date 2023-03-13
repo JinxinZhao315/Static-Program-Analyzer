@@ -4,14 +4,15 @@ WithHandler::WithHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
 Result WithHandler::evalWith(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	Result result;
-	if (!withClause.getFristArg().isRefAttrRef() && !withClause.getSecondArg().isRefAttrRef()) {
-		if (withClause.getFristArg().getValue() != withClause.getSecondArg().getValue()) {
+	std::vector<std::string> synList = resultTable.getSynList();
+	if (!withClause.getFirstArg().isRefAttrRef() && !withClause.getSecondArg().isRefAttrRef()) {
+		if (withClause.getFirstArg().getValue() != withClause.getSecondArg().getValue()) {
 			result.setResultTrue(false);
 			return result;
 		}
 	}
-	else if (!withClause.getFristArg().isRefAttrRef() && withClause.getFristArg().isRefAttrRef()) {
-		std::string leftValue = withClause.getFristArg().getValue();
+	else if (!withClause.getFirstArg().isRefAttrRef() && withClause.getFirstArg().isRefAttrRef()) {
+		std::string leftValue = withClause.getFirstArg().getValue();
 		std::string rightSynName = withClause.getSecondArg().getAttrRef().getSynName();
 		std::string rightSynType = withClause.getSecondArg().getAttrRef().getSynType();
 		resultTableCheckAndAdd(rightSynName, resultTable, rightSynType);
@@ -25,7 +26,7 @@ Result WithHandler::evalWith(WithClause withClause, ResultTable& resultTable, st
 			}
 		}
 	}
-	else if (withClause.getFristArg().isRefAttrRef() && !withClause.getFristArg().isRefAttrRef()) {
+	else if (withClause.getFirstArg().isRefAttrRef() && !withClause.getFirstArg().isRefAttrRef()) {
 		std::string rightValue = withClause.getSecondArg().getValue();
 		std::string leftSynName = withClause.getFirstArg().getAttrRef().getSynName();
 		std::string leftSynType = withClause.getFirstArg().getAttrRef().getSynType();
@@ -59,5 +60,5 @@ Result WithHandler::evalWith(WithClause withClause, ResultTable& resultTable, st
 			}
 		}
 	}
-	return Result;
+	return result;
 }

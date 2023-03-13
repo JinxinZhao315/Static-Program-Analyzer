@@ -29,6 +29,6 @@ AttrRef Ref::getAttrRef() {
 	return this->attrRef;
 }
 
-AttrRef Ref::isRefAttrRef() {
-	return this->isAttrRef();  
+bool Ref::isRefAttrRef() {
+	return this->isAttrRef;  
 }

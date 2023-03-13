@@ -13,6 +13,7 @@ private:
 	//bool isValue = false;
 	bool isAttrRef = false;
 public:
+	Ref();
 	Ref(std::string input);
 	Ref(AttrRef attrRef);
 	std::string getValue();

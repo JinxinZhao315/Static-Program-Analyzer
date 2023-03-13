@@ -10,6 +10,6 @@ public:
 	WithClause();
 	WithClause(Ref firstArg, Ref secondArg);
 	~WithClause();
-	Ref getFristArg();
+	Ref getFirstArg();
 	Ref getSecondArg();
 }; 

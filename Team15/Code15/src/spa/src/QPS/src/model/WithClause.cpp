@@ -1,10 +1,10 @@
-#include "../../include/model/WithClause.h"
+#include "QPS/include/model/WithClause.h"
 
 WithClause::WithClause() {}
 
 WithClause::WithClause(Ref firstArg, Ref rightArg) {
-	this->leftArg = firstArg;
-	this->rightArg = rightArg;
+	this->firstArg = firstArg;
+	this->secondArg = rightArg;
 }
 
 WithClause::~WithClause() {}
