@@ -1,18 +1,3 @@
-//              procedure Second {
-//        01        x = 0;
-//        02        i = 5;
-//        03        while (i!=0) {
-//        04            x = x + 2*y;
-//        05            call Third;
-//        06            i = i - 1; }
-//        07        if (x==1) then {
-//        08            x = x+1; }
-//                  else {
-//        09            z = 1; }
-//        10        z = z + x + i;
-//        11        y = z + 2;
-//        12        x = x * y + z; }
-
 #include "catch.hpp"
 #include "Constants.hpp"
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
@@ -77,4 +62,94 @@ TEST_CASE("extractNextRelationship_singleIfWithElseNoWhile") {
     auto extractedNext = extractNextRS(lines);
     unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 4}}, {3, {4}}, {4, {5}}};
     REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedWhiles") {
+    const vector<Line>& lines =  {
+            Line({"procedure", "test", "{"}, "procedure"),
+            Line(1, {"x", "=", "1", ";"}, "="),
+            Line(2, {"while", "(", "c", ">", "25", ")", "then", "{"}, "while"),
+            Line(3, {"while", "(", "c", ">", "25", ")", "then", "{"}, "while"),
+            Line(4, {"c", "=", "c",  "-",  "1"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line(5, {"read", "z", ";"}, "read"),
+            Line({"}"}, "}")
+    };
+    auto extractedNext = extractNextRS(lines);
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 5}}, {3, {4, 5}}, {4, {5}}};
+    REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedIfsNoElse") {
+    const vector<Line>& lines =  {
+            Line({"procedure", "test", "{"}, "procedure"),
+            Line(1, {"x", "=", "1", ";"}, "="),
+            Line(2, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
+            Line(3, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
+            Line(4, {"c", "=", "c",  "-",  "1"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line(5, {"read", "z", ";"}, "read"),
+            Line({"}"}, "}")
+    };
+    auto extractedNext = extractNextRS(lines);
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 5}}, {3, {4, 5}}, {4, {5}}};
+    REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedWhileInIfNoElse") {
+    const vector<Line>& lines =  {
+            Line({"procedure", "test", "{"}, "procedure"),
+            Line(1, {"x", "=", "1", ";"}, "="),
+            Line(2, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
+            Line(3, {"while", "(", "c", ">", "25", ")", "then", "{"}, "while"),
+            Line(4, {"c", "=", "c",  "-",  "1"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line(5, {"read", "z", ";"}, "read"),
+            Line({"}"}, "}")
+    };
+    auto extractedNext = extractNextRS(lines);
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 5}}, {3, {4, 5}}, {4, {5}}};
+    REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedIfInWhileNoElse") {
+    const vector<Line>& lines =  {
+            Line({"procedure", "test", "{"}, "procedure"),
+            Line(1, {"x", "=", "1", ";"}, "="),
+            Line(2, {"while", "(", "c", ">", "25", ")", "then", "{"}, "while"),
+            Line(3, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
+            Line(4, {"c", "=", "c",  "-",  "1"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line(5, {"read", "z", ";"}, "read"),
+            Line({"}"}, "}")
+    };
+    auto extractedNext = extractNextRS(lines);
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 5}}, {3, {4, 5}}, {4, {5}}};
+    REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedWhileInIfWithElse") {
+    const vector<Line>& lines =  {
+            Line({"procedure", "test", "{"}, "procedure"),
+            Line(1, {"x", "=", "1", ";"}, "="),
+            Line(2, {"if", "(", "c", ">", "25", ")", "then", "{"}, "if"),
+            Line(3, {"while", "(", "c", ">", "25", ")", "then", "{"}, "while"),
+            Line(4, {"c", "=", "c",  "-",  "1", ";", "}"}, "="),
+            Line({"}"}, "}"),
+            Line({"else", "{"}, "else"),
+            Line(5, {"c", "=", "c",  "-",  "1", ";", "}"}, "="),
+            Line(6, {"read", "z", ";"}, "read"),
+            Line({"}"}, "}")
+    };
+    auto extractedNext = extractNextRS(lines);
+    unordered_map<int, set<int>> expectedNext = {{1,{2}}, {2,{3, 5}}, {3, {4, 6}}, {4, {6}}, {5, {6}}};
+    REQUIRE(extractedNext == expectedNext);
+}
+
+TEST_CASE("extractNextRelationship_nestedIfInWhileWithElse") {
+
 }

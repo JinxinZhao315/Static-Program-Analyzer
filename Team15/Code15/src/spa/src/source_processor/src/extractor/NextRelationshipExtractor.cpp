@@ -19,10 +19,9 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
         if(type == "procedure") {
             nextRS.insert(currentProcNextRS.begin(), currentProcNextRS.end());
             currentProcNextRS.clear();
-        } else if(currLineNumber > 1) {
-            currentProcNextRS[prevLineNumber].insert(currLineNumber);
-        } if (type == "if" || type == "while") {
+        } else if (type == "if" || type == "while") {
             // get the line number of the first line after the while
+            currentProcNextRS[prevLineNumber].insert(currLineNumber);
             int newLineNumber = currLineNumber;
             int nesting = 1;
             for(int j = i + 1; j < program.size(); j++) {
@@ -34,7 +33,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
                     if(newLineType == "else") {
                         currentProcNextRS[currLineNumber].insert(newLineNumber + 1);
                     }
-                } else if (newLineType == "}") {
+                } else if (newLineType == "}" || containsToken(newTokens, "}")) {
                     nesting--;
                     if(nesting == 0) {
                         currentProcNextRS[currLineNumber].insert(newLineNumber + 1);
@@ -44,6 +43,8 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
                     newLineNumber++;
                 }
             }
+        } else if(currLineNumber > 1) {
+            currentProcNextRS[prevLineNumber].insert(currLineNumber);
         }
         if(hasLineNumber(type)) {
             prevLineNumber++;
