@@ -75,7 +75,7 @@ public:
 
     std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb);
 
-    std::string getElemValue(int synIndex, int colIndex, Elem elem, PKB &pkb);
+    std::string getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb);
 };
 
 

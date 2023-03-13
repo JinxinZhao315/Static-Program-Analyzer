@@ -16,6 +16,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
+    std::vector<WithClause> withVec = query.getWithClauseVec();
 
 
     //todo make clauseHandler.evaluate instead of if else branch
@@ -188,7 +189,19 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             break;
         }
     }
+    for (WithClause withCl : withVec) {
+        if (isEarlyExit) {
+            break;
+        }
+        WithHandler withHandler = WithHandler(pkb);
 
+        Result result = withHandler.evalWith(withCl, resultTable, synonymTable);
+        if (result.isResultTrue() == false || resultTable.isTableEmpty())
+        {
+            resultTable.clearResultTable();
+            break;
+        }
+    }
 
     set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames, pkb);
 

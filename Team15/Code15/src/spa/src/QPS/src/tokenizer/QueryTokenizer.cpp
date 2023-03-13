@@ -52,7 +52,8 @@ void QueryTokenizer::tokenizeClauses(std::string input,
                                      std::multimap<std::string, std::string> varTable,
                                      SelectClause& selectClause,
                                      std::vector<SuchThatClause>& suchThatClauseVec,
-                                     std::vector<PatternClause>& patternClauseVec) {
+                                     std::vector<PatternClause>& patternClauseVec,
+									 std::vector<WithClause>& withClauseVec) {
 	std::string keyword = extractKeyword(input);
 	if (keyword != "Select") {
 		throw PQLSyntaxError("PQL syntax error: No 'select' keyword");
@@ -66,10 +67,42 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 		else if (keyword == "pattern") {
 			tokenizePatternClause(input, varTable, patternClauseVec);
 		}
+		else if (keyword == "with") {
+			tokenizeWithClause(input, withClauseVec);
+		}
 		else {
 			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
 		}
 	}
+}
+
+void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClause>& withClauseVec, std::multimap<std::string, std::string> varTable) {
+	std::size_t equalSignIndex = input.find_first_of('=');
+	if (equalSignIndex == std::string::npos) {
+		throw PQLSyntaxError("PQL syntax error: Invalid with clause, no \"=\" sign");
+	}
+	std::string firstArgStr = Utility::trim(input.substr(0, equalSignIndex), Utility::WHITESPACES);
+	Ref firstArg = tokenizeRef(firstArgStr);
+	input = Utility::trim(input.substr(equalSignIndex + 1), Utility::WHITESPACES);
+
+	std::size_t secondArgEndIndex = input.find_first_of(Utility::WHITESPACES);
+	std::string secondArgStr = "";
+	//this with clause is the last clause
+	if (secondArgEndIndex == std::string::npos) {
+		secondArgStr = input;
+		input = "";
+	}
+	else {
+		secondArgStr = input.substr(0, secondArgEndIndex);
+		input = Utility::trim(input.substr(equalSignIndex + 1), Utility::WHITESPACES);
+	}
+	Ref secondArg = tokenizeRef(secondArgStr);
+
+	withClauseVec.push_back(WithClause(firstArg, secondArg));
+
+
+	
+
 }
 
 void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, 
@@ -109,6 +142,7 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 			std::string synName = elemStr.substr(0, periodIndex);
 			std::string attrName = elemStr.substr(periodIndex + 1);
 			Elem elem(AttrRef(synName, varTable.find(synName)->second, attrName));
+			elemList.push_back(elem);
 		}
 		else if (syntaxChecker.validateSynonym(elemStr)) {
 			Elem elem(elemStr);
@@ -150,8 +184,6 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 	input = input.substr(nextRightPar + 1);
 	suchThatClauseVec.push_back(SuchThatClause(relationship, leftArg, rightArg));
 }
-
-
 
 void QueryTokenizer::tokenizePatternClause(std::string& input,
                                            std::multimap<std::string, std::string> varTable,
@@ -249,4 +281,21 @@ std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
     }
     ret.push_back(remainder);
     return ret;
+}
+
+Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, std::string> varTable) {
+	std::string type = Utility::getReferenceType(input);
+	if (type == Utility::QUOTED_IDENT || type == Utility::INTEGER) {
+		return Ref(input);
+	}
+	else if (syntaxChecker.validateAttrRef(input)) {
+		std::size_t periodIndex = input.find_first_of(".");
+		std::string synName = input.substr(0, periodIndex);
+		std::string synType = varTable.find(synName)->second;
+		std::string attrName = input.substr(periodIndex + 1);
+		return Ref(AttrRef(synName, synType, attrName));
+	}
+	else {
+		throw PQLSyntaxError("PQL syntax error: Invalid with clause, second arg format incorrect");
+	}
 }

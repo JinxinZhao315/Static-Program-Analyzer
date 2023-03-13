@@ -16,6 +16,7 @@ public:
                          std::string firstArg, std::string secondArg, std::string thirdArg);
 	bool validateExprSpec(std::string input);
 	bool validateAttrRef(std::string input);
+	bool validateRef(std::string input);
 private:
 	std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";
 	std::string integerFormat = "[1-9][0-9]*";

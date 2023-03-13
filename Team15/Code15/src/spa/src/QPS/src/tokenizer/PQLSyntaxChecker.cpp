@@ -76,3 +76,11 @@ bool PQLSyntaxChecker::validateAttrRef(std::string input) {
         //synonym is valid, attrName is valid
         return validateSynonym(synName) && (Utility::attrNameSet.find(attrName) != Utility::attrNameSet.end());
 }
+
+
+bool PQLSyntaxChecker::validateRef(std::string input) {
+    std::string type = Utility::getReferenceType(input);
+    return type == Utility::QUOTED_IDENT ||
+        type == Utility::INTEGER ||
+        validateAttrRef(input);
+}

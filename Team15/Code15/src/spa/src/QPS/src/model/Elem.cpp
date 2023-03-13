@@ -39,3 +39,7 @@ std::string Elem::getAttrName() {
 std::string Elem::getAttrSynType() {
 	return this->attrRef.getSynType();
 }
+
+AttrRef Elem::getAttrRef() {
+	return this->attrRef;
+}

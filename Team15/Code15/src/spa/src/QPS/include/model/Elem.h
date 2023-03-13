@@ -17,4 +17,6 @@ public:
 	std::string getAttrName();
 
 	std::string getAttrSynType();
+
+	AttrRef getAttrRef();
 };

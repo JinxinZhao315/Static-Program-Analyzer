@@ -20,6 +20,10 @@ void Query::setSuchThatClauseVec(std::vector<SuchThatClause> suchThatClauseVec) 
 	this->suchThatClauseVec = suchThatClauseVec;
 }
 
+void Query::setWithClauseVec(std::vector<WithClause> withClauseVec) {
+	this->withClauseVec = withClauseVec;
+}
+
 std::multimap<std::string, std::string> Query::getSynonymTable() {
 	return synonymTable;
 }
@@ -34,4 +38,8 @@ std::vector<PatternClause> Query::getPatternClauseVec() {
 
 std::vector<SuchThatClause> Query::getSuchThatClauseVec() {
 	return suchThatClauseVec;
+}
+
+std::vector<WithClause> Query::getWithClauseVec() {
+	return withClauseVec;
 }

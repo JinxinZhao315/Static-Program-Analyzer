@@ -139,12 +139,12 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::string ResultTable::getElemValue(int synIndex, int colIndex, Elem elem, PKB &pkb) {
+std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb) {
     //attrbute is in the table
-    if (elem.isElemSynonym() || elem.getAttrName() == "stmt#" || elem.getAttrName() == "value") {
+    if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" || attrRef.getSynType() == "procedure") {
         return resultTable[synIndex][colIndex];
     }
-    else if (elem.getAttrSynType() == "call") {
+    else if (attrRef.getSynType() == "call") {
         int callLineNum = stoi(resultTable[synIndex][colIndex]);
         std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
         if (calledProcName == "-1") {
@@ -152,7 +152,7 @@ std::string ResultTable::getElemValue(int synIndex, int colIndex, Elem elem, PKB
         }
         return calledProcName;
     }
-    else if (elem.getAttrSynType() == "read") {
+    else if (attrRef.getSynType() == "read") {
         int readLineNum = stoi(resultTable[synIndex][colIndex]);
         std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
         if (readVarName == "-1") {
@@ -160,13 +160,16 @@ std::string ResultTable::getElemValue(int synIndex, int colIndex, Elem elem, PKB
         }
         return readVarName;
     }
-    else if (elem.getAttrSynType() == "print") {
+    else if (attrRef.getSynType() == "print") {
         int printLineNum = stoi(resultTable[synIndex][colIndex]);
         std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
         if (printVarName == "-1") {
             //should throw error
         }
         return printVarName;
+    }
+    else {
+        return "-1";
     }
 }
 
@@ -183,7 +186,12 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         for (int i = 0; i < colNum; i++) {
             std::string tuple;
             for (int j = 0; j < selectedElem.size(); j++) {
-                tuple += getElemValue(synNameIndex[j], i, selectedElem[j], pkb);
+                if (selectedElem[j].isElemSynonym()) {
+                    tuple += resultTable[synNameIndex[j]][i] + " ";
+                }
+                else {
+                    tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j].getAttrRef(), pkb) + " ";
+                }
                 //if (selectedElem[j].isElemSynonym()) {
                 //    tuple += resultTable[synNameIndex[j]][i] + " ";
                 //}
@@ -205,7 +213,7 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
             for (int i = 0; i < colNum; i++) {
-                selectedSynResult.insert(getElemValue(synIndex, i, selectedElem[0], pkb));
+                selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
             }
             return selectedSynResult;
         }
@@ -217,7 +225,6 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
             else {
                 return { "TRUE" };
             }
-
         }
     }
 }
