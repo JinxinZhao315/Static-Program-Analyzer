@@ -58,3 +58,38 @@ procedure p;
 Select p such that Calls*("main", "proc5")
 none
 5000
+13 - calls
+procedure p;
+Select p such that Calls("main", _)
+main, proc1, proc2, proc3, proc4, proc5
+5000
+14 - calls
+procedure p;
+Select p such that Calls(_, "proc4")
+main, proc1, proc2, proc3, proc4, proc5
+5000
+15 - calls
+procedure p;
+Select p such that Calls(_, _)
+main, proc1, proc2, proc3, proc4, proc5
+5000
+16 - calls
+procedure p;
+Select p such that Calls*("main", _)
+main, proc1, proc2, proc3, proc4, proc5
+5000
+17 - calls
+procedure p;
+Select p such that Calls*(_, "proc4")
+main, proc1, proc2, proc3, proc4, proc5
+5000
+18 - calls
+procedure p;
+Select p such that Calls*(_, _)
+main, proc1, proc2, proc3, proc4, proc5
+5000
+19 - calls
+procedure p;
+Select p such that Calls*(p, p)
+none
+5000

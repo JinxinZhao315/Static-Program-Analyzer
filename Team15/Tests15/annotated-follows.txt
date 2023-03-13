@@ -18,4 +18,22 @@ procedure proc1 {
 //16      count = count * 2;
         }
       }
-//17  y = c + d + e; }
+//17  y = c + d + e;
+//18  call proc2;
+}
+
+procedure proc2 {
+//19  f = 0;
+//20  if (f == 0) then {
+//21    f = f + 1;
+      } else {
+//22    f = f - 1;
+      }
+//23  f = 10;
+//24  call proc3;
+//25  f = 2;
+}
+
+procedure proc3 {
+//26  g = 0;
+}

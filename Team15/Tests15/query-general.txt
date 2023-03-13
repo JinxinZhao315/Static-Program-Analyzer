@@ -1,0 +1,40 @@
+1 - all variables
+variable v;
+Select v
+v, w, x, y, z, a, b, c, d, e, f, g
+5000
+2 - all constants
+constant c;
+Select c
+0, 1, 2, 3, 4, 5, 6
+5000
+3 - syntax error
+variable v;
+Select v;
+SyntaxError
+5000
+4 - semantic error
+stmt s;
+Select s pattern s(_,_)
+SemanticError
+5000
+5 - semantic error
+print p;
+Select p pattern p(_,_)
+SemanticError
+5000
+6 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and such that Next* (1, a)
+SyntaxError
+5000
+7 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) and pattern a ("x", _) such that Next* (1, a))
+SyntaxError
+5000
+8 - syntax error: illegal use of and
+assign a; while w;
+Select a such that Parent* (w, a) pattern a ("x", _) and Next* (1, a)
+SyntaxError
+5000

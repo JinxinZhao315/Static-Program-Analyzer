@@ -15,6 +15,6 @@ c
 5000
 4 - assign pattern
 assign a; variable v1, v2;
-Select v1 pattern a(v1, _"7"_) such that Uses(8, v2)
-c
+Select v1 such that Uses(8, v2) pattern a(v1, _"e"_)
+d
 5000

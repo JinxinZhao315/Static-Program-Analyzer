@@ -141,7 +141,8 @@ std::vector<std::string> ResultTable::getTuple(int index) {
 
 std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb) {
     //attrbute is in the table
-    if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" || attrRef.getSynType() == "procedure") {
+    if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
+        attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
         return resultTable[synIndex][colIndex];
     }
     else if (attrRef.getSynType() == "call") {
@@ -213,7 +214,12 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
             for (int i = 0; i < colNum; i++) {
-                selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
+                if (selectedElem[0].isElemSynonym()) {
+                    selectedSynResult.insert(resultTable[synIndex][i]);
+                }
+                else {
+                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
+                }
             }
             return selectedSynResult;
         }

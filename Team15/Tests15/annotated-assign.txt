@@ -23,3 +23,7 @@ procedure proc1 {
        }
      }    
 }
+
+procedure proc2 {
+//21  e = a + b * c - d;
+}

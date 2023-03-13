@@ -196,8 +196,14 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         WithHandler withHandler = WithHandler(pkb);
 
         Result result = withHandler.evalWith(withCl, resultTable, synonymTable);
-        if (result.isResultTrue() == false || resultTable.isTableEmpty()) {
+        if (result.isResultTrue() == false)
+        {
             resultTable.clearResultTable();
+            break;
+        }
+
+        resultTable.combineTable(result.getClauseResult());
+        if (resultTable.isTableEmpty()) {
             break;
         }
     }
