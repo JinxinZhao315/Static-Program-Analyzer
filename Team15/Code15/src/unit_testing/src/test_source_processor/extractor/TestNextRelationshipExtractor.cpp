@@ -3,12 +3,12 @@
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
 
 TEST_CASE("extractNextRelationship_ifWithNestedIfElseAndElseWithNestedWhile") {
-    CFGNode* node1 = new CFGNode(1);
-    CFGNode* node2 = new CFGNode(2);
-    CFGNode* node3 = new CFGNode(3);
-    CFGNode* node4 = new CFGNode(4);
-    CFGNode* node5 = new CFGNode(5);
-    CFGNode* node6 = new CFGNode(6);
+    auto* node1 = new CFGNode(1);
+    auto* node2 = new CFGNode(2);
+    auto* node3 = new CFGNode(3);
+    auto* node4 = new CFGNode(4);
+    auto* node5 = new CFGNode(5);
+    auto* node6 = new CFGNode(6);
 
     node1->addNext(node2);
     node1->addNext(node5);
