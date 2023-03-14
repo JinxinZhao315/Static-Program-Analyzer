@@ -256,6 +256,58 @@ TEST_CASE("Overall test : source1.txt 18 Select BOOLEAN") {
     REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Overall test : source1.txt 19 Select attribute") {
+    // Enter source of SIMPLE code
+    string filename = source1_filename;
+    string queryStr = "procedure p; read r; print pri; constant c; Select p.procName";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "proc1" };
+    REQUIRE(result == expectedResult);
+
+    queryStr = "procedure p; read r; print pri; constant c; Select r.stmt#";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = { "12" };
+    REQUIRE(result == expectedResult);
+
+    queryStr = "procedure p; read r; print pri; constant c; Select c.value";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = { "0", "1", "2", "3", "4", "5", "6"};
+    REQUIRE(result == expectedResult);
+
+    queryStr = "procedure p; read r; print pri; constant c; Select r.varName";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = { "g" };
+    REQUIRE(result == expectedResult);
+
+    queryStr = "procedure p; read r; print pri; constant c; Select pri.varName";
+
+    result = testDriver(filename, queryStr);
+    expectedResult = { "x" };
+    REQUIRE(result == expectedResult);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

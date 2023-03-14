@@ -13,6 +13,7 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	SelectClause selectClause = query.getSelectClause();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
+    std::vector<WithClause> withClauseVec = query.getWithClauseVec();
 
 
 	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
@@ -28,7 +29,7 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	// Select Clause
 	// toDo remove type attribute in selectClause
 	// Check if haven't been defined after checking all synonyms declared once.
-    std::vector<std::string> synNameVec = selectClause.getSynNameVec();
+    std::vector<Elem> elemVec = selectClause.getSynNameVec();
     //if (synNameVec.size() > 1) {
     //    for (std::string synName : synNameVec) {
     //        if (varTable.count(synName) != 1) {//multiple synonyms, can't be BOOLEAN
@@ -44,17 +45,17 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     //        return false;
     //    }
     //}
-    for (std::string synName : synNameVec) {
-        if (synNameVec.size() > 1) {
-            if (varTable.count(synName) != 1) {//multiple synonyms, can't be BOOLEAN
+    for (Elem elem : elemVec) {
+        if (elemVec.size() > 1) {
+            if (varTable.count(elem.getSynName()) != 1) {//multiple synonyms, can't be BOOLEAN
                 return false;
             }
         }
         else {//synNameVec.size == 1
-            if (synName == "BOOLEAN" && varTable.count(synName) > 1) {//if single syn and BOOLEAN, count can be 0 or 1
+            if (elem.getSynName() == "BOOLEAN" && varTable.count(elem.getSynName()) > 1) {//if single syn and BOOLEAN, count can be 0 or 1
                 return false;
             }
-            else if (synName != "BOOLEAN" && varTable.count(synName) != 1) {//single syn, count can only be 1
+            else if (elem.getSynName() != "BOOLEAN" && varTable.count(elem.getSynName()) != 1) {//single syn, count can only be 1
                 return false;
             }
         }
@@ -97,6 +98,22 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 //        if (patternSecondType == Utility::SYNONYM && varTable.find(patternSecondArg)->second != "assign") {
 //            return false;
 //        }
+    }
+
+    //attrRef synName should be in varTable
+    for (WithClause withClause : withClauseVec) {
+        if (withClause.getFirstArg().isRefAttrRef()) {
+            std::string firstArg = withClause.getFirstArg().getAttrRef().getSynName();
+            if (varTable.count(firstArg) != 1) {
+                return false;
+            }
+        }
+        if (withClause.getSecondArg().isRefAttrRef()) {
+            std::string secondArg = withClause.getSecondArg().getAttrRef().getSynName();
+            if (varTable.count(secondArg) != 1) {
+                return false;
+            }
+        }
     }
 
 

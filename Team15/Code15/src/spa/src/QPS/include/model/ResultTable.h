@@ -6,6 +6,8 @@
 #include <set>
 #include <assert.h>
 #include "SynonymLinkageMap.h"
+#include "pkb/include/PKB.h"
+#include "Elem.h"
 #ifndef SPA_RESULTTABLE_H
 #define SPA_RESULTTABLE_H
 
@@ -71,7 +73,9 @@ public:
 
     std::vector<std::string> getTuple(int index);
 
-    std::set<std::string> getSelectedResult(std::vector<std::string> selectedSynNames);
+    std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb);
+
+    std::string getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb);
 };
 
 
