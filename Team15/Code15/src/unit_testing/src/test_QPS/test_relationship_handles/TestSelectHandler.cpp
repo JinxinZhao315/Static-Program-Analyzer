@@ -5,6 +5,7 @@
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/evaluator/SelectHandler.h"
+#include "QPS/include/model/Elem.h"
 
 #include "catch.hpp"
 
@@ -35,14 +36,10 @@ void testSelectSynPkb(PKB& pkb) {
     // Line 1: if (x > 5) {
     // Line 2: n = n + 1 } else {
     // Line 3: m = m - 1}
-    // Line 4: while ( y > 0 ) {
-    // Line 5: y = y - 1}
-    // Line 6: while ( x > 0) {
-    // Line7:  x = x - 1}
 }
 
 TEST_CASE("Select Handler test 1") {
-    SelectClause selectClause("r");
+    SelectClause selectClause({ Elem("r") });
     std::multimap<std::string, std::string> varTable;
     ResultTable resultTable = ResultTable();
 
@@ -72,10 +69,10 @@ TEST_CASE("Select Handler test 1") {
 
 
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::vector<std::string> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+    std::vector<Elem> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-    set<std::string> retSet = resultTable.getSelectedResult(selectedVarName);
-    REQUIRE(selectedVarName[0] == "r");
+    set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb);
+    REQUIRE(selectedVarName[0].getSynName() == "r");
     REQUIRE(retSet.size() == 3);
     REQUIRE(retSet.count("3") == 1);
     REQUIRE(retSet.count("7") == 1);
@@ -99,10 +96,10 @@ TEST_CASE("Select Handler test 2") {
         pkb.addAllConsts(set<string>({ "10", "11", "12", "13" }));
 
         SelectHandler selectHandler = SelectHandler(pkb);
-        std::vector<std::string> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+        std::vector<Elem> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-        set<std::string> retSet = resultTable.getSelectedResult(selectedVarName);
-        REQUIRE(selectedVarName[0] == "c");
+        set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb);
+        REQUIRE(selectedVarName[0].getSynName() == "c");
         REQUIRE(retSet.size() == 4);
         REQUIRE(retSet.count("10") == 1);
         REQUIRE(retSet.count("11") == 1);
@@ -125,7 +122,7 @@ TEST_CASE("Select Handler test 3: multiple synonyms") {
     testSelectSynPkb(pkb);
 
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::vector<std::string> selectedSynName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+    std::vector<Elem> selectedSynName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
     std::vector<std::string> expectedSelectedSynName = { "a", "b", "c" };
     std::vector<std::vector<std::string>> expectedResultTable = {
         { "m", "m", "m", "m", "m", "m", "n", "n", "n", "n", "n", "n", "x", "x", "x", "x", "x", "x"},
@@ -138,7 +135,9 @@ TEST_CASE("Select Handler test 3: multiple synonyms") {
 
     REQUIRE(resultTable.getColNum() == 18);
     REQUIRE(resultTable.getRowNum() == 3);
-    REQUIRE(selectedSynName == expectedSelectedSynName);
+    for (int i = 0; i < selectedSynName.size(); i++) {
+        selectedSynName[i].getSynName() == expectedSelectedSynName[i];
+    }
     REQUIRE(resultTable.getResultTable() == expectedResultTable);
 
 }
@@ -157,12 +156,32 @@ TEST_CASE("Select Handler test 4: same synonyms appear multiple times in Select"
     testSelectSynPkb(pkb);
 
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::vector<std::string> selectedSynName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+    std::vector<Elem> selectedSynName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
     std::vector<std::string> expectedSelectedSynName = { "a", "a" };
     std::vector<std::vector<std::string>> expectedResultTable = {{ "m", "n", "x"}};
     std::vector<std::string> expectedSynList = { "a" };
 
-    REQUIRE(selectedSynName == expectedSelectedSynName);
+    for (int i = 0; i < selectedSynName.size(); i++) {
+        selectedSynName[i].getSynName() = expectedSelectedSynName[i];
+    }
     REQUIRE(resultTable.getResultTable() == expectedResultTable);
     REQUIRE(resultTable.getSynList() == expectedSynList);
+}
+
+TEST_CASE("Select Handler test 5: select attribute") {
+    PQLPreprocessor preprocessor;
+    string queryStr = "assign a; Select a.stmt#";
+    Query query = preprocessor.preprocess(queryStr);
+    SelectClause selectClause = query.getSelectClause();
+    std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+    ResultTable resultTable = ResultTable();
+
+    PKB pkb;
+    testSelectSynPkb(pkb);
+
+
+    SelectHandler selectHandler = SelectHandler(pkb);
+    std::vector<Elem> selectedElem = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
+    REQUIRE(selectedElem.size() == 1);
+    REQUIRE(selectedElem[0].isElemSynonym() == false);
 }

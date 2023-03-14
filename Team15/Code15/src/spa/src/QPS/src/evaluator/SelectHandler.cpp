@@ -2,12 +2,12 @@
 
 SelectHandler::SelectHandler(PKB& pkb) : ClauseHandler(pkb){}
 
-std::vector<std::string> SelectHandler::evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable) {
-    std::vector<std::string> synNameVec = selectClause.getSynNameVec();
-    for (std::string synName : synNameVec) {
-        if (synName != "BOOLEAN" || varTable.count("BOOLEAN") > 0) {
-            std::string synType = varTable.find(synName)->second;
-            resultTableCheckAndAdd(synName, resultTable, synType);
+std::vector<Elem> SelectHandler::evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable) {
+    std::vector<Elem> synNameVec = selectClause.getSynNameVec();
+    for (Elem elem : synNameVec) {
+        if (elem.getSynName() != "BOOLEAN" || varTable.count("BOOLEAN") > 0) {
+            std::string synType = varTable.find(elem.getSynName())->second;
+            resultTableCheckAndAdd(elem.getSynName(), resultTable, synType);
         }
     }
     //std::vector<std::string> varTypeVec = varTable.find(varName)->second;

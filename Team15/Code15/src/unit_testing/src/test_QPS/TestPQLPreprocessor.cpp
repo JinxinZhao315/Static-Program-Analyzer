@@ -20,7 +20,7 @@ TEST_CASE("PQLPreprocessor query object test 1") {
         assert(type == "assign");
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getSynNameVec()[0];
+        string varName = selectClause.getSynNameVec()[0].getSynName();
         assert(varName == "a");
 
         vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
@@ -52,7 +52,7 @@ TEST_CASE("PQLPreprocessor query object test follows*(synon,_)") {
         std::cout << "var table correct" << std::endl;
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getSynNameVec()[0];
+        string varName = selectClause.getSynNameVec()[0].getSynName();
         assert(varName == "s1");
         std::cout << "select correct" << std::endl;
 
@@ -88,7 +88,7 @@ TEST_CASE("PQLPreprocessor query object test follows(_,_)") {
         std::cout << "var table correct" << std::endl;
 
         SelectClause selectClause = query.getSelectClause();
-        string varName = selectClause.getSynNameVec()[0];
+        string varName = selectClause.getSynNameVec()[0].getSynName();
         assert(varName == "s1");
         std::cout << "select correct" << std::endl;
 
@@ -123,7 +123,7 @@ TEST_CASE("PQLPreprocessor query object test pattern 1") {
     REQUIRE(type == "assign");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getSynNameVec()[0];
+    string varName = selectClause.getSynNameVec()[0].getSynName();
     REQUIRE(varName == "a");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
@@ -148,7 +148,7 @@ TEST_CASE("PQLPreprocessor query object test pattern if 1") {
     REQUIRE(type2 == "variable");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getSynNameVec()[0];
+    string varName = selectClause.getSynNameVec()[0].getSynName();
     REQUIRE(varName == "ifs");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
@@ -172,7 +172,7 @@ TEST_CASE("PQLPreprocessor query object test while 1") {
     REQUIRE(type2 == "variable");
 
     SelectClause selectClause = query.getSelectClause();
-    string varName = selectClause.getSynNameVec()[0];
+    string varName = selectClause.getSynNameVec()[0].getSynName();
     REQUIRE(varName == "w");
 
     vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
@@ -261,4 +261,33 @@ TEST_CASE("PQLPreprocessor multi clause with and negative test") {
 
     string str3 = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Next* (1, a)";
     REQUIRE_THROWS_AS(preprocessor.preprocess(str3), PQLSyntaxError);
+}
+
+TEST_CASE("PQLPreprocessor with clause") {
+    PQLPreprocessor preprocessor;
+
+    std::string str1 = "assign a1, a2; Select a1 with a1.stmt# = a2.stmt#";
+    Query query1 = preprocessor.preprocess(str1);
+    WithClause withCl1 = query1.getWithClauseVec()[0];
+    
+    REQUIRE(withCl1.getFirstArg().isRefAttrRef() == true);
+    REQUIRE(withCl1.getFirstArg().getAttrRef().getSynName() == "a1");
+    REQUIRE(withCl1.getFirstArg().getAttrRef().getAttrName() == "stmt#");
+
+    REQUIRE(withCl1.getSecondArg().isRefAttrRef() == true);
+    REQUIRE(withCl1.getSecondArg().getAttrRef().getSynName() == "a2");
+    REQUIRE(withCl1.getSecondArg().getAttrRef().getAttrName() == "stmt#");
+
+
+    std::string str2 = "assign a1, a2; procedure p1; Select a1 with a1.stmt# = p1.procName";
+    Query query2 = preprocessor.preprocess(str2);
+    WithClause withCl2 = query2.getWithClauseVec()[0];
+
+    REQUIRE(withCl2.getFirstArg().isRefAttrRef() == true);
+    REQUIRE(withCl2.getFirstArg().getAttrRef().getSynName() == "a1");
+    REQUIRE(withCl2.getFirstArg().getAttrRef().getAttrName() == "stmt#");
+
+    REQUIRE(withCl2.getSecondArg().isRefAttrRef() == true);
+    REQUIRE(withCl2.getSecondArg().getAttrRef().getSynName() == "p1");
+    REQUIRE(withCl2.getSecondArg().getAttrRef().getAttrName() == "procName");
 }

@@ -5,6 +5,7 @@
 #include"QPS/include/model/SelectClause.h"
 #include"QPS/include/model/SuchThatClause.h"
 #include"QPS/include/model/PatternClause.h"
+#include"QPS/include/model/WithClause.h"
 #include "PQLSemanticCheck.h"
 #include "exceptions/PQLSemanticError.h"
 
