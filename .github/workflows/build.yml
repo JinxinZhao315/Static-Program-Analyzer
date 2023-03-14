@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - workflows
+  pull_request:
+    branches:
+      - master
+      - dev
+      - workflows
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build (MacOS)
+        run: |
+          cd Team15/Code15
+          mkdir cmake-build
+          cd cmake-build
+          brew install cmake
+          cmake ../
+          cmake --build ./ --target autotester --config Release
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build (Windows)
+        run: |
+          cd Team15/Code15
+          mkdir cmake-build
+          cd cmake-build
+          choco install -y cmake
+          cmake ../
+          cmake --build ./ --target autotester --config Release
