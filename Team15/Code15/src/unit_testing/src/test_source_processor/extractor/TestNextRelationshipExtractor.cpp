@@ -2,7 +2,7 @@
 #include "Constants.hpp"
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
 
-TEST_CASE("extractNextRelationship_noIfNoWhile") {
+TEST_CASE("extractNextRelationship_ifWithNestedIfElseAndElseWithNestedWhile") {
     CFGNode* node1 = new CFGNode(1);
     CFGNode* node2 = new CFGNode(2);
     CFGNode* node3 = new CFGNode(3);
