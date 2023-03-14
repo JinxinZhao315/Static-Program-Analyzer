@@ -8,26 +8,18 @@ std::set<int> NextHandler::getNextFromPKB(bool isStar, string type, string arg) 
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_LEADER) {
-            //int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
-            //if leader does not exist, return -1
-            /*if (leader != -1) {
-                ret.insert(leader);
-            }*/
+            ret = pkb.getPreviousStmtNums(stoi(arg));
         }
         else { //if (type == GET_FOLLOWER)
-            //int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
-            //if follower does not exist, return -1
-            /*if (follower != -1) {
-                ret.insert(follower);
-            }*/
+            ret = pkb.getNextStmtNums(stoi(arg));
         }
     }
     else {
         if (type == GET_LEADER) {
-            //ret = pkb.getFollowsStarLeaderNums(stoi(arg));
+            ret = pkb.getStarPreviousStmtNums(stoi(arg));
         }
         else { //  if (type == GET_FOLLOWER)
-            //ret = pkb.getFollowsStarFollowerNums(stoi(arg));
+            ret = pkb.getStarNextStmtNums(stoi(arg));
         }
     }
     return ret;
@@ -36,10 +28,10 @@ std::set<int> NextHandler::getNextFromPKB(bool isStar, string type, string arg) 
 bool NextHandler::getIsNextFromPKB(bool isStar, string leftArg, string rightArg) {
     bool ret;
     if (isStar) {
-        //ret = pkb.areInFollowsStarRelationship(stoi(leftArg), stoi(rightArg));
+        ret = pkb.areInNextStarRelationship(stoi(leftArg), stoi(rightArg));
     }
     else {
-       // ret = pkb.areInFollowsRelationship(stoi(leftArg), stoi(rightArg));
+        ret = pkb.areInNextRelationship(stoi(leftArg), stoi(rightArg));
     }
     return ret;
 }
@@ -47,10 +39,10 @@ bool NextHandler::getIsNextFromPKB(bool isStar, string leftArg, string rightArg)
 bool NextHandler::isNextEmptyFromPKB(bool isStar) {
     bool ret;
     if (isStar) {
-        //ret = pkb.isCallsStarEmpty();
+        ret = pkb.isNextStarEmpty();
     }
     else {
-        //ret = pkb.isCallsEmpty();
+        ret = pkb.isNextEmpty();
     }
     return ret;
 }

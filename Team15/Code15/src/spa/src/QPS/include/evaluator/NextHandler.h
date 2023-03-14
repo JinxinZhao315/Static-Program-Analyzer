@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <set>
+#include <queue>
 #ifndef SPA_NEXTHANDLER_H
 #define SPA_NEXTHANDLER_H
 
