@@ -1,4 +1,5 @@
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
+#include "source_processor/include/extractor/CFGNode.h"
 
 bool hasLineNumber(string keyword) {
     return !(keyword == "procedure" || keyword == "else" || keyword == "}");
@@ -11,6 +12,7 @@ bool containsToken(vector<string> tokens, string token) {
 unordered_map<int, set<int>> extractNextRS(const vector<Line>& program) {
     unordered_map<int, set<int>> nextRS;
     unordered_map<int, set<int>> currentProcNextRS;
+    unordered_map<int, CFGNode> cfgNodes;
     int prevLineNumber = 0;
     for (int i = 0; i < program.size(); i++) {
         Line line = program[i];
