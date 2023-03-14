@@ -3,9 +3,8 @@
 #include "CommonExtractorHeader.h"
 
 struct CFGNode {
-    int startLine;
-    int endLine;
-    set<int> next;
+    int lineNumber;
+    set<CFGNode> next;
 
-    CFGNode(int startLine, int endLine) : startLine(startLine), endLine(endLine) {}
+    CFGNode(int lineNumber) : lineNumber(lineNumber) {}
 };
