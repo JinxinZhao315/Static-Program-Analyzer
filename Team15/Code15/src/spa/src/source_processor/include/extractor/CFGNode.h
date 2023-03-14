@@ -7,12 +7,24 @@
 class CFGNode {
 public:
     int lineNumber;
-    set<CFGNode*> next;
+    std::set<CFGNode*> next;
+    bool isVisited = false;
+    explicit CFGNode() : lineNumber(0), next() {}
 
-    CFGNode(int lineNumber) : lineNumber(lineNumber) {}
+    explicit CFGNode(int lineNumber) : lineNumber(lineNumber), next() {}
 
-    // mainly for testing purposes
-    void addNext(CFGNode* node) {
-        next.insert(node);
+    [[nodiscard]] int getLineNumber() const { return lineNumber; }
+
+    [[nodiscard]] const set<CFGNode*>& getNext() const { return next; }
+
+    void addNext(CFGNode* successor) {
+        next.insert(successor);
+    }
+    void markVisited() {
+        isVisited = true;
+    }
+
+    bool hasBeenVisited() const {
+        return isVisited;
     }
 };

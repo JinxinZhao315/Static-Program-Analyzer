@@ -15,8 +15,10 @@ extern const vector<Line> singleAssignmentAddVariable;
 extern const vector<Line> onlyCallStatements;
 extern const vector<Line> source2;
 extern const vector<Line> source4;
-extern const vector<Line> source6;
+extern const vector<Line> whileLoopInProcedure;
+extern const vector<Line> whileLoopInProcedureWithLinesBeforeAfter;
 
+extern const vector<Line> source6;
 extern const set<string> mainProgramVariables;
 extern const set<string> whileLoopVariables;
 extern const set<string> whileLoop2Variables;

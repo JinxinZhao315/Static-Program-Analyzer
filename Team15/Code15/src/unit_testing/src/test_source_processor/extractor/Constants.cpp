@@ -53,6 +53,24 @@ const vector<Line> whileLoop2 = {
         Line(10, {"call", "readPoint", ";"}, "call"),
 };
 
+const vector<Line> whileLoopInProcedure = {
+        Line({"procedure", "whileLoopInProcedure", "{"}, "procedure"),
+        Line(1, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
+        Line(2, {"count", "=", "count", "+", "1", ";"}, "="),
+        Line({"}"}, "}"),
+        Line({"}"}, "}")
+};
+
+const vector<Line> whileLoopInProcedureWithLinesBeforeAfter = {
+        Line({"procedure", "whileLoopInProcedure", "{"}, "procedure"),
+        Line(1, {"count", "=", "0", ";"}, "="),
+        Line(2, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
+        Line(3, {"count", "=", "count", "+", "1", ";"}, "="),
+        Line({"}"}, "}"),
+        Line(4, {"call", "readPoint", ";"}, "call"),
+        Line({"}"}, "}")
+};
+
 const set<string> whileLoop2Variables = {"x", "y", "count", "cenX", "cenY"};
 
 const vector<Line> computeCentroid = {
