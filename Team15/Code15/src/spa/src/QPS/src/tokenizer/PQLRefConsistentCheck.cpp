@@ -117,13 +117,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         AttrRef leftAttrRef = withLeftArg.getAttrRef();
-        AttrRef rightAttrRef = withRightArg.getAttrRef();
+        std::string rightValue = withRightArg.getValue();
         std::string leftType = leftAttrRef.getSynType();
-        leftAttrRef.getAttrName()
-            isValidWith();
-        // If firstArg is proc
-        if (firstArg) {
+        std::string leftAttrName = leftAttrRef.getAttrName();
 
+        // If firstArg is proc
+        if (!refConsistentLogic->hasWithRef(leftType, leftAttrName, rightValue)) {
+            return false;
         }
             
     }

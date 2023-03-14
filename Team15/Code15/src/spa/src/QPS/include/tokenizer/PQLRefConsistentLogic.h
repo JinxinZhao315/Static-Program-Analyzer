@@ -8,7 +8,7 @@ class PQLRefConsistentLogic {
 private:
     // TODO: Put these constants into Utility class
 	std::string PROCEDURE = "procedure";
-	std::string INDENT_STRING = "quotedIdent";
+	std::string IDENT_STRING = "quotedIdent";
 	std::string STMT = "stmt";
 	std::string READ = "read";
 	std::string PRINT = "print";
@@ -22,6 +22,7 @@ private:
 	std::string PROCNAME = "procName";
 	std::string STMTNUM = "stmt#";
 	std::string VALUE = "value";
+	std::string CONSTANT = "constant";
 
 	std::unordered_map<std::string,
 		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> relationLogicMap;
@@ -36,6 +37,16 @@ private:
 	std::pair<std::string, std::string> stmtNumIntPair;
 	std::pair<std::string, std::string> valueIntPair;
 	std::pair<std::string, std::string> varNameNamePair;
+	std::unordered_set<std::pair<std::string, std::string>> procPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> callPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> constantPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> variablePairSet;
+	std::unordered_set<std::pair<std::string, std::string>> stmtPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> printPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> readPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> assignPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> ifPairSet;
+	std::unordered_set<std::pair<std::string, std::string>> whilePairSet;
 
 	void createUsesModifiesProcRef();
 	void createCallsProcRef();
@@ -43,10 +54,21 @@ private:
 	void createStmtRefModifies();
 	void createStmtRefUses();
 	void createVarRef();
+
 	void createProcNameNamePair();
 	void createStmtNumIntPair();
 	void createValueIntPair();
 	void createVarNameNamePair();
+	void createProcPairSet();
+	void createCallPairSet();
+	void createConstantPairSet();
+	void createVariablePairSet();
+	void createStmtPairSet();
+	void createPrintPairSet();
+	void createReadPairSet();
+	void createAssignPairSet();
+	void createWhilePairSet();
+	void createIfPairSet();
 
 public:
 
@@ -55,4 +77,6 @@ public:
 	~PQLRefConsistentLogic();
 
 	bool hasRelationRef(std::string relation, std::string leftType, std::string rightType);
+
+	bool hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rihgtValue);
 };
