@@ -19,15 +19,23 @@ private:
 	std::string UNDERSCORE = "_";
 	std::string INTEGER = "integer";
 	std::string VARIABLE = "variable";
+	std::string PROCNAME = "procName";
+	std::string STMTNUM = "stmt#";
+	std::string VALUE = "value";
 
 	std::unordered_map<std::string,
-		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> logicMap;
+		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> relationLogicMap;
+	std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>>> withLogicMap;
 	std::unordered_set<std::string> procUsesModifiesSet;
 	std::unordered_set<std::string> stmtSet;
 	std::unordered_set<std::string> stmtModifiesSet;
 	std::unordered_set<std::string> stmtUsesSet;
 	std::unordered_set<std::string> varSet;
 	std::unordered_set<std::string> procCallsSet;
+	std::pair<std::string, std::string> procNameNamePair;
+	std::pair<std::string, std::string> stmtNumIntPair;
+	std::pair<std::string, std::string> valueIntPair;
+	std::pair<std::string, std::string> varNameNamePair;
 
 	void createUsesModifiesProcRef();
 	void createCallsProcRef();
@@ -35,6 +43,10 @@ private:
 	void createStmtRefModifies();
 	void createStmtRefUses();
 	void createVarRef();
+	void createProcNameNamePair();
+	void createStmtNumIntPair();
+	void createValueIntPair();
+	void createVarNameNamePair();
 
 public:
 
@@ -42,5 +54,5 @@ public:
 
 	~PQLRefConsistentLogic();
 
-	bool hasRef(std::string relation, std::string leftType, std::string rightType);
+	bool hasRelationRef(std::string relation, std::string leftType, std::string rightType);
 };

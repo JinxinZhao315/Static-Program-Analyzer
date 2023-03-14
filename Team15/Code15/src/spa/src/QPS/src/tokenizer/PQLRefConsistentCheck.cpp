@@ -8,6 +8,8 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
 
     std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
+    std::vector<WithClause> withClauseVec = query.getWithClauseVec();
+
     std::multimap < std::string, std::string > varTable = query.getSynonymTable();
     //race condition when multithreads?
     //std::shared_ptr<PQLRefConsistentLogic> refConsistentLogic = std::make_shared<PQLRefConsistentLogic>();
@@ -34,54 +36,54 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         
 
         if (suchThatRefType == "Parent" || suchThatRefType == "Parent*") {
-            suchThatFlag = refConsistentLogic->hasRef("Parent", suchThatLeftType, suchThatRightType);
+            suchThatFlag = refConsistentLogic->hasRelationRef("Parent", suchThatLeftType, suchThatRightType);
         }
 
         if (suchThatRefType == "Follows" || suchThatRefType == "Follows*") {
-            suchThatFlag = refConsistentLogic->hasRef("Follows", suchThatLeftType, suchThatRightType);
+            suchThatFlag = refConsistentLogic->hasRelationRef("Follows", suchThatLeftType, suchThatRightType);
         }
 
         if (suchThatRefType == "Modifies") {
             if (suchThatLeftType == Utility::QUOTED_IDENT) {
-                suchThatFlag = refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             else if (suchThatLeftType == Utility::INTEGER) {
-                suchThatFlag = refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
             else if (suchThatLeftType == Utility::UNDERSCORE) {
                 suchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure		
-                suchThatFlag = refConsistentLogic->hasRef("ModifiesP", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             else {
-                suchThatFlag = refConsistentLogic->hasRef("ModifiesS", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
         }
         if (suchThatRefType == "Uses") {
             if (suchThatLeftType == Utility::QUOTED_IDENT) {
-                suchThatFlag = refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             else if (suchThatLeftType == Utility::INTEGER) {
-                suchThatFlag = refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
             }
             else if (suchThatLeftType == Utility::UNDERSCORE) {
                 suchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure
-                suchThatFlag = refConsistentLogic->hasRef("UsesP", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             else {
-                suchThatFlag = refConsistentLogic->hasRef("UsesS", suchThatLeftType, suchThatRightType);
+                suchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
             }
         }
         if (suchThatRefType == "Calls" || suchThatRefType == "Calls*") {
-            suchThatFlag = refConsistentLogic->hasRef("Calls", suchThatLeftType, suchThatRightType);
+            suchThatFlag = refConsistentLogic->hasRelationRef("Calls", suchThatLeftType, suchThatRightType);
         }
         if (suchThatRefType == "Next" || suchThatRefType == "Next*") {
-            suchThatFlag = refConsistentLogic->hasRef("Next", suchThatLeftType, suchThatRightType);
+            suchThatFlag = refConsistentLogic->hasRelationRef("Next", suchThatLeftType, suchThatRightType);
         }
         if (suchThatFlag == false) {
             return false;
@@ -104,6 +106,26 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             }
         }
     }
+    for (WithClause withClause : withClauseVec) {
+        Ref withLeftArg = withClause.getFirstArg();
+        Ref withRightArg = withClause.getSecondArg();
+        bool isLeftAttrRef = withLeftArg.isRefAttrRef();
+        bool isRightAttrRef = withRightArg.isRefAttrRef();
 
+        if (!isLeftAttrRef || isRightAttrRef) {
+            return false;
+        }
+
+        AttrRef leftAttrRef = withLeftArg.getAttrRef();
+        AttrRef rightAttrRef = withRightArg.getAttrRef();
+        std::string leftType = leftAttrRef.getSynType();
+        leftAttrRef.getAttrName()
+            isValidWith();
+        // If firstArg is proc
+        if (firstArg) {
+
+        }
+            
+    }
     return true;
 }

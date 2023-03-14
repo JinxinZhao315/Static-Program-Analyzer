@@ -56,22 +56,34 @@ PQLRefConsistentLogic::PQLRefConsistentLogic() {
 	createStmtRefModifies();
 	createStmtRefUses();
 	createVarRef();
-	logicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
-	logicMap.emplace("ModifiesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
-	logicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
-	logicMap.emplace("UsesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtUsesSet, varSet));
-	logicMap.emplace("Follows", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	logicMap.emplace("Follows*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	logicMap.emplace("Parent", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	logicMap.emplace("Parent*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	logicMap.emplace("Calls", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
-	logicMap.emplace("Calls*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
-	logicMap.emplace("Next", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	logicMap.emplace("Next*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
+	relationLogicMap.emplace("ModifiesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
+	relationLogicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
+	relationLogicMap.emplace("UsesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtUsesSet, varSet));
+	relationLogicMap.emplace("Follows", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Follows*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Parent", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Parent*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Calls", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
+	relationLogicMap.emplace("Calls*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
+	relationLogicMap.emplace("Next", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Next*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 }
 
-bool PQLRefConsistentLogic::hasRef(std::string relation, std::string leftType, std::string rightType) {
-	std::unordered_map<std::string, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>>::iterator setPairPointer = logicMap.find(relation);
+bool PQLRefConsistentLogic::hasRelationRef(std::string relation, std::string leftType, std::string rightType) {
+	std::unordered_map<std::string, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>>::iterator setPairPointer = relationLogicMap.find(relation);
+	std::unordered_set<std::string> leftSet = setPairPointer->second.first;
+	std::unordered_set<std::string> rightSet = setPairPointer->second.second;
+	bool inLeftSet = leftSet.find(leftType) != leftSet.end();
+	bool inRightSet = rightSet.find(rightType) != rightSet.end();
+	if (inLeftSet && inRightSet) {
+		return true;
+	}
+	return false;
+}
+
+bool PQLRefConsistentLogic::hasWithRef(std::string relation, std::string leftType, std::string rightType) {
+	std::unordered_map<std::string, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>>::iterator setPairPointer = relationLogicMap.find(relation);
 	std::unordered_set<std::string> leftSet = setPairPointer->second.first;
 	std::unordered_set<std::string> rightSet = setPairPointer->second.second;
 	bool inLeftSet = leftSet.find(leftType) != leftSet.end();
