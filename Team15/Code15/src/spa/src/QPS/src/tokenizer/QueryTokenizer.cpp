@@ -53,19 +53,44 @@ void QueryTokenizer::tokenizeClauses(std::string input,
                                      SelectClause& selectClause,
                                      std::vector<SuchThatClause>& suchThatClauseVec,
                                      std::vector<PatternClause>& patternClauseVec) {
-	std::string keyword = extractKeyword(input);
+    std::string keyword = extractKeyword(input);
 	if (keyword != "Select") {
 		throw PQLSyntaxError("PQL syntax error: No 'select' keyword");
 	}
 	tokenizeSelectClause(input, selectClause);
+    std::string prevClauseType;
 	while (input.length() != 0) {
 		keyword = extractKeyword(input);
 		if (keyword == "such") {
+            if (extractKeyword(input) != "that") {
+                throw PQLSyntaxError("PQL syntax error: No 'that' nextKey");
+            }
 			tokenizeSuchThatClause(input, suchThatClauseVec);
+            prevClauseType = "such";
 		}
 		else if (keyword == "pattern") {
 			tokenizePatternClause(input, varTable, patternClauseVec);
-		}
+            prevClauseType = "pattern";
+		} else if (keyword == "and") {
+
+            std::string nextKeyword = peekKeyword(input);
+            if (nextKeyword == "such" || nextKeyword == "pattern") {
+                throw PQLSyntaxError("PQL syntax error: Invalid use of and");
+            }
+
+            if (prevClauseType == "such") {
+                tokenizeSuchThatClause(input, suchThatClauseVec);
+            } else { // prevClauseType == "pattern"
+                if (Utility::getReferenceType(nextKeyword) != Utility::SYNONYM ) {
+                    throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
+                }
+                if (std::find(relationships.begin(), relationships.end(), nextKeyword) != relationships.end()) {
+                    throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
+                }
+                tokenizePatternClause(input, varTable, patternClauseVec);
+            }
+
+        }
 		else {
 			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
 		}
@@ -105,14 +130,6 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, SelectClause& sele
 }
 
 void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec) {
-	/*std::size_t nextWhiteSpace = input.find_first_of(Utility::WHITESPACES);
-	if (nextWhiteSpace == std::string::npos) {
-		throw - 1;
-	}*/
-	std::string keyword = extractKeyword(input);
-	if (keyword != "that") {
-		throw PQLSyntaxError("PQL syntax error: No 'that' keyword");
-	}
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
@@ -140,7 +157,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
                                            std::vector<PatternClause>& patternClauseVec) {
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t firstComma = input.find_first_of(",");
-    std::size_t lastComma = input.find_last_of(",");
+    std::size_t secondComma = input.find_first_of(",", firstComma + 1);
 	std::size_t nextRightPar = input.find_first_of(")");
 	if (nextLeftPar == std::string::npos || firstComma == std::string::npos || nextRightPar == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
@@ -157,14 +174,14 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
 
     if (synonymType == "if") {
         // 3 arguments case
-        if (firstComma == lastComma) {
+        if (secondComma == std::string::npos || secondComma > nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Only 1 comma in pattern clause if type");
         }
         firstArg = Utility::trim(input.substr(nextLeftPar + 1, firstComma - nextLeftPar - 1),
                                              Utility::WHITESPACES);
-        secondArg = Utility::trim(input.substr(firstComma + 1, lastComma - firstComma - 1),
+        secondArg = Utility::trim(input.substr(firstComma + 1, secondComma - firstComma - 1),
                                               Utility::WHITESPACES);
-        thirdArg = Utility::trim(input.substr(lastComma + 1, nextRightPar - lastComma - 1),
+        thirdArg = Utility::trim(input.substr(secondComma + 1, nextRightPar - secondComma - 1),
                                               Utility::WHITESPACES);
     } else {
         // 2 arguments case
@@ -172,7 +189,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
             throw PQLSemanticError("PQL Semantic error: pattern clause synonym type is not assign, while or if");
         }
 
-        if (firstComma != lastComma) {
+        if (secondComma < nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Too many commas in pattern clause assign and while type");
         }
 
@@ -200,20 +217,15 @@ std::string QueryTokenizer::extractKeyword(std::string& input) {
 	return keyword;
 }
 
-//std::string QueryTokenizer::trim(std::string input) {
-//    std::string trimmed = input;
-//    std::size_t firstWhitespace = trimmed.find_first_not_of(Utility::WHITESPACES);
-//    // trim left
-//	if (firstWhitespace != std::string::npos) {
-//		trimmed = trimmed.substr(firstWhitespace);
-//	}
-//    // trim right
-//    std::size_t lastWhitespace = trimmed.find_last_not_of(Utility::WHITESPACES);
-//    if (lastWhitespace != std::string::npos) {
-//        trimmed = trimmed.substr(0, lastWhitespace + 1);
-//    }
-//    return trimmed;
-//}
+std::string QueryTokenizer::peekKeyword(std::string input) {
+    input = Utility::trim(input, Utility::WHITESPACES);
+    std::size_t nextBracket = input.find_first_of("(");
+    if (nextBracket == std::string::npos) {
+        throw PQLSyntaxError("PQL syntax error: Invalid and clause");
+    }
+    std::string keyword = Utility::trim(input.substr(0, nextBracket), Utility::WHITESPACES);
+    return keyword;
+}
 
 std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
     std::vector<std::string> ret;

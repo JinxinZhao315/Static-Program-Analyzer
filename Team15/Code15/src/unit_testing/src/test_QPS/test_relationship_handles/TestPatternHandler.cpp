@@ -63,6 +63,15 @@ void testPatternFillPkb2(PKB& pkb) {
     whilePatterns.insert(make_pair("x", set<Line>({line6})));
     pkb.addAllWhilePatterns(whilePatterns);
 
+    unordered_map<int, int> follows = { {1, 4}, {4, 6} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {4, 6} },
+            {4, {6} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
     // Line 1: if (x > 5) {
     // Line 2: n = n + 1 } else {
     // Line 3: m = m - 1}
@@ -262,6 +271,9 @@ TEST_CASE("patternHandler while test") {
     string retStr2 = TestUtility::testDriver("while w; Select w pattern w (\"y\",_)", pkb);
     REQUIRE(retStr2 == "4");
 
+    string retStr5 = TestUtility::testDriver("while w; Select w pattern w (\"y\",_) such that Follows(w,6)", pkb);
+    REQUIRE(retStr5 == "4");
+
     string retStr3 = TestUtility::testDriver("while w; Select w pattern w (\"t\",_)", pkb);
     REQUIRE(retStr3 == "none");
 
@@ -291,6 +303,9 @@ TEST_CASE("patternHandler if test") {
 
     string retStr2 = TestUtility::testDriver("if i; Select i pattern i (\"x\",_,_)", pkb);
     REQUIRE(retStr2 == "1");
+
+    string retStr5 = TestUtility::testDriver("if i; Select i pattern i (\"x\",_,_) such that Follows*(i, 4)", pkb);
+    REQUIRE(retStr5 == "1");
 
     string retStr3 = TestUtility::testDriver("if i; Select i pattern i (\"t\",_,_)", pkb);
     REQUIRE(retStr3 == "none");

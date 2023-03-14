@@ -21,4 +21,9 @@ procedure proc1 {
       f = a * b + c * d;
       g = a * (b + c) * d;
     }
-  } }
+  }
+}
+
+procedure proc2 {
+  e = a + b * c - d;
+}
