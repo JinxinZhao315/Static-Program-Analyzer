@@ -1,27 +1,40 @@
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
-#include "source_processor/include/extractor/CFGNode.h"
 
 bool noNextNode(const CFGNode& node) {
     return node.next.empty();
 }
 
-unordered_map<int, set<int>> extractNextRSForProcedure(const CFGNode& rootNode,
+bool checkPair(int rootLine, int nextLine, unordered_map<int, set<int>> currentProcNextRS) {
+    if(currentProcNextRS.count(rootLine) == 0) {
+        return true;
+    } else {
+        set<int> rootSet = currentProcNextRS.at(rootLine);
+        return rootSet.find(nextLine) == rootSet.end();
+    }
+}
+
+unordered_map<int, set<int>> extractNextRSForProcedure(CFGNode* rootNode,
     unordered_map<int, set<int>> currentProcNextRS) {
-        if(!noNextNode(rootNode)) {
-            for(const CFGNode& next : rootNode.next) {
-                int rootLine = rootNode.lineNumber;
-                int nextLine = next.lineNumber;
+        if(!noNextNode(*rootNode)) {
+            for(CFGNode* next : rootNode->next) {
+                int rootLine = rootNode->lineNumber;
+                int nextLine = next->lineNumber;
+                if(!checkPair(rootLine, nextLine, currentProcNextRS)) {
+                    // cycle detected
+                    continue;
+                }
                 currentProcNextRS[rootLine].insert(nextLine);
-                extractNextRSForProcedure(next, currentProcNextRS);
+                unordered_map<int, set<int>> temp = (extractNextRSForProcedure(next, currentProcNextRS));
+                currentProcNextRS.insert(temp.begin(), temp.end());
             }
         }
         return currentProcNextRS;
 }
 
-unordered_map<int, set<int>> extractNextRS(const vector<CFGNode>& rootNodes) {
+unordered_map<int, set<int>> extractNextRS(const vector<CFGNode*>& rootNodes) {
     unordered_map<int, set<int>> nextRS;
     unordered_map<int, set<int>> currentProcNextRS;
-    for(const CFGNode& rootNode : rootNodes) {
+    for(CFGNode* rootNode : rootNodes) {
         currentProcNextRS = extractNextRSForProcedure(rootNode, currentProcNextRS);
         nextRS.insert(currentProcNextRS.begin(), currentProcNextRS.end());
         currentProcNextRS.clear();
