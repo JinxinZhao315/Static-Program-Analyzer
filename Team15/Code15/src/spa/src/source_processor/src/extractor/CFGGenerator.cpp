@@ -44,6 +44,7 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
     CFGNode* prevNode = rootNode;
     int endOfThen = 0;
     bool startOfElse = false;
+    bool prevLineProcessedBefore = false;
     for (int i = start; i < program.size(); i++) {
         Line line = program[i];
         int lineNumber = line.getLineNumber();
@@ -54,12 +55,18 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
         } else {
             currNode = new CFGNode(); // temporary dummy node
         }
-        cout << "currNode, lineType: " << lineType << ", lineNumber: " << lineNumber << endl;
-        if (currNode->hasBeenVisited()) {
-            cout << "Visited before: " << lineNumber << endl;
+//        cout << "currNode, lineType: " << lineType << ", lineNumber: " << lineNumber << endl;
+        if (processedLines.count(i) != 0) {
+//            cout << "Line has been processed before: " << i << endl;
+            prevLineProcessedBefore = true;
             continue;
         }
-        currNode->markVisited();
+        cout << endl << "call print function " << i << ", Root: " << rootNode->getLineNumber() << endl;
+        if (i == 7) {
+            cout << "here: " << prevNode->getLineNumber() << endl;
+        }
+        printCFG();
+        processedLines.insert(i);
         CFGNode* nextNode = nodes[prevNode->getLineNumber() + 1];
         if (lineType == "procedure") {
             auto* newRoot = new CFGNode(-1);
@@ -69,7 +76,7 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
             prevNode->addNext(currNode);
 //            CFGNode* savedCurrNode = currNode; //TODO: check if needed
             helper(program, i + 1, currNode, lineType);
-//            prevNode = savedCurrNode; //TODO: check if needed
+            prevNode = nullptr;
         } else if (lineType == "else") {
             startOfElse = true;
             endOfThen = prevNode->getLineNumber(); //store previous line to link to join
@@ -95,10 +102,14 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
                 }
                 continue;
             }
+            if (prevLineProcessedBefore) {
+                prevLineProcessedBefore = false;
+                continue;
+            }
             prevNode->addNext(currNode);
         }
-        cout << endl << "call print function " << i << ", Root: " << rootNode->getLineNumber();
-        printCFG();
+//        cout << endl << "call print function " << i << ", Root: " << rootNode->getLineNumber();
+//        printCFG();
         if (currNode->getLineNumber() != 0) {
             prevNode = currNode;
         }

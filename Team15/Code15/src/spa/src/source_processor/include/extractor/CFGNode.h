@@ -8,7 +8,7 @@ class CFGNode {
 public:
     int lineNumber;
     std::set<CFGNode*> next;
-    bool isVisited = false;
+
     explicit CFGNode() : lineNumber(0), next() {}
 
     explicit CFGNode(int lineNumber) : lineNumber(lineNumber), next() {}
@@ -21,12 +21,5 @@ public:
         if (successor->lineNumber != 0 && this->lineNumber != 0 && successor != this) {
             next.insert(successor);
         }
-    }
-    void markVisited() {
-        isVisited = true;
-    }
-
-    bool hasBeenVisited() const {
-        return isVisited;
     }
 };
