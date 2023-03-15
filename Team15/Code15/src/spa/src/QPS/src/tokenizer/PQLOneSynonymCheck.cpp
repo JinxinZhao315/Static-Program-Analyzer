@@ -102,14 +102,16 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 
     //attrRef synName should be in varTable
     for (WithClause withClause : withClauseVec) {
-        if (withClause.getFirstArg().isRefAttrRef()) {
-            std::string firstArg = withClause.getFirstArg().getAttrRef().getSynName();
+        if (withClause.isFirstArgAttrRef()) {
+            AttrRef firstAttrRef = withClause.getFirstArgAttrRef();
+            std::string firstArg = firstAttrRef.getSynName();
             if (varTable.count(firstArg) != 1) {
                 return false;
             }
         }
-        if (withClause.getSecondArg().isRefAttrRef()) {
-            std::string secondArg = withClause.getSecondArg().getAttrRef().getSynName();
+        if (withClause.isSecondArgAttrRef()) {
+            AttrRef secondAttrRef = withClause.getSecondArgAttrRef();
+            std::string secondArg = secondAttrRef.getSynName();
             if (varTable.count(secondArg) != 1) {
                 return false;
             }

@@ -270,24 +270,24 @@ TEST_CASE("PQLPreprocessor with clause") {
     Query query1 = preprocessor.preprocess(str1);
     WithClause withCl1 = query1.getWithClauseVec()[0];
     
-    REQUIRE(withCl1.getFirstArg().isRefAttrRef() == true);
-    REQUIRE(withCl1.getFirstArg().getAttrRef().getSynName() == "a1");
-    REQUIRE(withCl1.getFirstArg().getAttrRef().getAttrName() == "stmt#");
+    REQUIRE(withCl1.isFirstArgAttrRef() == true);
+    REQUIRE(withCl1.getFirstArgAttrRef().getSynName() == "a1");
+    REQUIRE(withCl1.getFirstArgAttrRef().getAttrName() == "stmt#");
 
-    REQUIRE(withCl1.getSecondArg().isRefAttrRef() == true);
-    REQUIRE(withCl1.getSecondArg().getAttrRef().getSynName() == "a2");
-    REQUIRE(withCl1.getSecondArg().getAttrRef().getAttrName() == "stmt#");
+    REQUIRE(withCl1.isSecondArgAttrRef() == true);
+    REQUIRE(withCl1.getSecondArgAttrRef().getSynName() == "a2");
+    REQUIRE(withCl1.getSecondArgAttrRef().getAttrName() == "stmt#");
 
 
     std::string str2 = "assign a1, a2; procedure p1; Select a1 with a1.stmt# = p1.procName";
     Query query2 = preprocessor.preprocess(str2);
     WithClause withCl2 = query2.getWithClauseVec()[0];
 
-    REQUIRE(withCl2.getFirstArg().isRefAttrRef() == true);
-    REQUIRE(withCl2.getFirstArg().getAttrRef().getSynName() == "a1");
-    REQUIRE(withCl2.getFirstArg().getAttrRef().getAttrName() == "stmt#");
+    REQUIRE(withCl2.isFirstArgAttrRef() == true);
+    REQUIRE(withCl2.getFirstArgAttrRef().getSynName() == "a1");
+    REQUIRE(withCl2.getFirstArgAttrRef().getAttrName() == "stmt#");
 
-    REQUIRE(withCl2.getSecondArg().isRefAttrRef() == true);
-    REQUIRE(withCl2.getSecondArg().getAttrRef().getSynName() == "p1");
-    REQUIRE(withCl2.getSecondArg().getAttrRef().getAttrName() == "procName");
+    REQUIRE(withCl2.isSecondArgAttrRef() == true);
+    REQUIRE(withCl2.getSecondArgAttrRef().getSynName() == "p1");
+    REQUIRE(withCl2.getSecondArgAttrRef().getAttrName() == "procName");
 }

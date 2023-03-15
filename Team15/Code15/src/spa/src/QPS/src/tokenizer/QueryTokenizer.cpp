@@ -295,9 +295,13 @@ std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
 
 Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, std::string> varTable) {
 	std::string type = Utility::getReferenceType(input);
-	if (type == Utility::QUOTED_IDENT || type == Utility::INTEGER) {
+	if (type == Utility::QUOTED_IDENT) {
 		input = Utility::trim_double_quotes(input);
-		return Ref(input);
+		return Ref(input, true);
+	}
+	else if (type == Utility::INTEGER) {
+		input = Utility::trim_double_quotes(input);
+		return Ref(input, false);
 	}
 	else if (syntaxChecker.validateAttrRef(input)) {
 		std::size_t periodIndex = input.find_first_of(".");

@@ -10,6 +10,12 @@ public:
 	WithClause();
 	WithClause(Ref firstArg, Ref secondArg);
 	~WithClause();
-	Ref getFirstArg();
-	Ref getSecondArg();
+
+	AttrRef getFirstArgAttrRef();
+	AttrRef getSecondArgAttrRef();
+	std::string getFirstArgConstValue();
+	std::string getSecondArgConstValue();
+
+	bool isFirstArgAttrRef();
+	bool isSecondArgAttrRef();
 }; 
