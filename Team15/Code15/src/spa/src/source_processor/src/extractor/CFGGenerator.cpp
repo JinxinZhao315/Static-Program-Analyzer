@@ -39,39 +39,61 @@ unordered_map<int, CFGNode*> createNodes(const vector<Line>& program) {
     return nodes;
 }
 
-void helper(const vector<Line>& program, int start, CFGNode* prevNode) {
+void addSuccessor(CFGNode* currNode, CFGNode* prevNode) {
+    if (currNode->getLineNumber() != 0 && currNode != prevNode) {
+        prevNode->addNext(currNode);
+    }
+}
+
+void helper(const vector<Line>& program, int start, CFGNode* rootNode, string rootLineType) {
     cout << endl << "Helper function - Starting line: " << start << endl;
+    CFGNode* prevNode = rootNode;
     for (int i = start; i < program.size(); i++) {
         Line line = program[i];
         int lineNumber = line.getLineNumber();
         string lineType = line.getType();
-        CFGNode *currNode;
+        CFGNode* currNode;
         if (lineNumber > 0) {
             currNode = nodes[lineNumber];
         } else {
             currNode = new CFGNode();
         }
-        cout << "currNode"  << ", lineType: " << lineType << endl;
+        cout << "currNode, lineType: " << lineType << endl;
         if (currNode->hasBeenVisited()) {
             cout << "Visited before: " << lineNumber << endl;
             continue;
         }
         currNode->markVisited();
         if (lineType == "procedure") {
-            auto* newRoot = new CFGNode();
+            auto* newRoot = new CFGNode(-1);
             setOfRoots.insert(newRoot);
-            helper(program, i, newRoot);
-            break;
-        } else if (lineType == "if" || lineType == "while" || lineType == "else") {
-            helper(program, i, currNode);
+            helper(program, i + 1, newRoot, "procedure");
+        } else if (lineType == "if") {
+            addSuccessor(currNode, prevNode);
+            helper(program, i + 1, currNode, "if");
+        } else if (lineType == "else") {
+            addSuccessor(rootNode, prevNode);
+        } else if (lineType == "while") {
+            addSuccessor(currNode, prevNode);
+            helper(program, i + 1, currNode, lineType);
         } else if (lineType == "}") {
-            break;
+            //end of while loop or if-else
+            if (rootLineType == "while") { // exiting while loop
+                addSuccessor(rootNode, prevNode);  // link last statement to head of while
+                if (nodes[lineNumber + 1]) {
+                    // link head of while to first statement after loops
+                    addSuccessor(nodes[lineNumber + 1], rootNode);
+                }
+            }
+            addSuccessor(prevNode, rootNode);
+            return;
         } else {
-            prevNode->addNext(currNode);
+            addSuccessor(currNode, prevNode);
         }
-        prevNode = currNode;
+        addSuccessor(currNode, prevNode);
     }
 }
+
 
 set<CFGNode*> generateCFG(const vector<Line>& program) {
     if (program.size() < 2) {
@@ -80,9 +102,9 @@ set<CFGNode*> generateCFG(const vector<Line>& program) {
     nodes = createNodes(program);
     // Create first node
     cout << "Generate CFG" << endl;
-    auto* rootNode = new CFGNode();
+    auto* rootNode = new CFGNode(-1); // create dummy node
     setOfRoots.insert(rootNode);
-    helper(program, 1, rootNode);
+    helper(program, 1, rootNode, "");
     cout << endl << endl;
     printCFG();
     return setOfRoots;
