@@ -2,6 +2,7 @@
 
 set<CFGNode*> setOfRoots = {};
 unordered_map<int, CFGNode*> nodes;
+unordered_set<int> processedLines = {};
 
 void printCFG() {
     cout << endl << "printCFG" << endl;
@@ -42,6 +43,7 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
     cout << endl << "Helper function - Starting line: " << start << endl;
     CFGNode* prevNode = rootNode;
     int endOfThen = 0;
+    bool startOfElse = false;
     for (int i = start; i < program.size(); i++) {
         Line line = program[i];
         int lineNumber = line.getLineNumber();
@@ -58,39 +60,45 @@ void helper(const vector<Line>& program, int start, CFGNode* rootNode, const str
             continue;
         }
         currNode->markVisited();
-
+        CFGNode* nextNode = nodes[prevNode->getLineNumber() + 1];
         if (lineType == "procedure") {
             auto* newRoot = new CFGNode(-1);
             setOfRoots.insert(newRoot);
             helper(program, i + 1, newRoot, "procedure");
-        } else if (lineType == "if") {
+        } else if (lineType == "if" || lineType == "while") {
             prevNode->addNext(currNode);
-            helper(program, i + 1, currNode, "if");
-        } else if (lineType == "else") {
-            endOfThen = prevNode->getLineNumber(); //store previous line to link to join
-            rootNode->addNext(prevNode);
-        } else if (lineType == "while") {
-            if (currNode->getLineNumber() != 0) prevNode->addNext(currNode);
+//            CFGNode* savedCurrNode = currNode; //TODO: check if needed
             helper(program, i + 1, currNode, lineType);
+//            prevNode = savedCurrNode; //TODO: check if needed
+        } else if (lineType == "else") {
+            startOfElse = true;
+            endOfThen = prevNode->getLineNumber(); //store previous line to link to join
+            if (nextNode) rootNode->addNext(nextNode);
         } else if (lineType == "}") {
-            CFGNode* nextNode = nodes[prevNode->getLineNumber() + 1];
             if (rootLineType == "while") { // exiting while loop
-                if (rootNode != prevNode) prevNode->addNext(rootNode);  // link last statement to head of while
+                prevNode->addNext(rootNode);  // link last statement to head of while
                 if (nextNode) { // if there is a statement after the while loop
                     // link head of while to first statement after loop
-                    if (rootNode != nextNode) rootNode->addNext(nextNode);
+                    rootNode->addNext(nextNode);
                 }
             } else if (rootLineType == "if" && nextNode) {
                 // join end of "then" block and "else" block to the node outside "if-else" block
                 nodes[endOfThen]->addNext(nextNode);
                 prevNode->addNext(nextNode);
             }
-//            rootNode->addNext(prevNode);
             return;
         } else {
-            printCFG();
-            if (currNode->getLineNumber() != 0 && currNode != prevNode) prevNode->addNext(currNode);
+            if (startOfElse) {
+                startOfElse = false;
+                if (currNode->getLineNumber() != 0) {
+                    prevNode = currNode;
+                }
+                continue;
+            }
+            prevNode->addNext(currNode);
         }
+        cout << endl << "call print function " << i << ", Root: " << rootNode->getLineNumber();
+        printCFG();
         if (currNode->getLineNumber() != 0) {
             prevNode = currNode;
         }

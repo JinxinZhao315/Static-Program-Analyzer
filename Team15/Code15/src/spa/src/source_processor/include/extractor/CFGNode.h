@@ -18,7 +18,7 @@ public:
     [[nodiscard]] const set<CFGNode*>& getNext() const { return next; }
 
     void addNext(CFGNode* successor) {
-        if (successor != this) {
+        if (successor->lineNumber != 0 && this->lineNumber != 0 && successor != this) {
             next.insert(successor);
         }
     }
