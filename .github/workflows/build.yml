@@ -1,0 +1,108 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build (MacOS)
+        run: |
+          cd Team15/Code15
+          mkdir cmake-build
+          cd cmake-build
+          brew install cmake
+          cmake ../
+          cmake --build ./ --target autotester --config Release
+      - name: Cache (MacOS)
+        uses: actions/cache@v2
+        with:
+          path: |
+            Team15/Code15/cmake-build/src/autotester
+          key: macos-autotester
+
+  test-macos:
+    needs: build-macos
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        tests:
+          - { source: source-assign.txt, query: query-assign.txt, output: assign.xml }
+          - { source: source-calls.txt, query: query-calls.txt, output: calls.xml }
+          - { source: source-follows.txt, query: query-follows.txt, output: follows.xml }
+          - { source: source-general.txt, query: query-general.txt, output: general.xml }
+          - { source: source-ifwhile.txt, query: query-ifwhile.txt, output: ifwhile.xml }
+          - { source: source-parent.txt, query: query-parent.txt, output: parent.xml }
+          - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore (MacOS)
+        uses: actions/cache@v2
+        with:
+          path: |
+            Team15/Code15/cmake-build/src/autotester
+          key: macos-autotester
+      - name: Test (MacOS)
+        run: |
+          cd $GITHUB_WORKSPACE 
+          Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
+          
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build (Windows)
+        shell: bash
+        run: |
+          cd Team15/Code15
+          mkdir cmake-build
+          cd cmake-build
+          choco install -y cmake
+          cmake ..
+          cmake --build . --target autotester --config Release
+      - name: Cache (Windows)
+        uses: actions/cache@v2
+        with:
+          path: |
+            Team15/Code15/cmake-build/src/autotester/Release/
+          key: windows-autotester
+
+  test-windows:
+    needs: build-windows
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        tests:
+          - { source: source-assign.txt, query: query-assign.txt, output: assign.xml }
+          - { source: source-calls.txt, query: query-calls.txt, output: calls.xml }
+          - { source: source-follows.txt, query: query-follows.txt, output: follows.xml }
+          - { source: source-general.txt, query: query-general.txt, output: general.xml }
+          - { source: source-ifwhile.txt, query: query-ifwhile.txt, output: ifwhile.xml }
+          - { source: source-parent.txt, query: query-parent.txt, output: parent.xml }
+          - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore (Windows)
+        uses: actions/cache@v2
+        with:
+          path: |
+            Team15/Code15/cmake-build/src/autotester/Release/
+          key: windows-autotester
+      - name: Test (Windows)
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE
+          ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/${{ matrix.tests.source }} ./Team15/Tests15/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
