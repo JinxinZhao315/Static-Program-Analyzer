@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <string>
 #include <unordered_set>
+#include "Utility.h"
 
 #pragma once 
 
@@ -26,27 +27,29 @@ private:
 
 	std::unordered_map<std::string,
 		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> relationLogicMap;
-	std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>>> withLogicMap;
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> withLogicMap;
 	std::unordered_set<std::string> procUsesModifiesSet;
 	std::unordered_set<std::string> stmtSet;
 	std::unordered_set<std::string> stmtModifiesSet;
 	std::unordered_set<std::string> stmtUsesSet;
 	std::unordered_set<std::string> varSet;
 	std::unordered_set<std::string> procCallsSet;
+
 	std::pair<std::string, std::string> procNameNamePair;
 	std::pair<std::string, std::string> stmtNumIntPair;
 	std::pair<std::string, std::string> valueIntPair;
 	std::pair<std::string, std::string> varNameNamePair;
-	std::unordered_set<std::pair<std::string, std::string>> procPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> callPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> constantPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> variablePairSet;
-	std::unordered_set<std::pair<std::string, std::string>> stmtPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> printPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> readPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> assignPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> ifPairSet;
-	std::unordered_set<std::pair<std::string, std::string>> whilePairSet;
+
+	std::unordered_map<std::string, std::string> procPairSet;
+	std::unordered_map<std::string, std::string> callPairSet;
+	std::unordered_map<std::string, std::string> constantPairSet;
+	std::unordered_map<std::string, std::string> variablePairSet;
+	std::unordered_map<std::string, std::string> stmtPairSet;
+	std::unordered_map<std::string, std::string> printPairSet;
+	std::unordered_map<std::string, std::string> readPairSet;
+	std::unordered_map<std::string, std::string> assignPairSet;
+	std::unordered_map<std::string, std::string> ifPairSet;
+	std::unordered_map<std::string, std::string> whilePairSet;
 
 	void createUsesModifiesProcRef();
 	void createCallsProcRef();
@@ -78,5 +81,5 @@ public:
 
 	bool hasRelationRef(std::string relation, std::string leftType, std::string rightType);
 
-	bool hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rihgtValue);
+	bool hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rightValue);
 };

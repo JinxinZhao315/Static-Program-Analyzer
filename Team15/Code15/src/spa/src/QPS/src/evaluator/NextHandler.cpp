@@ -129,7 +129,7 @@ Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultT
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
         for (std::string currSynonVal : currSynonValues) {
-            std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, currSynonVal);
+            std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, currSynonVal);
             if (!nextSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
             }

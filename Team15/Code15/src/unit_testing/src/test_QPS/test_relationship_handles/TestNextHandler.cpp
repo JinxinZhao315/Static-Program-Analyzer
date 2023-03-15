@@ -13,7 +13,7 @@ string testNext(string queryStr) {
     PKB pkb;
     pkb.addAllProcs({ "main", "proc1", "proc2", "proc3","proc4" });
     pkb.addAllStmts({ {"while",{1}}, {"if",{2}},{"=",{3,4}},{"read",{5}}});
-    pkb.addAllNext({ {1,{2, 5}}, {2, {3, 4}}, {3, {1}}, {4,{1}} });
+    pkb.addAllNext({ {1,{2, 5}}, {2, {3, 4}}, {3, {1}}, {4,{1}}, {5,{}} });
     pkb.addAllNextStar({ { 1,{1,2,3,4,5} }, { 2, {1,2,3,4,5} }, {3,{1,2,3,4,5}}, {4,{1,2,3,4,5}}, {5, {}}
         });
     string retStr = TestUtility::testDriver(queryStr, pkb);
@@ -121,7 +121,7 @@ TEST_CASE("Next/Next* (Stmt, Integer)") {
 
     string retStr2 = testNext("stmt p; Select p such that Next(p, 1)");
     //cout << retStr3 << endl;
-    REQUIRE(retStr2 == "none");
+    REQUIRE(retStr2 == "3,4");
 
     string retStr3 = testNext("stmt p; Select p such that Next*(p, 3)");
     //cout << retStr2 << endl;
@@ -143,7 +143,7 @@ TEST_CASE("Next/Next* (Stmt, Stmt)") {
 
     string retStr5 = testNext("stmt p,q; Select q such that Next(p, q)");
     //cout << retStr3 << endl;
-    REQUIRE(retStr5 == "2,3,4,5");
+    REQUIRE(retStr5 == "1,2,3,4,5");
 
     string retStr3 = testNext("stmt p,q; Select q such that Next*(p, q)");
     //cout << retStr2 << endl;
@@ -191,7 +191,7 @@ TEST_CASE("Next/Next* (_, Stmt)") {
 
     string retStr1 = testNext("stmt a; Select a such that Next(_, a)");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "2,3,4,5");
+    REQUIRE(retStr1 == "1,2,3,4,5");
 
     string retStr3 = testNext("stmt p; Select p such that Next*(_, p)");
     //cout << retStr2 << endl;
@@ -206,7 +206,7 @@ TEST_CASE("Next/Next* (_, Integer)") {
 
     string retStr1 = testNext("stmt a; Select a such that Next(_, 1)");
     //cout << retStr1 << endl;
-    REQUIRE(retStr1 == "none");
+    REQUIRE(retStr1 == "1,2,3,4,5");
 
     string retStr3 = testNext("stmt p; Select p such that Next*(_, 3)");
     //cout << retStr2 << endl;

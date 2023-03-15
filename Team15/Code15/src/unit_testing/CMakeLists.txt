@@ -23,11 +23,9 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.h"
         )
 
-<<<<<<< HEAD
+
 add_executable(unit_testing ${srcs} ${headers} "src/test_QPS/test_relationship_handles/TestCallsHandler.cpp" "src/test_QPS/test_relationship_handles/TestNextHandler.cpp")
-=======
-add_executable(unit_testing ${srcs} ${headers} "src/test_QPS/test_relationship_handles/TestCallsHandler.cpp" "src/test_QPS/test_relationship_handles/TestWithHandler.cpp")
->>>>>>> 02af504e2c3fe2b40c75e825fb33d70479190afb
+
 
 target_link_libraries(unit_testing spa)
 

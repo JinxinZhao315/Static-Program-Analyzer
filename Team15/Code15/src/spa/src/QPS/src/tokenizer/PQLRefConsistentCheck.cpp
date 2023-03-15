@@ -112,20 +112,28 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         bool isLeftAttrRef = withLeftArg.isRefAttrRef();
         bool isRightAttrRef = withRightArg.isRefAttrRef();
 
-        if (!isLeftAttrRef || isRightAttrRef) {
+        if (!isLeftAttrRef) {
             return false;
         }
 
         AttrRef leftAttrRef = withLeftArg.getAttrRef();
-        std::string rightValue = withRightArg.getValue();
-        std::string leftType = leftAttrRef.getSynType();
+        std::string leftSynType = leftAttrRef.getSynType();
         std::string leftAttrName = leftAttrRef.getAttrName();
 
-        // If firstArg is proc
-        if (!refConsistentLogic->hasWithRef(leftType, leftAttrName, rightValue)) {
-            return false;
-        }
+        if (isRightAttrRef) {
+            AttrRef rightAttrRef = withRightArg.getAttrRef();
+            std::string rightSynType = rightAttrRef.getSynType();
+            std::string rightAttrName = rightAttrRef.getAttrName();
             
+        }
+        else {
+            std::string rightValue = withRightArg.getValue();
+
+            // If leftSynType isn't paired with correct attribute name and corresponding value, return false.
+            if (!refConsistentLogic->hasWithRef(leftSynType, leftAttrName, rightValue)) {
+                return false;
+            }
+        }
     }
     return true;
 }

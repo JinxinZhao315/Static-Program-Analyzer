@@ -49,26 +49,47 @@ void PQLRefConsistentLogic::createVarRef() {
 	varSet.emplace(IDENT_STRING);
 }
 
-void createProcPairSet() {
-	procPairSet.emplace(this->procNameNamePair);
+void PQLRefConsistentLogic::createProcPairSet() {
+	procPairSet.emplace(procNameNamePair);
 }
-void createCallPairSet() {
+
+void PQLRefConsistentLogic::createCallPairSet() {
+	callPairSet.emplace(stmtNumIntPair);
+	callPairSet.emplace(procNameNamePair);
 }
-void createConstantPairSet() {
+
+void PQLRefConsistentLogic::createConstantPairSet() {
+	constantPairSet.emplace(valueIntPair);
 }
-void createVariablePairSet() {
+
+void PQLRefConsistentLogic::createVariablePairSet() {
+	variablePairSet.emplace(varNameNamePair);
 }
-void createStmtPairSet() {
+
+void PQLRefConsistentLogic::createStmtPairSet() {
+	stmtPairSet.emplace(stmtNumIntPair);
 }
-void createPrintPairSet() {
+
+void PQLRefConsistentLogic::createPrintPairSet() {
+	printPairSet.emplace(stmtNumIntPair);
+	printPairSet.emplace(varNameNamePair);
 }
-void createReadPairSet() {
+
+void PQLRefConsistentLogic::createReadPairSet() {
+	readPairSet.emplace(stmtNumIntPair);
+	readPairSet.emplace(varNameNamePair);
 }
-void createAssignPairSet() {
+
+void PQLRefConsistentLogic::createAssignPairSet() {
+	assignPairSet.emplace(stmtNumIntPair);
 }
-void createWhilePairSet() {
+
+void PQLRefConsistentLogic::createWhilePairSet() {
+	whilePairSet.emplace(stmtNumIntPair);
 }
-void createIfPairSet() {
+
+void PQLRefConsistentLogic::createIfPairSet() {
+	ifPairSet.emplace(stmtNumIntPair);
 }
 
 void PQLRefConsistentLogic::createProcNameNamePair() {
@@ -92,10 +113,22 @@ PQLRefConsistentLogic::PQLRefConsistentLogic() {
 	createStmtRefModifies();
 	createStmtRefUses();
 	createVarRef();
+
 	createProcNameNamePair();
 	createStmtNumIntPair();
 	createValueIntPair();
 	createVarNameNamePair();
+	createAssignPairSet();
+	createCallPairSet();
+	createPrintPairSet();
+	createReadPairSet();
+	createIfPairSet();
+	createWhilePairSet();
+	createProcPairSet();
+	createVariablePairSet();
+	createConstantPairSet();
+	createStmtPairSet();
+
 	relationLogicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
 	relationLogicMap.emplace("ModifiesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
 	relationLogicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
@@ -109,19 +142,16 @@ PQLRefConsistentLogic::PQLRefConsistentLogic() {
 	relationLogicMap.emplace("Next", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 	relationLogicMap.emplace("Next*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 
-	withLogicMap.emplace(PROCEDURE, procNameNamePair);
-	withLogicMap.emplace(CALL, procNameNamePair);
-	withLogicMap.emplace(CALL, stmtNumIntPair);
-	withLogicMap.emplace(VARIABLE, varNameNamePair);
-	withLogicMap.emplace(READ, stmtNumIntPair);
-	withLogicMap.emplace(READ, varNameNamePair);
-	withLogicMap.emplace(WHILE, stmtNumIntPair);
-	withLogicMap.emplace(IF, stmtNumIntPair);
-	withLogicMap.emplace(ASSIGN, stmtNumIntPair);
-	withLogicMap.emplace(STMT, stmtNumIntPair);
-	withLogicMap.emplace(PRINT, stmtNumIntPair);
-	withLogicMap.emplace(PRINT, varNameNamePair);
-	withLogicMap.emplace(CONSTANT, valueIntPair);
+	withLogicMap.emplace(PROCEDURE, procPairSet);
+	withLogicMap.emplace(CALL, callPairSet);
+	withLogicMap.emplace(VARIABLE, variablePairSet);
+	withLogicMap.emplace(READ, readPairSet);
+	withLogicMap.emplace(WHILE, whilePairSet);
+	withLogicMap.emplace(IF, ifPairSet);
+	withLogicMap.emplace(ASSIGN, assignPairSet);
+	withLogicMap.emplace(STMT, stmtPairSet);
+	withLogicMap.emplace(PRINT, printPairSet);
+	withLogicMap.emplace(CONSTANT, constantPairSet);
 }
 
 bool PQLRefConsistentLogic::hasRelationRef(std::string relation, std::string leftType, std::string rightType) {
@@ -136,15 +166,18 @@ bool PQLRefConsistentLogic::hasRelationRef(std::string relation, std::string lef
 	return false;
 }
 
-bool PQLRefConsistentLogic::hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rihgtValue) {
-	std::unordered_map<std::string, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>>::iterator setPairPointer = withLogicMap.find(leftAttrType);
-	std::unordered_set<std::string> leftSet = setPairPointer->second.first;
-	std::unordered_set<std::string> rightSet = setPairPointer->second.second;
-	bool inLeftSet = leftSet.find(leftType) != leftSet.end();
-	bool inRightSet = rightSet.find(rightType) != rightSet.end();
-	if (inLeftSet && inRightSet) {
-		return true;
+bool PQLRefConsistentLogic::hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rightValue) {
+
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator pairSetPointer = withLogicMap.find(leftAttrType);
+	std::unordered_map<std::string, std::string> pairSet = pairSetPointer->second;
+	std::unordered_map<std::string, std::string> ::iterator pairSetIterator;
+	
+	for (pairSetIterator = pairSet.begin(); pairSetIterator != pairSet.end(); pairSetIterator++) {
+		if (leftAttrName == pairSetIterator->first && rightValue == Utility::getReferenceType(pairSetIterator->second)) {
+			return true;
+		}
 	}
+
 	return false;
 }
 
