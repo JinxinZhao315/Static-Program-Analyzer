@@ -18,7 +18,9 @@ public:
     [[nodiscard]] const set<CFGNode*>& getNext() const { return next; }
 
     void addNext(CFGNode* successor) {
-        next.insert(successor);
+        if (successor != this) {
+            next.insert(successor);
+        }
     }
     void markVisited() {
         isVisited = true;

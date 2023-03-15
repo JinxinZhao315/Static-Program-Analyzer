@@ -106,6 +106,18 @@ const vector<Line> ifElse = {
         Line({"}"}, "}"),
 };
 
+const vector<Line> ifElseInProcedure = {
+        Line({"procedure", "ifElseInProcedure", "{"}, "procedure"),
+        Line(1, {"flag", "=", "1", ";"}, "="),
+        Line(2, {"if", "(", "count", "==", "0", ")", "{"}, "if"),
+        Line(3, {"flag", "=", "1", ";"}, "="),
+        Line({"}", "else", "{"}, "else"),
+        Line(4, {"cenX", "=", "cenX", "/", "count", ";"}, "="),
+        Line({"}"}, "}"),
+        Line(5, {"flag", "=", "1", ";"}, "="),
+        Line({"}"}, "}"),
+};
+
 const set<string> ifElseVariables = {"count", "cenX", "cenY", "flag"};
 
 const vector<Line> ifElse2 = {

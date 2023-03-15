@@ -7,6 +7,7 @@ extern const vector<Line> whileLoop2;
 extern const vector<Line> computeCentroid;
 extern const vector<Line> ifElse;
 extern const vector<Line> ifElse2;
+extern const vector<Line> ifElseInProcedure;
 extern const vector<Line> program;
 extern const vector<Line> superNested;
 extern const vector<Line> readPoint;

@@ -50,3 +50,9 @@ TEST_CASE("whileLoopWithLineBeforeAfter") {
     auto result = generateCFG(whileLoopInProcedureWithLinesBeforeAfter);
 //    compareCFG(expected, result);
 }
+
+TEST_CASE("ifElseInProcedure") {
+    const set<CFGNode*> expected = {};
+    auto result = generateCFG(ifElseInProcedure);
+//    compareCFG(expected, result);
+}
