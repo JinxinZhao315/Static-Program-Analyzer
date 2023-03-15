@@ -9,10 +9,42 @@ WithClause::WithClause(Ref firstArg, Ref rightArg) {
 
 WithClause::~WithClause() {}
 
-Ref WithClause::getFirstArg() {
-	return this->firstArg;
+AttrRef WithClause::getFirstArgAttrRef() {
+	return this->firstArg.getAttrRef();
 }
 
-Ref WithClause::getSecondArg() {
-	return this->secondArg;
+AttrRef WithClause::getSecondArgAttrRef() {
+	return this->secondArg.getAttrRef();
+}
+
+//get fixed ident or integer value
+std::string WithClause::getFirstArgConstValue() {
+	if (this->firstArg.isRefIdent()) {
+		return this->firstArg.getIdentValue();
+	} else if (this->firstArg.isRefInteger()){
+		return this->firstArg.getIdentValue();
+	}
+	else {
+		return "";
+	}
+}
+
+std::string WithClause::getSecondArgConstValue() {
+	if (this->secondArg.isRefIdent()) {
+		return this->secondArg.getIdentValue();
+	}
+	else if (this->secondArg.isRefInteger()) {
+		return this->secondArg.getIdentValue();
+	}
+	else {
+		return "";
+	}
+}
+
+bool WithClause::isFirstArgAttrRef() {
+	return this->firstArg.isRefAttrRef();
+}
+
+bool WithClause::isSecondArgAttrRef() {
+	return this->secondArg.isRefAttrRef();
 }
