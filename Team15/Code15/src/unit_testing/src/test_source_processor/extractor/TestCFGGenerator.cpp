@@ -74,6 +74,7 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
             Line({"}"}, "}"),
     };
 
+    auto* node0 = new CFGNode(-1);
     auto* node1 = new CFGNode(1);
     auto* node2 = new CFGNode(2);
     auto* node3 = new CFGNode(3);
@@ -81,6 +82,7 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
     auto* node5 = new CFGNode(5);
     auto* node6 = new CFGNode(6);
 
+    node0->addNext(node1);
     node1->addNext(node2);
     node1->addNext(node5);
     node2->addNext(node3);
@@ -88,7 +90,7 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
     node5->addNext(node6);
     node6->addNext(node5);
 
-    const set<CFGNode*>& expected = {node1};
+    const set<CFGNode*>& expected = {node0};
     const set<CFGNode*>& result = generateCFG(lines);
     compareCFG(expected, result);
 }
