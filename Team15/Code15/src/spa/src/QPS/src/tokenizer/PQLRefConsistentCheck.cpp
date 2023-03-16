@@ -107,32 +107,31 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
     }
     for (WithClause withClause : withClauseVec) {
-        Ref withLeftArg = withClause.getFirstArg();
-        Ref withRightArg = withClause.getSecondArg();
-        bool isLeftAttrRef = withLeftArg.isRefAttrRef();
-        bool isRightAttrRef = withRightArg.isRefAttrRef();
+        
+        bool isLeftAttrRef = withClause.isFirstArgAttrRef();
+        bool isRightAttrRef = withClause.isSecondArgAttrRef();
+        
 
         if (!isLeftAttrRef) {
             return false;
         }
 
-        AttrRef leftAttrRef = withLeftArg.getAttrRef();
+        AttrRef leftAttrRef = withClause.getFirstArgAttrRef();
         std::string leftSynType = leftAttrRef.getSynType();
         std::string leftAttrName = leftAttrRef.getAttrName();
 
         if (isRightAttrRef) {
-            AttrRef rightAttrRef = withRightArg.getAttrRef();
+            AttrRef rightAttrRef = withClause.getSecondArgAttrRef();
             std::string rightSynType = rightAttrRef.getSynType();
             std::string rightAttrName = rightAttrRef.getAttrName();
-            
+            return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, rightSynType, rightAttrName);       
         }
         else {
-            std::string rightValue = withRightArg.getValue();
+            std::string rightValue = withClause.getSecondArgConstValue();
 
             // If leftSynType isn't paired with correct attribute name and corresponding value, return false.
-            if (!refConsistentLogic->hasWithRef(leftSynType, leftAttrName, rightValue)) {
-                return false;
-            }
+            return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, rightValue);
+            
         }
     }
     return true;

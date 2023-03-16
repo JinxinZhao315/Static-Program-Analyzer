@@ -182,21 +182,21 @@ TEST_CASE("Test UsesS Cases") {
 
 TEST_CASE("Test With Cases") {
 	SECTION("Test Positive Cases") {
-		REQUIRE(refConsistentLogic->hasWithRef("call", "procName", "main") == true);
-		REQUIRE(refConsistentLogic->hasWithRef("call", "stmt#", "14") == true);
-		REQUIRE(refConsistentLogic->hasWithRef("print", "varName", "var1") == true);
-		REQUIRE(refConsistentLogic->hasWithRef("read", "stmt#", "52") == true);
-		REQUIRE(refConsistentLogic->hasWithRef("constant", "value", "15") == true);
-		REQUIRE(refConsistentLogic->hasWithRef("while", "stmt#", "1") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("call", "procName", "\"main\"") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("call", "stmt#", "14") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("print", "varName", "\"var1\"") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("read", "stmt#", "52") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("constant", "value", "15") == true);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("while", "stmt#", "1") == true);
 		cout << "PQLRefConsistentLogic:Test With Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
-		REQUIRE(refConsistentLogic->hasWithRef("call", "value", "main") == false);
-		REQUIRE(refConsistentLogic->hasWithRef("call", "stmt#", "main") == false);
-		REQUIRE(refConsistentLogic->hasWithRef("print", "varName", "1") == false);
-		REQUIRE(refConsistentLogic->hasWithRef("read", "procName", "var1") == false);
-		REQUIRE(refConsistentLogic->hasWithRef("constant", "stmt#", "52") == false);
-		REQUIRE(refConsistentLogic->hasWithRef("while", "variable", "quotedIdent") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("call", "value", "\"main\"") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("call", "stmt#", "\"main\"") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("print", "varName", "1") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("read", "procName", "\"var1\"") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("constant", "stmt#", "52") == false);
+		REQUIRE(refConsistentLogic->isWithRefCompatible("while", "variable", "\"quotedIdent\"") == false);
 		cout << "PQLRefConsistentLogic:Test With Cases:Test Negative Cases:passed" << endl;
 	}
 }

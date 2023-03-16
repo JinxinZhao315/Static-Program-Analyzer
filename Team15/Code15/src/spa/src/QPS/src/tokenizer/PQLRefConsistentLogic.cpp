@@ -102,7 +102,7 @@ void PQLRefConsistentLogic::createValueIntPair() {
 	this->valueIntPair = std::make_pair(VALUE, INTEGER);
 }
 void PQLRefConsistentLogic::createVarNameNamePair() {
-	this->varNameNamePair = std::make_pair(VARIABLE, IDENT_STRING);
+	this->varNameNamePair = std::make_pair(VARNAME, IDENT_STRING);
 }
 
 
@@ -166,21 +166,50 @@ bool PQLRefConsistentLogic::hasRelationRef(std::string relation, std::string lef
 	return false;
 }
 
-bool PQLRefConsistentLogic::hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rightValue) {
-
+bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightValue) {
+	bool isLeftAttrTypeValid = withLogicMap.find(leftAttrType) != withLogicMap.end();
+	if (!isLeftAttrTypeValid) {
+		return false;
+	}
 	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator pairSetPointer = withLogicMap.find(leftAttrType);
 	std::unordered_map<std::string, std::string> pairSet = pairSetPointer->second;
-	std::unordered_map<std::string, std::string> ::iterator pairSetIterator;
-	
-	for (pairSetIterator = pairSet.begin(); pairSetIterator != pairSet.end(); pairSetIterator++) {
-		if (leftAttrName == pairSetIterator->first && rightValue == Utility::getReferenceType(pairSetIterator->second)) {
-			return true;
-		}
+
+
+	bool isLeftAttrNameValid = pairSet.find(leftAttrName) != pairSet.end();
+	if (!isLeftAttrNameValid) {
+		return false;
+	}
+	std::string desiredRightValueType = pairSet.find(leftAttrName)->second;
+	std::string actualRightValueType = Utility::getReferenceType(rightValue);
+	return desiredRightValueType == actualRightValueType;
+}
+
+bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightAttrType, std::string rightAttrName) {
+	bool isLeftAttrTypeValid = withLogicMap.find(leftAttrType) != withLogicMap.end();
+	if (!isLeftAttrTypeValid) {
+		return false;
+	}
+	bool isRightAttrTypeValid = withLogicMap.find(rightAttrType) != withLogicMap.end();
+	if (!isRightAttrTypeValid) {
+		return false;
 	}
 
-	return false;
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator leftPairSetPointer = withLogicMap.find(leftAttrType);
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator rightPairSetPointer = withLogicMap.find(rightAttrType);
+	std::unordered_map<std::string, std::string> leftPairSet = leftPairSetPointer->second;
+	std::unordered_map<std::string, std::string> rightPairSet = rightPairSetPointer->second;
+
+	bool isLeftAttrNameValid = leftPairSet.find(leftAttrName) != leftPairSet.end();
+	if (!isLeftAttrNameValid) {
+		return false;
+	}
+	bool isRightAttrNameValid = rightPairSet.find(rightAttrName) != rightPairSet.end();
+	if (!isRightAttrNameValid) {
+		return false;
+	}
+	std::string actualRightValueType = rightPairSet.find(rightAttrName)->second;
+	std::string actualLeftValueType = leftPairSet.find(leftAttrName)->second;
+	return actualRightValueType == actualLeftValueType;
 }
 
 PQLRefConsistentLogic::~PQLRefConsistentLogic() {}
-
-

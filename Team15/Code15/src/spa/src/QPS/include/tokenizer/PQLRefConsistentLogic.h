@@ -21,6 +21,7 @@ private:
 	std::string INTEGER = "integer";
 	std::string VARIABLE = "variable";
 	std::string PROCNAME = "procName";
+	std::string VARNAME = "varName";
 	std::string STMTNUM = "stmt#";
 	std::string VALUE = "value";
 	std::string CONSTANT = "constant";
@@ -81,5 +82,7 @@ public:
 
 	bool hasRelationRef(std::string relation, std::string leftType, std::string rightType);
 
-	bool hasWithRef(std::string leftAttrType, std::string leftAttrName, std::string rightValue);
+	bool isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightValue);
+
+	bool isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightAttrType, std::string rightAttrName);
 };

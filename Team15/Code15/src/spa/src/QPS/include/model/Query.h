@@ -1,10 +1,8 @@
 #include <map>
-#include "QPS/include/model/PatternClause.h"
-#include "QPS/include/model/WithClause.h"
+#include "PatternClause.h"
 #include "SynonymTable.h"
 #include "SelectClause.h"
 #include "WithClause.h"
-
 #include "SuchThatClause.h"
 #pragma once
 
