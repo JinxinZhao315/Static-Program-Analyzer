@@ -174,8 +174,11 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
     }
 }
 
-std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb) {
+std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
+        if (isEarlyExit) {
+            return std::set<std::string>();
+        }
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
         for (int i = 0; i < selectedElem.size(); i++) {
@@ -210,6 +213,9 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
     else if (selectedElem.size() == 1) {
         //not BOOLEAN or BOOLEAN is a synonym
         if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+            if (isEarlyExit) {
+                return std::set<std::string>();
+            }
             std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
@@ -225,7 +231,8 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         }
         //BOOLEAN is BOOLEAN
         else {
-            if (isTableEmpty()) {
+            //no tuple satisfy the condition, there are some synonyms, or no synonym is declared in the later clause but clause evaluate to false
+            if ((isTableEmpty() && !isSynListEmpty()) || isEarlyExit) {
                 return { "FALSE" };
             }
             else {

@@ -107,6 +107,8 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
         if (result.isResultTrue() == false)
         {
+            isEarlyExit = true;
+
             resultTable.clearResultTable();
 
             break;
@@ -114,7 +116,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
         resultTable.combineTable(result.getClauseResult());
         if (resultTable.isTableEmpty()) {
-
+            isEarlyExit = true;
             break;
         }
     }
@@ -127,17 +129,19 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         Result result = withHandler.evalWith(withCl, resultTable, synonymTable);
         if (result.isResultTrue() == false)
         {
+            isEarlyExit = true;
             resultTable.clearResultTable();
             break;
         }
 
         resultTable.combineTable(result.getClauseResult());
         if (resultTable.isTableEmpty()) {
+            isEarlyExit = true;
             break;
         }
     }
 
-    set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames, pkb);
+    set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames, pkb, isEarlyExit);
 
     return retSet;
 }

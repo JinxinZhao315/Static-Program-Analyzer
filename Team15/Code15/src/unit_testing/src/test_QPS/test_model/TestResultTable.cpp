@@ -195,7 +195,7 @@ TEST_CASE("Test SelectedResult 1") {
 	std::vector<std::string> synList = { "a1", "a2" };
 
 	ResultTable resultTable = ResultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({Elem("a1")}, PKB());
+	std::set<std::string> result = resultTable.getSelectedResult({Elem("a1")}, PKB(), false);
 	REQUIRE(result.size() == 1 );
 	REQUIRE(result.count("1") == 1);
 }
@@ -207,7 +207,7 @@ TEST_CASE("Test SelectedResult 2 multiple return synonyms") {
 	};
 	std::vector<std::string> synList = { "a1", "a2" };
 	ResultTable resultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2")}, PKB());
+	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2")}, PKB(), false);
 
 	std::set<std::string> expectedResult = { "1 5", "1 6", "1 7", "1 8" };
 	REQUIRE(result == expectedResult);
@@ -220,7 +220,7 @@ TEST_CASE("Test SelectedResult 3 multiple return same synonyms") {
 	};
 	std::vector<std::string> synList = { "a1", "a2" };
 	ResultTable resultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2"), Elem("a2") }, PKB());
+	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2"), Elem("a2") }, PKB(), false);
 
 	std::set<std::string> expectedResult = { "1 5 5", "1 6 6", "2 7 7", "2 8 8"};
 	REQUIRE(result == expectedResult);
