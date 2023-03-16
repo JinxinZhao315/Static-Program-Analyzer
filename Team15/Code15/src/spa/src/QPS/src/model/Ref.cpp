@@ -1,7 +1,5 @@
 #include "../../include/model/Ref.h"
 
-#pragma once
-
 Ref::Ref() {}
 Ref::Ref(std::string input, bool isIdent) {
 	if (isIdent) {
