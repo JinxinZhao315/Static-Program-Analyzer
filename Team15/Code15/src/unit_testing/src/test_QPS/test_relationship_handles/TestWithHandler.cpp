@@ -67,8 +67,8 @@ TEST_CASE("With call positive test") {
     string retStr1 = testWith("call c1; Select c1 with c1.stmt#=5");
     REQUIRE(retStr1 == "5");
 
-    //string retStr2 = testWith("call c1; Select c1 with c1.procName=\"foo\"");
-    //REQUIRE(retStr2 == "5");
+    string retStr2 = testWith("call c1; Select c1 with c1.procName=\"foo\"");
+    REQUIRE(retStr2 == "5");
 }
 
 TEST_CASE("With variable positive test") {
@@ -86,8 +86,8 @@ TEST_CASE("With read positive test") {
     PKB pkb;
     PQLDriver driver = PQLDriver(pkb);
 
-    //string retStr1 = testWith("read r; Select r with r.varName=\"x\"");
-    //REQUIRE(retStr1 == "6");
+    string retStr1 = testWith("read r; Select r with r.varName=\"x\"");
+    REQUIRE(retStr1 == "6");
 
     string retStr2 = testWith("read r; Select r with r.stmt#=6");
     //cout << retStr1 << endl;
@@ -98,8 +98,8 @@ TEST_CASE("With print positive test") {
     PKB pkb;
     PQLDriver driver = PQLDriver(pkb);
 
-    //string retStr1 = testWith("print pri; Select pri with pri.varName=\"x\"");
-    //REQUIRE(retStr1 == "4");
+    string retStr1 = testWith("print pri; Select pri with pri.varName=\"x\"");
+    REQUIRE(retStr1 == "4");
 
     string retStr2 = testWith("print pri; Select pri with pri.stmt#=4");
     //cout << retStr1 << endl;
@@ -112,6 +112,8 @@ TEST_CASE("With const positive test") {
 
     string retStr1 = testWith("constant c; Select c with c.value=2");
     REQUIRE(retStr1 == "2");
+    string retStr2 = testWith("constant c; Select c with c.value=10");
+    REQUIRE(retStr2 == "none");
 }
 
 TEST_CASE("With stmt positive test") {
@@ -120,6 +122,8 @@ TEST_CASE("With stmt positive test") {
 
     string retStr1 = testWith("stmt s; Select s with s.stmt#=1");
     REQUIRE(retStr1 == "1");
+    string retStr2 = testWith("stmt s; Select s with s.stmt#=7");
+    REQUIRE(retStr2 == "none");
 }
 TEST_CASE("With while positive test") {
     PKB pkb;
@@ -127,6 +131,9 @@ TEST_CASE("With while positive test") {
 
     string retStr1 = testWith("while w; Select w with w.stmt#=2");
     REQUIRE(retStr1 == "2");
+
+    string retStr2 = testWith("while w; Select w with w.stmt#=1");
+    REQUIRE(retStr2 == "none");
 }
 TEST_CASE("With if positive test") {
     PKB pkb;
@@ -134,6 +141,9 @@ TEST_CASE("With if positive test") {
 
     string retStr1 = testWith("if i; Select i with i.stmt#=3");
     REQUIRE(retStr1 == "3");
+
+    string retStr2 = testWith("if i; Select i with i.stmt#=4");
+    REQUIRE(retStr2 == "none");
 }
 TEST_CASE("With assign positive test") {
     PKB pkb;
@@ -141,4 +151,7 @@ TEST_CASE("With assign positive test") {
 
     string retStr1 = testWith("assign a; Select a with a.stmt#=1");
     REQUIRE(retStr1 == "1");
+
+    string retStr2 = testWith("assign a; Select a with a.stmt# = 7");
+    REQUIRE(retStr2 == "none");
 }

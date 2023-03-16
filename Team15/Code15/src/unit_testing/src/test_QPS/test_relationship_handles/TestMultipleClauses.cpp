@@ -273,3 +273,18 @@ TEST_CASE("Multiple such that & pattern clauses test 1") {
     string retStr2 = TestUtility::testDriver("assign a; variable v; Select v such that Follows*(1, a) and Uses(a,\"y\") pattern a (v,_\"2\"_)", pkb);
     REQUIRE(retStr2 == "n");
 }
+
+TEST_CASE("Multiple With clauses test 1") {
+    PKB pkb;
+    testMulticlauseFillPkb3(pkb);
+
+    // Line 1: k = x + y;
+    // Line 2: m = t + 2;
+    // Line 3: n = 2 + y
+
+    string retStr1 = TestUtility::testDriver("stmt s1, s2, s3; Select s1 with s1.stmt# = 1 and s2.stmt# = 2 and s3.stmt# = 3", pkb);
+    REQUIRE(retStr1 == "1,2,3");
+
+    string retStr2 = TestUtility::testDriver("stmt s1, s2; Select s1 such that Follows(s1, s2) with s1.stmt# = s2.stmt#", pkb);
+    REQUIRE(retStr2 == "none");
+}

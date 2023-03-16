@@ -6,6 +6,7 @@
 #include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/evaluator/SelectHandler.h"
 #include "QPS/include/model/Elem.h"
+#include "TestUtility.h"
 
 #include "catch.hpp"
 
@@ -36,6 +37,50 @@ void testSelectSynPkb(PKB& pkb) {
     // Line 1: if (x > 5) {
     // Line 2: n = n + 1 } else {
     // Line 3: m = m - 1}
+}
+
+string testSelect(string queryStr) {
+    PKB pkb;
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1 })));
+    stmts.insert(make_pair("while", set<int>({ 2 })));
+    stmts.insert(make_pair("if", set<int>({ 3 })));
+    stmts.insert(make_pair("print", set<int>({ 4 })));
+    stmts.insert(make_pair("call", set<int>({ 5 })));
+    stmts.insert(make_pair("read", set<int>({ 6 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x" });
+    pkb.addAllConsts({ "1", "2" });
+    pkb.addAllProcs({ "main", "foo" });
+    string retStr = TestUtility::testDriver(queryStr, pkb);
+    return retStr;
+
+    /*
+    procedure main{
+        x = x + 1;--------------------1
+        while (x > 1){----------------2
+            if (x < 2) {--------------3
+                print x;--------------4
+            } else {
+                call foo;-------------5
+            }
+        }
+    }
+    procedure foo{
+        read x;-----------------------6
+    }
+    procedure: main, foo
+    variable: x
+    constant: 1, 2
+    assign: 1
+    while: 2
+    if: 3
+    print: 4
+    call: 5
+    read: 6
+    */
 }
 
 TEST_CASE("Select Handler test 1") {
