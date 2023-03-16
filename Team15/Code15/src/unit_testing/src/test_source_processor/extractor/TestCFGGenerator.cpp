@@ -41,18 +41,54 @@ TEST_CASE("No nesting") {
 TEST_CASE("whileLoop") {
     const set<CFGNode*> expected = {};
     auto result = generateCFG(whileLoopInProcedure);
-//    compareCFG(expected, result);
+    compareCFG(expected, result);
 }
 
 
 TEST_CASE("whileLoopWithLineBeforeAfter") {
     const set<CFGNode*> expected = {};
     auto result = generateCFG(whileLoopInProcedureWithLinesBeforeAfter);
-//    compareCFG(expected, result);
+    compareCFG(expected, result);
 }
 
 TEST_CASE("ifElseInProcedure") {
     const set<CFGNode*> expected = {};
     auto result = generateCFG(ifElseInProcedure);
-//    compareCFG(expected, result);
+    compareCFG(expected, result);
+}
+
+TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
+    const vector<Line>& lines = {
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
+            Line(2, {"if", "(", "y", "==", "1", ")", "then", "{"}, "if"),
+            Line(3, {"y", "=", "0", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(4, {"y", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"}", "else", "{"}, "else"),
+            Line(5, {"while", "(", "y", "==", "1", ")", "{"}, "while"),
+            Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+    };
+
+    auto* node1 = new CFGNode(1);
+    auto* node2 = new CFGNode(2);
+    auto* node3 = new CFGNode(3);
+    auto* node4 = new CFGNode(4);
+    auto* node5 = new CFGNode(5);
+    auto* node6 = new CFGNode(6);
+
+    node1->addNext(node2);
+    node1->addNext(node5);
+    node2->addNext(node3);
+    node2->addNext(node4);
+    node5->addNext(node6);
+    node6->addNext(node5);
+
+    const set<CFGNode*>& expected = {node1};
+    const set<CFGNode*>& result = generateCFG(lines);
+    compareCFG(expected, result);
 }
