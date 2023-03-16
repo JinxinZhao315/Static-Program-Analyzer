@@ -22,7 +22,7 @@ std::string WithClause::getFirstArgConstValue() {
 	if (this->firstArg.isRefIdent()) {
 		return this->firstArg.getIdentValue();
 	} else if (this->firstArg.isRefInteger()){
-		return this->firstArg.getIdentValue();
+		return this->firstArg.getIntegerValue();
 	}
 	else {
 		return "";
@@ -34,7 +34,7 @@ std::string WithClause::getSecondArgConstValue() {
 		return this->secondArg.getIdentValue();
 	}
 	else if (this->secondArg.isRefInteger()) {
-		return this->secondArg.getIdentValue();
+		return this->secondArg.getIntegerValue();
 	}
 	else {
 		return "";
