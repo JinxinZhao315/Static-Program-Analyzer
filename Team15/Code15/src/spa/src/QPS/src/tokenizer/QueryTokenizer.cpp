@@ -79,13 +79,14 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 		else if (keyword == "and") {
 
             std::string nextKeyword = peekKeyword(input);
-            if (nextKeyword == "such" || nextKeyword == "pattern") {
+
+            if (nextKeyword == "such" || nextKeyword == "pattern" || nextKeyword == "with") {
                 throw PQLSyntaxError("PQL syntax error: Invalid use of and");
             }
 
             if (prevClauseType == "such") {
                 tokenizeSuchThatClause(input, suchThatClauseVec);
-            } else { // prevClauseType == "pattern"
+            } else if (prevClauseType == "pattern") { 
                 if (Utility::getReferenceType(nextKeyword) != Utility::SYNONYM ) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
@@ -93,6 +94,8 @@ void QueryTokenizer::tokenizeClauses(std::string input,
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
                 tokenizePatternClause(input, varTable, patternClauseVec);
+            } else { // prevClauseType == "with"
+                tokenizeWithClause(input, withClauseVec, varTable);
             }
 
         }
