@@ -209,6 +209,7 @@ TEST_CASE("Test SelectedResult 2 multiple return synonyms") {
 	ResultTable resultTable(tempTable, synList);
 	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2")}, PKB(), false);
 
+
 	std::set<std::string> expectedResult = { "1 5", "1 6", "1 7", "1 8" };
 	REQUIRE(result == expectedResult);
 }

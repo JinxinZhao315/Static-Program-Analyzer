@@ -273,7 +273,7 @@ TEST_CASE("Select Handler test: multiple synonyms") {
     REQUIRE(resultTable.getColNum() == 18);
     REQUIRE(resultTable.getRowNum() == 3);
     for (int i = 0; i < selectedSynName.size(); i++) {
-        selectedSynName[i].getSynName() == expectedSelectedSynName[i];
+        selectedSynName[i].getSynName() = expectedSelectedSynName[i];
     }
     REQUIRE(resultTable.getResultTable() == expectedResultTable);
 

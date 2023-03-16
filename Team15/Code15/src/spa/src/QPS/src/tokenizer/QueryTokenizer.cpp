@@ -77,8 +77,11 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 			prevClauseType = "with";
 		}
 		else if (keyword == "and") {
-
-            std::string nextKeyword = peekKeyword(input);
+            // Possible syntax after "and":
+            // (with) s1.stmt# = 1
+            // (pattern) a(_, "y")
+            // (such that) Follows(a1, a3)
+            std::string nextKeyword = peekKeyword(input, Utility::WHITESPACES);
 
             if (nextKeyword == "such" || nextKeyword == "pattern" || nextKeyword == "with") {
                 throw PQLSyntaxError("PQL syntax error: Invalid use of and");
@@ -86,18 +89,18 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 
             if (prevClauseType == "such") {
                 tokenizeSuchThatClause(input, suchThatClauseVec);
-            } else if (prevClauseType == "pattern") { 
-                if (Utility::getReferenceType(nextKeyword) != Utility::SYNONYM ) {
+            } else if (prevClauseType == "with") {
+                tokenizeWithClause(input, withClauseVec, varTable);
+            } else { // prevClauseType == "pattern"
+                nextKeyword = peekKeyword(input, "(");
+                if (Utility::getReferenceType(nextKeyword) != Utility::SYNONYM) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
                 if (std::find(relationships.begin(), relationships.end(), nextKeyword) != relationships.end()) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
                 tokenizePatternClause(input, varTable, patternClauseVec);
-            } else { // prevClauseType == "with"
-                tokenizeWithClause(input, withClauseVec, varTable);
             }
-
         }
 		else {
 			throw PQLSyntaxError("PQL syntax error: Unknown keyword");
@@ -268,13 +271,13 @@ std::string QueryTokenizer::extractKeyword(std::string& input) {
 	return keyword;
 }
 
-std::string QueryTokenizer::peekKeyword(std::string input) {
+std::string QueryTokenizer::peekKeyword(std::string input, std::string delimiter) {
     input = Utility::trim(input, Utility::WHITESPACES);
-    std::size_t nextBracket = input.find_first_of("(");
-    if (nextBracket == std::string::npos) {
+    std::size_t nextDelimiter = input.find_first_of(delimiter);
+    if (nextDelimiter == std::string::npos) {
         throw PQLSyntaxError("PQL syntax error: Invalid and clause");
     }
-    std::string keyword = Utility::trim(input.substr(0, nextBracket), Utility::WHITESPACES);
+    std::string keyword = Utility::trim(input.substr(0, nextDelimiter), Utility::WHITESPACES);
     return keyword;
 }
 

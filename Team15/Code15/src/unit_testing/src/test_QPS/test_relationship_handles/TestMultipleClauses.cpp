@@ -283,7 +283,7 @@ TEST_CASE("Multiple With clauses test 1") {
     // Line 3: n = 2 + y
 
     string retStr1 = TestUtility::testDriver("stmt s1, s2, s3; Select s1 with s1.stmt# = 1 and s2.stmt# = 2 and s3.stmt# = 3", pkb);
-    REQUIRE(retStr1 == "1,2,3");
+    REQUIRE(retStr1 == "1");
 
     string retStr2 = TestUtility::testDriver("stmt s1, s2; Select s1 such that Follows(s1, s2) with s1.stmt# = s2.stmt#", pkb);
     REQUIRE(retStr2 == "none");
