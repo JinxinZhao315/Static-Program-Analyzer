@@ -11,13 +11,14 @@
 
 class FollowsHandler : public ClauseHandler{
 public:
-    FollowsHandler(PKB& pkb);
-    Result evalFollows(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
-    std::set<int> getFollowsFromPKB(bool isStar, string type, string arg);
-    bool getIsFollowsFromPKB(bool isStar, string leftArg, string rightArg);
+    explicit FollowsHandler(PKB& pkb);
+//    Result evalFollows(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
+    Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 private:
     string GET_LEADER = "get_leader";
     string GET_FOLLOWER = "get_follower";
+    std::set<int> getFollowsFromPKB(bool isStar, string type, string arg);
+    bool getIsFollowsFromPKB(bool isStar, string leftArg, string rightArg);
 };
 
 

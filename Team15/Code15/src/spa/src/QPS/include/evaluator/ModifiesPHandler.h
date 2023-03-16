@@ -11,12 +11,10 @@
 
 class ModifiesPHandler : public ClauseHandler {
 public:
-    ModifiesPHandler(PKB& pkb);
-    Result evalModifiesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
-    std::set<int> getModifiesPFromPKB(bool isStar, string type, string arg);
-    bool getIsModifiesPFromPKB(bool isStar, string leftArg, string rightArg);
+    explicit ModifiesPHandler(PKB& pkb);
+    Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) override;
+//    Result evalModifiesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
 private:
-    //todo ???
     string GET_PARENT = "get_parent";
     string GET_CHILD = "get_child";
 };

@@ -93,7 +93,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
                 tokenizeWithClause(input, withClauseVec, varTable);
             } else { // prevClauseType == "pattern"
                 nextKeyword = peekKeyword(input, "(");
-                if (Utility::getReferenceType(nextKeyword) != Utility::SYNONYM) {
+                if (nextKeyword == "" || Utility::getReferenceType(nextKeyword) != Utility::SYNONYM) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
                 if (std::find(relationships.begin(), relationships.end(), nextKeyword) != relationships.end()) {
@@ -275,7 +275,7 @@ std::string QueryTokenizer::peekKeyword(std::string input, std::string delimiter
     input = Utility::trim(input, Utility::WHITESPACES);
     std::size_t nextDelimiter = input.find_first_of(delimiter);
     if (nextDelimiter == std::string::npos) {
-        throw PQLSyntaxError("PQL syntax error: Invalid and clause");
+        return "";
     }
     std::string keyword = Utility::trim(input.substr(0, nextDelimiter), Utility::WHITESPACES);
     return keyword;

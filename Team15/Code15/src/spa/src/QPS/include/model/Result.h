@@ -1,9 +1,5 @@
-//
-// Created by Jinxin Zhao on 3/2/23.
-//
 #include<set>
 #include<string>
-#include "SynonymLinkageMap.h"
 #include "ResultTable.h"
 
 #ifndef SPA_RESULT_H

@@ -8,6 +8,6 @@ class WithHandler: public ClauseHandler {
 private:
 
 public:
-	WithHandler(PKB& pkb);
-	Result evalWith(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
+	explicit WithHandler(PKB& pkb);
+	Result evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 };

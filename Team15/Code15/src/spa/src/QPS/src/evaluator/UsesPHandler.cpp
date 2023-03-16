@@ -3,7 +3,7 @@
 
 UsesPHandler::UsesPHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);
@@ -36,7 +36,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given procedure uses historical variables in source.
 			bool isUses = pkb.areInUsesProcRelationship(Utility::trim_double_quotes(leftArg), currSynonVal);
 			if (isUses) {
@@ -58,7 +58,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 
 			std::set<std::string> usesSet = pkb.getUsesVarsFromProc(currSynonVal);
 
@@ -81,7 +81,7 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given procedures uses historical variables in source.
 			bool isUses = pkb.areInUsesProcRelationship(currSynonVal, Utility::trim_double_quotes(rightArg));
 			if (isUses) {

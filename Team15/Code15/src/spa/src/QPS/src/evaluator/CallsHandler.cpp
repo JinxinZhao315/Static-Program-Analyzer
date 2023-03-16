@@ -47,7 +47,7 @@ bool CallsHandler::isCallsEmptyFromPKB(bool isStar) {
     return ret;
 }
 
-Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -76,7 +76,7 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> callerSet = getCallsFromPKB(isStar, GET_CALLER, currSynonVal);
             if (!callerSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -110,7 +110,7 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isCalls = getIsCallsFromPKB(isStar, Utility::trim_double_quotes(leftArg), currSynonVal);
             if (isCalls) {
                 resultSynonValues.push_back(currSynonVal);
@@ -128,7 +128,7 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> calleeSet = getCallsFromPKB(isStar, GET_CALLEE, currSynonVal);
             if (!calleeSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -146,7 +146,7 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isCalls = getIsCallsFromPKB(isStar, currSynonVal, Utility::trim_double_quotes(rightArg));
             if (isCalls) {
                 resultSynonValues.push_back(currSynonVal);

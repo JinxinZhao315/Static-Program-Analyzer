@@ -47,7 +47,7 @@ bool NextHandler::isNextEmptyFromPKB(bool isStar) {
     return ret;
 }
 
-Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -76,7 +76,7 @@ Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultT
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, currSynonVal);
             if (!nextSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -110,7 +110,7 @@ Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultT
         resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isNext = getIsNextFromPKB(isStar, leftArg, currSynonVal);
             if (isNext) {
                 resultSynonValues.push_back(currSynonVal);
@@ -128,7 +128,7 @@ Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultT
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, currSynonVal);
             if (!nextSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -146,7 +146,7 @@ Result NextHandler::evalNext(bool isStar, SuchThatClause suchThatClause, ResultT
         resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isNext = getIsNextFromPKB(isStar, currSynonVal, rightArg);
             if (isNext) {
                 resultSynonValues.push_back(currSynonVal);
