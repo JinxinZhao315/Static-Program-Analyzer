@@ -18,4 +18,8 @@ public:
 
 	bool isFirstArgAttrRef();
 	bool isSecondArgAttrRef();
+	bool isFirstArgIdent();
+	bool isSecondArgIdent();
+	bool isFirstArgInteger();
+	bool isSecondArgInteger();
 }; 
