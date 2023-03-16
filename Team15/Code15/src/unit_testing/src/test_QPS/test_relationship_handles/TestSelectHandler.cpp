@@ -245,7 +245,7 @@ TEST_CASE("Select Handler test 6 multi synonyms with attribute") {
     REQUIRE(retStr1 == expected1);
 }
 
-TEST_CASE("Select Handler test 3: multiple synonyms") {
+TEST_CASE("Select Handler test: multiple synonyms") {
 
     PQLPreprocessor preprocessor;
     string queryStr = "variable a, b; constant c; Select <a,b,c> ";// variable: m, n, x; constant: 1, 5
@@ -279,7 +279,7 @@ TEST_CASE("Select Handler test 3: multiple synonyms") {
 
 }
 
-TEST_CASE("Select Handler test 4: same synonyms appear multiple times in Select") {
+TEST_CASE("Select Handler test: same synonyms appear multiple times in Select") {
 
     PQLPreprocessor preprocessor;
     string queryStr = "variable a; Select <a,a> ";// variable: m, n, x; constant: 1, 5
@@ -305,7 +305,7 @@ TEST_CASE("Select Handler test 4: same synonyms appear multiple times in Select"
     REQUIRE(resultTable.getSynList() == expectedSynList);
 }
 
-TEST_CASE("Select Handler test 5: select attribute") {
+TEST_CASE("Select Handler test: select attribute") {
     PQLPreprocessor preprocessor;
     string queryStr = "assign a; Select a.stmt#";
     Query query = preprocessor.preprocess(queryStr);
