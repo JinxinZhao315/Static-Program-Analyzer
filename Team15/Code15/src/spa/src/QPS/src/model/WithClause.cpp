@@ -52,12 +52,15 @@ bool WithClause::isSecondArgAttrRef() {
 bool WithClause::isFirstArgIdent() {
 	return this->firstArg.isRefIdent();
 }
+
 bool WithClause::isSecondArgIdent() {
 	return this->secondArg.isRefIdent();
 }
+
 bool WithClause::isFirstArgInteger() {
 	return this->firstArg.isRefInteger();
 }
+
 bool WithClause::isSecondArgInteger() {
 	return this->secondArg.isRefInteger();
 }

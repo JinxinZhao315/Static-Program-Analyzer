@@ -127,10 +127,17 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, rightSynType, rightAttrName);       
         }
         else {
-            std::string rightValue = withClause.getSecondArgConstValue();
-
+            bool isRightValueIdent = withClause.isSecondArgIdent();
+            bool isRightValueInt = withClause.isSecondArgInteger();
+            std::string actualRightValueType = Utility::SYNONYM;
+            if (isRightValueIdent) {
+                actualRightValueType = Utility::QUOTED_IDENT;
+            }
+            if (isRightValueInt) {
+                actualRightValueType = Utility::INTEGER;
+            }
             // If leftSynType isn't paired with correct attribute name and corresponding value, return false.
-            return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, rightValue);
+            return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, actualRightValueType);
             
         }
     }

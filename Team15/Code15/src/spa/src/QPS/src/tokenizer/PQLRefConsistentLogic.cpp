@@ -166,7 +166,7 @@ bool PQLRefConsistentLogic::hasRelationRef(std::string relation, std::string lef
 	return false;
 }
 
-bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightValue) {
+bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string actualRightValueType) {
 	bool isLeftAttrTypeValid = withLogicMap.find(leftAttrType) != withLogicMap.end();
 	if (!isLeftAttrTypeValid) {
 		return false;
@@ -180,7 +180,6 @@ bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::s
 		return false;
 	}
 	std::string desiredRightValueType = pairSet.find(leftAttrName)->second;
-	std::string actualRightValueType = Utility::getReferenceType(rightValue);
 	return desiredRightValueType == actualRightValueType;
 }
 
