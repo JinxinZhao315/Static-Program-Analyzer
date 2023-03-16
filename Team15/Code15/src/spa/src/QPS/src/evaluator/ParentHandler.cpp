@@ -43,7 +43,7 @@ bool ParentHandler::getIsParentFromPKB(bool isStar, string leftArg, string right
     return ret;
 }
 
-Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) {
+Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -91,7 +91,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         std::vector<std::string> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
-            for (auto currSynonVal : currSynonValues) {
+            for (const auto& currSynonVal : currSynonValues) {
                 std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, currSynonVal); //=pkb.getFollowsStarFollowerNums(stoi(currSynonVal))
                 if (!childSet.empty()) {
                     resultSynonValues.push_back(currSynonVal);
@@ -99,7 +99,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             }
         }
         else if (rightType == Utility::INTEGER) {
-            for (auto currSynonVal : currSynonValues) {
+            for (const auto& currSynonVal : currSynonValues) {
                 bool isRightParentStarLeft = getIsParentFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
                 if (isRightParentStarLeft) {
                     resultSynonValues.push_back(currSynonVal);
@@ -121,7 +121,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
         std::vector<std::string> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
-            for (auto currSynonVal : currSynonValues) {
+            for (const auto& currSynonVal : currSynonValues) {
                 std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, currSynonVal); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
                 if (!parentSet.empty()) {
                     resultSynonValues.push_back(currSynonVal);
@@ -129,7 +129,7 @@ Result ParentHandler::evalParentStar(bool isStar, SuchThatClause suchThatClause,
             }
         }
         else if (leftType == Utility::INTEGER) {
-            for (auto currSynonVal : currSynonValues) {
+            for (const auto& currSynonVal : currSynonValues) {
                 bool isRightParentStarLeft = getIsParentFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
                 if (isRightParentStarLeft) {
                     resultSynonValues.push_back(currSynonVal);

@@ -1,11 +1,7 @@
-//
-// Created by Jinxin Zhao on 3/2/23.
-//
 #include <unordered_map>
 #include <string>
 #include <set>
 #include <assert.h>
-#include "SynonymLinkageMap.h"
 #include "pkb/include/PKB.h"
 #include "Elem.h"
 #ifndef SPA_RESULTTABLE_H
@@ -14,8 +10,6 @@
 
 class ResultTable {
 private:
-    /*std::unordered_map<std::string, 
-        std::unordered_map<std::string, SynonymLinkageMap>> resultTable;*/
     std::vector<std::vector<std::string>> resultTable;
     std::vector<std::string> synList;
     int colNum;

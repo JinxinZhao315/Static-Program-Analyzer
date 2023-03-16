@@ -3,7 +3,7 @@
 
 ModifiesPHandler::ModifiesPHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result ModifiesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);

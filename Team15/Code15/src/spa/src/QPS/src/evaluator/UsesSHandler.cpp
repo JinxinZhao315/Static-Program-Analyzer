@@ -3,7 +3,7 @@
 
 UsesSHandler::UsesSHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result UsesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);
@@ -48,7 +48,7 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given statement line uses historical variables in source.
 			bool isUses = pkb.areInUsesStmtRelationship(stoi(leftArg), currSynonVal);
 			if (isUses) {
@@ -70,7 +70,7 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 
 			std::set<std::string> usesSet = pkb.getUsesVarsFromStmt(stoi(currSynonVal));
 
@@ -93,7 +93,7 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given statement line uses historical variables in source.
 			bool isUses = pkb.areInUsesStmtRelationship(stoi(currSynonVal), Utility::trim_double_quotes(rightArg));
 			if (isUses) {
