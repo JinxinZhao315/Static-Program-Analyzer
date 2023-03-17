@@ -75,7 +75,7 @@ vector<string> PatternHandler::getStmtsFromPkb(const string& patternSynonType, c
 }
 
 
-Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
+Result PatternHandler::evaluate(PatternClause patternClause, ResultTable &resultTable,
                                    std::multimap<std::string, std::string> &synonymTable) {
 
     string patternSynon = patternClause.getPatternSynonym();

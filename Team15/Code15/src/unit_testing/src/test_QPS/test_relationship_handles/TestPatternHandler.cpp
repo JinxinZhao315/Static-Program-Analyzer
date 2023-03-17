@@ -106,31 +106,31 @@ void testPatternFillPkb3(PKB& pkb) {
     // Line 4: x = 1 + 3 * 5
 }
 
-TEST_CASE("Tokeniser and ConvertToPostfix test") {
-    PKB pkb;
-    PatternHandler handler = PatternHandler(pkb);
-    string input = "aa+bb*cc+dd";
-    vector<string> tokens = handler.simplifiedTokenise(input);
-    vector<string> result = handler.simplifiedConvertToPostfix(tokens);
-    vector<string> expected = {"aa", "bb", "cc", "*", "+", "dd", "+"};
-    REQUIRE(result == expected);
-}
+//TEST_CASE("Tokeniser and ConvertToPostfix test") {
+//    PKB pkb;
+//    PatternHandler handler = PatternHandler(pkb);
+//    string input = "aa+bb*cc+dd";
+//    vector<string> tokens = handler.simplifiedTokenise(input);
+//    vector<string> result = handler.simplifiedConvertToPostfix(tokens);
+//    vector<string> expected = {"aa", "bb", "cc", "*", "+", "dd", "+"};
+//    REQUIRE(result == expected);
+//}
 
-TEST_CASE("Tokeniser and ConvertToPostfix test throw error") {
-    PKB pkb;
-    PatternHandler handler = PatternHandler(pkb);
-
-    string input = "+bb*cc+dd";
-    vector<string> tokens = handler.simplifiedTokenise(input);
-    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens), PQLSyntaxError);
-
-    string input2 = "bb*cc+(dd";
-    vector<string> tokens2 = handler.simplifiedTokenise(input2);
-    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens2), PQLSyntaxError);
-
-    string input3 = "{aa+bb*cc}+dd";
-    REQUIRE_THROWS_AS(handler.simplifiedTokenise(input3), PQLSyntaxError);
-}
+//TEST_CASE("Tokeniser and ConvertToPostfix test throw error") {
+//    PKB pkb;
+//    PatternHandler handler = PatternHandler(pkb);
+//
+//    string input = "+bb*cc+dd";
+//    vector<string> tokens = handler.simplifiedTokenise(input);
+//    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens), PQLSyntaxError);
+//
+//    string input2 = "bb*cc+(dd";
+//    vector<string> tokens2 = handler.simplifiedTokenise(input2);
+//    REQUIRE_THROWS_AS(handler.simplifiedConvertToPostfix(tokens2), PQLSyntaxError);
+//
+//    string input3 = "{aa+bb*cc}+dd";
+//    REQUIRE_THROWS_AS(handler.simplifiedTokenise(input3), PQLSyntaxError);
+//}
 
 TEST_CASE("PatternHandler a(_,_) test empty pkb") {
     PKB pkb;

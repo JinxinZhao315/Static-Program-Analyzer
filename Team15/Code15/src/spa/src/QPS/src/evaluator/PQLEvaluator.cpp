@@ -10,76 +10,65 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     ResultTable resultTable = ResultTable();
     std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
-
-
     std::vector<Elem> selectedVarNames = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
     std::vector<WithClause> withVec = query.getWithClauseVec();
 
-
-    //todo make clauseHandler.evaluate instead of if else branch
-
     bool isEarlyExit = false;
 
     for (SuchThatClause suchThatCl : suchThatVec)
     {
+        ClauseHandler *clauseHandler;
         std::string relationship = suchThatCl.getRelationShip();
         Result result;
         if (relationship == "Follows" || relationship == "Follows*")
         {
             FollowsHandler followsHandler = FollowsHandler(pkb);
             bool isStar = relationship == "Follows" ? false : true;
-            result = followsHandler.evalFollows(isStar, suchThatCl, resultTable, synonymTable);
-        }
-
-       else if (relationship == "Parent" || relationship == "Parent*") {
+            result = followsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        } else if (relationship == "Parent" || relationship == "Parent*") {
             ParentHandler parentHandler = ParentHandler(pkb);
             bool isStar = relationship == "Parent" ? false : true;
-            result = parentHandler.evalParentStar(isStar, suchThatCl, resultTable, synonymTable);
-        }
-        else if (relationship == "Modifies") {
+            result = parentHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        } else if (relationship == "Modifies") {
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
-            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
-            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
 
             if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure") ) {
-                result = modifiesPHandler.evalModifiesP(suchThatCl, resultTable, synonymTable);
+                ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+                result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
             }
             else {
-                result = modifiesSHandler.evalModifiesS(suchThatCl, resultTable, synonymTable);
+                ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
+                result = modifiesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
             }
-        }
-        else if (relationship == "Uses") {
+        } else if (relationship == "Uses") {
             std::string leftArg = suchThatCl.getLeftArg();
             std::string leftType = Utility::getReferenceType(leftArg);
-            UsesPHandler usesPHandler = UsesPHandler(pkb);
-            UsesSHandler usesSHandler = UsesSHandler(pkb);
 
             if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-                result = usesPHandler.evalUsesP(suchThatCl, resultTable, synonymTable);
+                UsesPHandler usesPHandler = UsesPHandler(pkb);
+                result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            } else {
+                UsesSHandler usesSHandler = UsesSHandler(pkb);
+                result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
             }
-            else {
-
-                result = usesSHandler.evalUsesS(suchThatCl, resultTable, synonymTable);
-            }
-        }
-        else if (relationship == "Calls" || relationship == "Calls*") {
+        } else if (relationship == "Calls" || relationship == "Calls*") {
 
             CallsHandler callsHandler = CallsHandler(pkb);
             bool isStar = relationship == "Calls" ? false : true;
-            result = callsHandler.evalCalls(isStar, suchThatCl, resultTable, synonymTable);   
-        }
-        else if (relationship == "Next" || relationship == "Next*") {
+            result = callsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+
+        } else if (relationship == "Next" || relationship == "Next*") {
 
             NextHandler nextHandler = NextHandler(pkb);
             bool isStar = relationship == "Next" ? false : true;
-            result = nextHandler.evalNext(isStar, suchThatCl, resultTable, synonymTable);
+            result = nextHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
            
         }
-        if (result.isResultTrue() == false)
+        if (!result.isResultTrue())
         {
 
             resultTable.clearResultTable();
@@ -96,16 +85,16 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             break;
         }
     }
-    for (PatternClause patternCl : patternVec)
+    for (const PatternClause& patternCl : patternVec)
     {
         if (isEarlyExit) {
             break;
         }
         PatternHandler patternHandler = PatternHandler(pkb);
 
-        Result result = patternHandler.evalPattern(patternCl, resultTable, synonymTable);
+        Result result = patternHandler.evaluate(patternCl, resultTable, synonymTable);
 
-        if (result.isResultTrue() == false)
+        if (!result.isResultTrue())
         {
             isEarlyExit = true;
 
@@ -120,14 +109,14 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             break;
         }
     }
-    for (WithClause withCl : withVec) {
+    for (const WithClause& withCl : withVec) {
         if (isEarlyExit) {
             break;
         }
         WithHandler withHandler = WithHandler(pkb);
 
-        Result result = withHandler.evalWith(withCl, resultTable, synonymTable);
-        if (result.isResultTrue() == false)
+        Result result = withHandler.evaluate(withCl, resultTable, synonymTable);
+        if (!result.isResultTrue())
         {
             isEarlyExit = true;
             resultTable.clearResultTable();

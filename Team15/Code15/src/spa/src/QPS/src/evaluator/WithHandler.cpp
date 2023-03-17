@@ -2,7 +2,7 @@
 
 WithHandler::WithHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result WithHandler::evalWith(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	Result result;
 	std::vector<std::string> synList = resultTable.getSynList();
 	if (!withClause.isFirstArgAttrRef() && !withClause.isSecondArgAttrRef()) {
