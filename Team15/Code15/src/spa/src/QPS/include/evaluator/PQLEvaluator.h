@@ -27,6 +27,7 @@ class PQLEvaluator {
 public:
     PQLEvaluator(PKB& pkb);
     std::set<std::string> evaluate(Query query);
+    Result getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable);
 private:
     PKB pkb;
 };
