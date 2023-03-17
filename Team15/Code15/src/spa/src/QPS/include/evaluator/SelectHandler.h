@@ -9,12 +9,12 @@
 
 #pragma once
 
-class SelectHandler : public ClauseHandler{
+class SelectHandler{
 
 public:
     explicit SelectHandler(PKB &pkb);
     std::vector<Elem> evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
 
 private:
-    ResultTable resultTable;
+    PKB pkb;
 };

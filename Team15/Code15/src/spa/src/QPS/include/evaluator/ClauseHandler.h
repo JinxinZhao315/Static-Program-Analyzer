@@ -15,8 +15,6 @@
 public:    
     PKB pkb;
     explicit ClauseHandler(PKB &pkb);
-    void resultTableCheckAndAdd(string arg, ResultTable& resultTable, string DeType);
-    std::set<std::string> getResultFromPKB(PKB& pkb, string DeType);
 
     virtual Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};
     virtual Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};

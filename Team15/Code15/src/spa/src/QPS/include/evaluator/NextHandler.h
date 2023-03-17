@@ -14,7 +14,7 @@ class NextHandler : public ClauseHandler {
 public:
     explicit NextHandler(PKB& pkb);
 //    Result evalNext(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
-    Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) override;
+    Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 
 private:
     string GET_LEADER = "get_leader";

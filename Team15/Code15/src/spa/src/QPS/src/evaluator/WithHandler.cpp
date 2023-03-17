@@ -17,7 +17,7 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		std::string secondSynName = withClause.getSecondArgAttrRef().getSynName();
 		std::string secondSynType = withClause.getSecondArgAttrRef().getSynType();
 		//add syn to resultTable if not added
-		resultTableCheckAndAdd(secondSynName, resultTable, secondSynType);
+		resultTable.resultTableCheckAndAdd(secondSynName, pkb, secondSynType);
 		//find the index of this syn in resultTable
 		std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), secondSynName);
 		int secondSynIndex = it - synList.begin();
@@ -39,7 +39,7 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		std::string secondValue = withClause.getSecondArgConstValue();
 		std::string firstSynName = withClause.getFirstArgAttrRef().getSynName();
 		std::string firstSynType = withClause.getFirstArgAttrRef().getSynType();
-		resultTableCheckAndAdd(firstSynName, resultTable, firstSynType);
+		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
 		std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), firstSynName);
 		int firstSynIndex = it - synList.begin();
 		int tupleNum = resultTable.getColNum();
@@ -60,8 +60,8 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		std::string firstSynType = withClause.getFirstArgAttrRef().getSynType();
 		std::string secondSynName = withClause.getSecondArgAttrRef().getSynName();
 		std::string secondSynType = withClause.getSecondArgAttrRef().getSynType();
-		resultTableCheckAndAdd(firstSynName, resultTable, firstSynType);
-		resultTableCheckAndAdd(secondSynName, resultTable, secondSynType);
+		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
+		resultTable.resultTableCheckAndAdd(secondSynName, pkb, secondSynType);
 		std::vector<std::string>::iterator firstIt = std::find(synList.begin(), synList.end(), firstSynName);
 		std::vector<std::string>::iterator secondIt = std::find(synList.begin(), synList.end(), secondSynName);
 		int firstSynIndex = firstIt - synList.begin();

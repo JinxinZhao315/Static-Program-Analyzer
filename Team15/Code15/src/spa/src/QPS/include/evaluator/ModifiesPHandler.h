@@ -12,7 +12,7 @@
 class ModifiesPHandler : public ClauseHandler {
 public:
     explicit ModifiesPHandler(PKB& pkb);
-    Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) override;
+    Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 //    Result evalModifiesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
 private:
     string GET_PARENT = "get_parent";
