@@ -43,7 +43,7 @@ bool ParentHandler::getIsParentFromPKB(bool isStar, string leftArg, string right
     return ret;
 }
 
-Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable) {
+Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -85,8 +85,8 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         // Synon - Wildcard/Int
     }
     else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
-        string synonDeType = varTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+        string synonDeType = synonymTable.find(leftArg)->second;
+        resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
 
@@ -115,8 +115,8 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         // Wilcard/Int - Synon
     }
     else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
-        string synonDeType = varTable.find(rightArg)->second;
-        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+        string synonDeType = synonymTable.find(rightArg)->second;
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
 
@@ -149,10 +149,10 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
             result.setResultTrue(false);
             return result;
         }
-        string leftDeType = varTable.find(leftArg)->second;
-        string rightDeType = varTable.find(rightArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+        string leftDeType = synonymTable.find(leftArg)->second;
+        string rightDeType = synonymTable.find(rightArg)->second;
+        resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);

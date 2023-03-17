@@ -79,7 +79,7 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
     } else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
 
         string synonDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(leftArg, pkb,synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
 
@@ -108,7 +108,7 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
 
         string synonDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
 
@@ -143,8 +143,8 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+        resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);

@@ -34,6 +34,10 @@ public:
 
     int getColNum();
 
+    std::set<std::string> getResultFromPKB(PKB& pkb, string DeType);
+
+    void resultTableCheckAndAdd(string arg, PKB pkb, string DeType);
+
 
 
     //void setSynList(std::vector<std::string> synList);
