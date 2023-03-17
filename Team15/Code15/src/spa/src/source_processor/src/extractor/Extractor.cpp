@@ -2,6 +2,7 @@
 
 Extractor::Extractor() {
     variableExtractor = new VariableExtractor();
+    procedureExtractor = new ProcedureExtractor();
 }
 
 set<string> Extractor::getVariables() {
@@ -110,6 +111,10 @@ unordered_map<int, string> Extractor::getPrintLineNumToVarName() {
     return this->printLineNumToVarName;
 }
 
+unordered_map<int, string> Extractor::getCallLineNumToProcName() {
+    return this->callLineNumToProcName;
+}
+
 void Extractor::extract(const vector<Line> &program) {
     this->constants = extractConstants(program);
     this->statements = extractStatements(program);
@@ -118,7 +123,10 @@ void Extractor::extract(const vector<Line> &program) {
     this->variables = variableExtractor->getVariables();
     this->readLineNumToVarName = variableExtractor->getReadLineNumToVarName();
     this->printLineNumToVarName = variableExtractor->getPrintLineNumToVarName();
-    this->procedures = extractProcedures(program);
+    procedureExtractor->extractProcedures(program);
+    procedureExtractor->extractCallLineNumToProcName(program);
+    this->procedures = procedureExtractor->getProcedures();
+    this->callLineNumToProcName = procedureExtractor->getCallLineNumToProcName();
     // Call and get results of extraction
     this->assignsRS = extractAssignmentRS(program, variables);
     this->ifRS = extractConditionalRS("if", program, variables);
@@ -141,7 +149,3 @@ void Extractor::extract(const vector<Line> &program) {
     this->callsStarRS = callsStar;
 
 }
-
-
-
-

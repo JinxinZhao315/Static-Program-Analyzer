@@ -37,6 +37,7 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllCallsStar(extractor->getCallsStarRS());
     pkb->addAllWithRead(extractor->getReadLineNumToVarName());
     pkb->addAllWithPrint(extractor->getPrintLineNumToVarName());
+    pkb->addAllWithCall(extractor->getCallLineNumToProcName());
 
     //TODO
     //Next: pkb->addAllNext();

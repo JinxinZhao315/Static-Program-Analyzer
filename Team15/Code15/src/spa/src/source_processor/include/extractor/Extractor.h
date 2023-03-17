@@ -42,6 +42,7 @@ public:
 
     unordered_map<int, string> getReadLineNumToVarName();
     unordered_map<int, string> getPrintLineNumToVarName();
+    unordered_map<int, string> getCallLineNumToProcName();
 
 private:
     unordered_map<int, set<int>> parentsRS;
@@ -70,6 +71,8 @@ private:
 
     unordered_map<int, string> readLineNumToVarName;
     unordered_map<int, string> printLineNumToVarName;
+    unordered_map<int, string> callLineNumToProcName;
 
     VariableExtractor* variableExtractor;
+    ProcedureExtractor* procedureExtractor;
 };
