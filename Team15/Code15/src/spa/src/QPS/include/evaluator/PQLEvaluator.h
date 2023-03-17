@@ -3,6 +3,7 @@
 
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
+#include "QPS/include/evaluator/WithHandler.h"
 #include "SelectHandler.h"
 #include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/evaluator/ParentHandler.h"
@@ -12,6 +13,7 @@
 #include "QPS/include/evaluator/UsesSHandler.h"
 #include "QPS/include/evaluator/UsesPHandler.h"
 #include "QPS/include/evaluator/CallsHandler.h"
+#include "QPS/include/evaluator/NextHandler.h"
 #include "Utility.h"
 #include <numeric>
 #include <string>
@@ -25,6 +27,7 @@ class PQLEvaluator {
 public:
     PQLEvaluator(PKB& pkb);
     std::set<std::string> evaluate(Query query);
+    Result getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable);
 private:
     PKB pkb;
 };

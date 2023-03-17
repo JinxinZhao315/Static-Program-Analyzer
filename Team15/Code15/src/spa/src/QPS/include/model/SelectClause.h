@@ -1,19 +1,18 @@
 #include <string>
 #include <vector>
+#include "Elem.h"
 
 #pragma once
 
 class SelectClause {
 private:
-    std::vector<std::string> synNames;
+    std::vector<Elem> synNames;
 public:
 	SelectClause();
 
-	SelectClause(std::string synName);
-
-	SelectClause(std::vector<std::string> synNames);
+	SelectClause(std::vector<Elem> synNames);
 
 	~SelectClause();
 
-	std::vector<std::string> getSynNameVec();
+	std::vector<Elem> getSynNameVec();
 };

@@ -47,7 +47,7 @@ bool CallsHandler::isCallsEmptyFromPKB(bool isStar) {
     return ret;
 }
 
-Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -73,10 +73,10 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
     // UNDERSCORE-Procedure
     else if (leftType == Utility::UNDERSCORE) {
         std::string synonDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> callerSet = getCallsFromPKB(isStar, GET_CALLER, currSynonVal);
             if (!callerSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -107,10 +107,10 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
     // QUOTED_IDENT-Procedure
     else if (leftType == Utility::QUOTED_IDENT) {
         std::string synonDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isCalls = getIsCallsFromPKB(isStar, Utility::trim_double_quotes(leftArg), currSynonVal);
             if (isCalls) {
                 resultSynonValues.push_back(currSynonVal);
@@ -125,10 +125,10 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
     // Procedure-UNDERSCORE
     else if (rightType == Utility::UNDERSCORE) {
         std::string synonDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> calleeSet = getCallsFromPKB(isStar, GET_CALLEE, currSynonVal);
             if (!calleeSet.empty()) {
                 resultSynonValues.push_back(currSynonVal);
@@ -143,10 +143,10 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
     // Procedure-QUOTED_IDENT
     else if (rightType == Utility::QUOTED_IDENT) {
         std::string synonDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+        resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
         std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> resultSynonValues;
-        for (std::string currSynonVal : currSynonValues) {
+        for (const std::string& currSynonVal : currSynonValues) {
             bool isCalls = getIsCallsFromPKB(isStar, currSynonVal, Utility::trim_double_quotes(rightArg));
             if (isCalls) {
                 resultSynonValues.push_back(currSynonVal);
@@ -166,8 +166,8 @@ Result CallsHandler::evalCalls(bool isStar, SuchThatClause suchThatClause, Resul
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+        resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
 
         std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
         std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);

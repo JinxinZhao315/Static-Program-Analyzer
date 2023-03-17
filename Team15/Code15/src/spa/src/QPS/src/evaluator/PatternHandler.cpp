@@ -75,8 +75,7 @@ vector<string> PatternHandler::getStmtsFromPkb(const string& patternSynonType, c
 }
 
 
-Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
-                                   std::multimap<std::string, std::string> &synonymTable) {
+Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 
     string patternSynon = patternClause.getPatternSynonym();
     string firstArg = patternClause.getFirstArg();
@@ -86,7 +85,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
 
-    resultTableCheckAndAdd(patternSynon, resultTable, patternType);
+    resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
 
     bool isPartialMatch;
     if (secondType == Utility::UNDERSCORED_EXPR) {
@@ -135,7 +134,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
     } else if (firstType == Utility::SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        resultTableCheckAndAdd(firstArg, resultTable, firstDeType);
+        resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
         std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
         ResultTable tempResultTable({patternSynon, firstArg });

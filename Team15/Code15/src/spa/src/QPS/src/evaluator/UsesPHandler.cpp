@@ -3,7 +3,7 @@
 
 UsesPHandler::UsesPHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);
@@ -32,11 +32,11 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	//Find variable v defined in QPS which is used by given procedure defined in source. 
 	else if (leftType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given procedure uses historical variables in source.
 			bool isUses = pkb.areInUsesProcRelationship(Utility::trim_double_quotes(leftArg), currSynonVal);
 			if (isUses) {
@@ -53,12 +53,12 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	//Left type is a procedure defined in QPS, find whether given procedure has some uses to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
 		// currSynonValues here are procedures in string format.
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 
 			std::set<std::string> usesSet = pkb.getUsesVarsFromProc(currSynonVal);
 
@@ -76,12 +76,12 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	//Left type is a procedure defined in QPS, find whether given procedure uses given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
 		// currSynonValues here are procedures in string format.
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given procedures uses historical variables in source.
 			bool isUses = pkb.areInUsesProcRelationship(currSynonVal, Utility::trim_double_quotes(rightArg));
 			if (isUses) {
@@ -100,8 +100,8 @@ Result UsesPHandler::evalUsesP(SuchThatClause suchThatClause, ResultTable& resul
 	else {
 		string leftDeType = synonymTable.find(leftArg)->second;
 		string rightDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+		resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
 		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
 

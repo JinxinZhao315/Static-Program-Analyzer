@@ -3,7 +3,7 @@
 
 ModifiesPHandler::ModifiesPHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result ModifiesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);
@@ -31,7 +31,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	//Find variable v defined in QPS which is modified by given procedure defined in source. 
 	else if (leftType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
@@ -52,7 +52,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	//Left type is a procedure defined in QPS, find whether given procedure has some modifies to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
 		// currSynonValues here are statement line numbers in string format.
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
@@ -75,7 +75,7 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	//Left type is a procedure defined in QPS, find whether given procedure modifies given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
 		// currSynonValues here are procedure names in string format.
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> resultSynonValues;
@@ -99,8 +99,8 @@ Result ModifiesPHandler::evalModifiesP(SuchThatClause suchThatClause, ResultTabl
 	else {
 		string leftDeType = synonymTable.find(leftArg)->second;
 		string rightDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+		resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
+		resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
 		/*set<string> currLeftValues = resultTable.getStringSetFromKey(leftArg);
 		set<string> currRightValues = resultTable.getStringSetFromKey(rightArg);*/
 		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
