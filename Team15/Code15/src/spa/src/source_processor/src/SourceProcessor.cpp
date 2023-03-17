@@ -35,6 +35,9 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllModifiesProc(extractor->getProcedureModifiesRS());
     pkb->addAllCalls(extractor->getCallsRS());
     pkb->addAllCallsStar(extractor->getCallsStarRS());
+    pkb->addAllWithRead(extractor->getReadLineNumToVarName());
+    pkb->addAllWithPrint(extractor->getPrintLineNumToVarName());
+
     //TODO
     //Next: pkb->addAllNext();
     //Next*: pkb->addAllNextStar();
@@ -42,7 +45,7 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     //Affects*: pkb->addAllAffectsStar();
     //with: pkb->addAllWithRead();
     //with: pkb->addAllWithPrint();
-    //wiith: pkb->addAllWithCall();
+    //with: pkb->addAllWithCall();
 }
 
 void SourceProcessor::printParsedProgram() {

@@ -40,6 +40,9 @@ public:
     unordered_map<string, set<string>> getCallsRS();
     unordered_map<string, set<string>> getCallsStarRS();
 
+    unordered_map<int, string> getReadLineNumToVarName();
+    unordered_map<int, string> getPrintLineNumToVarName();
+
 private:
     unordered_map<int, set<int>> parentsRS;
     unordered_map<int, set<int>> parentsStarRS;
@@ -64,6 +67,9 @@ private:
     set<string> constants;
     set<string> variables;
     unordered_map<string, set<int>> statements;
+
+    unordered_map<int, string> readLineNumToVarName;
+    unordered_map<int, string> printLineNumToVarName;
 
     VariableExtractor* variableExtractor;
 };
