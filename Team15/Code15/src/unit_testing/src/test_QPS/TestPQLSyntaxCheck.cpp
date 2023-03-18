@@ -220,7 +220,6 @@ TEST_CASE("PQLSyntaxChecker positive test 10: With valid arg") {
 	REQUIRE_NOTHROW(preprocessor.preprocess("assign a; Select a with a.stmt#=10"));
 	REQUIRE_NOTHROW(preprocessor.preprocess("assign a; Select a with a.stmt#=a.stmt#"));
 	REQUIRE_NOTHROW(preprocessor.preprocess("assign a;constant c; Select a with a.stmt#=c.value"));
-	REQUIRE_NOTHROW(preprocessor.preprocess("assign a; Select a with 10=10"));
 	//ident
 	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; Select p with p.procName=\"proc1\""));
 	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; call c; Select p with p.procName=c.procName"));

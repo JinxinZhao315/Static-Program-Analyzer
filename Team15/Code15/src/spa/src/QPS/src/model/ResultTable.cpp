@@ -138,7 +138,9 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
     }
 }
 
-
+//void ResultTable::filterTable(void (*func)(int, int)) {
+//
+//}
 
 
 
@@ -355,4 +357,28 @@ std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTup
 }
 
 
+void ResultTable::deleteSynonym(std::string synonym) {
+    std::vector<std::string>::iterator synNamePos = std::find(synList.begin(), synList.end(), synonym);
+    int synIndex = std::distance(synList.begin(), synNamePos);
+    if (synNamePos != synList.end()) {
+        synList.erase(synNamePos);
+        rowNum--;
+        resultTable.erase(resultTable.begin() + synIndex);
+        removeDuplicates();
+    }
+}
 
+void ResultTable::removeDuplicates() {
+    std::set<std::vector<std::string>> distinctTupleSet;
+    for (int i = 0; i < colNum; i++) {
+        distinctTupleSet.insert(getTuple(i));
+    }
+    resultTable = {};
+    for (int i = 0; i < rowNum;i++) {
+        this->resultTable.push_back({});
+    }
+    for (std::vector<std::string> distinctTuple : distinctTupleSet) {
+        insertTuple(distinctTuple);
+    }
+    colNum = distinctTupleSet.size();
+}

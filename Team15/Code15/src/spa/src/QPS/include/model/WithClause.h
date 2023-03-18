@@ -22,4 +22,7 @@ public:
 	bool isSecondArgIdent();
 	bool isFirstArgInteger();
 	bool isSecondArgInteger();
+
+	std::string getFirstArgStr();
+	std::string getSecondArgStr();
 }; 
