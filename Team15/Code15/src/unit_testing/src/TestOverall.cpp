@@ -26,13 +26,13 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string sample_source2 = "../../../../../../Tests15/Sample_source2.txt";
-string source1_filename = "../../../../../../Tests15/source1.txt";
-string source2_filename = "../../../../../../Tests15/source2.txt";
-string source3_filename = "../../../../../../Tests15/source3.txt";
-string source4_filename = "../../../../../../Tests15/source4.txt";
-string source7_filename = "../../../../../../Tests15/source7.txt";
-
+string sample_source2 = "../../../../../../Tests15/source-sample2.txt";
+string source1_filename = "../../../../../../Tests15/source-general.txt";
+string source2_filename = "../../../../../../Tests15/source-2.txt";
+string source3_filename = "../../../../../../Tests15/source-3.txt";
+string source4_filename = "../../../../../../Tests15/source-4.txt";
+string source7_filename = "../../../../../../Tests15/source-7.txt";
+string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
 //string source2_filename = "../../../../Tests15/source2.txt";
@@ -873,5 +873,14 @@ TEST_CASE("Overall test : source-ifwhile.txt 2") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "9" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample1.txt") {
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Modifies(s, \"i\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "3", "4", "11", "12", "13", "14", "17" };
     REQUIRE(result == expectedResult);
 }
