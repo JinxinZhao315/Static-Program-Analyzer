@@ -54,13 +54,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         if (!result.isResultTrue())
         {
             resultTable.clearResultTable();
-
+            isEarlyExit = true;
             break;
         }
 
         resultTable.combineTable(result.getClauseResult());
         if (resultTable.isTableEmpty()) {
-
+            isEarlyExit = true;
             break;
         }
     }
@@ -75,11 +75,13 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         if (!result.isResultTrue())
         {
             resultTable.clearResultTable();
+            isEarlyExit = true;
             break;
         }
 
         resultTable.combineTable(result.getClauseResult());
         if (resultTable.isTableEmpty()) {
+            isEarlyExit = true;
             break;
         }
     }
