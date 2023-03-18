@@ -877,3 +877,13 @@ TEST_CASE("Overall test : source-ifwhile.txt 2") {
     set<string> expectedResult = { "9" };
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source-sample1.txt") {
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Modifies(s, \"i\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "3", "4", "11", "12", "13", "14", "17" };
+    REQUIRE(result == expectedResult);
+}
+
