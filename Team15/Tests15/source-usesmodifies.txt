@@ -15,7 +15,7 @@ procedure proc4 {
   read v;
   read w;
   while ((v >= 1) && (w >= 1)) {
-    if (v >= w) then {
+    if (v >= a) then {
       x = v / 3; }
     else {
       y = w / 4; }
