@@ -2,59 +2,58 @@
 #include "Constants.hpp"
 #include "source_processor/include/extractor/CFGGenerator.h"
 
-void compareCFG(set<CFGNode*> cfg1, set<CFGNode*> cfg2) {
-//    cout << "compareCFG" << endl;
-    // Compare the sizes of the sets
-    if (cfg1.size() != cfg2.size()) {
-        FAIL("Sets have different sizes");
-        return;
-    }
-    // Traverse each root node in the set and compare their successors
-    for (auto it1 = cfg1.begin(), it2 = cfg2.begin(); it1 != cfg1.end() && it2 != cfg2.end(); it1++, it2++) {
-        cout << "test 1";
-        CFGNode* node1 = *it1;
-        CFGNode* node2 = *it2;
-        while (node1 != nullptr && node2 != nullptr) {
-            cout << "test";
-            REQUIRE(node1->getLineNumber() == node2->getLineNumber());
-            REQUIRE(node1->getNext() == node2->getNext());
-            node1 = *(node1->getNext().begin());
-            node2 = *(node2->getNext().begin());
-        }
-    }
-}
-
+//void compareCFG(set<CFGNode*> cfg1, set<CFGNode*> cfg2) {
+////    cout << "compareCFG" << endl;
+//    // Compare the sizes of the sets
+//    if (cfg1.size() != cfg2.size()) {
+//        FAIL("Sets have different sizes");
+//        return;
+//    }
+//    // Traverse each root node in the set and compare their successors
+//    for (auto it1 = cfg1.begin(), it2 = cfg2.begin(); it1 != cfg1.end() && it2 != cfg2.end(); it1++, it2++) {
+//        cout << "test 1";
+//        CFGNode* node1 = *it1;
+//        CFGNode* node2 = *it2;
+//        while (node1 != nullptr && node2 != nullptr) {
+//            cout << "test";
+//            REQUIRE(node1->getLineNumber() == node2->getLineNumber());
+//            REQUIRE(node1->getNext() == node2->getNext());
+//            node1 = *(node1->getNext().begin());
+//            node2 = *(node2->getNext().begin());
+//        }
+//    }
+//}
 
 TEST_CASE("Empty Program") {
     const vector<Line>& lines = {};
-    const set<CFGNode*> expected = {};
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE(result, Equals(expected));
+    unordered_map<int, set<int>> expected = {};
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("No nesting") {
-    const set<CFGNode *> expected = {};
-    map<int, set<int>> result = generateCFG(mainProgram);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> expected = {};
+    unordered_map<int, set<int>> result = generateCFG(mainProgram);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("whileLoop") {
-    const set<CFGNode*> expected = {};
-    map<int, set<int>> result = generateCFG(whileLoopInProcedure);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> expected = {};
+    unordered_map<int, set<int>> result = generateCFG(whileLoopInProcedure);
+    REQUIRE(result == expected);
 }
 
 
 TEST_CASE("whileLoopWithLineBeforeAfter") {
-    const set<CFGNode*> expected = {};
-    map<int, set<int>> result = generateCFG(whileLoopInProcedureWithLinesBeforeAfter);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> expected = {};
+    unordered_map<int, set<int>> result = generateCFG(whileLoopInProcedureWithLinesBeforeAfter);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifElseInProcedure") {
-    const set<CFGNode*> expected = {};
-    map<int, set<int>> result = generateCFG(ifElseInProcedure);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> expected = {};
+    unordered_map<int, set<int>> result = generateCFG(ifElseInProcedure);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifNoElseNoLinesBeforeAndAfter") {
@@ -70,8 +69,8 @@ TEST_CASE("ifNoElseNoLinesBeforeAndAfter") {
             {1, {2}},
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifNoElseWithLinesBeforeAndAfter") {
@@ -90,8 +89,8 @@ TEST_CASE("ifNoElseWithLinesBeforeAndAfter") {
             {2, {3, 4}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
@@ -111,8 +110,8 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
             {2, {3}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
@@ -136,8 +135,8 @@ TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
             {4, {5}},
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_whileNoLinesBeforeAndAfter") {
@@ -153,8 +152,8 @@ TEST_CASE("extractNextRelationship_whileNoLinesBeforeAndAfter") {
             {1, {2}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
@@ -174,8 +173,8 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
             {3, {2, 4}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_whileNestedInWhile") {
@@ -200,8 +199,8 @@ TEST_CASE("extractNextRelationship_whileNestedInWhile") {
             {5, {2, 6}},
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
@@ -230,8 +229,8 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             {6, {2, 7}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 
@@ -259,8 +258,8 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
             {5, {4}},
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
@@ -289,8 +288,8 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             {6, {1, 7}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedIfWithElse") {
@@ -331,8 +330,8 @@ TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedI
             {9, {6}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
 
 TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
@@ -359,6 +358,6 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
             {6, {5}}
     };
 
-    map<int, set<int>> result = generateCFG(lines);
-    REQUIRE_THAT(result, Equals(expected));
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    REQUIRE(result == expected);
 }
