@@ -10,13 +10,40 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     ResultTable resultTable = ResultTable();
     std::multimap<std::string, std::string> synonymTable = query.getSynonymTable();
     SelectHandler selectHandler = SelectHandler(pkb);
-    std::vector<Elem> selectedVarNames = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    std::vector<Elem> selectedElems = selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     std::vector<SuchThatClause> suchThatVec = query.getSuchThatClauseVec();
     std::vector<PatternClause> patternVec = query.getPatternClauseVec();
     std::vector<WithClause> withVec = query.getWithClauseVec();
 
     bool isEarlyExit = false;
+
+    std::vector<std::string> selectedElemName;
+    std::vector<std::string> clauseArgVec;
+    int clauseArgVecIndex = 0;
+
+    for (Elem e : selectedElems) {
+        selectedElemName.push_back(e.getSynName());
+    }
+
+    for (SuchThatClause suchThatCl : suchThatVec){
+        clauseArgVec.push_back(suchThatCl.getLeftArg());
+        clauseArgVec.push_back(suchThatCl.getRightArg());
+    }
+
+    for (PatternClause& patternCl : patternVec) {
+        clauseArgVec.push_back(patternCl.getPatternSynonym());
+        clauseArgVec.push_back(patternCl.getFirstArg());
+        clauseArgVec.push_back(patternCl.getSecondArg());
+        clauseArgVec.push_back(patternCl.getThirdArg());
+    }
+
+    for (WithClause& withCl : withVec) {
+        clauseArgVec.push_back(withCl.getFirstArgStr());
+        clauseArgVec.push_back(withCl.getSecondArgStr());
+    }
+
+
 
     for (SuchThatClause suchThatCl : suchThatVec)
     {
@@ -40,9 +67,18 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
             break;
         }
+        //no such arg left in the following clause, can delete it in resultTable
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(suchThatCl.getLeftArg());
+        }
+        clauseArgVecIndex++;
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(suchThatCl.getRightArg());
+        }
+        clauseArgVecIndex++;
     }
 
-    for (const PatternClause& patternCl : patternVec)
+    for (PatternClause& patternCl : patternVec)
     {
         if (isEarlyExit) {
             break;
@@ -53,6 +89,8 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
         if (!result.isResultTrue())
         {
+            isEarlyExit = true;
+
             resultTable.clearResultTable();
             isEarlyExit = true;
             break;
@@ -63,9 +101,26 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
             break;
         }
+
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(patternCl.getPatternSynonym());
+        }
+        clauseArgVecIndex++;
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(patternCl.getFirstArg());
+        }
+        clauseArgVecIndex++;
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(patternCl.getSecondArg());
+        }
+        clauseArgVecIndex++;
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(patternCl.getThirdArg());
+        }
+        clauseArgVecIndex++;
     }
 
-    for (const WithClause& withCl : withVec) {
+    for (WithClause& withCl : withVec) {
         if (isEarlyExit) {
             break;
         }
@@ -74,6 +129,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         Result result = withHandler.evaluate(withCl, resultTable, synonymTable);
         if (!result.isResultTrue())
         {
+            isEarlyExit = true;
             resultTable.clearResultTable();
             isEarlyExit = true;
             break;
@@ -84,9 +140,18 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
             break;
         }
+
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(withCl.getFirstArgStr());
+        }
+        clauseArgVecIndex++;
+        if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex)) {
+            resultTable.deleteSynonym(withCl.getSecondArgStr());
+        }
+        clauseArgVecIndex++;
     }
 
-    set<std::string> retSet = resultTable.getSelectedResult(selectedVarNames, pkb);
+    set<std::string> retSet = resultTable.getSelectedResult(selectedElems, pkb, isEarlyExit);
 
     return retSet;
 }
@@ -145,4 +210,16 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
     }
 
     return result;
+}
+
+bool PQLEvaluator::isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos) {
+    std::string argName = argList[currArgPos];
+    auto argNextOccur = std::find(argList.begin() + currArgPos + 1, argList.end(), argName);
+    bool isArgSelected = std::find(selectedSyn.begin(), selectedSyn.end(), argName) != selectedSyn.end();
+    if (argNextOccur == argList.end() && !isArgSelected) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }

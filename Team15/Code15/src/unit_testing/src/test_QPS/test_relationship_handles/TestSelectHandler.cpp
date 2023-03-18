@@ -39,7 +39,7 @@ void testSelectSynPkb(PKB& pkb) {
     // Line 3: m = m - 1}
 }
 
-string testSelect(string queryStr) {
+std::set<string> testSelect(string queryStr) {
     PKB pkb;
 
     unordered_map<string, set<int>> stmts;
@@ -50,12 +50,15 @@ string testSelect(string queryStr) {
     stmts.insert(make_pair("call", set<int>({ 5 })));
     stmts.insert(make_pair("read", set<int>({ 6 })));
     pkb.addAllStmts(stmts);
+    pkb.addAllFollows({ {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6} });
 
     pkb.addAllVars({ "x" });
     pkb.addAllConsts({ "1", "2" });
     pkb.addAllProcs({ "main", "foo" });
-    string retStr = TestUtility::testDriver(queryStr, pkb);
-    return retStr;
+    PQLDriver driver = PQLDriver(pkb);
+    set<string> retSet = driver.processPQL(queryStr);
+    
+    return retSet;
 
     /*
     procedure main{
@@ -116,7 +119,7 @@ TEST_CASE("Select Handler test 1") {
     SelectHandler selectHandler = SelectHandler(pkb);
     std::vector<Elem> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-    set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb);
+    set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb, false);
     REQUIRE(selectedVarName[0].getSynName() == "r");
     REQUIRE(retSet.size() == 3);
     REQUIRE(retSet.count("3") == 1);
@@ -143,7 +146,7 @@ TEST_CASE("Select Handler test 2") {
         SelectHandler selectHandler = SelectHandler(pkb);
         std::vector<Elem> selectedVarName = selectHandler.evalSelect(selectClause, varTable, resultTable);// update resultTable and return the synonym name
 
-        set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb);
+        set<std::string> retSet = resultTable.getSelectedResult(selectedVarName, pkb, false);
         REQUIRE(selectedVarName[0].getSynName() == "c");
         REQUIRE(retSet.size() == 4);
         REQUIRE(retSet.count("10") == 1);
@@ -153,7 +156,96 @@ TEST_CASE("Select Handler test 2") {
 
 }
 
-TEST_CASE("Select Handler test 3: multiple synonyms") {
+TEST_CASE("Select Handler test 3 single synonym") {
+    std::set<string> retStr1 = testSelect("assign a; Select a");
+    std::set<string> expected1 = {"1"};
+    REQUIRE(retStr1 == expected1);
+
+    std::set<string> retStr2 = testSelect("stmt s; Select s");
+    std::set<string> expected2 = {"1", "2", "3", "4", "5", "6"};
+    REQUIRE(retStr2 == expected2);
+
+    std::set<string> retStr3 = testSelect("stmt s; Select s such that Follows(1,7)");
+    std::set<string> expected3 = {};
+    REQUIRE(retStr3 == expected3);
+}
+
+TEST_CASE("Select Handler test 4 single synonym attribute") {
+    std::set<std::string> retStr1 = testSelect("assign a; Select a.stmt#");
+    std::set<std::string> expected1 = { "1" };
+    REQUIRE(retStr1 == expected1);
+
+    std::set<std::string> retStr2 = testSelect("stmt s; Select s.stmt#");
+    std::set<std::string> expected2 = { "1", "2", "3", "4", "5", "6" };
+    REQUIRE(retStr2 == expected2);
+
+    std::set<std::string> retStr3 = testSelect("stmt s; Select s.stmt# such that Follows(1,7)");
+    std::set<std::string> expected3 = {};
+    REQUIRE(retStr3 == expected3);
+}
+
+TEST_CASE("Select Handler test BOOLEAN") {
+    std::set<std::string> retStr1 = testSelect("assign a; Select BOOLEAN");
+    std::set<std::string> expected1 = { "TRUE" };
+    REQUIRE(retStr1 == expected1);
+
+    std::set<std::string> retStr2 = testSelect("Select BOOLEAN");
+    std::set<std::string> expected2 = { "TRUE" };
+    REQUIRE(retStr2 == expected2);
+
+    std::set<std::string> retStr3 = testSelect("stmt s; Select BOOLEAN with s.stmt#=1");
+    std::set<std::string> expected3 = { "TRUE" };
+    REQUIRE(retStr3 == expected3);
+
+    std::set<std::string> retStr4 = testSelect("stmt s; Select BOOLEAN with s.stmt#=7");
+    std::set<std::string> expected4 = { "FALSE" };
+    REQUIRE(retStr4 == expected4);
+
+    std::set<std::string> retStr5 = testSelect("stmt s; Select BOOLEAN such that Follows(1,3)");
+    std::set<std::string> expected5 = { "FALSE" };
+    REQUIRE(retStr5 == expected5);
+
+    std::set<std::string> retStr6 = testSelect("stmt BOOLEAN; Select BOOLEAN");
+    std::set<std::string> expected6 = { "1", "2", "3", "4", "5", "6"};
+    REQUIRE(retStr6 == expected6);
+}
+
+TEST_CASE("Select Handler test 5 multi synonyms") {
+    std::set<std::string> retStr1 = testSelect("stmt s1, s2; Select <s1, s2> such that Follows(s1, s2)");
+    std::set<std::string> expected1 = { "1 2", "2 3", "3 4", "4 5", "5 6"};
+    REQUIRE(retStr1 == expected1);
+
+    std::set<std::string> retStr2 = testSelect("stmt s1, s2; Select <s1, s2>");
+    std::set<std::string> expected2 = { "1 1","1 2","1 3","1 4","1 5","1 6",
+    "2 1","2 2","2 3","2 4","2 5","2 6",
+    "3 1","3 2","3 3","3 4","3 5", "3 6",
+    "4 1","4 2","4 3","4 4","4 5","4 6",
+    "5 1","5 2","5 3","5 4", "5 5", "5 6",
+    "6 1","6 2","6 3","6 4","6 5","6 6"};
+    REQUIRE(retStr2 == expected2);
+
+}
+
+TEST_CASE("Select Handler test 6 multi synonyms with attribute") {
+    std::set<std::string> retStr1 = testSelect("stmt s1, s2; Select <s1, s2.stmt#> such that Follows(s1, s2)");
+    std::set<std::string> expected1 = { "1 2", "2 3", "3 4", "4 5", "5 6" };
+    REQUIRE(retStr1 == expected1);
+
+    std::set<std::string> retStr2 = testSelect("stmt s1, s2; Select <s1.stmt#, s2>");
+    std::set<std::string> expected2 = { "1 1","1 2","1 3","1 4","1 5","1 6",
+    "2 1","2 2","2 3","2 4","2 5","2 6",
+    "3 1","3 2","3 3","3 4","3 5", "3 6",
+    "4 1","4 2","4 3","4 4","4 5","4 6",
+    "5 1","5 2","5 3","5 4", "5 5", "5 6",
+    "6 1","6 2","6 3","6 4","6 5","6 6" };
+    REQUIRE(retStr2 == expected2);
+
+    std::set<std::string> retStr3 = testSelect("stmt s1, s2; Select <s1.stmt#> such that Follows(s1, s2)");
+    std::set<std::string> expected3 = { "1", "2", "3", "4", "5" };
+    REQUIRE(retStr1 == expected1);
+}
+
+TEST_CASE("Select Handler test: multiple synonyms") {
 
     PQLPreprocessor preprocessor;
     string queryStr = "variable a, b; constant c; Select <a,b,c> ";// variable: m, n, x; constant: 1, 5
@@ -187,7 +279,7 @@ TEST_CASE("Select Handler test 3: multiple synonyms") {
 
 }
 
-TEST_CASE("Select Handler test 4: same synonyms appear multiple times in Select") {
+TEST_CASE("Select Handler test: same synonyms appear multiple times in Select") {
 
     PQLPreprocessor preprocessor;
     string queryStr = "variable a; Select <a,a> ";// variable: m, n, x; constant: 1, 5
@@ -213,7 +305,7 @@ TEST_CASE("Select Handler test 4: same synonyms appear multiple times in Select"
     REQUIRE(resultTable.getSynList() == expectedSynList);
 }
 
-TEST_CASE("Select Handler test 5: select attribute") {
+TEST_CASE("Select Handler test: select attribute") {
     PQLPreprocessor preprocessor;
     string queryStr = "assign a; Select a.stmt#";
     Query query = preprocessor.preprocess(queryStr);

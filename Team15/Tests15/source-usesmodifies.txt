@@ -14,9 +14,12 @@ procedure proc3 {
 procedure proc4 {
   read v;
   read w;
-  x = v / 3;
-  y = w / 4;
-  z = v - w * x; }
+  while ((v >= 1) && (w >= 1)) {
+    if (v >= a) then {
+      x = v / 3; }
+    else {
+      y = w / 4; }
+    z = v - w * x; } }
 
 procedure proc5 {
   print b;

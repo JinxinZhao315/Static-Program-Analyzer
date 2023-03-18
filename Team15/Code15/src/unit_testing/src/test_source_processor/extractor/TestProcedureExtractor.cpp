@@ -3,85 +3,113 @@
 #include "source_processor/include/extractor/ProcedureExtractor.h"
 
 TEST_CASE("extract procedures from mainProgram") {
-	set<string> results = extractProcedures(mainProgram);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(mainProgram);
+	set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "main" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from onlyCallStatements") {
-	set<string> results = extractProcedures(onlyCallStatements);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(onlyCallStatements);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "main" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from singleAssignmentSelfIncrement") {
-	set<string> results = extractProcedures(singleAssignmentSelfIncrement);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(singleAssignmentSelfIncrement);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from singleAssignmentAddVariable") {
-	set<string> results = extractProcedures(singleAssignmentAddVariable);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(singleAssignmentAddVariable);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from whileLoop") {
-	set<string> results = extractProcedures(whileLoop);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(whileLoop);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from whileLoop2") {
-	set<string> results = extractProcedures(whileLoop2);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(whileLoop2);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from computeCentroid") {
-	set<string> results = extractProcedures(computeCentroid);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(computeCentroid);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "computeCentroid" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from ifElse") {
-	set<string> results = extractProcedures(ifElse);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(ifElse);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from ifElse2") {
-	set<string> results = extractProcedures(ifElse2);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(ifElse2);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected;
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from superNested") {
-	set<string> results = extractProcedures(superNested);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(superNested);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "proc1" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from readPoint") {
-	set<string> results = extractProcedures(readPoint);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(readPoint);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "readPoint" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from program") {
-	set<string> results = extractProcedures(program);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(program);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "computeCentroid", "main", "printResults", "readPoint" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from source2") {
-	set<string> results = extractProcedures(source2);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(source2);
+    set<string> results = procedureExtractor->getProcedures();
 	set<string> expected = { "proc1", "proc2" };
 	REQUIRE(results == expected);
 }
 
 TEST_CASE("extract procedures from source4") {
-    set<string> results = extractProcedures(source4);
+    ProcedureExtractor* procedureExtractor = new ProcedureExtractor();
+    procedureExtractor->extractProcedures(source4);
+    set<string> results = procedureExtractor->getProcedures();
     set<string> expected = { "proc1" };
     REQUIRE(results == expected);
 }
