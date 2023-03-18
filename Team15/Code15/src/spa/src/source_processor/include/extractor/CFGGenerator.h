@@ -3,4 +3,4 @@
 #include "queue"
 
 unordered_map<int, CFGNode*> createNodes(const std::vector<Line>& program);
-set<CFGNode*> generateCFG(const vector<Line>& program);
+map<int, set<int>> generateCFG(const vector<Line>& program) ;
