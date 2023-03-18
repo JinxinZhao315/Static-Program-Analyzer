@@ -1,15 +1,5 @@
 #include "source_processor/include/extractor/CFGGenerator.h"
 
-void printNodes(const unordered_map<int, set<int>>& myMap) {
-    for (const auto& [key, value] : myMap) {
-        std::cout << key << ": [";
-        for (const auto& v : value) {
-            std::cout << v << ", ";
-        }
-        std::cout << "]" << std::endl;
-    }
-}
-
 unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
     unordered_map<int, set<int>> cfg;
 
@@ -26,7 +16,7 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
         int nextLineNumber = lineNumber + 1;
 
         if (lineType == "if" || lineType == "while") {
-            if (prevLineNumber != -1) {
+            if (prevLineNumber != -1 && prevLineNumber != 0 && prevLineNumber != lineNumber) {
                 cfg[prevLineNumber].insert(lineNumber);
             }
             nestingStack.emplace(lineNumber, lineType);
@@ -36,7 +26,9 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
                 int topLineNumber;
                 string topLineType;
                 tie(topLineNumber, topLineType) = nestingStack.top();
-                cfg[topLineNumber].insert(nextLineNumber);
+                if (topLineNumber != 0) {
+                    cfg[topLineNumber].insert(nextLineNumber);
+                }
                 nestingStack.pop();
                 nestingStack.emplace(lineNumber, "else");
             }
@@ -46,18 +38,25 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
                 int topLineNumber;
                 string topLineType;
                 tie(topLineNumber, topLineType) = nestingStack.top();
-                cfg[topLineNumber].insert(nextLineNumber);
+                if (topLineNumber != 0) {
+                    cfg[topLineNumber].insert(nextLineNumber);
+                }
                 nestingStack.pop();
                 if (!nestingStack.empty() && topLineType != "else") {
-                    cfg[nestingStack.top().first].insert(nextLineNumber);
+                    int parentLineNumber;
+                    string parentLineType;
+                    tie(parentLineNumber, parentLineType) = nestingStack.top();
+                    if (parentLineNumber != 0) {
+                        cfg[parentLineNumber].insert(nextLineNumber);
+                    }
                 }
-                if (topLineType == "while") {
+                if (topLineType == "while" && nextLineNumber != 0) {
                     cfg[nextLineNumber].insert(topLineNumber);
                 }
             }
             prevLineNumber = -1;
         } else {
-            if (prevLineNumber != -1) {
+            if (prevLineNumber != -1 && prevLineNumber != 0 && prevLineNumber != lineNumber) {
                 cfg[prevLineNumber].insert(lineNumber);
             }
         }
@@ -67,6 +66,5 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
         }
     }
 
-    printNodes(cfg);
     return cfg;
 }
