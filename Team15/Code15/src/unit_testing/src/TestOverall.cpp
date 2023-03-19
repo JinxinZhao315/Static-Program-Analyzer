@@ -33,7 +33,7 @@ string source_general = "../../../../../../Tests15/source-general.txt";
 string source_follows = "../../../../../../Tests15/source-follows.txt";
 string source_parent = "../../../../../../Tests15/source-parent.txt";
 string source7 = "../../../../../../Tests15/source7.txt";
-
+string source_while_while = "../../../../../../Tests15/while-while.txt";
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
 //string source2_filename = "../../../../Tests15/source2.txt";
@@ -912,5 +912,23 @@ TEST_CASE("Overall test : source-sample1.txt 6") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-while-while.txt 1") {
+    string filename = source_while_while;
+    string queryStr = "while w1, w2, w3; stmt s1, s2, s3; Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2,w3)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "6,8,13", "6,8,15"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-while-while.txt 2") {
+    string filename = source_while_while;
+    string queryStr = "while w1, w2, w3; stmt s1, s2, s3; Select w1 such that Parent*(w1, w2)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "6,8", "6,13","6,15","8,13","8,15"};
     REQUIRE(result == expectedResult);
 }
