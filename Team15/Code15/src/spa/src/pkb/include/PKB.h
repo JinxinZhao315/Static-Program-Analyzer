@@ -228,12 +228,6 @@ public:
 	//QPS with call
 	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
 
-	void requestAllNextStar();
-
-	void requestAllAffects();
-
-	void requestAllAffectsStar();
-
 	//QPS assign pattern
 	std::string getAssignVarFromStmt(int assignStmtNum);
 
