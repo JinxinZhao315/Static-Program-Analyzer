@@ -7,3 +7,11 @@ procedure proc2 {
     a = 5; }
   else {
     a = 10; } }
+
+procedure proc3 {
+  b = 10;
+  c = 5;
+  if (b > 5) then {
+    b = 10 - c; }
+  else {
+    b = c; } }

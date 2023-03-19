@@ -3,3 +3,8 @@ stmt s;
 Select s such that Uses(s, "a")
 2, 3
 5000
+2 - uses statement
+stmt s;
+Select s such that Uses(s, "c")
+8, 9, 10
+5000
