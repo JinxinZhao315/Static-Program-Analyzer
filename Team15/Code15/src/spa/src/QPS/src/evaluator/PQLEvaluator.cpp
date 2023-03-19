@@ -92,7 +92,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             isEarlyExit = true;
 
             resultTable.clearResultTable();
-
+            isEarlyExit = true;
             break;
         }
 
@@ -131,6 +131,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         {
             isEarlyExit = true;
             resultTable.clearResultTable();
+            isEarlyExit = true;
             break;
         }
 

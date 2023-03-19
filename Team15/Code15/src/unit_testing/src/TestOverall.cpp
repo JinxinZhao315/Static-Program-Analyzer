@@ -28,6 +28,7 @@ set<string> testDriver(string filename, string queryStr) {
 
 string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
 string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
+string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
 string source_general = "../../../../../../Tests15/source-general.txt";
 string source_follows = "../../../../../../Tests15/source-follows.txt";
 string source_parent = "../../../../../../Tests15/source-parent.txt";
@@ -875,5 +876,32 @@ TEST_CASE("Overall test : source-ifwhile.txt 2") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "9" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample1.txt") {
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Modifies(s, \"i\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "3", "4", "11", "12", "13", "14", "17" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample1.txt 2") {
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "4","5","6", "7", "8", "9","10","12","13", "18", "19", "21","22", "23","24"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample3.txt 3") {
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = {"TRUE" };
     REQUIRE(result == expectedResult);
 }
