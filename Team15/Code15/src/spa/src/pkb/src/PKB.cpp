@@ -11,9 +11,8 @@ PKB::PKB() {
 	parentStarTable = RelationshipTable<int, int>();
 	usesStmtTable = RelationshipTable<int, std::string>();
 	usesProcTable = RelationshipTable<std::string, std::string>();
-	assignPatternTable = PatternTable();
-	whilePatternTable = PatternTable();
-	ifPatternTable = PatternTable();
+	modifiesStmtTable = RelationshipTable<int, std::string>();
+	modifiesProcTable = RelationshipTable<std::string, std::string>();
 	callsTable = RelationshipTable<std::string, std::string>();
 	callsStarTable = RelationshipTable<std::string, std::string>();
 	nextTable = RelationshipTable<int, int>();
@@ -23,6 +22,9 @@ PKB::PKB() {
 	withReadTable = RelationshipTable<int, std::string>();
 	withPrintTable = RelationshipTable<int, std::string>();
 	withCallTable = RelationshipTable<int, std::string>();
+	assignPatternTable = PatternTable();
+	whilePatternTable = PatternTable();
+	ifPatternTable = PatternTable();
 }
 
 //SP procedure
@@ -86,21 +88,6 @@ void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::strin
 	modifiesProcTable.addAllOneToManyRelationships(allProcToVars);
 }
 
-//SP assign pattern
-void PKB::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
-	assignPatternTable.addAllAssignPatterns(lhsVarToRhsLine);
-}
-
-//SP while pattern
-void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
-	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
-}
-
-//SP if pattern
-void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
-	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
-}
-
 //SP calls
 void PKB::addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
 	callsTable.addAllOneToManyRelationships(allCallertoCallees);
@@ -147,6 +134,21 @@ void PKB::addAllWithPrint(unordered_map<int, std::string> printLineNumToVarName)
 //SP with call
 void PKB::addAllWithCall(unordered_map<int, std::string> callLineNumToProcName) {
 	withCallTable.addAllOneToOneRelationships(callLineNumToProcName);
+}
+
+//SP assign pattern
+void PKB::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
+	assignPatternTable.addAllAssignPatterns(lhsVarToRhsLine);
+}
+
+//SP while pattern
+void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
+	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
+}
+
+//SP if pattern
+void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
+	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
 }
 
 //QPS procedure
@@ -291,57 +293,6 @@ std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
 
 bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
 	return modifiesProcTable.inOneToManyRelationship(procName, varName);
-}
-
-//QPS assign pattern
-std::string PKB::getAssignVarFromStmt(int assignStmtNum) {
-	return assignPatternTable.getVarFromStmt(assignStmtNum);
-}
-
-std::set<int> PKB::getAssignStmtsFromVar(std::string lhsVarName) {
-	return assignPatternTable.getStmtsFromVar(lhsVarName);
-}
-
-std::set<std::vector<std::string>> PKB::getAssignExprsFromStmt(int assignStmtNum) {
-	return assignPatternTable.getExprsFromStmt(assignStmtNum);
-}
-
-std::set<int> PKB::getAssignStmtsFromExpr(std::vector<std::string> rhsExpr) {
-	return assignPatternTable.getStmtsFromExpr(rhsExpr);
-}
-
-std::set<std::vector<std::string>> PKB::getAssignExprsFromVar(std::string lhsVarName) {
-	return assignPatternTable.getExprsFromVar(lhsVarName);
-}
-
-std::set<std::string> PKB::getAssignVarsFromExpr(std::vector<std::string> rhsExpr) {
-	return assignPatternTable.getVarsFromExpr(rhsExpr);
-}
-
-//QPS while pattern
-std::set<int> PKB::getWhileStmtsWithVars() {
-	return whilePatternTable.getAllStmts();
-}
-
-std::set<int> PKB::getWhileStmtsFromVar(std::string controlVarName) {
-	return whilePatternTable.getStmtsFromVar(controlVarName);
-}
-
-std::set<std::string> PKB::getWhileVarsFromStmt(int whileStmtNum) {
-	return whilePatternTable.getVarsFromStmt(whileStmtNum);
-}
-
-//QPS if pattern
-std::set<int> PKB::getIfStmtsWithVars() {
-	return ifPatternTable.getAllStmts();
-}
-
-std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
-	return ifPatternTable.getStmtsFromVar(controlVarName);
-}
-
-std::set<std::string> PKB::getIfVarsFromStmt(int ifStmtNum) {
-	return ifPatternTable.getVarsFromStmt(ifStmtNum);
 }
 
 //QPS calls
@@ -501,4 +452,55 @@ std::string PKB::getWithPrintVarName(int printLineNum, std::string invalidVarNam
 //QPS with call
 std::string PKB::getWithCallProcName(int callLineNum, std::string invalidProcName) {
 	return withCallTable.getOneRight(callLineNum, invalidProcName);
+}
+
+//QPS assign pattern
+std::string PKB::getAssignVarFromStmt(int assignStmtNum) {
+	return assignPatternTable.getVarFromStmt(assignStmtNum);
+}
+
+std::set<int> PKB::getAssignStmtsFromVar(std::string lhsVarName) {
+	return assignPatternTable.getStmtsFromVar(lhsVarName);
+}
+
+std::set<std::vector<std::string>> PKB::getAssignExprsFromStmt(int assignStmtNum) {
+	return assignPatternTable.getExprsFromStmt(assignStmtNum);
+}
+
+std::set<int> PKB::getAssignStmtsFromExpr(std::vector<std::string> rhsExpr) {
+	return assignPatternTable.getStmtsFromExpr(rhsExpr);
+}
+
+std::set<std::vector<std::string>> PKB::getAssignExprsFromVar(std::string lhsVarName) {
+	return assignPatternTable.getExprsFromVar(lhsVarName);
+}
+
+std::set<std::string> PKB::getAssignVarsFromExpr(std::vector<std::string> rhsExpr) {
+	return assignPatternTable.getVarsFromExpr(rhsExpr);
+}
+
+//QPS while pattern
+std::set<int> PKB::getWhileStmtsWithVars() {
+	return whilePatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getWhileStmtsFromVar(std::string controlVarName) {
+	return whilePatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getWhileVarsFromStmt(int whileStmtNum) {
+	return whilePatternTable.getVarsFromStmt(whileStmtNum);
+}
+
+//QPS if pattern
+std::set<int> PKB::getIfStmtsWithVars() {
+	return ifPatternTable.getAllStmts();
+}
+
+std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
+	return ifPatternTable.getStmtsFromVar(controlVarName);
+}
+
+std::set<std::string> PKB::getIfVarsFromStmt(int ifStmtNum) {
+	return ifPatternTable.getVarsFromStmt(ifStmtNum);
 }
