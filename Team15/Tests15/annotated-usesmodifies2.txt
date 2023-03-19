@@ -1,0 +1,9 @@
+procedure proc1 {
+//1  a = 5;
+//2  call proc2; }
+
+procedure proc2 {
+//3  if (a > 10) then {
+//4    a = 5; }
+     else {
+//5    a = 10; } }

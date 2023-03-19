@@ -1,0 +1,5 @@
+1 - uses statement
+stmt s;
+Select s such that Uses(s, "a")
+2, 3
+5000
