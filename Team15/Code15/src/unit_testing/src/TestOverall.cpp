@@ -65,7 +65,9 @@ TEST_CASE("Overall test : Sample_source1.txt 1") {
 
 TEST_CASE("Overall test : source-sample1.txt 6") {
     string filename = source_sample1;
-    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
+    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3;\
+        variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) \
+        and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };
