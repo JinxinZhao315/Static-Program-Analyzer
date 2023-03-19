@@ -1,0 +1,21 @@
+procedure proc1 {
+//1	  x = 1;
+//2	  y = 50;
+//3	  if (1 != 2) then {
+//4	    x = x - 1; }
+	  else {
+//5	    x = 1000; }
+//6	  while (1 == 1) {
+//7	    x = x * 10; 
+//8	  while (x < 9) {
+//9	    if (x > 4) then {
+//10	      x = x + 1; }
+   	 else {
+//11	      x = x + 2; }
+    }
+//12	    if (x == 8) then {
+ //13	     while (y < 100) {
+ //14	       y = (y + 1) * 2; } }
+    else {
+//15	     while (y > 0) {
+//16	        y = y / 2; } } } } }

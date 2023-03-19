@@ -26,13 +26,13 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
-string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
-string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
-string source_general = "../../../../../../Tests15/source-general.txt";
-string source_follows = "../../../../../../Tests15/source-follows.txt";
-string source_parent = "../../../../../../Tests15/source-parent.txt";
-string source7 = "../../../../../../Tests15/source7.txt";
+string source_sample1 = "../../../../Tests15/source-sample1.txt";
+string source_sample2 = "../../../../Tests15/source-sample2.txt";
+string source_sample3 = "../../../../Tests15/source-sample3.txt";
+string source_general = "../../../../Tests15/source-general.txt";
+string source_follows = "../../../../Tests15/source-follows.txt";
+string source_parent = "../../../../Tests15/source-parent.txt";
+string source7 = "../../../../Tests15/source-7.txt";
 
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
@@ -901,7 +901,7 @@ TEST_CASE("Overall test : source-sample1.txt 2") {
     string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "4","5","6", "7", "8", "9","10","12","13", "18", "19", "21","22", "23","24"};
+    set<string> expectedResult = {"4","5","6","7","8","9","10","12","13","16","18","19","21","22","23","24"};
     REQUIRE(result == expectedResult);
 }
 
@@ -913,3 +913,12 @@ TEST_CASE("Overall test : source-sample3.txt 3") {
     set<string> expectedResult = {"TRUE" };
     REQUIRE(result == expectedResult);
 }
+
+//TEST_CASE("Overall test : source-sample1.txt 6") {
+//    string filename = source_sample1;
+//    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "TRUE" };
+//    REQUIRE(result == expectedResult);
+//}

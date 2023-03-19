@@ -4,6 +4,7 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
     vector<int> v;
     unordered_map<int, int> followsRS;
     unordered_map<int, int> parent;
+    set<int> linesInSameProc;
     int prevLineNumber = 0;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
@@ -12,8 +13,10 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
             // new procedure, store everything in temp and start anew
             parent.clear();
             v.clear();
+            linesInSameProc.clear();
             continue;
         }
+        linesInSameProc.insert(currLineNumber);
         // keep track of which block curr line is in
         if (!v.empty() && currLineNumber) {
             parent[currLineNumber] = v.back();
@@ -22,7 +25,7 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
         bool bothNoParent = (parent.find(prevLineNumber) == parent.end()) && (parent.find(currLineNumber) == parent.end());
         bool bothSameParent = parent[prevLineNumber] == parent[currLineNumber];
         bool isSiblings = bothNoParent || bothSameParent;
-        if (prevLineNumber && currLineNumber && isSiblings) {
+        if (prevLineNumber && currLineNumber && isSiblings && linesInSameProc.count(prevLineNumber) > 0) {
             followsRS[prevLineNumber] = currLineNumber;
         }
         if (lineType == "if" || lineType == "while") {
