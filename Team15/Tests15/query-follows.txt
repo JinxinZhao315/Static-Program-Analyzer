@@ -41,7 +41,7 @@ Select c such that Follows(c, 25)
 9 - follows*
 stmt s;
 Select s such that Follows*(9, s)
-10, 11, 17, 18, 19, 20, 23, 24, 25, 26
+10, 11, 17, 18
 5000
 10 - follows*
 stmt s;
@@ -51,12 +51,12 @@ Select s such that Follows*(s, 15)
 11 - follows
 call c;
 Select c such that Follows*(1, c)
-18, 24
+18
 5000
 12 - follows
 call c;
 Select c such that Follows*(c, 25)
-18, 24
+24
 5000
 13 - follows
 if i;
