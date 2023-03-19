@@ -35,6 +35,7 @@ string source_parent = "../../../../Tests15/source-parent.txt";
 string source7 = "../../../../Tests15/source-7.txt";
 string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
 string uses_modifies2 = "../../../../Tests15/source-usesmodifies2.txt";
+string source_with = "../../../../Tests15/with.txt";
 
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
@@ -52,20 +53,18 @@ string uses_modifies2 = "../../../../Tests15/source-usesmodifies2.txt";
 //    REQUIRE(result == expectedResult);
 //}
 
-TEST_CASE("Overall test : Sample_source1.txt 1") {
-    string filename = source_sample1;
-    string queryStr = "if ifs; assign a1, a2; variable v1, v2;\
-        Select ifs such that Follows* (a1, ifs) and Follows* (ifs, a2)\
-        and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName";
+TEST_CASE("Overall test: temp") {
+    string filename = source_with;
+    string queryStr = "print p; Select p such that Uses(p, _) with p.varName = \"c\"";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "6" };
+    set<string> expectedResult = { "5" };
     REQUIRE(result == expectedResult);
 }
 
 TEST_CASE("Overall test : source-sample1.txt 6") {
     string filename = source_sample1;
-    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3;\
+    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; \
         variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) \
         and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
 
