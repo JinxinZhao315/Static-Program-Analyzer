@@ -2,6 +2,7 @@
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/model/SuchThatClause.h"
+#include "pkb/include/PKB.h"
 #include <map>
 #include <string>
 #include <set>

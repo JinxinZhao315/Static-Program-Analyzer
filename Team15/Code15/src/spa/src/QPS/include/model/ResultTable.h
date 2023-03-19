@@ -2,6 +2,7 @@
 #include <string>
 #include <set>
 #include <assert.h>
+#include "Utility.h"
 #include "pkb/include/PKB.h"
 #include "Elem.h"
 #ifndef SPA_RESULTTABLE_H
@@ -33,8 +34,6 @@ public:
     int getRowNum();
 
     int getColNum();
-
-    std::set<std::string> getResultFromPKB(PKB& pkb, string DeType);
 
     void resultTableCheckAndAdd(string arg, PKB pkb, string DeType);
 

@@ -73,8 +73,11 @@ Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Result
     // UNDERSCORE-Procedure
     else if (leftType == Utility::UNDERSCORE) {
         std::string synonDeType = synonymTable.find(rightArg)->second;
-        resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+        /*resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        // currSynonValues here are statement line numbers in string format.
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
         for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> callerSet = getCallsFromPKB(isStar, GET_CALLER, currSynonVal);
@@ -125,8 +128,11 @@ Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Result
     // Procedure-UNDERSCORE
     else if (rightType == Utility::UNDERSCORE) {
         std::string synonDeType = synonymTable.find(leftArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        // currSynonValues here are statement line numbers in string format.
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+
         std::vector<std::string> resultSynonValues;
         for (const std::string& currSynonVal : currSynonValues) {
             std::set<string> calleeSet = getCallsFromPKB(isStar, GET_CALLEE, currSynonVal);
@@ -143,9 +149,11 @@ Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Result
     // Procedure-QUOTED_IDENT
     else if (rightType == Utility::QUOTED_IDENT) {
         std::string synonDeType = synonymTable.find(leftArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+        //resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
+
         for (const std::string& currSynonVal : currSynonValues) {
             bool isCalls = getIsCallsFromPKB(isStar, currSynonVal, Utility::trim_double_quotes(rightArg));
             if (isCalls) {
@@ -166,26 +174,34 @@ Result CallsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Result
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
-        resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
+        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+        //resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
+        //resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
+        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
-        std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-        std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+        //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
+        //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+        ResultTable initTable(currLeftValues, leftArg);
+        initTable.combineTable(ResultTable(currRightValues, rightArg));
+        int initTableSize = initTable.getColNum();
 
-        ResultTable tempResultTable({ leftArg, rightArg });
+        ResultTable tempTable({ leftArg, rightArg });
 
-        for (int i = 0; i < currLeftValues.size(); i++) {
-            bool isLeftCallsRight = getIsCallsFromPKB(isStar, currLeftValues[i], currRightValues[i]); 
+        for (int i = 0; i < initTableSize; i++) {
+            std::vector<std::string> tuple = initTable.getTuple(i);
+            bool isLeftCallsRight = getIsCallsFromPKB(isStar, tuple[0], tuple[1]);
             if (isLeftCallsRight) {
-                tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+                tempTable.insertTuple({ tuple[0], tuple[1] });
             }
         }
-        if (tempResultTable.isTableEmpty()) {
+        if (tempTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
 
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
     }
 
     return result;

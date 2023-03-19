@@ -166,26 +166,37 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
-        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
+        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+        //convert the set to vector
+        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
-        std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-        std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
 
-        ResultTable tempResultTable({ leftArg, rightArg });
+        //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
+        //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
 
-        for (int i = 0; i < currLeftValues.size(); i++) {
-            bool isLeftNextRight = getIsNextFromPKB(isStar, currLeftValues[i], currRightValues[i]);
+        ResultTable initTable(currLeftValues, leftArg);
+        initTable.combineTable(ResultTable(currRightValues, rightArg));
+        int initTableSize = initTable.getColNum();
+
+        ResultTable tempTable({ leftArg, rightArg });
+
+        for (int i = 0; i < initTableSize; i++) {
+            std::vector<std::string> tuple = initTable.getTuple(i);
+            bool isLeftNextRight = getIsNextFromPKB(isStar, tuple[0], tuple[1]);
             if (isLeftNextRight) {
-                tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+                tempTable.insertTuple({ tuple[0], tuple[1] });
             }
         }
-        if (tempResultTable.isTableEmpty()) {
+        if (tempTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
 
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
     }
     return result;
 }
