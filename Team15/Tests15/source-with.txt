@@ -1,0 +1,25 @@
+procedure proc1 {
+  a = 100;
+  b = 101;
+  call proc2; }
+
+procedure proc2 {
+  c = 102;
+  print c;
+  d = 103; }
+
+procedure proc3 {
+  e = 104;
+  read f;
+  proc1 = 4; }
+
+procedure proc4 {
+  g = 105;
+  while (g > 0) {
+    g = g - 17;
+  }
+  h = 106;
+  if (h > 0) then {
+    h = h - 17; }
+  else {
+    h = h + 17; } }
