@@ -25,19 +25,19 @@ public:
 		}
 	}
 
-	inline void addAllOneToOneRelationships(std::unordered_map<L, R> oneToOneAbstractions) {
-		leftToOneRightMap = oneToOneAbstractions;
-		flipOneToOne(oneToOneAbstractions);
+	inline void addAllOneToOneRelationships(std::unordered_map<L, R> oneToOneRelationships) {
+		leftToOneRightMap = oneToOneRelationships;
+		flipOneToOne(oneToOneRelationships);
 	}
 
-	inline void addAllOneToManyRelationships(std::unordered_map<L, std::set<R> > oneToManyAbstractions) {
-		leftToManyRightMap = oneToManyAbstractions;
-		flipOneToMany(oneToManyAbstractions);
+	inline void addAllOneToManyRelationships(std::unordered_map<L, std::set<R> > oneToManyRelationships) {
+		leftToManyRightMap = oneToManyRelationships;
+		flipOneToMany(oneToManyRelationships);
 	}
 
-	inline void addAllOneSidedOnetoManyRelationships(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
-		leftToManyRightMap = oneToManyAbstractions;
-		flipOneSidedOneToMany(oneToManyAbstractions);
+	inline void addAllOneSidedOnetoManyRelationships(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
+		leftToManyRightMap = oneToManyRelationships;
+		flipOneSidedOneToMany(oneToManyRelationships);
 	}
 
 	inline R getOneRight(L left, R invalidRight) {
@@ -163,20 +163,20 @@ private:
 		}
 	}
 
-	inline void flipOneToOne(std::unordered_map<L, R> oneToOneAbstractions) {
-		for (const auto& [left, right] : oneToOneAbstractions) {
+	inline void flipOneToOne(std::unordered_map<L, R> oneToOneRelationships) {
+		for (const auto& [left, right] : oneToOneRelationships) {
 			addRightToOneLeft(left, right);
 		}
 	}
 	
-	inline void flipOneToMany(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
-		for (const auto& [left, rights] : oneToManyAbstractions) {
+	inline void flipOneToMany(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
+		for (const auto& [left, rights] : oneToManyRelationships) {
 			addRightToManyLeft(left, rights);
 		}
 	}
 
-	inline void flipOneSidedOneToMany(std::unordered_map<L, std::set<R>> oneToManyAbstractions) {
-		for (const auto& [left, rights] : oneToManyAbstractions) {
+	inline void flipOneSidedOneToMany(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
+		for (const auto& [left, rights] : oneToManyRelationships) {
 			for (R right : rights) {
 				addRightToOneLeft(left, right);
 			}
