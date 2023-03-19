@@ -33,6 +33,8 @@ string source_general = "../../../../Tests15/source-general.txt";
 string source_follows = "../../../../Tests15/source-follows.txt";
 string source_parent = "../../../../Tests15/source-parent.txt";
 string source7 = "../../../../Tests15/source-7.txt";
+string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
+string uses_modifies2 = "../../../../Tests15/source-usesmodifies2.txt";
 
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
@@ -40,6 +42,15 @@ string source7 = "../../../../Tests15/source-7.txt";
 //string source3_filename = "../../../../Tests15/source3.txt";
 //string source4_filename = "../../../../Tests15/source4.txt";
 //string source7_filename = "../../../../Tests15/source7.txt";
+
+//TEST_CASE("Overall test : source-usesmodifies.txt 1") {
+//    string filename = uses_modifies;
+//    string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "6" };
+//    REQUIRE(result == expectedResult);
+//}
 
 TEST_CASE("Overall test : Sample_source1.txt 1") {
     string filename = source_sample1;

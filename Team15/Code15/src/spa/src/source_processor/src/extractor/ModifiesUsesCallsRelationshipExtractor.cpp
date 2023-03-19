@@ -18,7 +18,6 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
             continue;
         } else if (lineType == "if" || lineType == "while") { // keep track of stmt container line number
             stmtContainerStack.push_back(currLineNumber);
-            continue;
         } else if (lineType == "}") {
             if (!stmtContainerStack.empty()) {
                 stmtContainerStack.pop_back();
