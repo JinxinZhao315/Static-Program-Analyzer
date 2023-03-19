@@ -897,11 +897,20 @@ TEST_CASE("Overall test : source-sample1.txt 2") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source-sample3.txt 3") {
-    string filename = source_sample1;
+TEST_CASE("Overall test : source-sample3.txt 4") {
+    string filename = source_sample3;
     string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = {"TRUE" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample3.txt 3") {
+    string filename = source_sample1;
+    string queryStr = "assign a1, a2, a3; statement s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, ¡°x¡±) and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "TRUE" };
     REQUIRE(result == expectedResult);
 }
