@@ -19,6 +19,10 @@ string testWith(string queryStr) {
     stmts.insert(make_pair("read", set<int>({ 6 })));
     pkb.addAllStmts(stmts);
 
+    pkb.addAllWithCall({ {5, "foo"} });
+    pkb.addAllWithPrint({ {4, "x"} });
+    pkb.addAllWithRead({ {6, "x"} });
+    pkb.addAllCalls({ {"main", {"foo"}} });
     pkb.addAllVars({ "x" });
     pkb.addAllConsts({ "1", "2" });
     pkb.addAllProcs({ "main", "foo" });

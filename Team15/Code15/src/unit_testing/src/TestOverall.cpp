@@ -40,16 +40,16 @@ string source7 = "../../../../../../Tests15/source7.txt";
 //string source4_filename = "../../../../Tests15/source4.txt";
 //string source7_filename = "../../../../Tests15/source7.txt";
 
-//TEST_CASE("Overall test : Sample_source1.txt 1") {
-//    string filename = sample_source1;
-//    string queryStr = "if ifs; assign a1, a2; variable v1, v2;\
-//        Select ifs such that Follows* (a1, ifs) and Follows* (ifs, a2)\
-//        and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "6" };
-//    REQUIRE(result == expectedResult);
-//}
+TEST_CASE("Overall test : Sample_source1.txt 1") {
+    string filename = source_sample1;
+    string queryStr = "if ifs; assign a1, a2; variable v1, v2;\
+        Select ifs such that Follows* (a1, ifs) and Follows* (ifs, a2)\
+        and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "6" };
+    REQUIRE(result == expectedResult);
+}
 
 
 TEST_CASE("Overall test : source1.txt 1") {

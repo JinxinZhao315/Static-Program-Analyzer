@@ -36,7 +36,7 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		result.setClauseResult(tempResultTable);
 	}
 	else if (withClause.isFirstArgAttrRef() && !withClause.isSecondArgAttrRef()) {
-		std::string secondValue = withClause.getSecondArgConstValue();
+		std::string secondConstValue = withClause.getSecondArgConstValue();
 		std::string firstSynName = withClause.getFirstArgAttrRef().getSynName();
 		std::string firstSynType = withClause.getFirstArgAttrRef().getSynType();
 		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
@@ -45,9 +45,9 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		int tupleNum = resultTable.getColNum();
 		ResultTable tempResultTable({ firstSynName });
 		for (int col = 0; col < tupleNum; col++) {
-			std::string firstValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
-			if (firstValue == secondValue) {
-				tempResultTable.insertTuple({ firstValue });
+			std::string firstAttrRefValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
+			if (firstAttrRefValue == secondConstValue) {
+				tempResultTable.insertTuple({ resultTable.getTuple(col)[firstSynIndex] });
 			}
 		}
 		if (tempResultTable.isTableEmpty()) {
@@ -69,10 +69,10 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		int tupleNum = resultTable.getColNum();
 		ResultTable tempResultTable({ firstSynName, secondSynName });
 		for (int col = 0; col < tupleNum; col++) {
-			std::string firstValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
-			std::string secondValue = resultTable.getAttrRefValue(secondSynIndex, col, withClause.getSecondArgAttrRef(), pkb);
-			if (firstValue == secondValue) {
-				tempResultTable.insertTuple({ firstValue, secondValue });
+			std::string firstAttrRefValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
+			std::string secondAttrRefValue = resultTable.getAttrRefValue(secondSynIndex, col, withClause.getSecondArgAttrRef(), pkb);
+			if (firstAttrRefValue == secondAttrRefValue) {
+				tempResultTable.insertTuple({ resultTable.getTuple(col)[firstSynIndex], resultTable.getTuple(col)[secondSynIndex] });
 			}
 		}
 
