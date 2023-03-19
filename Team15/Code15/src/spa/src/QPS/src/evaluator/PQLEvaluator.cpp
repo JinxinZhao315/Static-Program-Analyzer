@@ -42,7 +42,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         clauseArgVec.push_back(withCl.getSecondArgStr());
     }
 
-    selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    //selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     for (SuchThatClause suchThatCl : suchThatVec)
     {
@@ -60,7 +60,8 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
             break;
         }
         resultTable.combineTable(result.getClauseResult());
-        if (resultTable.isTableEmpty()) {
+        //there used to be some syns in the table but now it is empty
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
 
             isEarlyExit = true;
 
@@ -96,7 +97,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         }
 
         resultTable.combineTable(result.getClauseResult());
-        if (resultTable.isTableEmpty()) {
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             isEarlyExit = true;
             break;
         }
@@ -135,7 +136,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         }
 
         resultTable.combineTable(result.getClauseResult());
-        if (resultTable.isTableEmpty()) {
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             isEarlyExit = true;
             break;
         }
@@ -150,7 +151,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         clauseArgVecIndex++;
     }
 
-    //selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
 
     set<std::string> retSet = resultTable.getSelectedResult(selectedElems, pkb, isEarlyExit);
 
