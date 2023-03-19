@@ -6,6 +6,7 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
     vector<int> stmtContainerStack;
     string currProcedure;
     vector<Line> callStatements;
+    unordered_map<int, string> callToProcName;
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         vector<string> tokens = line.getTokens();
@@ -17,7 +18,6 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
             continue;
         } else if (lineType == "if" || lineType == "while") { // keep track of stmt container line number
             stmtContainerStack.push_back(currLineNumber);
-            continue;
         } else if (lineType == "}") {
             if (!stmtContainerStack.empty()) {
                 stmtContainerStack.pop_back();
@@ -37,7 +37,9 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
         } else if (lineType == "print") { // uses variable
             RHSVars.insert(getVarNameFromPrintStatement(tokens));
         } else if (lineType == "call") { // calls procedure
-            result.callsRS[currProcedure].insert(getProcedureNameFromCallStatement(tokens));
+            string procName = getProcedureNameFromCallStatement(tokens);
+            result.callsRS[currProcedure].insert(procName);
+            callToProcName[currLineNumber] = procName;
         } else if (lineType == "if" || lineType == "while") { // uses variable in conditions
             RHSVars = getVariablesFromStatement(tokens, variables);
         }
@@ -62,6 +64,7 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
     generateCallsStarRS(result.callsRS, result.callsStarRS);
     // determine transitive modification of variables through procedure calls
     updateProcModifiesAndUsesRS(result.procedureModifiesRS, result.procedureUsesRS, result.callsStarRS);
+    updateCallStmtModifiesAndUsesRS(result.procedureModifiesRS, result.procedureUsesRS, result.modifiesRS, result.usesRS, callToProcName);
     return result;
 }
 
@@ -92,16 +95,38 @@ void generateCallsStarRS(unordered_map<string, set<string>>& callsRS, unordered_
 void updateProcModifiesAndUsesRS(unordered_map<string, set<string>>& procedureModifiesRS,
                                  unordered_map<string, set<string>>& procedureUsesRS,
                                  unordered_map<string, set<string>>& callsStarRS) {
-    for (const auto& [caller, callees] : callsStarRS) {
-        for (auto const& callee: callees) {
+    for (const auto &[caller, callees]: callsStarRS) {
+        for (auto const &callee: callees) {
+            // if procedure A has calls to B, procedure A then modifies same variables as B
             if (procedureModifiesRS.find(callee) != procedureModifiesRS.end()) {
                 set<string> additionalModifies = procedureModifiesRS[callee];
                 procedureModifiesRS[caller].insert(additionalModifies.begin(), additionalModifies.end());
             }
+            // if procedure A has calls to B, procedure A then uses same variables as B
             if (procedureUsesRS.find(callee) != procedureUsesRS.end()) {
                 set<string> additionalUses = procedureUsesRS[callee];
                 procedureUsesRS[caller].insert(additionalUses.begin(), additionalUses.end());
             }
+        }
+    }
+}
+void updateCallStmtModifiesAndUsesRS(unordered_map<string, set<string>>& procedureModifiesRS,
+                                     unordered_map<string, set<string>>& procedureUsesRS,
+                                     unordered_map<int, set<string>>& modifiesRS,
+                                     unordered_map<int, set<string>>& usesRS,
+                                     const unordered_map<int, string>& callToProcName) {
+    for (const auto& entry : callToProcName) {
+        int statementNumber = entry.first;
+        string procName = entry.second;
+        // if call stmt calls proc A and proc A uses var, then proc A uses same var
+        if (procedureModifiesRS.find(procName) != procedureModifiesRS.end()) {
+            set<string> additionalModifies = procedureModifiesRS[procName];
+            modifiesRS[statementNumber].insert(additionalModifies.begin(), additionalModifies.end());
+        }
+        // if call stmt calls proc A and proc A modifies var, then proc A modifies same var
+        if (procedureUsesRS.find(procName) != procedureUsesRS.end()) {
+            set<string> additionalUses = procedureUsesRS[procName];
+            usesRS[statementNumber].insert(additionalUses.begin(), additionalUses.end());
         }
     }
 }

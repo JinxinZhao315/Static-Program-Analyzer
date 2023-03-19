@@ -86,8 +86,10 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
     }
     else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
+        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
@@ -116,8 +118,10 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
     }
     else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
         string synonDeType = synonymTable.find(rightArg)->second;
-        resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+        /*resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
+        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
@@ -151,25 +155,35 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         }
         string leftDeType = synonymTable.find(leftArg)->second;
         string rightDeType = synonymTable.find(rightArg)->second;
-        resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
-        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
+        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+        //convert the set to vector
+        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
-        std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-        std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-        ResultTable tempResultTable({ leftArg, rightArg });
+        ResultTable initTable(currLeftValues, leftArg);
+        initTable.combineTable(ResultTable(currRightValues, rightArg));
+        int initTableSize = initTable.getColNum();
 
-        for (int i = 0; i < currLeftValues.size(); i++) {
-            bool isRightParentStarLeft = getIsParentFromPKB(isStar, currLeftValues[i], currRightValues[i]); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
+        //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
+        //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+        ResultTable tempTable({ leftArg, rightArg });
+
+        for (int i = 0; i < initTableSize; i++) {
+            std::vector<std::string> tuple = initTable.getTuple(i);
+            bool isRightParentStarLeft = getIsParentFromPKB(isStar, tuple[0], tuple[1]); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
             if (isRightParentStarLeft) {
-                tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+                tempTable.insertTuple({ tuple[0], tuple[1] });
             }
         }
 
-        if (tempResultTable.isTableEmpty()) {
+        if (tempTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
     }
     else {
         throw std::runtime_error("Unhandled left or right arg type in ParentHandler");

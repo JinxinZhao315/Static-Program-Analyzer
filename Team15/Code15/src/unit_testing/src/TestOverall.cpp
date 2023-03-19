@@ -26,6 +26,7 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
+<<<<<<< HEAD
 string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
 string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
 string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
@@ -34,6 +35,18 @@ string source_follows = "../../../../../../Tests15/source-follows.txt";
 string source_parent = "../../../../../../Tests15/source-parent.txt";
 string source7 = "../../../../../../Tests15/source7.txt";
 string source_while_while = "../../../../../../Tests15/while-while.txt";
+=======
+string source_sample1 = "../../../../Tests15/source-sample1.txt";
+string source_sample2 = "../../../../Tests15/source-sample2.txt";
+string source_sample3 = "../../../../Tests15/source-sample3.txt";
+string source_general = "../../../../Tests15/source-general.txt";
+string source_follows = "../../../../Tests15/source-follows.txt";
+string source_parent = "../../../../Tests15/source-parent.txt";
+string source7 = "../../../../Tests15/source-7.txt";
+string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
+string uses_modifies2 = "../../../../Tests15/source-usesmodifies2.txt";
+
+>>>>>>> 55ab632014cc698ea3a39168ff49f5b039b58eff
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
 //string source2_filename = "../../../../Tests15/source2.txt";
@@ -41,17 +54,36 @@ string source_while_while = "../../../../../../Tests15/while-while.txt";
 //string source4_filename = "../../../../Tests15/source4.txt";
 //string source7_filename = "../../../../Tests15/source7.txt";
 
-//TEST_CASE("Overall test : Sample_source1.txt 1") {
-//    string filename = sample_source1;
-//    string queryStr = "if ifs; assign a1, a2; variable v1, v2;\
-//        Select ifs such that Follows* (a1, ifs) and Follows* (ifs, a2)\
-//        and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName";
+//TEST_CASE("Overall test : source-usesmodifies.txt 1") {
+//    string filename = uses_modifies;
+//    string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
 //
 //    set<string> result = testDriver(filename, queryStr);
 //    set<string> expectedResult = { "6" };
 //    REQUIRE(result == expectedResult);
 //}
 
+TEST_CASE("Overall test : Sample_source1.txt 1") {
+    string filename = source_sample1;
+    string queryStr = "if ifs; assign a1, a2; variable v1, v2;\
+        Select ifs such that Follows* (a1, ifs) and Follows* (ifs, a2)\
+        and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "6" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : source-sample1.txt 6") {
+    string filename = source_sample1;
+    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3;\
+        variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) \
+        and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "TRUE" };
+    REQUIRE(result == expectedResult);
+}
 
 TEST_CASE("Overall test : source1.txt 1") {
     // Enter source of SIMPLE code
@@ -893,7 +925,7 @@ TEST_CASE("Overall test : source-sample1.txt 2") {
     string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "4","5","6", "7", "8", "9","10","12","13", "18", "19", "21","22", "23","24"};
+    set<string> expectedResult = {"4","5","6","7","8","9","10","12","13","16","18","19","21","22","23","24"};
     REQUIRE(result == expectedResult);
 }
 
@@ -906,6 +938,7 @@ TEST_CASE("Overall test : source-sample3.txt 4") {
     REQUIRE(result == expectedResult);
 }
 
+<<<<<<< HEAD
 TEST_CASE("Overall test : source-sample1.txt 6") {
     string filename = source_sample1;
     string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
@@ -932,3 +965,13 @@ TEST_CASE("Overall test : source-while-while.txt 2") {
     set<string> expectedResult = { "6,8", "6,13","6,15","8,13","8,15"};
     REQUIRE(result == expectedResult);
 }
+=======
+//TEST_CASE("Overall test : source-sample1.txt 6") {
+//    string filename = source_sample1;
+//    string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "TRUE" };
+//    REQUIRE(result == expectedResult);
+//}
+>>>>>>> 55ab632014cc698ea3a39168ff49f5b039b58eff

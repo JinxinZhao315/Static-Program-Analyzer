@@ -5,6 +5,7 @@
 #include <iterator>
 #include <set>
 #include"exceptions/PQLSyntaxError.h"
+#include "pkb/include/PKB.h"
 
 #pragma once
 
@@ -84,6 +85,37 @@ public:
 		}
 		return s;
 	}
+
+    inline static const std::set<std::string> getResultFromPKB(PKB& pkb, std::string DeType) {
+        std::set<std::string> ret;
+        if (DeType == "constant") {
+            ret = pkb.getAllConstVals();
+        }
+        else if (DeType == "procedure") {
+            ret = pkb.getAllProcNames();
+        }
+        else if (DeType == "variable") {
+            ret = pkb.getAllVarNames();
+        }
+        else {
+            std::set<int> allStmtIntSet;
+
+            if (DeType == "stmt") {
+                allStmtIntSet = pkb.getAllStmtNums();
+            }
+            else if (DeType == "assign") {
+                allStmtIntSet = pkb.getAllStmtNumsByType("=");
+            }
+            else {
+                allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
+            }
+
+            for (int stmtNum : allStmtIntSet) {
+                ret.insert(to_string(stmtNum));
+            }
+        }
+        return ret;
+    }
 };
 
 
