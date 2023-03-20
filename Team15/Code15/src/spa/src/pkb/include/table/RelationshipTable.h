@@ -8,23 +8,6 @@ class RelationshipTable {
 public:
 	inline RelationshipTable() = default;
 
-	inline void addOneToOneRelationship(L left, R right) {
-		addLeftToOneRight(left, right);
-		addRightToOneLeft(left, right);
-	}
-
-	inline void addOneToManyRelationship(L left, std::set<R> right) {
-		addLeftToManyRight(left, right);
-		addRightToManyLeft(left, right);
-	}
-
-	inline void addOneSidedOnetoManyRelationship(L left, std::set<R> rights) {
-		addLeftToManyRight(left, rights);
-		for (R right : rights) {
-			addRightToOneLeft(left, right);
-		}
-	}
-
 	inline void addAllOneToOneRelationships(std::unordered_map<L, R> oneToOneRelationships) {
 		leftToOneRightMap = oneToOneRelationships;
 		flipOneToOne(oneToOneRelationships);
