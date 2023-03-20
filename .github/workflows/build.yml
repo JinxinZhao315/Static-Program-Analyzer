@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: workflows-2
       - name: Lint and Build (MacOS)
         run: |
           cd Team15/Code15
@@ -51,6 +53,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: workflows-2
       - name: Restore (MacOS)
         uses: actions/cache@v2
         with:
@@ -76,7 +80,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          path: workflows-2
       - name: Lint and Build (Windows)
         shell: bash
         run: |
@@ -111,6 +115,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: workflows-2
       - name: Restore (Windows)
         uses: actions/cache@v2
         with:
