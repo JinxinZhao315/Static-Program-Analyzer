@@ -53,16 +53,29 @@ set<string> testDriver(string filename, string queryStr) {
 //    REQUIRE(result == expectedResult);
 //}
 
-string source_sample1 = "./Tests15/source-sample1.txt";
-string source_sample2 = "./Tests15/source-sample2.txt";
-string source_sample3 = "./Tests15/source-sample3.txt";
-string source_general = "./Tests15/source-general.txt";
-string source_follows = "./Tests15/source-follows.txt";
-string source_parent = "./Tests15/source-parent.txt";
-string source7 = "./Tests15/source-7.txt";
-string uses_modifies = "./Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "./Tests15/source-usesmodifies2.txt";
-string source_with = "./Tests15/with.txt";
+#if __APPLE__
+    string source_sample1 = "Team15/Tests15/source-sample1.txt";
+    string source_sample2 = "Team15/Tests15/source-sample2.txt";
+    string source_sample3 = "Team15/Tests15/source-sample3.txt";
+    string source_general = "Team15/Tests15/source-general.txt";
+    string source_follows = "Team15/Tests15/source-follows.txt";
+    string source_parent = "Team15/Tests15/source-parent.txt";
+    string source7 = "Team15/Tests15/source-7.txt";
+    string uses_modifies = "Team15/Tests15/source-usesmodifies.txt";
+    string uses_modifies2 = "Team15/Tests15/source-usesmodifies2.txt";
+    string source_with = "Team15/Tests15/with.txt";
+#elif _WIN32
+    string source_sample1 = "./Team15/Tests15/source-sample1.txt";
+    string source_sample2 = "./Team15/Tests15/source-sample2.txt";
+    string source_sample3 = "./Team15/Tests15/source-sample3.txt";
+    string source_general = "./Team15/Tests15/source-general.txt";
+    string source_follows = "./Team15/Tests15/source-follows.txt";
+    string source_parent = "./Team15/Tests15/source-parent.txt";
+    string source7 = "./Team15/Tests15/source-7.txt";
+    string uses_modifies = "./Team15/Tests15/source-usesmodifies.txt";
+    string uses_modifies2 = "./Team15/Tests15/source-usesmodifies2.txt";
+    string source_with = "./Team15/Tests15/with.txt";
+#endif
 
 TEST_CASE("Overall test: temp") {
     string filename = source_with;
