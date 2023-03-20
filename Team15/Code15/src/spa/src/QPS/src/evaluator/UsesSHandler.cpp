@@ -3,25 +3,12 @@
 
 UsesSHandler::UsesSHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result UsesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 	std::string leftArg = suchThatClause.getLeftArg();
 	std::string rightArg = suchThatClause.getRightArg();
 	std::string leftType = Utility::getReferenceType(leftArg);
 	std::string rightType = Utility::getReferenceType(rightArg);
 	Result result;
-
-	//std::set<std::string> PKB::getUsesVarsFromStmt(int stmtNum) {
-	//	return usesStmtTable.getManyRight(stmtNum);
-	//}
-
-	//std::set<int> PKB::getUsesStmtsFromVar(std::string varName) {
-	//	return usesStmtTable.getManyLeft(varName);
-	//}
-
-	//bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
-	//	return usesStmtTable.inOneToManyRelationship(stmtNum, varName);
-	//}
-
 
 	// Find everything defined in source used by a statement line defined in source.
 	if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
@@ -44,11 +31,11 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 	//Find variable v defined in QPS which is used by given statement line defined in source. 
 	else if (leftType == Utility::INTEGER) {
 		string synonDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
+		resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given statement line uses historical variables in source.
 			bool isUses = pkb.areInUsesStmtRelationship(stoi(leftArg), currSynonVal);
 			if (isUses) {
@@ -65,12 +52,12 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 	//Left type is a statement defined in QPS, find whether given statement has some uses to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
+		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
 		// currSynonValues here are statement line numbers in string format.
-		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 
 			std::set<std::string> usesSet = pkb.getUsesVarsFromStmt(stoi(currSynonVal));
 
@@ -88,12 +75,11 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 	//Left type is a statement defined in QPS, find whether given statement uses given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
-		// currSynonValues here are statement line numbers in string format.
-		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
-		for (auto currSynonVal : currSynonValues) {
+		for (const auto& currSynonVal : currSynonValues) {
 			// check whether given statement line uses historical variables in source.
 			bool isUses = pkb.areInUsesStmtRelationship(stoi(currSynonVal), Utility::trim_double_quotes(rightArg));
 			if (isUses) {
@@ -112,57 +98,33 @@ Result UsesSHandler::evalUsesS(SuchThatClause suchThatClause, ResultTable& resul
 	else {
 		string leftDeType = synonymTable.find(leftArg)->second;
 		string rightDeType = synonymTable.find(rightArg)->second;
-		resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-		resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
-		/*set<string> currLeftValues = resultTable.getStringSetFromKey(leftArg);
-		set<string> currRightValues = resultTable.getStringSetFromKey(rightArg);*/
-		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+		std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+		std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+		//convert the set to vector
+		std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+		std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
+		
 
-		/*std::unordered_map<std::string, SynonymLinkageMap> leftResultValues;
-		std::unordered_map<std::string, SynonymLinkageMap> rightResultValues;*/
-		ResultTable tempResultTable({ leftArg, rightArg });
-		for (int i = 0; i < currLeftValues.size(); i++) {
-			bool isRightUsesLeft = pkb.areInUsesStmtRelationship(stoi(currLeftValues[i]), currRightValues[i]);
+		ResultTable initTable(currLeftValues, leftArg);
+		initTable.combineTable(ResultTable(currRightValues, rightArg));
+		int initTableSize = initTable.getColNum();
+
+		ResultTable tempTable({ leftArg, rightArg });
+
+		for (int i = 0; i < initTableSize; i++) {
+			std::vector<std::string> tuple = initTable.getTuple(i);
+			bool isRightUsesLeft = pkb.areInUsesStmtRelationship(stoi(tuple[0]), tuple[1]);
 			if (isRightUsesLeft) {
-				tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+				tempTable.insertTuple({ tuple[0], tuple[1] });
 			}
 		}
-		//for (string currLeftVal : currLeftValues) {
-		//	for (string currRightVal : currRightValues) {
-		//		bool isRightUsesLeft = pkb.areInUsesStmtRelationship(stoi(currLeftVal), currRightVal);
-		//		if (isRightUsesLeft) {
-		//			tempResultTable.insertTuple({ currLeftVal, currRightVal });
 
-		//			/*if (leftResultValues.find(currLeftVal) == leftResultValues.end()) {
-		//				SynonymLinkageMap leftLinkedSynonymCollection;
-		//				leftLinkedSynonymCollection.insertLinkage(rightArg, currRightVal);
-		//				leftResultValues.insert(std::make_pair<>(currLeftVal, leftLinkedSynonymCollection));
-		//			}
-		//			else {
-		//				leftResultValues.find(currLeftVal)->second
-		//					.insertLinkage(rightArg, currRightVal);
-		//			}
-
-		//			if (rightResultValues.find(currRightVal) == rightResultValues.end()) {
-		//				SynonymLinkageMap rightLinkedSynonymCollection;
-		//				rightLinkedSynonymCollection.insertLinkage(leftArg, currLeftVal);
-		//				rightResultValues.insert(std::make_pair<>(currRightVal, rightLinkedSynonymCollection));
-		//			}
-		//			else {
-		//				rightResultValues.find(currRightVal)->second
-		//					.insertLinkage(leftArg, currLeftVal);
-		//			}*/
-		//		}
-		//	}
-		//}
-
-		if (tempResultTable.isTableEmpty()) {
+		if (tempTable.isTableEmpty()) {
 			result.setResultTrue(false);
 			return result;
 		}
 
-		result.setClauseResult(tempResultTable);
+		result.setClauseResult(tempTable);
 	}
 	//Do we need to throw exception if type doesn't match? As all semantics are checked already.
 	return result;

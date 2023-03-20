@@ -8,10 +8,6 @@ class EntityTable {
 public:
 	inline EntityTable() = default;
 
-	inline void addEntity(E entity) {
-		entityTable.insert(entity);
-	}
-
 	inline void addAllEntities(std::set<E> entities) {
 		entityTable = entities;
 	}

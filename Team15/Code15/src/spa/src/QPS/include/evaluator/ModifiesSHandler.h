@@ -11,8 +11,9 @@
 
 class ModifiesSHandler : public ClauseHandler {
 public:
-    ModifiesSHandler(PKB& pkb);
-    Result evalModifiesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
+    explicit ModifiesSHandler(PKB& pkb);
+    //Result evalModifiesS(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
+    Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 };
 
 

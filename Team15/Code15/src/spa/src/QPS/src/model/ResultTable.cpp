@@ -38,6 +38,19 @@ ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std:
 
 
 
+void ResultTable::resultTableCheckAndAdd(string synName, PKB pkb, string DeType) {
+    if (!isSynExist(synName)) {
+
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, DeType);
+        std::vector<string> synValuesStrVector(synValuesStrSet.begin(), synValuesStrSet.end());
+        std::vector<std::vector<std::string>> tempResult = { synValuesStrVector };
+        std::vector<string> synList = { synName };
+        ResultTable tempResultTable = ResultTable(tempResult, synList);
+        combineTable(tempResultTable);
+
+    }
+}
+
 
 
 void ResultTable::combineTable(ResultTable tempResultTable) {
@@ -98,7 +111,9 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
     }
 }
 
-
+//void ResultTable::filterTable(void (*func)(int, int)) {
+//
+//}
 
 
 
@@ -139,20 +154,70 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> selectedSynNames) {
-    if (selectedSynNames.size() > 1) {
+std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb) {
+    //attrbute is in the table
+    if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
+        attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
+        return resultTable[synIndex][colIndex];
+    }
+    else if (attrRef.getSynType() == "call") {
+        int callLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
+        if (calledProcName == "-1") {
+            //should throw error
+        }
+        return calledProcName;
+    }
+    else if (attrRef.getSynType() == "read") {
+        int readLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
+        if (readVarName == "-1") {
+            //should throw error
+        }
+        return readVarName;
+    }
+    else if (attrRef.getSynType() == "print") {
+        int printLineNum = stoi(resultTable[synIndex][colIndex]);
+        std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
+        if (printVarName == "-1") {
+            //should throw error
+        }
+        return printVarName;
+    }
+    else {
+        return "-1";
+    }
+}
+
+std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit) {
+    if (selectedElem.size() > 1) {
+        if (isEarlyExit) {
+            return std::set<std::string>();
+        }
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
-        for (int i = 0; i < selectedSynNames.size(); i++) {
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedSynNames[i]);
+        for (int i = 0; i < selectedElem.size(); i++) {
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[i].getSynName());
             synNameIndex.push_back(it - synList.begin());
         }
 
         std::set<std::string> multiSynResult;
         for (int i = 0; i < colNum; i++) {
             std::string tuple;
-            for (int j = 0; j < selectedSynNames.size(); j++) {
-                tuple += resultTable[synNameIndex[j]][i] + " ";
+            for (int j = 0; j < selectedElem.size(); j++) {
+                if (selectedElem[j].isElemSynonym()) {
+                    tuple += resultTable[synNameIndex[j]][i] + " ";
+                }
+                else {
+                    tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j].getAttrRef(), pkb) + " ";
+                }
+                //if (selectedElem[j].isElemSynonym()) {
+                //    tuple += resultTable[synNameIndex[j]][i] + " ";
+                //}
+                //else {
+                //    tuple += getAttrValue()
+                //}
+                
             }
             //pop the last white space
             tuple.pop_back();
@@ -160,22 +225,34 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<std::string> se
         }
         return multiSynResult;
     }
-    else if (selectedSynNames.size() == 1) {
-        //BOOLEAN is a synonym
-        if (selectedSynNames[0] != "BOOLEAN" || isSynExist("BOOLEAN")) {
-            std::vector<std::string> selectedSynVec = getSynValues(selectedSynNames[0]);
-            std::set<std::string> selectedSynResult(selectedSynVec.begin(), selectedSynVec.end());
+    else if (selectedElem.size() == 1) {
+        //not BOOLEAN or BOOLEAN is a synonym
+        if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+            if (isEarlyExit) {
+                return std::set<std::string>();
+            }
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
+            int synIndex = it - synList.begin();
+            std::set<std::string> selectedSynResult;
+            for (int i = 0; i < colNum; i++) {
+                if (selectedElem[0].isElemSynonym()) {
+                    selectedSynResult.insert(resultTable[synIndex][i]);
+                }
+                else {
+                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
+                }
+            }
             return selectedSynResult;
         }
         //BOOLEAN is BOOLEAN
         else {
-            if (isTableEmpty()) {
+            //no tuple satisfy the condition, there are some synonyms, or no synonym is declared in the later clause but clause evaluate to false
+            if ((isTableEmpty() && !isSynListEmpty()) || isEarlyExit) {
                 return { "FALSE" };
             }
             else {
                 return { "TRUE" };
             }
-
         }
     }
 }
@@ -253,4 +330,28 @@ std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTup
 }
 
 
+void ResultTable::deleteSynonym(std::string synonym) {
+    std::vector<std::string>::iterator synNamePos = std::find(synList.begin(), synList.end(), synonym);
+    int synIndex = std::distance(synList.begin(), synNamePos);
+    if (synNamePos != synList.end()) {
+        synList.erase(synNamePos);
+        rowNum--;
+        resultTable.erase(resultTable.begin() + synIndex);
+        removeDuplicates();
+    }
+}
 
+void ResultTable::removeDuplicates() {
+    std::set<std::vector<std::string>> distinctTupleSet;
+    for (int i = 0; i < colNum; i++) {
+        distinctTupleSet.insert(getTuple(i));
+    }
+    resultTable = {};
+    for (int i = 0; i < rowNum;i++) {
+        this->resultTable.push_back({});
+    }
+    for (std::vector<std::string> distinctTuple : distinctTupleSet) {
+        insertTuple(distinctTuple);
+    }
+    colNum = distinctTupleSet.size();
+}

@@ -11,13 +11,14 @@
 
 class ParentHandler : public ClauseHandler {
 public:
-    ParentHandler(PKB& pkb);
-    Result evalParentStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
-    std::set<int> getParentFromPKB(bool isStar, string type, string arg);
-    bool getIsParentFromPKB(bool isStar, string leftArg, string rightArg);
+    explicit ParentHandler(PKB& pkb);
+//    Result evalParentStar(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& varTable);
+    Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 private:
     string GET_PARENT = "get_parent";
     string GET_CHILD = "get_child";
+    std::set<int> getParentFromPKB(bool isStar, string type, string arg);
+    bool getIsParentFromPKB(bool isStar, string leftArg, string rightArg);
 };
 
 

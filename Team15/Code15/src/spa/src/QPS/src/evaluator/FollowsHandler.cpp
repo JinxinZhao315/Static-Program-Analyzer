@@ -40,7 +40,7 @@ bool FollowsHandler:: getIsFollowsFromPKB(bool isStar, string leftArg, string ri
     return ret;
 }
 
-Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     std::string leftType = Utility::getReferenceType(leftArg);
@@ -79,8 +79,11 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     } else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
 
         string synonDeType = synonymTable.find(leftArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,synonDeType);
+        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        // currSynonValues here are statement line numbers in string format.
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
@@ -108,8 +111,11 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
     } else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
 
         string synonDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(rightArg, resultTable, synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+        /*resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        // currSynonValues here are statement line numbers in string format.
+        std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
@@ -143,27 +149,38 @@ Result FollowsHandler::evalFollows(bool isStar, SuchThatClause suchThatClause, R
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        resultTableCheckAndAdd(leftArg, resultTable, leftDeType);
-        resultTableCheckAndAdd(rightArg, resultTable, rightDeType);
+        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
+        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
+        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+		std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+		//convert the set to vector
+		std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+		std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
+		
 
-        std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-        std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+        //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
+        //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
 
-        ResultTable tempResultTable({ leftArg, rightArg });
+        ResultTable initTable(currLeftValues, leftArg);
+        initTable.combineTable(ResultTable(currRightValues, rightArg));
+        int initTableSize = initTable.getColNum();
 
-        for (int i = 0; i < currLeftValues.size(); i++) {
-            bool isRightFollowLeft = getIsFollowsFromPKB(isStar, currLeftValues[i], currRightValues[i]); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
+        ResultTable tempTable({ leftArg, rightArg });
+
+        for (int i = 0; i < initTableSize; i++) {
+            std::vector<std::string> tuple = initTable.getTuple(i);
+            bool isRightFollowLeft = getIsFollowsFromPKB(isStar, tuple[0], tuple[1]); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
             if (isRightFollowLeft) {
-                tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+                tempTable.insertTuple({ tuple[0], tuple[1] });
             }
         }
 
-        if (tempResultTable.isTableEmpty()) {
+        if (tempTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
 
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
     } else {
         throw std::runtime_error("Unhandled left or right arg type in FollowsHandler");
     }

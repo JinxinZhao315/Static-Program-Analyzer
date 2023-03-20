@@ -4,9 +4,7 @@
 
 #include "catch.hpp"
 
-
-TEST_CASE("Follows/Follow* and pattern test") {
-    PKB pkb;
+void testMulticlauseFillPkb1(PKB& pkb) {
     unordered_map<string, set<int>> stmts;
     stmts.insert(make_pair("=", set<int>({ 1, 2 })));
     stmts.insert(make_pair("read", set<int>({ 3, 4, 5 })));
@@ -32,40 +30,135 @@ TEST_CASE("Follows/Follow* and pattern test") {
     };
     pkb.addAllFollowsStar(followsStar);
 
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-    vector<string> rhs1 = {"x", "y", "+"};
-    set<vector<string>> rhsSet1 = {rhs1};
-    pkb.addPattern(1, "k", rhsSet1);
+    // Line 1: k = x + y;
+    // Line 2: m = 1 + 2;
+    // Line 3: read t;
+    // Line 4: read i;
+    // Line 5: read j;
+
+}
+
+void testMulticlauseFillPkb2(PKB& pkb) {
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "n"});
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
+    Line line2 = Line(2, vector<string>({ "1", "2", "+" }), "=");
+    Line line3 = Line(3, vector<string>({ "2", "3", "+" }), "=");
+    patterns.insert(make_pair("k", set<Line>({ line1 })));
+    patterns.insert(make_pair("m", set<Line>({ line2 })));
+    patterns.insert(make_pair("n", set<Line>({ line3 })));
+    pkb.addAllAssignPatterns(patterns);
+
+    unordered_map<int, int> follows = { {1, 2}, {2, 3} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3} },
+            {2, {3} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
+    // Line 1: k = x + y;
+    // Line 2: m = 1 + 2;
+    // Line 3: n = 2 + 3;
+}
+
+void testMulticlauseFillPkb3(PKB& pkb) {
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
+    pkb.addAllStmts(stmts);
+
+    pkb.addAllVars({ "x", "y", "k", "m", "t", "n" });
+
+    unordered_map<string, set<Line>> patterns;
+    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
+    Line line2 = Line(2, vector<string>({ "t", "2", "+" }), "=");
+    Line line3 = Line(3, vector<string>({ "2", "y", "+" }), "=");
+    patterns.insert(make_pair("k", set<Line>({ line1 })));
+    patterns.insert(make_pair("m", set<Line>({ line2 })));
+    patterns.insert(make_pair("n", set<Line>({ line3 })));
+    pkb.addAllAssignPatterns(patterns);
 
 
-    pkb.addStmt("=", 2);
-    pkb.addVar("m");
-    vector<string> rhs2 = {"1", "2", "+"};
-    set<vector<string>> rhsSet2 = {rhs2};
-    pkb.addPattern(2, "m", rhsSet2);
+    pkb.addAllModifiesStmt({ {1, {"k"}}, {2, {"m"}}, {3, {"n"}} });
+    pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"t"}}, {3, {"y"}}});
 
-    pkb.addStmt("read", 3);
-    pkb.addVar("t");
-    pkb.addStmt("read", 4);
-    pkb.addVar("i");
-    pkb.addStmt("read", 5);
-    pkb.addVar("j");
+    unordered_map<int, int> follows = { {1, 2}, {2, 3}};
+    pkb.addAllFollows(follows);
 
-    pkb.addFollows(1, 2);
-    pkb.addFollows(2, 3);
-    pkb.addFollows(3, 4);
-    pkb.addFollows(4, 5);
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {2, 3} },
+            {2, {3} }
+    };
+    pkb.addAllFollowsStar(followsStar);
 
-    pkb.addFollowsStar(1, set<int>({2,3,4,5}));
-    pkb.addFollowsStar(2, set<int>({3,4,5}));
-    pkb.addFollowsStar(3, set<int>({4,5}));
-    pkb.addFollowsStar(4, set<int>({5}));
-    */
+    // Line 1: k = x + y;
+    // Line 2: m = t + 2;
+    // Line 3: n = 2 + y
+}
+
+void testMulticlauseFillPkb4(PKB& pkb) {
+    pkb.addAllVars(set<string>({"x", "y", "n", "m"}));
+    pkb.addAllConsts(set<string>({"1", "0", "5"}));
+
+    unordered_map<string, set<int>> stmts;
+    stmts.insert(make_pair("=", set<int>({2,3,5,7})));
+    stmts.insert(make_pair("if", set<int>({1})));
+    stmts.insert(make_pair("while", set<int>({4,6})));
+    pkb.addAllStmts(stmts);
+
+    unordered_map<string, set<Line>> assignPatterns;
+    Line line2 = Line(2, vector<string>({"n", "1", "+"}), "=");
+    Line line3 = Line(3, vector<string>({"m", "1", "-"}), "=");
+    Line line5 = Line(5, vector<string>({"y", "1", "-"}), "=");
+    Line line7 = Line(7, vector<string>({"x", "1", "-"}), "=");
+
+    assignPatterns.insert(make_pair("n", set<Line>({line2})));
+    assignPatterns.insert(make_pair("m", set<Line>({line3})));
+    assignPatterns.insert(make_pair("y", set<Line>({line5})));
+    assignPatterns.insert(make_pair("x", set<Line>({line7})));
+    pkb.addAllAssignPatterns(assignPatterns);
+
+    unordered_map<string, set<Line>> ifPatterns;
+    Line line1 = Line(1, vector<string>({"x", "5", ">"}), "if");
+    ifPatterns.insert(make_pair("x", set<Line>({line1})));
+    pkb.addAllIfPatterns(ifPatterns);
+
+    unordered_map<string, set<Line>> whilePatterns;
+    Line line4 = Line(4, vector<string>({"y", "0", ">"}), "while");
+    whilePatterns.insert(make_pair("y", set<Line>({line4})));
+    Line line6 = Line(6, vector<string>({"x", "0", ">"}), "while");
+    whilePatterns.insert(make_pair("x", set<Line>({line6})));
+    pkb.addAllWhilePatterns(whilePatterns);
+
+    unordered_map<int, int> follows = { {1, 4}, {4, 6} };
+    pkb.addAllFollows(follows);
+
+    unordered_map<int, std::set<int>> followsStar = {
+            {1, {4, 6} },
+            {4, {6} }
+    };
+    pkb.addAllFollowsStar(followsStar);
+
+    // Line 1: if (x > 5) {
+    // Line 2: n = n + 1 } else {
+    // Line 3: m = m - 1}
+    // Line 4: while ( y > 0 ) {
+    // Line 5: y = y - 1}
+    // Line 6: while ( x > 0) {
+    // Line7:  x = x - 1}
+}
+
+TEST_CASE("Follows/Follow* and pattern test") {
+    PKB pkb;
+    testMulticlauseFillPkb1(pkb);
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
@@ -105,60 +198,7 @@ TEST_CASE("Follows/Follow* and pattern test") {
 
 TEST_CASE("Follows/Follow* and pattern linked synons test") {
     PKB pkb;
-
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
-    pkb.addAllStmts(stmts);
-
-    pkb.addAllVars({ "x", "y", "k", "m", "n"});
-
-    unordered_map<string, set<Line>> patterns;
-    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
-    Line line2 = Line(2, vector<string>({ "1", "2", "+" }), "=");
-    Line line3 = Line(3, vector<string>({ "2", "3", "+" }), "=");
-    patterns.insert(make_pair("k", set<Line>({ line1 })));
-    patterns.insert(make_pair("m", set<Line>({ line2 })));
-    patterns.insert(make_pair("n", set<Line>({ line3 })));
-    pkb.addAllAssignPatterns(patterns);
-
-    unordered_map<int, int> follows = { {1, 2}, {2, 3} };
-    pkb.addAllFollows(follows);
-
-    unordered_map<int, std::set<int>> followsStar = {
-            {1, {2, 3} },
-            {2, {3} }
-    };
-    pkb.addAllFollowsStar(followsStar);
-
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-    vector<string> rhs1 = {"x", "y", "+"};
-    set<vector<string>> rhsSet1 = {rhs1};
-    pkb.addPattern(1, "k", rhsSet1);
-
-
-    pkb.addStmt("=", 2);
-    pkb.addVar("m");
-    vector<string> rhs2 = {"1", "2", "+"};
-    set<vector<string>> rhsSet2 = {rhs2};
-    pkb.addPattern(2, "m", rhsSet2);
-
-    pkb.addStmt("=", 3);
-    pkb.addVar("n");
-    vector<string> rhs3 = {"2", "3", "+"};
-    set<vector<string>> rhsSet3 = {rhs3};
-    pkb.addPattern(2, "n", rhsSet3);
-
-    pkb.addFollows(1, 2);
-    pkb.addFollows(2, 3);
-
-    pkb.addFollowsStar(1, set<int>({2,3}));
-    pkb.addFollowsStar(2, set<int>({3}));
-    */
+    testMulticlauseFillPkb2(pkb);
 
     // Line 1: k = x + y;
     // Line 2: m = 1 + 2;
@@ -182,55 +222,7 @@ TEST_CASE("Follows/Follow* and pattern linked synons test") {
 
 TEST_CASE("ModifiesS / UsesS and pattern test") {
     PKB pkb;
-
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
-    pkb.addAllStmts(stmts);
-
-    pkb.addAllVars({ "x", "y", "k", "m", "t", "n" });
-
-    unordered_map<string, set<Line>> patterns;
-    Line line1 = Line(1, vector<string>({ "x", "y", "+" }), "=");
-    Line line2 = Line(2, vector<string>({ "t", "2", "+" }), "=");
-    Line line3 = Line(3, vector<string>({ "2", "y", "+" }), "=");
-    patterns.insert(make_pair("k", set<Line>({ line1 })));
-    patterns.insert(make_pair("m", set<Line>({ line2 })));
-    patterns.insert(make_pair("n", set<Line>({ line3 })));
-    pkb.addAllAssignPatterns(patterns);
-
-
-    pkb.addAllModifiesStmt({ {1, {"k"}}, {2, {"m"}}, {3, {"n"}} });
-    pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"t"}}, {3, {"y"}}});
-    
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-    vector<string> rhs1 = {"x", "y", "+"};
-    set<vector<string>> rhsSet1 = {rhs1};
-    pkb.addPattern(1, "k", rhsSet1);
-    pkb.addModifiesStmt(1, {"k"});
-    pkb.addUsesStmt(1, {"x", "y"});
-
-    pkb.addStmt("=", 2);
-    pkb.addVar("m");
-    pkb.addVar("t");
-    vector<string> rhs2 = {"t","2","+"};
-    set<vector<string>> rhsSet2 = {rhs2};
-    pkb.addPattern(2, "m", rhsSet2);
-    pkb.addModifiesStmt(2, {"m"});
-    pkb.addUsesStmt(2, {"t"});
-
-    pkb.addStmt("=", 3);
-    pkb.addVar("n");
-    vector<string> rhs3 = {"2", "y", "+"};
-    set<vector<string>> rhsSet3 = {rhs3};
-    pkb.addPattern(3, "n", rhsSet3);
-    pkb.addModifiesStmt(3, {"n"});
-    pkb.addUsesStmt(3, {"y"});
-    */
+    testMulticlauseFillPkb3(pkb);
 
     // Line 1: k = x + y;
     // Line 2: m = t + 2;
@@ -265,4 +257,39 @@ TEST_CASE("ModifiesS / UsesS and pattern test") {
     //Invalid syntax test
     string retStr10 = TestUtility::testDriver("if i; Select i such that Parents(i,_) pattern i (\"k\",_)", pkb);
     REQUIRE(retStr10 == "SyntaxError");
+}
+
+TEST_CASE("Multiple such that & pattern clauses test 1") {
+    PKB pkb;
+    testMulticlauseFillPkb3(pkb);
+
+    // Line 1: k = x + y;
+    // Line 2: m = t + 2;
+    // Line 3: n = 2 + y
+
+    string retStr1 = TestUtility::testDriver("assign a; Select a pattern a (\"k\",_) such that Follows*(a,3) and Uses(a,\"y\")", pkb);
+    REQUIRE(retStr1 == "1");
+
+    string retStr2 = TestUtility::testDriver("assign a; variable v; Select v such that Follows*(1, a) and Uses(a,\"y\") pattern a (v,_\"2\"_)", pkb);
+    REQUIRE(retStr2 == "n");
+}
+
+TEST_CASE("Multiple With clauses test 1") {
+    PKB pkb;
+    testMulticlauseFillPkb3(pkb);
+
+    // Line 1: k = x + y;
+    // Line 2: m = t + 2;
+    // Line 3: n = 2 + y
+
+    string retStr1 = TestUtility::testDriver("stmt s1, s2, s3; Select s1 with s1.stmt# = 1 and s2.stmt# = 2 and s3.stmt# = 3", pkb);
+    REQUIRE(retStr1 == "1");
+
+    string retStr2 = TestUtility::testDriver("stmt s1, s2; Select s1 such that Follows(s1, s2) with s1.stmt# = s2.stmt#", pkb);
+    REQUIRE(retStr2 == "none");
+}
+
+TEST_CASE("Combination of Clauses test 1") {
+    PKB pkb;
+    testMulticlauseFillPkb3(pkb);
 }

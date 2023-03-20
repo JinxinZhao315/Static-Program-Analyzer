@@ -1,0 +1,32 @@
+procedure proc1 {
+//1  a = 99;
+//2  call proc2; }
+
+procedure proc2 {
+//3  b = a + 1;
+//4  call proc3; }
+
+procedure proc3 {
+//5  print a;
+//6  print b;
+//7  call proc4; }
+
+procedure proc4 {
+//8  read v;
+//9  read w;
+//10 while ((v >= 1) && (w >= 1)) {
+//11   if (v >= a) then {
+//12     x = v / 3; }
+       else {
+//13     y = w / 4; }
+//14   z = v - w * x; } }
+
+procedure proc5 {
+//15  print b;
+//16  read w;
+//17  c = 10;
+//18  d = 5;
+//19  if (c > 5) then {
+//20    c = 10 - d; }
+      else {
+//21    c = d; } }

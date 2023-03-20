@@ -1,19 +1,16 @@
-//
-// Created by Jinxin Zhao on 3/2/23.
-//
 #include <unordered_map>
 #include <string>
 #include <set>
 #include <assert.h>
-#include "SynonymLinkageMap.h"
+#include "Utility.h"
+#include "pkb/include/PKB.h"
+#include "Elem.h"
 #ifndef SPA_RESULTTABLE_H
 #define SPA_RESULTTABLE_H
 
 
 class ResultTable {
 private:
-    /*std::unordered_map<std::string, 
-        std::unordered_map<std::string, SynonymLinkageMap>> resultTable;*/
     std::vector<std::vector<std::string>> resultTable;
     std::vector<std::string> synList;
     int colNum;
@@ -37,6 +34,8 @@ public:
     int getRowNum();
 
     int getColNum();
+
+    void resultTableCheckAndAdd(string arg, PKB pkb, string DeType);
 
 
 
@@ -71,7 +70,14 @@ public:
 
     std::vector<std::string> getTuple(int index);
 
-    std::set<std::string> getSelectedResult(std::vector<std::string> selectedSynNames);
+    std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit);
+
+    std::string getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb);
+
+
+    void deleteSynonym(std::string synonym);
+
+    void removeDuplicates();
 };
 
 

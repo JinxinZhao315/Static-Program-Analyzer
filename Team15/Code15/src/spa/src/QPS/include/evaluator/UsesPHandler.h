@@ -12,7 +12,8 @@
 
 class UsesPHandler : public ClauseHandler {
 public:
-    UsesPHandler(PKB& pkb);
-    Result evalUsesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
+    explicit UsesPHandler(PKB& pkb);
+//    Result evalUsesP(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
+    Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
 };
 #endif 

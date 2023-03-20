@@ -682,6 +682,12 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
+# github actions simulator
+**/node_modules
+**/package.json
+**/package-lock.json
+.github/workflows/index.js
+
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 

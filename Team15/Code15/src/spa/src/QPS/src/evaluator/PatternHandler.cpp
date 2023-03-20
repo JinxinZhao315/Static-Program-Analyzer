@@ -75,8 +75,7 @@ vector<string> PatternHandler::getStmtsFromPkb(const string& patternSynonType, c
 }
 
 
-Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &resultTable,
-                                   std::multimap<std::string, std::string> &synonymTable) {
+Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
 
     string patternSynon = patternClause.getPatternSynonym();
     string firstArg = patternClause.getFirstArg();
@@ -86,7 +85,9 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
 
-    resultTableCheckAndAdd(patternSynon, resultTable, patternType);
+    //resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
+    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
+    std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 
     bool isPartialMatch;
     if (secondType == Utility::UNDERSCORED_EXPR) {
@@ -110,13 +111,13 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
             if (patternType == "assign") {
                 // Result maintains current values of patternSynon, which is a assign synon
                 // No need to call PKB since all eligible assign synon values are already in resultTable
-                patternSynonVals = resultTable.getSynValues(patternSynon);
+                patternSynonVals = currSynonValues;
             } else {
                 patternSynonVals = getStmtsFromPkb(patternType, "", GET_ALL);
             }
 
         } else {
-            std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
+            std::vector<std::string> patternSynonLineNums = currSynonValues;
 
             for (const string& lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
@@ -135,10 +136,12 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
     } else if (firstType == Utility::SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        resultTableCheckAndAdd(firstArg, resultTable, firstDeType);
-        std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
+        //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, firstDeType);
+        std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+        //std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
-        ResultTable tempResultTable({patternSynon, firstArg });
+        ResultTable tempTable({patternSynon, firstArg });
 
 
         if (secondType == Utility::UNDERSCORE) {
@@ -147,7 +150,7 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                     vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
                     // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
                     for (const string& numStr : lineNumVec) { // Each num is a possible value of pattern synon
-                        tempResultTable.insertTuple({numStr, currFirstVal});
+                        tempTable.insertTuple({numStr, currFirstVal});
                     }
             }
 
@@ -158,13 +161,13 @@ Result PatternHandler::evalPattern(PatternClause patternClause, ResultTable &res
                 set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
                 if (!matchingLines.empty()) {
                     for (const string& lineStr : matchingLines) {
-                        tempResultTable.insertTuple({lineStr, currFirstVal });
+                        tempTable.insertTuple({lineStr, currFirstVal });
                     }
                 }
             }
         }
 
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
 
     } else if (firstType == Utility::QUOTED_IDENT) {
 

@@ -25,8 +25,7 @@ bool VariableExtractor::isVariable(string token, string previous) {
     }
 }
 
-set<string> VariableExtractor::extractVariables(const vector<Line> &program) {
-    set<string> variables;
+void VariableExtractor::extractVariables(const vector<Line> &program) {
     for(auto line: program) {
         vector<string> tokens = line.getTokens();
         string type = line.getType();
@@ -41,5 +40,33 @@ set<string> VariableExtractor::extractVariables(const vector<Line> &program) {
             }
         }
     }
+}
+
+void VariableExtractor::extractReadAndPrintLineNumToVarName(const vector<Line> &program) {
+    for(auto line : program) {
+        vector<string> tokens = line.getTokens();
+        string type = line.getType();
+        int lineNumber = line.getLineNumber();
+        for(auto token : tokens) {
+            if(variables.count(token) > 0) {
+                if(type == "read") {
+                    readLineNumToVarName[lineNumber] = token;
+                } else if (type == "print"){
+                    printLineNumToVarName[lineNumber] = token;
+                }
+            }
+        }
+    }
+}
+
+set<string> VariableExtractor::getVariables() {
     return variables;
+}
+
+unordered_map<int, string> VariableExtractor::getReadLineNumToVarName() {
+    return readLineNumToVarName;
+}
+
+unordered_map<int, string> VariableExtractor::getPrintLineNumToVarName() {
+    return printLineNumToVarName;
 }

@@ -1,0 +1,22 @@
+procedure proc1 {
+  x = 1;
+  y = 50;
+  if (1 != 2) then {
+    x = x - 1; }
+  else {
+    x = 1000; }
+  while (1 == 1) {
+    x = x * 10; 
+  while (x < 9) {
+    if (x > 4) then {
+      x = x + 1; }
+    else {
+      x = x + 2; }
+    }
+    if (x == 8) then {
+      while (y < 100) {
+        y = (y + 1) * 2; } }
+    else {
+      while (y > 0) {
+        y = y / 2; } } } } }
+

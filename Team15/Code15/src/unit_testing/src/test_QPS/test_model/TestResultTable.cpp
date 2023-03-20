@@ -1,6 +1,48 @@
 #include "QPS/include/model/ResultTable.h"
+#include "pkb/include/PKB.h"
+#include "QPS/include/evaluator/PQLEvaluator.h"
+#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "QPS/include/model/Elem.h"
 
 #include "catch.hpp"
+
+//void testSelectSynPkb(PKB& pkb) {
+//	pkb.addAllVars(set<string>({ "x", "y" }));
+//	pkb.addAllConsts(set<string>({ "5", "10" }));
+//
+//	unordered_map<string, set<int>> stmts;
+//	stmts.insert(make_pair("=", set<int>({ 2, 3 })));
+//	stmts.insert(make_pair("if", set<int>({ 1 })));
+//	pkb.addAllStmts(stmts);
+//
+//	unordered_map<string, set<Line>> assignPatterns;
+//	Line line2 = Line(2, vector<string>({ "n", "1", "+" }), "=");
+//	Line line3 = Line(3, vector<string>({ "m", "1", "-" }), "=");
+//
+//	assignPatterns.insert(make_pair("n", set<Line>({ line2 })));
+//	assignPatterns.insert(make_pair("m", set<Line>({ line3 })));
+//	pkb.addAllAssignPatterns(assignPatterns);
+//
+//	unordered_map<string, set<Line>> ifPatterns;
+//	Line line1 = Line(1, vector<string>({ "x", "5", ">" }), "if");
+//	ifPatterns.insert(make_pair("x", set<Line>({ line1 })));
+//	pkb.addAllIfPatterns(ifPatterns);
+//
+//	/*
+//	procedure main{
+//		if (y < 5) {--------------1
+//			print x;--------------2
+//		} else {
+//			read x;---------------3
+//		}
+//		call foo;-----------------4
+//	}
+//
+//	procedure foo{
+//		x = 10;-------------------5
+//	}
+//	*/
+//}
 
 ResultTable resultTableGenerator(int sampleNum) {
 	ResultTable resultTable = ResultTable();
@@ -153,7 +195,8 @@ TEST_CASE("Test SelectedResult 1") {
 	std::vector<std::string> synList = { "a1", "a2" };
 
 	ResultTable resultTable = ResultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({"a1"});
+    PKB pkb;
+	std::set<std::string> result = resultTable.getSelectedResult({Elem("a1")}, pkb, false);
 	REQUIRE(result.size() == 1 );
 	REQUIRE(result.count("1") == 1);
 }
@@ -165,7 +208,9 @@ TEST_CASE("Test SelectedResult 2 multiple return synonyms") {
 	};
 	std::vector<std::string> synList = { "a1", "a2" };
 	ResultTable resultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({ "a1", "a2"});
+    PKB pkb;
+	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2")}, pkb, false);
+
 
 	std::set<std::string> expectedResult = { "1 5", "1 6", "1 7", "1 8" };
 	REQUIRE(result == expectedResult);
@@ -178,11 +223,24 @@ TEST_CASE("Test SelectedResult 3 multiple return same synonyms") {
 	};
 	std::vector<std::string> synList = { "a1", "a2" };
 	ResultTable resultTable(tempTable, synList);
-	std::set<std::string> result = resultTable.getSelectedResult({ "a1", "a2", "a2" });
+    PKB pkb;
+	std::set<std::string> result = resultTable.getSelectedResult({ Elem("a1"), Elem("a2"), Elem("a2") }, pkb, false);
 
 	std::set<std::string> expectedResult = { "1 5 5", "1 6 6", "2 7 7", "2 8 8"};
 	REQUIRE(result == expectedResult);
 }
+
+//TEST_CASE("Test SelectedResult 4 select attribute") {
+//	PQLPreprocessor preprocessor;
+//	string queryStr = "assign a; Select a.stmt#";
+//	Query query = preprocessor.preprocess(queryStr);
+//	SelectClause selectClause = query.getSelectClause();
+//	std::multimap<std::string, std::string> varTable = query.getSynonymTable();
+//	ResultTable resultTable = ResultTable();
+//
+//	PKB pkb;
+//	testSelectSynPkb(pkb);
+//}
 
 TEST_CASE("Test combineTable 1: no common synonym") {
 	std::vector<std::vector<std::string>> currTempTable = {
