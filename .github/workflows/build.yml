@@ -68,7 +68,7 @@ jobs:
       - name: Integration Testing (MacOS)
         run: |
           cd $GITHUB_WORKSPACE 
-          Team15/Code15/cmake-build/src/unit_testing/integration_testing
+          Team15/Code15/cmake-build/src/integration_testing/integration_testing
           
   build-windows:
     runs-on: windows-latest
