@@ -2,6 +2,7 @@
 #include <string>
 #include <set>
 #include <assert.h>
+#include "Utility.h"
 #include "pkb/include/PKB.h"
 #include "Elem.h"
 #ifndef SPA_RESULTTABLE_H
@@ -33,8 +34,6 @@ public:
     int getRowNum();
 
     int getColNum();
-
-    std::set<std::string> getResultFromPKB(PKB& pkb, string DeType);
 
     void resultTableCheckAndAdd(string arg, PKB pkb, string DeType);
 
@@ -71,9 +70,14 @@ public:
 
     std::vector<std::string> getTuple(int index);
 
-    std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb);
+    std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit);
 
     std::string getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb);
+
+
+    void deleteSynonym(std::string synonym);
+
+    void removeDuplicates();
 };
 
 

@@ -38,7 +38,6 @@ procedure p;
 Select p such that Calls*("Example", p)
 p, q
 5000
-5000
 14 - comment
 assign a;
 Select a pattern a(_, _"x + 1"_)

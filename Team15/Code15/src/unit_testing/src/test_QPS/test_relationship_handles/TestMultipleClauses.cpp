@@ -288,3 +288,8 @@ TEST_CASE("Multiple With clauses test 1") {
     string retStr2 = TestUtility::testDriver("stmt s1, s2; Select s1 such that Follows(s1, s2) with s1.stmt# = s2.stmt#", pkb);
     REQUIRE(retStr2 == "none");
 }
+
+TEST_CASE("Combination of Clauses test 1") {
+    PKB pkb;
+    testMulticlauseFillPkb3(pkb);
+}

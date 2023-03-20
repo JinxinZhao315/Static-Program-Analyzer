@@ -30,8 +30,10 @@ Result ModifiesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& re
 	//Find variable v defined in QPS which is modified by given statement line defined in source. 
 	else if (leftType == Utility::INTEGER) {
 		string synonDeType = synonymTable.find(rightArg)->second;
-		resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
-		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+		/*resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
+		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 	
 		for (auto currSynonVal : currSynonValues) {
@@ -51,9 +53,11 @@ Result ModifiesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& re
 	//Left type is a statement defined in QPS, find whether given statement has some modifications to some variables in source
 	else if (rightType == Utility::UNDERSCORE) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
+		/*resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);*/
 		// currSynonValues here are statement line numbers in string format.
-		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		//std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
 		for (auto currSynonVal : currSynonValues) {
@@ -74,9 +78,11 @@ Result ModifiesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& re
 	//Left type is a statement defined in QPS, find whether given statement modifies given variable in source.
 	else if (rightType == Utility::QUOTED_IDENT) {
 		string synonDeType = synonymTable.find(leftArg)->second;
-		resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
+		//resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
 		// currSynonValues here are statement line numbers in string format.
-		std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		//std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
 		for (auto currSynonVal : currSynonValues) {
@@ -98,25 +104,37 @@ Result ModifiesSHandler::evaluate(SuchThatClause suchThatClause, ResultTable& re
 	else {
 		string leftDeType = synonymTable.find(leftArg)->second;
 		string rightDeType = synonymTable.find(rightArg)->second;
-		resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
-		resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
-		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
-		ResultTable tempResultTable({ leftArg, rightArg });
+		//resultTable.resultTableCheckAndAdd(leftArg, pkb, leftDeType);
+		//resultTable.resultTableCheckAndAdd(rightArg, pkb, rightDeType);
+		std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+		std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+		//convert the set to vector
+		std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+		std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
-		for (int i = 0; i < currLeftValues.size(); i++) {
-			bool isRightModifiesLeft = pkb.areInModifiesStmtRelationship(stoi(currLeftValues[i]), currRightValues[i]);
+
+		//std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
+		//std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
+		ResultTable initTable(currLeftValues, leftArg);
+		initTable.combineTable(ResultTable(currRightValues, rightArg));
+		int initTableSize = initTable.getColNum();
+
+		ResultTable tempTable({ leftArg, rightArg });
+
+		for (int i = 0; i < initTableSize; i++) {
+			std::vector<std::string> tuple = initTable.getTuple(i);
+			bool isRightModifiesLeft = pkb.areInModifiesStmtRelationship(stoi(tuple[0]), tuple[1]);
 			if (isRightModifiesLeft) {
-				tempResultTable.insertTuple({ currLeftValues[i], currRightValues[i] });
+				tempTable.insertTuple({ tuple[0], tuple[1] });
 			}
 		}
 
-		if (tempResultTable.isTableEmpty()) {
+		if (tempTable.isTableEmpty()) {
 			result.setResultTrue(false);
 			return result;
 		}
 
-		result.setClauseResult(tempResultTable);
+		result.setClauseResult(tempTable);
 	}
 	//Do we need to throw exception if type doesn't match? As all semantics are checked already.
 	return result;
