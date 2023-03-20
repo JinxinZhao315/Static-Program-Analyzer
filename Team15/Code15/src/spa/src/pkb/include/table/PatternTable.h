@@ -13,8 +13,6 @@ class PatternTable {
 public:
 	PatternTable();
 
-	void addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsExprs);
-
 	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
 
 	void addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine);
