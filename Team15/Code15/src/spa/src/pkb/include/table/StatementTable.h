@@ -8,15 +8,25 @@
 
 class StatementTable {
 public:
-	StatementTable();
+	inline StatementTable() = default;
 
-	void addAllStatementNumbers(std::unordered_map<std::string, std::set<int>> statementsByType);
+	inline void addAllStatementNumbers(std::unordered_map<std::string, std::set<int>> statementsByType) {
+		for (const auto& [stmtType, stmtNums] : statementsByType) {
+			statementTable.insert(stmtNums.begin(), stmtNums.end());
+		}
+	}
 
-	void addAllStatementNumbersByType(std::unordered_map<std::string, std::set<int>> statementsByType);
+	inline void addAllStatementNumbersByType(std::unordered_map<std::string, std::set<int>> statementsByType) {
+		statementByTypeTable = statementsByType;
+	}
 
-	std::set<int> getAllStatementNumbers();
+	inline std::set<int> getAllStatementNumbers() {
+		return statementTable;
+	}
 
-	std::set<int> getAllStatementNumbersByType(std::string statementType);
+	inline std::set<int> getAllStatementNumbersByType(std::string statementType) {
+		return statementByTypeTable[statementType];
+	}
 
 private:
 	std::set<int> statementTable;
