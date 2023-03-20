@@ -2,15 +2,6 @@
 
 PatternTable::PatternTable() = default;
 
-void PatternTable::addAssignPattern(int assignStmtNum, std::string lhsVarName, std::set<std::vector<std::string>> rhsExprs) {
-	mapStmtToVar(assignStmtNum, lhsVarName);
-	mapVarToStmts(lhsVarName, assignStmtNum);
-	mapStmtToExprs(assignStmtNum, rhsExprs);
-	mapExprToStmts(rhsExprs, assignStmtNum);
-	mapVarToExprs(lhsVarName, rhsExprs);
-	mapExprToVars(rhsExprs, lhsVarName);
-}
-
 void PatternTable::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
 	for (const auto& [var, lines] : lhsVarToRhsLine) {
 		for (Line line : lines) {
