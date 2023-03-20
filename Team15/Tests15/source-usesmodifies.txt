@@ -23,4 +23,10 @@ procedure proc4 {
 
 procedure proc5 {
   print b;
-  read w; }
+  read w;
+  c = 10;
+  d = 5;
+  if (c > 5) then {
+    c = 10 - d; }
+  else {
+    c = d; } }
