@@ -62,7 +62,7 @@ jobs:
           cd $GITHUB_WORKSPACE 
           Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
       - name: Save Autotester Output (MacOS)
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: autotester-output-macos
           path: |
@@ -128,7 +128,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/${{ matrix.tests.source }} ./Team15/Tests15/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
       - name: Save Autotester Output (Windows)
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: autotester-output-windows
           path: |
