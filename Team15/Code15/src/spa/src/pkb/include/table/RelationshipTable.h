@@ -23,7 +23,7 @@ public:
 		flipOneSidedOneToMany(oneToManyRelationships);
 	}
 
-	inline R getOneRight(L left, R invalidRight) {
+	inline R getRight(L left, R invalidRight) {
 		auto pair = leftToOneRightMap.find(left);
 		if (pair == leftToOneRightMap.end()) {
 			return invalidRight;
@@ -31,7 +31,7 @@ public:
 		return pair->second;
 	}
 
-	inline L getOneLeft(R right, L invalidLeft) {
+	inline L getLeft(R right, L invalidLeft) {
 		auto pair = rightToOneLeftMap.find(right);
 		if (pair == rightToOneLeftMap.end()) {
 			return invalidLeft;
@@ -39,7 +39,7 @@ public:
 		return pair->second;
 	}
 
-	inline std::set<R> getManyRight(L left) {
+	inline std::set<R> getAllRights(L left) {
 		auto pair = leftToManyRightMap.find(left);
 		if (pair == leftToManyRightMap.end()) {
 			return {};
@@ -47,7 +47,7 @@ public:
 		return pair->second;
 	}
 
-	inline std::set<L> getManyLeft(R right) {
+	inline std::set<L> getAllLefts(R right) {
 		auto pair = rightToManyLeftMap.find(right);
 		if (pair == rightToManyLeftMap.end()) {
 			return {};

@@ -177,11 +177,11 @@ std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
 
 //QPS follow
 int PKB::getFollowsLeaderNum(int followerNum, int invalidLeaderNum) {
-	return followsTable.getOneLeft(followerNum, invalidLeaderNum);
+	return followsTable.getLeft(followerNum, invalidLeaderNum);
 }
 
 int PKB::getFollowsFollowerNum(int leaderNum, int invalidFollowerNum) {
-	return followsTable.getOneRight(leaderNum, invalidFollowerNum);
+	return followsTable.getRight(leaderNum, invalidFollowerNum);
 }
 
 bool PKB::areInFollowsRelationship(int leaderNum, int followerNum) {
@@ -194,11 +194,11 @@ bool PKB::isFollowsEmpty() {
 
 //QPS follows*
 std::set<int> PKB::getFollowsStarLeaderNums(int followerNum) {
-	return followsStarTable.getManyLeft(followerNum);
+	return followsStarTable.getAllLefts(followerNum);
 }
 
 std::set<int> PKB::getFollowsStarFollowerNums(int leaderNum) {
-	return followsStarTable.getManyRight(leaderNum);
+	return followsStarTable.getAllRights(leaderNum);
 }
 
 bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
@@ -211,11 +211,11 @@ bool PKB::isFollowsStarEmpty() {
 
 //QPS parent
 int PKB::getParentParentNum(int childNum, int invalidParentNum) {
-	return parentTable.getOneLeft(childNum, invalidParentNum);
+	return parentTable.getLeft(childNum, invalidParentNum);
 }
 
 std::set<int> PKB::getParentChildNums(int parentNum) {
-	return parentTable.getManyRight(parentNum);
+	return parentTable.getAllRights(parentNum);
 }
 
 bool PKB::areInParentRelationship(int parentNum, int childNum) {
@@ -228,11 +228,11 @@ bool PKB::isParentEmpty() {
 
 //QPS parent*
 std::set<int> PKB::getParentStarParentNums(int childNum) {
-	return parentStarTable.getManyLeft(childNum);
+	return parentStarTable.getAllLefts(childNum);
 }
 
 std::set<int> PKB::getParentStarChildNums(int parentNum) {
-	return parentStarTable.getManyRight(parentNum);
+	return parentStarTable.getAllRights(parentNum);
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
@@ -245,11 +245,11 @@ bool PKB::isParentStarEmpty() {
 
 //QPS uses statement-variable
 std::set<std::string> PKB::getUsesVarsFromStmt(int stmtNum) {
-	return usesStmtTable.getManyRight(stmtNum);
+	return usesStmtTable.getAllRights(stmtNum);
 }
 
 std::set<int> PKB::getUsesStmtsFromVar(std::string varName) {
-	return usesStmtTable.getManyLeft(varName);
+	return usesStmtTable.getAllLefts(varName);
 }
 
 bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
@@ -258,11 +258,11 @@ bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
 
 //QPS uses procedure-variable
 std::set<std::string> PKB::getUsesVarsFromProc(std::string procName) {
-	return usesProcTable.getManyRight(procName);
+	return usesProcTable.getAllRights(procName);
 }
 
 std::set<std::string> PKB::getUsesProcsFromVar(std::string varName) {
-	return usesProcTable.getManyLeft(varName);
+	return usesProcTable.getAllLefts(varName);
 }
 
 bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
@@ -271,11 +271,11 @@ bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
 
 //QPS modifies statement-variable
 std::set<std::string> PKB::getModifiesVarsFromStmt(int stmtNum) {
-	return modifiesStmtTable.getManyRight(stmtNum);
+	return modifiesStmtTable.getAllRights(stmtNum);
 }
 
 std::set<int> PKB::getModifiesStmtsFromVar(std::string varName) {
-	return modifiesStmtTable.getManyLeft(varName);
+	return modifiesStmtTable.getAllLefts(varName);
 }
 
 bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
@@ -284,11 +284,11 @@ bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
 
 //QPS modifies procedure-variable
 std::set<std::string> PKB::getModifiesVarsFromProc(std::string procName) {
-	return modifiesProcTable.getManyRight(procName);
+	return modifiesProcTable.getAllRights(procName);
 }
 
 std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
-	return modifiesProcTable.getManyLeft(varName);
+	return modifiesProcTable.getAllLefts(varName);
 }
 
 bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
@@ -297,11 +297,11 @@ bool PKB::areInModifiesProcRelationship(std::string procName, std::string varNam
 
 //QPS calls
 std::set<std::string> PKB::getCallsCallerNames(std::string calleeName) {
-	return callsTable.getManyLeft(calleeName);
+	return callsTable.getAllLefts(calleeName);
 }
 
 std::set<std::string> PKB::getCallsCalleeNames(std::string callerName) {
-	return callsTable.getManyRight(callerName);
+	return callsTable.getAllRights(callerName);
 }
 
 bool PKB::areInCallsRelationship(std::string callerName, std::string calleeName) {
@@ -314,11 +314,11 @@ bool PKB::isCallsEmpty() {
 
 //QPS calls*
 std::set<std::string> PKB::getCallsStarCallerNames(std::string calleeName) {
-	return callsStarTable.getManyLeft(calleeName);
+	return callsStarTable.getAllLefts(calleeName);
 }
 
 std::set<std::string> PKB::getCallsStarCalleeNames(std::string callerName) {
-	return callsStarTable.getManyRight(callerName);
+	return callsStarTable.getAllRights(callerName);
 }
 
 bool PKB::areInCallsStarRelationship(std::string callerName, std::string calleeName) {
@@ -331,11 +331,11 @@ bool PKB::isCallsStarEmpty() {
 
 //QPS next
 std::set<int> PKB::getPreviousStmtNums(int nextStmtNum) {
-	return nextTable.getManyLeft(nextStmtNum);
+	return nextTable.getAllLefts(nextStmtNum);
 }
 
 std::set<int> PKB::getNextStmtNums(int previousStmtNum) {
-	return nextTable.getManyRight(previousStmtNum);
+	return nextTable.getAllRights(previousStmtNum);
 }
 
 bool PKB::areInNextRelationship(int previousStmtNum, int nextStmtNum) {
@@ -349,16 +349,16 @@ bool PKB::isNextEmpty() {
 //QPS next*
 std::set<int> PKB::getStarPreviousStmtNums(int nextStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getManyLeft(nextStmtNum);
+		return nextStarTable.getAllLefts(nextStmtNum);
 	}
-	return nextStarTable.getManyLeft(nextStmtNum);//TODO
+	return nextStarTable.getAllLefts(nextStmtNum);//TODO
 }
 
 std::set<int> PKB::getStarNextStmtNums(int previousStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getManyRight(previousStmtNum);
+		return nextStarTable.getAllRights(previousStmtNum);
 	}
-	return nextStarTable.getManyRight(previousStmtNum);//TODO
+	return nextStarTable.getAllRights(previousStmtNum);//TODO
 }
 
 bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
@@ -380,16 +380,16 @@ void PKB::clearNextStar() {
 //QPS affects
 std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.getManyLeft(userStmtNum);
+		return affectsTable.getAllLefts(userStmtNum);
 	}
-	return affectsTable.getManyLeft(userStmtNum);//TODO
+	return affectsTable.getAllLefts(userStmtNum);//TODO
 }
 
 std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.getManyRight(modifierStmtNum);
+		return affectsTable.getAllRights(modifierStmtNum);
 	}
-	return affectsTable.getManyRight(modifierStmtNum);//TODO
+	return affectsTable.getAllRights(modifierStmtNum);//TODO
 }
 
 bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
@@ -411,16 +411,16 @@ void PKB::clearAffects() {
 //QPS affects*
 std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.getManyLeft(userStmtNum);
+		return affectsStarTable.getAllLefts(userStmtNum);
 	}
-	return affectsStarTable.getManyLeft(userStmtNum);//TODO
+	return affectsStarTable.getAllLefts(userStmtNum);//TODO
 }
 
 std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.getManyRight(modifierStmtNum);
+		return affectsStarTable.getAllRights(modifierStmtNum);
 	}
-	return affectsStarTable.getManyRight(modifierStmtNum);//TODO
+	return affectsStarTable.getAllRights(modifierStmtNum);//TODO
 }
 
 bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
@@ -441,17 +441,17 @@ void PKB::clearAffectsStar() {
 
 //QPS with read
 std::string PKB::getWithReadVarName(int readLineNum, std::string invalidVarName) {
-	return withReadTable.getOneRight(readLineNum, invalidVarName);
+	return withReadTable.getRight(readLineNum, invalidVarName);
 }
 
 //QPS with print
 std::string PKB::getWithPrintVarName(int printLineNum, std::string invalidVarName) {
-	return withPrintTable.getOneRight(printLineNum, invalidVarName);
+	return withPrintTable.getRight(printLineNum, invalidVarName);
 }
 
 //QPS with call
 std::string PKB::getWithCallProcName(int callLineNum, std::string invalidProcName) {
-	return withCallTable.getOneRight(callLineNum, invalidProcName);
+	return withCallTable.getRight(callLineNum, invalidProcName);
 }
 
 //QPS assign pattern
