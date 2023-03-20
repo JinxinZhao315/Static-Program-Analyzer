@@ -16,13 +16,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build (MacOS)
+      - name: Lint and Build (MacOS)
         run: |
           cd Team15/Code15
           mkdir cmake-build
           cd cmake-build
           brew install cmake
+          brew install llvm
+          echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> ~/.bashrc
           cmake ../
+          cmake --build ./ --target unit-testing --config Release
+          cmake --build ./ --target integration --config Release
           cmake --build ./ --target autotester --config Release
       - name: Cache (MacOS)
         uses: actions/cache@v2
@@ -63,6 +67,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install Linter (Windows)'
+        shell: bash
+        run: |
+          $downloadUrl = "https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7.win64.exe"
+          Invoke-WebRequest $downloadUrl -OutFile LLVM.exe
+          Start-Process -Wait -FilePath .\LLVM.exe -ArgumentList '/verysilent'
+          echo "::add-path::C:\Program Files\LLVM\bin"
       - name: Build (Windows)
         shell: bash
         run: |
@@ -71,6 +82,8 @@ jobs:
           cd cmake-build
           choco install -y cmake
           cmake ..
+          cmake --build . --target unit-testing --config Release
+          cmake --build . --target integration-testing --config Release
           cmake --build . --target autotester --config Release
       - name: Cache (Windows)
         uses: actions/cache@v2

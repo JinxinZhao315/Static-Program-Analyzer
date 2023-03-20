@@ -9,6 +9,13 @@ if("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message(FATAL_ERROR "In-source builds are forbidden.")
 endif()
 
+#find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+#if(CLANG_TIDY_EXE)
+#    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}" "--fix-errors" "-checks=*")
+#else()
+#    message(WARNING "clang-tidy not found.")
+#endif()
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
