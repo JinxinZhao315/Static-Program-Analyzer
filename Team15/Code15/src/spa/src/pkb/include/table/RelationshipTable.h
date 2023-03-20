@@ -13,12 +13,12 @@ public:
 		flipOneToOne(oneToOneRelationships);
 	}
 
-	inline void addAllOneToManyRelationships(std::unordered_map<L, std::set<R> > oneToManyRelationships) {
+	inline void addAllManyToManyRelationships(std::unordered_map<L, std::set<R> > oneToManyRelationships) {
 		leftToManyRightMap = oneToManyRelationships;
 		flipOneToMany(oneToManyRelationships);
 	}
 
-	inline void addAllOneSidedOnetoManyRelationships(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
+	inline void addAllOnetoManyRelationships(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
 		leftToManyRightMap = oneToManyRelationships;
 		flipOneSidedOneToMany(oneToManyRelationships);
 	}
@@ -67,7 +67,7 @@ public:
 		return false;
 	}
 
-	inline bool inOneToManyRelationship(L left, R right) {
+	inline bool inManyToManyRelationship(L left, R right) {
 		auto pair = leftToManyRightMap.find(left);
 		if (pair == leftToManyRightMap.end()) {
 			return false;

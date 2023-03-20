@@ -55,69 +55,69 @@ void PKB::addAllFollows(std::unordered_map<int, int> allLeaderToFollower) {
 
 //SP follows*
 void PKB::addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers) {
-	followsStarTable.addAllOneToManyRelationships(allLeaderToFollowers);
+	followsStarTable.addAllManyToManyRelationships(allLeaderToFollowers);
 }
 
 //SP parent
 void PKB::addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren) {
-	parentTable.addAllOneSidedOnetoManyRelationships(allParentToChildren);
+	parentTable.addAllOnetoManyRelationships(allParentToChildren);
 }
 
 //SP parent*
 void PKB::addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren) {
-	parentStarTable.addAllOneToManyRelationships(allParentToChildren);
+	parentStarTable.addAllManyToManyRelationships(allParentToChildren);
 }
 
 //SP uses statement-variable
 void PKB::addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
-	usesStmtTable.addAllOneToManyRelationships(allStmtToVars);
+	usesStmtTable.addAllManyToManyRelationships(allStmtToVars);
 }
 
 //SP uses procedure-variable
 void PKB::addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
-	usesProcTable.addAllOneToManyRelationships(allProcToVars);
+	usesProcTable.addAllManyToManyRelationships(allProcToVars);
 }
 
 //SP modifies statement-variable
 void PKB::addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
-	modifiesStmtTable.addAllOneToManyRelationships(allStmtToVars);
+	modifiesStmtTable.addAllManyToManyRelationships(allStmtToVars);
 }
 
 //SP modifies procedure-variable
 void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
-	modifiesProcTable.addAllOneToManyRelationships(allProcToVars);
+	modifiesProcTable.addAllManyToManyRelationships(allProcToVars);
 }
 
 //SP calls
 void PKB::addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
-	callsTable.addAllOneToManyRelationships(allCallertoCallees);
+	callsTable.addAllManyToManyRelationships(allCallertoCallees);
 }
 
 //SP calls*
 void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
-	callsStarTable.addAllOneToManyRelationships(allCallertoCallees);
+	callsStarTable.addAllManyToManyRelationships(allCallertoCallees);
 }
 
 //SP next
 void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
-	nextTable.addAllOneToManyRelationships(allPreviousToNexts);
+	nextTable.addAllManyToManyRelationships(allPreviousToNexts);
 }
 
 //SP next*
 void PKB::addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
-	nextStarTable.addAllOneToManyRelationships(allPreviousToNexts);
+	nextStarTable.addAllManyToManyRelationships(allPreviousToNexts);
 	nextStarTable.setToReady();
 }
 
 //SP affects
 void PKB::addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers) {
-	affectsTable.addAllOneToManyRelationships(allModifierToUsers);
+	affectsTable.addAllManyToManyRelationships(allModifierToUsers);
 	affectsTable.setToReady();
 }
 
 //SP affects*
 void PKB::addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers) {
-	affectsStarTable.addAllOneToManyRelationships(allModifierToUsers);
+	affectsStarTable.addAllManyToManyRelationships(allModifierToUsers);
 	affectsStarTable.setToReady();
 }
 
@@ -202,7 +202,7 @@ std::set<int> PKB::getFollowsStarFollowerNums(int leaderNum) {
 }
 
 bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
-	return followsStarTable.inOneToManyRelationship(leaderNum, followerNum);
+	return followsStarTable.inManyToManyRelationship(leaderNum, followerNum);
 }
 
 bool PKB::isFollowsStarEmpty() {
@@ -236,7 +236,7 @@ std::set<int> PKB::getParentStarChildNums(int parentNum) {
 }
 
 bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
-	return parentStarTable.inOneToManyRelationship(parentNum, childNum);
+	return parentStarTable.inManyToManyRelationship(parentNum, childNum);
 }
 
 bool PKB::isParentStarEmpty() {
@@ -253,7 +253,7 @@ std::set<int> PKB::getUsesStmtsFromVar(std::string varName) {
 }
 
 bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
-	return usesStmtTable.inOneToManyRelationship(stmtNum, varName);
+	return usesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
 
 //QPS uses procedure-variable
@@ -266,7 +266,7 @@ std::set<std::string> PKB::getUsesProcsFromVar(std::string varName) {
 }
 
 bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
-	return usesProcTable.inOneToManyRelationship(procName, varName);
+	return usesProcTable.inManyToManyRelationship(procName, varName);
 }
 
 //QPS modifies statement-variable
@@ -279,7 +279,7 @@ std::set<int> PKB::getModifiesStmtsFromVar(std::string varName) {
 }
 
 bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
-	return modifiesStmtTable.inOneToManyRelationship(stmtNum, varName);
+	return modifiesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
 
 //QPS modifies procedure-variable
@@ -292,7 +292,7 @@ std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
 }
 
 bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
-	return modifiesProcTable.inOneToManyRelationship(procName, varName);
+	return modifiesProcTable.inManyToManyRelationship(procName, varName);
 }
 
 //QPS calls
@@ -305,7 +305,7 @@ std::set<std::string> PKB::getCallsCalleeNames(std::string callerName) {
 }
 
 bool PKB::areInCallsRelationship(std::string callerName, std::string calleeName) {
-	return callsTable.inOneToManyRelationship(callerName, calleeName);
+	return callsTable.inManyToManyRelationship(callerName, calleeName);
 }
 
 bool PKB::isCallsEmpty() {
@@ -322,7 +322,7 @@ std::set<std::string> PKB::getCallsStarCalleeNames(std::string callerName) {
 }
 
 bool PKB::areInCallsStarRelationship(std::string callerName, std::string calleeName) {
-	return callsStarTable.inOneToManyRelationship(callerName, calleeName);
+	return callsStarTable.inManyToManyRelationship(callerName, calleeName);
 }
 
 bool PKB::isCallsStarEmpty() {
@@ -339,7 +339,7 @@ std::set<int> PKB::getNextStmtNums(int previousStmtNum) {
 }
 
 bool PKB::areInNextRelationship(int previousStmtNum, int nextStmtNum) {
-	return nextTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);
+	return nextTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);
 }
 
 bool PKB::isNextEmpty() {
@@ -363,9 +363,9 @@ std::set<int> PKB::getStarNextStmtNums(int previousStmtNum) {
 
 bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
 	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);
+		return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);
 	}
-	return nextStarTable.inOneToManyRelationship(previousStmtNum, nextStmtNum);//TODO
+	return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);//TODO
 }
 
 bool PKB::isNextStarEmpty() {
@@ -394,9 +394,9 @@ std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 
 bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 	if (affectsTable.checkReadiness()) {
-		return affectsTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);
+		return affectsTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);
 	}
-	return affectsTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);//TODO
+	return affectsTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);//TODO
 }
 
 bool PKB::isAffectsEmpty() {
@@ -425,9 +425,9 @@ std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 
 bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);
+		return affectsStarTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);
 	}
-	return affectsStarTable.inOneToManyRelationship(modifierStmtNum, userStmtNum);//TODO
+	return affectsStarTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);//TODO
 }
 
 bool PKB::isAffectsStarEmpty() {
