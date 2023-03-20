@@ -16,20 +16,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build (MacOS)
+      - name: Lint and Build (MacOS)
         run: |
           cd Team15/Code15
           mkdir cmake-build
           cd cmake-build
           brew install cmake
+          brew install llvm
+          echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> ~/.bashrc
           cmake ../
+          cmake --build ./ --target unit_testing --config Release
+          cmake --build ./ --target integration_testing --config Release
           cmake --build ./ --target autotester --config Release
       - name: Cache (MacOS)
         uses: actions/cache@v2
         with:
           path: |
-            Team15/Code15/cmake-build/src/autotester
-          key: macos-autotester
+            Team15/Code15/cmake-build/src/**
+          key: macos-test-files
 
   test-macos:
     needs: build-macos
@@ -51,9 +55,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            Team15/Code15/cmake-build/src/autotester
-          key: macos-autotester
-      - name: Test (MacOS)
+            Team15/Code15/cmake-build/src/**
+          key: macos-test-files
+      - name: Autotester (MacOS)
         run: |
           cd $GITHUB_WORKSPACE 
           Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
@@ -63,7 +67,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build (Windows)
+      - name: Lint and Build (Windows)
         shell: bash
         run: |
           cd Team15/Code15
@@ -71,13 +75,15 @@ jobs:
           cd cmake-build
           choco install -y cmake
           cmake ..
+          cmake --build ./ --target unit_testing --config Release
+          cmake --build ./ --target integration_testing --config Release
           cmake --build . --target autotester --config Release
       - name: Cache (Windows)
         uses: actions/cache@v2
         with:
           path: |
-            Team15/Code15/cmake-build/src/autotester/Release/
-          key: windows-autotester
+            Team15/Code15/cmake-build/src/**
+          key: windows-test-files
 
   test-windows:
     needs: build-windows
@@ -99,9 +105,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            Team15/Code15/cmake-build/src/autotester/Release/
-          key: windows-autotester
-      - name: Test (Windows)
+            Team15/Code15/cmake-build/src/**
+          key: windows-test-files
+      - name: Autotester (Windows)
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE
