@@ -15,9 +15,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: workflows-2
+      - uses: actions/checkout@v3
       - name: Lint and Build (MacOS)
         run: |
           cd Team15/Code15
@@ -31,7 +29,7 @@ jobs:
           cmake --build ./ --target integration_testing --config Release
           cmake --build ./ --target autotester --config Release
       - name: Cache (MacOS)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             Team15/Code15/cmake-build/src/**
@@ -52,11 +50,9 @@ jobs:
           - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: workflows-2
+      - uses: actions/checkout@v3
       - name: Restore (MacOS)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             Team15/Code15/cmake-build/src/**
@@ -65,6 +61,13 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE 
           Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
+      - name: Save Autotester Output (MacOS)
+      - uses: actions/upload-artifact@v3
+        with:
+          name: autotester-output-macos
+          path: |
+            Team15/Tests15/*.xml
+            Team15/Tests15/analysis.xsl
       - name: Unit Testing (MacOS)
         run: |
           cd $GITHUB_WORKSPACE 
@@ -78,9 +81,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: workflows-2
+      - uses: actions/checkout@v3
       - name: Lint and Build (Windows)
         shell: bash
         run: |
@@ -93,7 +94,7 @@ jobs:
           cmake --build ./ --target integration_testing --config Release
           cmake --build ./ --target autotester --config Release
       - name: Cache (Windows)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             Team15/Code15/cmake-build/src/**
@@ -114,11 +115,9 @@ jobs:
           - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: workflows-2
+      - uses: actions/checkout@v3
       - name: Restore (Windows)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             Team15/Code15/cmake-build/src/**
@@ -128,6 +127,13 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/${{ matrix.tests.source }} ./Team15/Tests15/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
+      - name: Save Autotester Output (Windows)
+      - uses: actions/upload-artifact@v3
+        with:
+          name: autotester-output-windows
+          path: |
+            ./Team15/Tests15/*.xml
+            ./Team15/Tests15/analysis.xsl
       - name: Unit Testing (Windows)
         shell: bash
         run: |
