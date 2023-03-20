@@ -10,11 +10,9 @@ class StatementTable {
 public:
 	StatementTable();
 
-	void addStatementNumber(std::string statementType, int statementNumber);
+	void addAllStatementNumbers(std::unordered_map<std::string, std::set<int>> statementsByType);
 
-	void addAllStatementsByType(std::unordered_map<std::string, std::set<int>> statementsByType);
-
-	void addAllStatementsRegardlessOfType(std::unordered_map<std::string, std::set<int>> statementsByType);
+	void addAllStatementNumbersByType(std::unordered_map<std::string, std::set<int>> statementsByType);
 
 	std::set<int> getAllStatementNumbers();
 

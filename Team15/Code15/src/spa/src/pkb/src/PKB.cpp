@@ -44,8 +44,8 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 
 //SP statement
 void PKB::addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums) {
-	stmtTable.addAllStatementsByType(stmtNums);
-	stmtTable.addAllStatementsRegardlessOfType(stmtNums);
+	stmtTable.addAllStatementNumbers(stmtNums);
+	stmtTable.addAllStatementNumbersByType(stmtNums);
 }
 
 //SP follows
