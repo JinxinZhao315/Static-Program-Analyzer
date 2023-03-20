@@ -61,6 +61,14 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE 
           Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
+      - name: Unit Testing (MacOS)
+        run: |
+          cd $GITHUB_WORKSPACE 
+          Team15/Code15/cmake-build/src/unit_testing/unit_testing
+      - name: Integration Testing (MacOS)
+        run: |
+          cd $GITHUB_WORKSPACE 
+          Team15/Code15/cmake-build/src/unit_testing/integration_testing
           
   build-windows:
     runs-on: windows-latest
@@ -77,7 +85,7 @@ jobs:
           cmake ..
           cmake --build ./ --target unit_testing --config Release
           cmake --build ./ --target integration_testing --config Release
-          cmake --build . --target autotester --config Release
+          cmake --build ./ --target autotester --config Release
       - name: Cache (Windows)
         uses: actions/cache@v2
         with:
@@ -112,3 +120,13 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/${{ matrix.tests.source }} ./Team15/Tests15/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
+      - name: Unit Testing (Windows)
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE
+          ./Team15/Code15/cmake-build/src/unit_testing/Release/unit_testing.exe
+      - name: Integration Testing (Windows)
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE
+          ./Team15/Code15/cmake-build/src/integration_testing/Release/integration_testing.exe
