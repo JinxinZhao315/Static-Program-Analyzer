@@ -25,8 +25,6 @@ jobs:
           brew install llvm
           echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> ~/.bashrc
           cmake ../
-#          cmake --build ./ --target unit-testing --config Release
-#          cmake --build ./ --target integration-testing --config Release
           cmake --build ./ --target autotester --config Release
       - name: Cache (MacOS)
         uses: actions/cache@v2
@@ -81,8 +79,6 @@ jobs:
           cd cmake-build
           choco install -y cmake
           cmake ..
-#          cmake --build . --target unit-testing --config Release
-#          cmake --build . --target integration-testing --config Release
           cmake --build . --target autotester --config Release
       - name: Cache (Windows)
         uses: actions/cache@v2
