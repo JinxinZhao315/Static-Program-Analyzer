@@ -75,6 +75,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - name: Lint and Build (Windows)
         shell: bash
         run: |
