@@ -66,13 +66,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install Linter (Windows)
-        shell: powershell
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7.win64.exe" -OutFile LLVM.exe
-          Start-Process -Wait -FilePath .\LLVM.exe -ArgumentList '/verysilent'
-          echo "::add-path::C:\Program Files\LLVM\bin"
-      - name: Build (Windows)
+      - name: Lint and Build (Windows)
         shell: bash
         run: |
           cd Team15/Code15
