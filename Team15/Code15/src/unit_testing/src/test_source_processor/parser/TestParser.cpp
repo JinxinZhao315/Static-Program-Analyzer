@@ -2,19 +2,19 @@
 #include "source_processor/include/parser/Parser.h"
 
 #if __APPLE__
-    string sourceProgram = "Team15/Tests15/Sample_source.txt";
-    string parsedProgram = "Team15/Tests15/Sample_source_parsed.txt";
-    string sourceProgram2 = "Team15/Tests15/Sample_source2.txt";
-    string parsedProgram2 = "Team15/Tests15/Sample_source2_parsed.txt";
-    string sourceProgram4 = "Team15/Tests15/source4.txt";
-    string parsedProgram4 = "Team15/Tests15/source4_parsed.txt";
+    string sourceProgram = "../../../../../../Tests15/Sample_source.txt";
+    string parsedProgram = "../../../../../../Tests15/Sample_source_parsed.txt";
+    string sourceProgram2 = "../../../../../../Tests15/Sample_source2.txt";
+    string parsedProgram2 = "../../../../../../Tests15/Sample_source2_parsed.txt";
+    string sourceProgram4 = "../../../../../../Tests15/source4.txt";
+    string parsedProgram4 = "../../../../../../Tests15/source4_parsed.txt";
 #elif _WIN32
-    string sourceProgram = "./Team15/Tests15/Sample_source.txt";
-    string parsedProgram = "./Team15/Tests15/Sample_source_parsed.txt";
-    string sourceProgram2 = "./Team15/Tests15/Sample_source2.txt";
-    string parsedProgram2 = "./Team15/Tests15/Sample_source2_parsed.txt";
-    string sourceProgram4 = "./Team15/Tests15/source4.txt";
-    string parsedProgram4 = "./Team15/Tests15/source4_parsed.txt";
+    string sourceProgram = "../../../../../../../../Tests15/Sample_source.txt";
+    string parsedProgram = "../../../../../../../../Tests15/Sample_source_parsed.txt";
+    string sourceProgram2 = "../../../../../../../../Tests15/Sample_source2.txt";
+    string parsedProgram2 = "../../../../../../../../Tests15/Sample_source2_parsed.txt";
+    string sourceProgram4 = "../../../../../../../../Tests15/source4.txt";
+    string parsedProgram4 = "../../../../../../../../Tests15/source4_parsed.txt";
 #endif
 
 TEST_CASE("parseProgram_emptyString_shouldReturnEmptyString") {
