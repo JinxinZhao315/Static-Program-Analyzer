@@ -43,7 +43,6 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 3}},
-            {2, {3}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -107,7 +106,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
     unordered_map<int, set<int>> expected = {
             {1, {2}},
             {2, {3, 4}},
-            {3, {2, 4}}
+            {3, {2}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -163,7 +162,7 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {2, 7}}
+            {6, {2}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -222,7 +221,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {1, 7}}
+            {6, {1}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
