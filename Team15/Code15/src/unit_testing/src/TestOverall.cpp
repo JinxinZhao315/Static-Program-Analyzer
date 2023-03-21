@@ -942,7 +942,7 @@ TEST_CASE("Overall test : source-sample1.txt 2") {
 }
 
 TEST_CASE("Overall test : source-sample3.txt 3") {
-    string filename = source_sample1;
+    string filename = source_sample3;
     string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
 
     set<string> result = testDriver(filename, queryStr);
