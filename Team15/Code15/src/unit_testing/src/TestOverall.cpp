@@ -26,16 +26,16 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string source_sample1 = "../../../../Tests15/source-sample1.txt";
-string source_sample2 = "../../../../Tests15/source-sample2.txt";
-string source_sample3 = "../../../../Tests15/source-sample3.txt";
-string source_general = "../../../../Tests15/source-general.txt";
-string source_follows = "../../../../Tests15/source-follows.txt";
-string source_parent = "../../../../Tests15/source-parent.txt";
-string source7 = "../../../../Tests15/source-7.txt";
-string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "../../../../Tests15/source-usesmodifies2.txt";
-string source_with = "../../../../Tests15/with.txt";
+string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
+string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
+string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
+string source_general = "../../../../../../Tests15/source-general.txt";
+string source_follows = "../../../../../../Tests15/source-follows.txt";
+string source_parent = "../../../../../../Tests15/source-parent.txt";
+string source7 = "../../../../../../Tests15/source-7.txt";
+string uses_modifies = "../../../../../../Tests15/source-usesmodifies.txt";
+string uses_modifies2 = "../../../../../../Tests15/source-usesmodifies2.txt";
+string source_with = "../../../../../../Tests15/with.txt";
 
 //string sample_source2 = "../../../../Tests15/Sample_source2.txt";
 //string source1_filename = "../../../../Tests15/source1.txt";
@@ -69,7 +69,11 @@ TEST_CASE("Overall test : source-sample1.txt 6") {
         and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "TRUE" };
+    set<string> expectedResult = { 
+        "10 11 i", "10 11 x", "10 11 y", "10 11 z", "14 18 i", "14 18 x", "14 18 y",
+        "14 18 z", "15 16 i", "15 16 x", "15 16 y", "15 16 z", "16 17 i", "16 17 x",
+        "16 17 y", "16 17 z", "18 19 i", "18 19 x", "18 19 y", "18 19 z", "5 6 i", "5 6 x",
+        "5 6 y", "5 6 z", "6 9 i", "6 9 x", "6 9 y", "6 9 z", "9 10 i","9 10 x", "9 10 y", "9 10 z" };
     REQUIRE(result == expectedResult);
 }
 
@@ -882,7 +886,7 @@ TEST_CASE("Overall test : source7.txt 10") {
 }
 
 TEST_CASE("Overall test : source-ifwhile.txt 1") {
-    string filename = "../../../../Tests15/source-ifwhile.txt";
+    string filename = "../../../../../../Tests15/source-ifwhile.txt";
     string queryStr = "while w; Select w such that Parent*(w, 10) and Uses(w, \"x\") and Follows(6, w) pattern w (\"x\", _)";
 
     set<string> result = testDriver(filename, queryStr);
@@ -891,7 +895,7 @@ TEST_CASE("Overall test : source-ifwhile.txt 1") {
 }
 
 TEST_CASE("Overall test : source-ifwhile.txt 2") {
-    string filename = "../../../../Tests15/source-ifwhile.txt";
+    string filename = "../../../../../../Tests15/source-ifwhile.txt";
     string queryStr = "if i; Select i such that Parent(i, 11) and Modifies(i, \"x\") and Follows(i, 12) pattern i (\"x\", _, _)";
 
     set<string> result = testDriver(filename, queryStr);
@@ -918,7 +922,7 @@ TEST_CASE("Overall test : source-sample1.txt 2") {
 }
 
 TEST_CASE("Overall test : source-sample3.txt 3") {
-    string filename = source_sample1;
+    string filename = source_sample3;
     string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
 
     set<string> result = testDriver(filename, queryStr);

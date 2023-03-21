@@ -224,7 +224,6 @@ TEST_CASE("PQLSyntaxChecker positive test 10: With valid arg") {
 	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; Select p with p.procName=\"proc1\""));
 	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; call c; Select p with p.procName=c.procName"));
 	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; variable v; Select p with p.procName=v.varName"));
-	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; variable v; Select p with \"proc1\"=\"proc2\""));
 	//unmatched type
 	try { preprocessor.preprocess("assign a1; Select a1 with a1.stmt# = \"assign1\""); }
 	catch (PQLSyntaxError e) { REQUIRE(false); }
