@@ -41,7 +41,7 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
     };
 
     unordered_map<int, set<int>> expected = {
-            {1, {2, 3}}
+            {1, {2, 3}},
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -104,7 +104,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
     unordered_map<int, set<int>> expected = {
             {1, {2}},
             {2, {3, 4}},
-            {3, {2, 4}}
+            {3, {2}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -144,8 +144,7 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             Line(2, {"while", "(", "y", "==", "1", ")", "{"}, "while"),
             Line(3, {"if", "(", "y", "==", "1", ")", "{"}, "if"),
             Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -160,7 +159,7 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {2, 7}}
+            {6, {2}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -175,8 +174,7 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
             Line(2, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
             Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(4, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
@@ -203,8 +201,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             Line(2, {"x", "=", "x", "+", "1", ";"}, "="),
             Line(3, {"if", "(", "y", "==", "1", ")", "{"}, "if"),
             Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -219,7 +216,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {1, 7}}
+            {6, {1}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -233,18 +230,15 @@ TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedI
             Line(2, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
             Line(3, {"if", "(", "y", "==", "1", ")", "{"}, "if"),
             Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line({"}"}, "}"),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(6, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
             Line(7, {"if", "(", "y", "==", "1", ")", "{"}, "if"),
             Line(8, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(9, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line({"}"}, "}"),

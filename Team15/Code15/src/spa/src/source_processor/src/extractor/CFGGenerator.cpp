@@ -49,10 +49,10 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
                     int parentLineNumber;
                     string parentLineType;
                     tie(parentLineNumber, parentLineType) = nestingStack.top();
-                    nodesToJoin.push_back(lineNumber);
+                    nodesToJoin.push_back(prevLineNumber);
                 } else if (parentType == "while") {
                     nodesToJoin.push_back(parentLine);
-                    cfg[lineNumber].insert(parentLine); // link back to head of while loop
+                    cfg[prevLineNumber].insert(parentLine); // link back to head of while loop
                 }
                 if (!nodesToJoin.empty() && i + 1 < program.size()) {
                     string nextLineType = program[i + 1].getType();
