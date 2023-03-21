@@ -29,68 +29,6 @@ TEST_CASE("Empty Program") {
     compareCFG(result, expected);
 }
 
-//TEST_CASE("No nesting") {
-//    unordered_map<int, set<int>> expected = {};
-//    unordered_map<int, set<int>> result = generateCFG(mainProgram);
-//    compareCFG(result, expected);
-//}
-//
-//TEST_CASE("whileLoop") {
-//    unordered_map<int, set<int>> expected = {};
-//    unordered_map<int, set<int>> result = generateCFG(whileLoopInProcedure);
-//    compareCFG(result, expected);
-//}
-//
-//
-//TEST_CASE("whileLoopWithLineBeforeAfter") {
-//    unordered_map<int, set<int>> expected = {};
-//    unordered_map<int, set<int>> result = generateCFG(whileLoopInProcedureWithLinesBeforeAfter);
-//    compareCFG(result, expected);
-//}
-//
-//TEST_CASE("ifElseInProcedure") {
-//    unordered_map<int, set<int>> expected = {};
-//    unordered_map<int, set<int>> result = generateCFG(ifElseInProcedure);
-//    compareCFG(result, expected);
-//}
-
-//TEST_CASE("ifNoElseNoLinesBeforeAndAfter") {
-//    const vector<Line>& lines = {
-//            Line({"procedure", "B", "{"}, "procedure"),
-//            Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
-//            Line(2, {"x", "=", "x", "+", "1", ";"}, "="),
-//            Line({"}"}, "}"),
-//            Line({"}"}, "}"),
-//    };
-//
-//    unordered_map<int, set<int>> expected = {
-//            {1, {2}},
-//    };
-//
-//    unordered_map<int, set<int>> result = generateCFG(lines);
-//    compareCFG(result, expected);
-//}
-
-//TEST_CASE("ifNoElseWithLinesBeforeAndAfter") {
-//    const vector<Line>& lines = {
-//            Line({"procedure", "B", "{"}, "procedure"),
-//            Line(1, {"x", "=", "x", "+", "1", ";"}, "="),
-//            Line(2, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
-//            Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
-//            Line({"}"}, "}"),
-//            Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
-//            Line({"}"}, "}"),
-//    };
-//
-//    unordered_map<int, set<int>> expected = {
-//            {1, {2}},
-//            {2, {3, 4}}
-//    };
-//
-//    unordered_map<int, set<int>> result = generateCFG(lines);
-//    compareCFG(result, expected);
-//}
-
 TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
