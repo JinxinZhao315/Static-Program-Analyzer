@@ -6,12 +6,13 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
     if (program.size() < 2) {
         return cfg;
     }
-
+    // intermediate data structures for each procedure
     stack<pair<int, string>> nestingStack;
     vector<int> nodesToJoin;
     int prevLineNumber = -1;
+    int prevValidLineNumber = -1;
     int currMaxLineNumber = 0;
-    int nextLineNumber = 0;
+    int nextLineNumber;
     for (int i = 0; i < program.size(); i++) {
         Line line = program[i];
         int lineNumber = line.getLineNumber();
@@ -26,9 +27,10 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
             continue;
         } else if (lineType == "if" || lineType == "while") {
             if (isPrevLineValid) {
-                cfg[prevLineNumber].insert(lineNumber);
+                cfg[prevValidLineNumber].insert(lineNumber);
             }
             nestingStack.emplace(lineNumber, lineType);
+            nodesToJoin.clear(); // clear nodesToJoin for new nesting level
             cfg[lineNumber].insert(nextLineNumber);
             prevLineNumber = -1;
         } else if (lineType == "else") {
@@ -38,7 +40,7 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
                 tie(parentLine, parentType) = nestingStack.top();
                 cfg[parentLine].insert(nextLineNumber);
             }
-            nodesToJoin.push_back(prevLineNumber);
+            nodesToJoin.push_back(prevValidLineNumber);
             prevLineNumber = -1;
         } else if (lineType == "}") {
             if (!nestingStack.empty()) {
@@ -49,10 +51,15 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
                     int parentLineNumber;
                     string parentLineType;
                     tie(parentLineNumber, parentLineType) = nestingStack.top();
-                    nodesToJoin.push_back(prevLineNumber);
+                    nodesToJoin.push_back(prevValidLineNumber);
                 } else if (parentType == "while") {
+                    cfg[prevValidLineNumber].insert(parentLine); // link back to head of while loop
+                    // todo: put this 4 lines in correct spot
+                    for (int lineToLink: nodesToJoin) {
+                        cfg[lineToLink].insert(parentLine); // link all nodes to next line
+                    }
+                    nodesToJoin.clear(); // clear the nodes to join
                     nodesToJoin.push_back(parentLine);
-                    cfg[prevLineNumber].insert(parentLine); // link back to head of while loop
                 }
                 if (!nodesToJoin.empty() && i + 1 < program.size()) {
                     string nextLineType = program[i + 1].getType();
@@ -68,13 +75,14 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
             prevLineNumber = -1;
         } else {
             if (isPrevLineValid) {
-                cfg[prevLineNumber].insert(lineNumber);
+                cfg[prevValidLineNumber].insert(lineNumber);
             }
         }
 
 
         if (lineNumber > 0) {
             prevLineNumber = lineNumber;
+            prevValidLineNumber = lineNumber;
         }
     }
 

@@ -194,6 +194,38 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
     compareCFG(result, expected);
 }
 
+TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch2") {
+    const vector<Line>& lines = {
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
+            Line(2, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
+            Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line(6, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
+            Line(7, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+            Line(8, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2, 5}},
+            {2, {3, 4}},
+            {3, {2}},
+            {4, {8}},
+            {5, {6}},
+            {6, {7, 8}},
+            {7, {6}}
+    };
+
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    compareCFG(result, expected);
+}
+
 TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
