@@ -30,7 +30,7 @@ public:
 
     int getLineNumber();
     vector<string> getTokens();
-    string getType();
+    string getType() const;
     void printLine();
 
     bool operator<(const Line& l) const { // necessary to create set<Line>

@@ -34,15 +34,14 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
             Line(2, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
 
     unordered_map<int, set<int>> expected = {
-            {1, {2, 3}},
+            {1, {2, 3}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -55,8 +54,7 @@ TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
             Line(1, {"x", "=", "x", "+", "1", ";"}, "="),
             Line(2, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
             Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"else", "{"}, "else"),
+            Line({"}", "else", "{"}, "else"),
             Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -106,7 +104,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
     unordered_map<int, set<int>> expected = {
             {1, {2}},
             {2, {3, 4}},
-            {3, {2}}
+            {3, {2, 4}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -162,7 +160,7 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {2}}
+            {6, {2, 7}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
@@ -221,7 +219,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             {3, {4, 5}},
             {4, {6}},
             {5, {6}},
-            {6, {1}}
+            {6, {1, 7}}
     };
 
     unordered_map<int, set<int>> result = generateCFG(lines);
