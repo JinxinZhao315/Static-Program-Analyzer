@@ -26,34 +26,6 @@ set<string> testDriver(string filename, string queryStr) {
     return qpsDriver(queryStr, pkb);
 }
 
-string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
-string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
-string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
-string source_general = "../../../../../../Tests15/source-general.txt";
-string source_follows = "../../../../../../Tests15/source-follows.txt";
-string source_parent = "../../../../../../Tests15/source-parent.txt";
-string source7 = "../../../../../../Tests15/source-7.txt";
-string uses_modifies = "../../../../../../Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "../../../../../../Tests15/source-usesmodifies2.txt";
-string source_with = "../../../../../../Tests15/with.txt";
-
-
-//string sample_source2 = "../../../../Tests15/Sample_source2.txt";
-//string source1_filename = "../../../../Tests15/source1.txt";
-//string source2_filename = "../../../../Tests15/source2.txt";
-//string source3_filename = "../../../../Tests15/source3.txt";
-//string source4_filename = "../../../../Tests15/source4.txt";
-//string source7_filename = "../../../../Tests15/source7.txt";
-
-//TEST_CASE("Overall test : source-usesmodifies.txt 1") {
-//    string filename = uses_modifies;
-//    string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "6" };
-//    REQUIRE(result == expectedResult);
-//}
-
 #if __APPLE__
     string source_sample1 = "Team15/Tests15/source-sample1.txt";
     string source_sample2 = "Team15/Tests15/source-sample2.txt";
@@ -77,6 +49,15 @@ string source_with = "../../../../../../Tests15/with.txt";
     string uses_modifies2 = "./Team15/Tests15/source-usesmodifies2.txt";
     string source_with = "./Team15/Tests15/with.txt";
 #endif
+
+//TEST_CASE("Overall test : source-usesmodifies.txt 1") {
+//    string filename = uses_modifies;
+//    string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "6" };
+//    REQUIRE(result == expectedResult);
+//}
 
 TEST_CASE("Overall test: temp") {
     string filename = source_with;
@@ -264,8 +245,6 @@ TEST_CASE("Overall test : source1.txt 16") {
     REQUIRE(result == expectedResult);
 }
 
-
-
 TEST_CASE("Overall test : source1.txt 17 Select Multiple synonyms") {
     // Enter source of SIMPLE code
     string filename = source_general;
@@ -341,27 +320,6 @@ TEST_CASE("Overall test : source1.txt 19 Select attribute") {
     expectedResult = { "x" };
     REQUIRE(result == expectedResult);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //TEST_CASE("Overall test : source2.txt 1") {
 //    // Enter source of SIMPLE code
@@ -566,10 +524,6 @@ TEST_CASE("Overall test : source1.txt 19 Select attribute") {
 //    REQUIRE(result1 == expectedResult1);
 //}
 
-
-
-
-
 TEST_CASE("Overall test : source3.txt 1") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -582,6 +536,7 @@ TEST_CASE("Overall test : source3.txt 1") {
     set<string> expectedResult = { "10", "11", "17", "18"};
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source3.txt 2") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -591,6 +546,7 @@ TEST_CASE("Overall test : source3.txt 2") {
     set<string> expectedResult = { "13", "14" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source3.txt 3") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -600,6 +556,7 @@ TEST_CASE("Overall test : source3.txt 3") {
     set<string> expectedResult = { "12" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source3.txt 4") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -609,6 +566,7 @@ TEST_CASE("Overall test : source3.txt 4") {
     set<string> expectedResult = { "13", "14", "15", "16"};
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source3.txt 5") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -618,6 +576,7 @@ TEST_CASE("Overall test : source3.txt 5") {
     set<string> expectedResult = { "12" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source3.txt 6") {
     // Enter source of SIMPLE code
     string filename =  source_follows;
@@ -659,7 +618,6 @@ TEST_CASE("Overall test : source3.txt 8") {
     REQUIRE(result1 == expectedResult1);
 }
 
-
 TEST_CASE("Overall test : source4.txt 1") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -672,6 +630,7 @@ TEST_CASE("Overall test : source4.txt 1") {
     set<string> expectedResult = { "6", "7", "8", "9", "10", "11", "12", "13"};
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 2") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -681,6 +640,7 @@ TEST_CASE("Overall test : source4.txt 2") {
     set<string> expectedResult = { "4", "5", "6", "7", "10" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 3") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -690,6 +650,7 @@ TEST_CASE("Overall test : source4.txt 3") {
     set<string> expectedResult = { "7", "8", "9", "10", "11", "12", "13" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 4") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -699,6 +660,7 @@ TEST_CASE("Overall test : source4.txt 4") {
     set<string> expectedResult = { "4", "5", "6", "7", "10" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 5") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -708,6 +670,7 @@ TEST_CASE("Overall test : source4.txt 5") {
     set<string> expectedResult = { "8", "9", "10", "11", "12" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 6") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -717,6 +680,7 @@ TEST_CASE("Overall test : source4.txt 6") {
     set<string> expectedResult = { "4", "5", "6", "7" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 7") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -726,6 +690,7 @@ TEST_CASE("Overall test : source4.txt 7") {
     set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 8") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -735,6 +700,7 @@ TEST_CASE("Overall test : source4.txt 8") {
     set<string> expectedResult = { "4", "5", "6", "7" };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 9") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -744,6 +710,7 @@ TEST_CASE("Overall test : source4.txt 9") {
     set<string> expectedResult = { };
     REQUIRE(result == expectedResult);
 }
+
 TEST_CASE("Overall test : source4.txt 10") {
     // Enter source of SIMPLE code
     string filename = source_parent;
@@ -808,7 +775,6 @@ TEST_CASE("Overall test : source4.txt 15") {
     set<string> expectedResult1 = {"7", "10"};
     REQUIRE(result1 == expectedResult1);
 }
-
 
 TEST_CASE("Overall test : source7.txt 1") {
     // Enter source of SIMPLE code
