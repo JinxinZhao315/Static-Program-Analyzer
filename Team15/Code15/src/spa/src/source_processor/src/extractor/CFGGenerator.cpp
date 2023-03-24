@@ -34,19 +34,13 @@ unordered_map<int, set<int>> generateCFG(const vector<Line>& program) {
             cfg[lineNumber].insert(nextLineNumber);
             prevLineHasNumber = false;
         } else if (lineType == "else") {
-            if (!nestingStack.empty()) {
-                int parentLine;
-                string parentType;
-                tie(parentLine, parentType) = nestingStack.top();
-                cfg[parentLine].insert(nextLineNumber);
-            }
+            auto [parentLine, parentType] = nestingStack.top();
+            cfg[parentLine].insert(nextLineNumber);
             nodesToJoin.push_back(prevLineNumber);
             prevLineHasNumber = false;
         } else if (lineType == "}") {
             if (!nestingStack.empty()) {
-                int parentLine;
-                string parentType;
-                tie(parentLine, parentType) = nestingStack.top();
+                auto [parentLine, parentType] = nestingStack.top();
                 if (parentType == "if") {
                     nodesToJoin.push_back(prevLineNumber);
                 } else if (parentType == "while") {
