@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int Line::getLineNumber() {
+int Line::getLineNumber() const {
     return lineNumber;
 }
 

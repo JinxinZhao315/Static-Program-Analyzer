@@ -28,7 +28,7 @@ public:
         this->type = type;
     }
 
-    int getLineNumber();
+    int getLineNumber() const;
     vector<string> getTokens();
     string getType() const;
     void printLine();
