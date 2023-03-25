@@ -48,7 +48,7 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
     Result result;
 
     // Wildcard-Wildcard
-    if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
+    if (leftType == Utility::UNDERSCORE && rightType == Utility::UNDERSCORE) {
         bool isFollowEmpty = pkb.isFollowsEmpty(); //
         if (isFollowEmpty) {
             result.setResultTrue(false);

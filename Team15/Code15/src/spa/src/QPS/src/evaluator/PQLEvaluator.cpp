@@ -207,7 +207,13 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
         isStar = relationship == "Next" ? false : true;
         result = nextHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
 
-    } else {
+    }
+    else if (relationship == "Affects" || relationship == "Affects*") {
+        AffectsHandler affectsHandler = AffectsHandler(pkb);
+        isStar = relationship == "Affects" ? false : true;
+        result = affectsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+    }
+    else {
         throw PQLSyntaxError("PQL Syntax error: invalid relationship");
     }
 

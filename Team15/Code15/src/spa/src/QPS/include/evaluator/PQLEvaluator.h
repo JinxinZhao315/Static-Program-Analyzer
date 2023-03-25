@@ -14,6 +14,7 @@
 #include "QPS/include/evaluator/UsesPHandler.h"
 #include "QPS/include/evaluator/CallsHandler.h"
 #include "QPS/include/evaluator/NextHandler.h"
+#include "QPS/include/evaluator/AffectsHandler.h"
 #include "Utility.h"
 #include <numeric>
 #include <string>
