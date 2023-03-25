@@ -389,6 +389,125 @@ TEST_CASE("multiProcedureIfAndElseInEachProc") {
     compareCFG(result, expected);
 }
 
+TEST_CASE("multiProcedureIfAndElseInEachProcLineBeforeAndAfterIf") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, "procedure"),
+            Line(1, {"y", "=", "y", "+", "1", ";"}, "="),
+            Line(2, {"if", "(", "y", "==", "1", ")", "then", "{"}, "if"),
+            Line(3, {"y", "=", "0", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(4, {"y", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(5, {"y", "=", "y", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line(7, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
+            Line(8, {"x", "=", "0", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(9, {"x", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(10, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"procedure", "C", "{"}, "procedure"),
+            Line(11, {"z", "=", "z", "+", "1", ";"}, "="),
+            Line(12, {"if", "(", "z", "==", "1", ")", "then", "{"}, "if"),
+            Line(13, {"z", "=", "0", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(14, {"z", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(15, {"z", "=", "z", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2}},
+            {2, {3,4}},
+            {3, {5}},
+            {4, {5}},
+            {6, {7}},
+            {7, {8,9}},
+            {8, {10}},
+            {9, {10}},
+            {11, {12}},
+            {12, {13,14}},
+            {13, {15}},
+            {14, {15}},
+    };
+
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    compareCFG(result, expected);
+}
+
+TEST_CASE("multiProcedureIfAndElseInEachProcMultipleLinesBeforeAfterAndInIf") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, "procedure"),
+            Line(1, {"y", "=", "y", "+", "1", ";"}, "="),
+            Line(2, {"y", "=", "y", "+", "2", ";"}, "="),
+            Line(3, {"y", "=", "y", "+", "3", ";"}, "="),
+            Line(4, {"if", "(", "y", "==", "6", ")", "then", "{"}, "if"),
+            Line(5, {"y", "=", "0", ";"}, "="),
+            Line(6, {"y", "=", "y", "+", "2", ";"}, "="),
+            Line(7, {"y", "=", "y", "+", "3", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(8, {"y", "=", "1", ";"}, "="),
+            Line(9, {"y", "=", "y", "+", "2", ";"}, "="),
+            Line(10, {"y", "=", "y", "+", "3", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(11, {"y", "=", "y", "+", "1", ";"}, "="),
+            Line(12, {"y", "=", "y", "+", "2", ";"}, "="),
+            Line(13, {"y", "=", "y", "+", "3", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(14, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line(15, {"x", "=", "x", "+", "2", ";"}, "="),
+            Line(16, {"x", "=", "x", "+", "3", ";"}, "="),
+            Line(17, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
+            Line(18, {"x", "=", "0", ";"}, "="),
+            Line(19, {"x", "=", "x", "+", "2", ";"}, "="),
+            Line(20, {"x", "=", "x", "+", "3", ";"}, "="),
+            Line({"}", "else", "{"}, "else"),
+            Line(21, {"x", "=", "1", ";"}, "="),
+            Line(22, {"x", "=", "x", "+", "2", ";"}, "="),
+            Line(23, {"x", "=", "x", "+", "3", ";"}, "="),
+            Line({"}"}, "}"),
+            Line(24, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line(25, {"x", "=", "x", "+", "2", ";"}, "="),
+            Line(26, {"x", "=", "x", "+", "3", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2}},
+            {2, {3}},
+            {3, {4}},
+            {4, {5,8}},
+            {5, {6}},
+            {6, {7}},
+            {7, {11}},
+            {8, {9}},
+            {9, {10}},
+            {10, {11}},
+            {11, {12}},
+            {12, {13}},
+            {14, {15}},
+            {15, {16}},
+            {16, {17}},
+            {17, {18, 21}},
+            {18, {19}},
+            {19, {20}},
+            {20, {24}},
+            {21, {22}},
+            {22, {23}},
+            {23, {24}},
+            {24, {25}},
+            {25, {26}}
+    };
+
+    unordered_map<int, set<int>> result = generateCFG(lines);
+    compareCFG(result, expected);
+}
+
 TEST_CASE("multiProcedureWithWhileInEachProc") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
