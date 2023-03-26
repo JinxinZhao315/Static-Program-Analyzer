@@ -12,6 +12,7 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int> > > extractFollowsRel
             // new procedure, store everything in temp and start anew
             parent.clear();
             v.clear();
+            prevLineNumber = 0;
             continue;
         }
         // keep track of which block curr line is in

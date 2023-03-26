@@ -31,7 +31,7 @@ TEST_CASE("Empty Program") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
+TEST_CASE("IfElseNoLinesBeforeAndAfter") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
@@ -51,7 +51,7 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
+TEST_CASE("IfElseWithLinesBeforeAndAfter") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -306,7 +306,7 @@ TEST_CASE("extractNextRelationship_ifElseEachBranchHasNestedWhileWithNestedIfEls
     compareCFG(result, expected);
 }
 
-TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
+TEST_CASE("ifWithNestedIfElseInThenAndNestedWhileInElse") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
@@ -368,7 +368,7 @@ TEST_CASE("multiProcedureSimple") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProc") {
+TEST_CASE("multiProcedureIfElseInEachProc") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"if", "(", "y", "==", "1", ")", "then", "{"}, "if"),
@@ -404,7 +404,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProc") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProcLineBeforeAndAfterIf") {
+TEST_CASE("multiProcedureIfElseInEachProcLineBeforeAndAfterIf") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"y", "=", "y", "+", "1", ";"}, "="),
@@ -455,7 +455,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcLineBeforeAndAfterIf") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProcMultipleLinesBeforeAfterAndInIf") {
+TEST_CASE("multiProcedureIfElseInEachProcMultipleLinesBeforeAfterAndInIf") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"y", "=", "y", "+", "1", ";"}, "="),
@@ -822,7 +822,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileMultipleLines
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIf") {
+TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIf") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"if", "(", "y", "==", "1", ")", "then", "{"}, "if"),
@@ -854,14 +854,19 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIf") {
             {2, {3}},
             {3, {2}},
             {4, {5}},
-            {5, {4}}
+            {5, {4}},
+            {6, {7,9}},
+            {7, {8}},
+            {8, {7}},
+            {9, {10}},
+            {10, {9}}
     };
 
     unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfLineBeforeAndAfter") {
+TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfLineBeforeAndAfter") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -927,7 +932,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfLineBeforeAndAfter") {
     compareCFG(result, expected);
 }
 
-TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfMultipleLinesBeforeAndAfter") {
+TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfMultipleLinesBeforeAndAfter") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, "procedure"),
             Line(1, {"x", "=", "x", "+", "1", ";"}, "="),

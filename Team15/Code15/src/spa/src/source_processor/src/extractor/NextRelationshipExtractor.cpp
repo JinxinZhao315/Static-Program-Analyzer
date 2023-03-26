@@ -3,7 +3,7 @@
 /**
  * To be used to get prevCFGNode when at the end of the if-then/else block and link it to the
  */
-void storeLinesToLink(const Line& prevLine, const pair<int, string>& justExited, const int& prevLineNumber, vector<int>& nodesToJoin) {
+void storeLinesToLink(const Line& prevLine, pair<int, string>& justExited, const int& prevLineNumber, vector<int>& nodesToJoin) {
     if (prevLine.getType() == "}") {
         auto [parentLine, parentType] = justExited;
         if (parentType == "while") {
@@ -83,6 +83,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
             auto [parentLine, parentType] = nestingStack.back();
             cfg[parentLine].insert(nextLineNumber);
             storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
+            linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
             prevLineHasNumber = false;
         } else if (lineType == "}") { // when exiting nesting
             if (!nestingStack.empty()) {
@@ -91,7 +92,8 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
                     storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
                     linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
                 } else if (parentType == "while") {
-                   cfg[prevLineNumber].insert(parentLine); // link back to head of while loop
+                    storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
+                    linkAllToLine(nodesToJoin, cfg, parentLine);
                     nodesToJoin.push_back(parentLine);
                     linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
                 }
@@ -106,7 +108,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
             prevLineHasNumber = true;
         }
         if (lineNumber > 0) prevLineNumber = lineNumber;
-        if (lineType != "}") justExited = make_pair(0, "");;
+        if (lineType != "}") justExited = make_pair(0, "");
     }
 
     return cfg;
