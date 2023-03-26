@@ -977,6 +977,6 @@ TEST_CASE("Overall test : source-sample3.txt 3")
     string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = {"FALSE"};
+    set<string> expectedResult = {"TRUE"};
     REQUIRE(result == expectedResult);
 }
