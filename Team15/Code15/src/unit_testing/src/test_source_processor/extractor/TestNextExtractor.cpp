@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/CFGGenerator.h"
+#include "source_processor/include/extractor/NextRelationshipExtractor.h"
+#include "source_processor/include/extractor/FollowsRelationshipExtractor.h"
 
 void printNodes(const unordered_map<int, set<int>>& myMap) {
     for (const auto& [key, value] : myMap) {
@@ -24,8 +25,9 @@ void compareCFG(const unordered_map<int, set<int>>& result, const unordered_map<
 
 TEST_CASE("Empty Program") {
     const vector<Line>& lines = {};
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
     unordered_map<int, set<int>> expected = {};
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -39,12 +41,13 @@ TEST_CASE("ifAndElseNoLinesBeforeAndAfter") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 3}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -60,6 +63,7 @@ TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
             Line(5, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -68,7 +72,7 @@ TEST_CASE("ifAndElseWithLinesBeforeAndAfter") {
             {4, {5}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -80,13 +84,14 @@ TEST_CASE("extractNextRelationship_whileNoLinesBeforeAndAfter") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
             {2, {1}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -100,6 +105,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
             Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -107,7 +113,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
             {3, {2}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -124,6 +130,7 @@ TEST_CASE("extractNextRelationship_whileNestedInWhile") {
             Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -133,11 +140,11 @@ TEST_CASE("extractNextRelationship_whileNestedInWhile") {
             {5, {2}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
-TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
+TEST_CASE("extractNextRelationship_ifElseNestedInWhile") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"x", "=", "x", "+", "1", ";"}, "="),
@@ -152,6 +159,7 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             Line(7, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -162,12 +170,12 @@ TEST_CASE("extractNextRelationship_ifWithElseNestedInWhile") {
             {6, {2}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
 
-TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
+TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
@@ -181,6 +189,7 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 4}},
@@ -190,11 +199,11 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch") {
             {5, {4}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
-TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch2") {
+TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch2") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
@@ -211,6 +220,7 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch2") {
             Line(8, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 5}},
@@ -222,11 +232,11 @@ TEST_CASE("extractNextRelationship_ifWithElseWhileNestedInEachBranch2") {
             {7, {6}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
-TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
+TEST_CASE("extractNextRelationship_whileWithNestedIfElse") {
     const vector<Line>& lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"while", "(", "y", "==", "1", ")", "{"}, "while"),
@@ -241,6 +251,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             Line(7, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 7}},
@@ -251,11 +262,11 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfWithElse") {
             {6, {1}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
-TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedIfWithElse") {
+TEST_CASE("extractNextRelationship_ifElseEachBranchHasNestedWhileWithNestedIfElse") {
     const vector<Line> &lines = {
             Line({"procedure", "B", "{"}, "procedure"),
             Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
@@ -277,6 +288,7 @@ TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedI
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 6}},
@@ -290,7 +302,7 @@ TEST_CASE("extractNextRelationship_ifWithElseEachBranchHasNestedWhileWithNestedI
             {9, {6}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -310,6 +322,7 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 5}},
@@ -318,7 +331,7 @@ TEST_CASE("ifWithNestedIfAndElseInThenAndNestedWhileInElse") {
             {6, {5}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -340,6 +353,7 @@ TEST_CASE("multiProcedureSimple") {
             Line(9, {"z", "=", "2", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -350,7 +364,7 @@ TEST_CASE("multiProcedureSimple") {
             {8, {9}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -378,6 +392,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProc") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2,3}},
@@ -385,7 +400,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProc") {
             {7, {8,9}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -419,6 +434,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcLineBeforeAndAfterIf") {
             Line(15, {"z", "=", "z", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -435,7 +451,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcLineBeforeAndAfterIf") {
             {14, {15}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -476,6 +492,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcMultipleLinesBeforeAfterAndInIf") {
             Line(26, {"x", "=", "x", "+", "3", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -504,7 +521,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcMultipleLinesBeforeAfterAndInIf") {
             {25, {26}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -526,6 +543,7 @@ TEST_CASE("multiProcedureWithWhileInEachProc") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -536,7 +554,7 @@ TEST_CASE("multiProcedureWithWhileInEachProc") {
             {6, {5}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -564,6 +582,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcLinesBeforeAndAfterWhile") {
             Line(12, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -577,7 +596,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcLinesBeforeAndAfterWhile") {
             {11, {10}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -610,6 +629,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcMultipleLinesBeforeAfterAndInWhile")
             Line(20, {"y", "=", "y", "+", "9", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -632,7 +652,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcMultipleLinesBeforeAfterAndInWhile")
             {19, {20}},
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -657,6 +677,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhile") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -669,7 +690,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhile") {
             {8, {5}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -702,6 +723,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileLineBeforeAft
             Line(16, {"y", "=", "0", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -720,7 +742,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileLineBeforeAft
             {15, {10}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -765,6 +787,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileMultipleLines
             Line(28, {"x", "=", "0", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -795,7 +818,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileMultipleLines
             {27, {28}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -824,6 +847,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIf") {
             Line({"}"}, "}"),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2,4}},
@@ -833,7 +857,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIf") {
             {5, {4}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -874,6 +898,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfLineBeforeAndAfter") {
             Line(22, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -898,7 +923,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfLineBeforeAndAfter") {
             {21, {22}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }
 
@@ -955,6 +980,7 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfMultipleLinesBeforeAndA
             Line(38, {"x", "=", "x", "+", "1", ";"}, "="),
             Line({"}"}, "}"),
     };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -995,6 +1021,6 @@ TEST_CASE("multiProcedureIfAndElseInEachProcWhileInEachIfMultipleLinesBeforeAndA
             {37, {38}}
     };
 
-    unordered_map<int, set<int>> result = generateCFG(lines);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
     compareCFG(result, expected);
 }

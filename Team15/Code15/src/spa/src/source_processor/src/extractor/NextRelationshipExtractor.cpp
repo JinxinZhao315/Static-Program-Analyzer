@@ -1,43 +1,114 @@
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
 
-bool noNextNode(const CFGNode& node) {
-    return node.next.empty();
-}
-
-bool checkPair(int rootLine, int nextLine, unordered_map<int, set<int>> currentProcNextRS) {
-    if(currentProcNextRS.count(rootLine) == 0) {
-        return true;
+/**
+ * To be used to get prevCFGNode when at the end of the if-then/else block and link it to the
+ */
+void storeLinesToLink(const Line& prevLine, const pair<int, string>& justExited, const int& prevLineNumber, vector<int>& nodesToJoin) {
+    if (prevLine.getType() == "}") {
+        auto [parentLine, parentType] = justExited;
+        if (parentType == "while") {
+            nodesToJoin.push_back(parentLine);
+        }
     } else {
-        set<int> rootSet = currentProcNextRS.at(rootLine);
-        return rootSet.find(nextLine) == rootSet.end();
+        nodesToJoin.push_back(prevLineNumber);
     }
 }
+void linkAllToLine(vector<int>& nodesToJoin, unordered_map<int, set<int>>& cfg, int targetLine) {
+    for (auto nodeToJoin : nodesToJoin) {
+        cfg[nodeToJoin].insert(targetLine);
+    }
+    nodesToJoin.clear();
+}
 
-unordered_map<int, set<int>> extractNextRSForProcedure(CFGNode* rootNode,
-    unordered_map<int, set<int>> currentProcNextRS) {
-        if(!noNextNode(*rootNode)) {
-            for(CFGNode* next : rootNode->next) {
-                int rootLine = rootNode->lineNumber;
-                int nextLine = next->lineNumber;
-                if(!checkPair(rootLine, nextLine, currentProcNextRS)) {
-                    // cycle detected
-                    continue;
-                }
-                currentProcNextRS[rootLine].insert(nextLine);
-                unordered_map<int, set<int>> temp = (extractNextRSForProcedure(next, currentProcNextRS));
-                currentProcNextRS.insert(temp.begin(), temp.end());
+void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& nestingStack, const unordered_map<int, int>& followsRS,  unordered_map<int, set<int>>& cfg) {
+    int i = 0;
+    for (auto it = nestingStack.rbegin(); it != nestingStack.rend(); ++it) {
+        auto parentLine = it->first;
+        auto parentType = it->second;
+        if (i >= 1) {
+            if (parentType == "while") {
+                linkAllToLine(nodesToJoin, cfg, parentLine);
+                return;
             }
         }
-        return currentProcNextRS;
+        if (followsRS.count(parentLine) > 0) {
+            int lineThatFollowsParent = followsRS.at(parentLine);
+            linkAllToLine(nodesToJoin, cfg, lineThatFollowsParent);
+            return;
+        }
+        i++;
+    }
+    nodesToJoin.clear();
 }
 
-unordered_map<int, set<int>> extractNextRS(const vector<CFGNode*>& rootNodes) {
-    unordered_map<int, set<int>> nextRS;
-    unordered_map<int, set<int>> currentProcNextRS;
-    for(CFGNode* rootNode : rootNodes) {
-        currentProcNextRS = extractNextRSForProcedure(rootNode, currentProcNextRS);
-        nextRS.insert(currentProcNextRS.begin(), currentProcNextRS.end());
-        currentProcNextRS.clear();
+
+
+unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const unordered_map<int, int>& followsRS) {
+    unordered_map<int, set<int>> cfg;
+
+    if (program.size() < 2) {
+        return cfg;
     }
-    return nextRS;
+    // intermediate data structures for each procedure
+    vector<pair<int, string>> nestingStack;
+    vector<int> nodesToJoin;
+    bool prevLineHasNumber = false;
+    int prevLineNumber;
+    int currMaxLineNumber = 0;
+    int nextLineNumber;
+    pair<int, string> justExited;
+    for (int i = 0; i < program.size(); i++) {
+        const Line& line = program[i];
+        int lineNumber = line.getLineNumber();
+        string lineType = line.getType();
+        currMaxLineNumber = max(currMaxLineNumber, lineNumber);
+        nextLineNumber = currMaxLineNumber + 1;
+        bool isPrevLineValid = prevLineHasNumber && prevLineNumber != lineNumber;
+
+
+        if (lineType == "procedure") {
+            nestingStack = vector<pair<int, string>>(); // clear stack
+            nodesToJoin.clear();
+            prevLineHasNumber = false;
+            justExited = make_pair(0, "");;
+            continue;
+        } else if (lineType == "if" || lineType == "while") {
+            if (isPrevLineValid) {
+                cfg[prevLineNumber].insert(lineNumber);
+            }
+            nestingStack.emplace_back(lineNumber, lineType);
+            cfg[lineNumber].insert(nextLineNumber);
+            prevLineHasNumber = false;
+        } else if (lineType == "else") {
+            auto [parentLine, parentType] = nestingStack.back();
+            cfg[parentLine].insert(nextLineNumber);
+            storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
+            prevLineHasNumber = false;
+        } else if (lineType == "}") { // when exiting nesting
+            if (!nestingStack.empty()) {
+                auto [parentLine, parentType] = nestingStack.back();
+                if (parentType == "if") {
+                    storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
+                } else if (parentType == "while") {
+                   cfg[prevLineNumber].insert(parentLine); // link back to head of while loop
+                    nodesToJoin.push_back(parentLine);
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
+                }
+                justExited = make_pair(parentLine, parentType);
+                nestingStack.pop_back();
+            }
+            prevLineHasNumber = false;
+        } else {
+            if (isPrevLineValid) {
+                cfg[prevLineNumber].insert(lineNumber);
+            }
+            prevLineHasNumber = true;
+        }
+        if (lineNumber > 0) prevLineNumber = lineNumber;
+        if (lineType != "}") justExited = make_pair(0, "");;
+    }
+
+    return cfg;
 }
+

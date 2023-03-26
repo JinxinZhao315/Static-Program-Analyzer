@@ -115,6 +115,10 @@ unordered_map<int, string> Extractor::getCallLineNumToProcName() {
     return this->callLineNumToProcName;
 }
 
+unordered_map<int, set<int>> Extractor::getNextRS() {
+    return this->nextRS;
+}
+
 void Extractor::extract(const vector<Line> &program) {
     this->constants = extractConstants(program);
     this->statements = extractStatements(program);
@@ -148,4 +152,5 @@ void Extractor::extract(const vector<Line> &program) {
     this->callsRS = calls;
     this->callsStarRS = callsStar;
 
+    this->nextRS = extractNextRS(program, follows);
 }
