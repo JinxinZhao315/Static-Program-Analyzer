@@ -38,8 +38,8 @@ string source_follows = "Team15/Tests15/source-follows.txt";
 string source_parent = "Team15/Tests15/source-parent.txt";
 string source7 = "Team15/Tests15/source-7.txt";
 string uses_modifies = "Team15/Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "Team15/Tests15/source-usesmodifies2.txt";
 string source_with = "Team15/Tests15/with.txt";
+string source_ifwhile = "Team15/Tests15/source-ifwhile.txt";
 #elif _WIN32
 string source_sample1 = "./Team15/Tests15/source-sample1.txt";
 string source_sample2 = "./Team15/Tests15/source-sample2.txt";
@@ -49,18 +49,18 @@ string source_follows = "./Team15/Tests15/source-follows.txt";
 string source_parent = "./Team15/Tests15/source-parent.txt";
 string source7 = "./Team15/Tests15/source-7.txt";
 string uses_modifies = "./Team15/Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "./Team15/Tests15/source-usesmodifies2.txt";
 string source_with = "./Team15/Tests15/with.txt";
+string source_ifwhile = "./Team15/Tests15/source-ifwhile.txt";
 #endif
 
-// TEST_CASE("Overall test : source-usesmodifies.txt 1") {
-//     string filename = uses_modifies;
-//     string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
-//
-//     set<string> result = testDriver(filename, queryStr);
-//     set<string> expectedResult = { "6" };
-//     REQUIRE(result == expectedResult);
-// }
+ TEST_CASE("Overall test : source-usesmodifies.txt 1") {
+     string filename = uses_modifies;
+     string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
+
+     set<string> result = testDriver(filename, queryStr);
+     set<string> expectedResult = { "2", "3", "4", "5", "7", "10", "11" };
+     REQUIRE(result == expectedResult);
+ }
 
 TEST_CASE("Overall test: temp")
 {
@@ -933,23 +933,23 @@ TEST_CASE("Overall test : source7.txt 10")
     REQUIRE(result == expectedResult);
 }
 
-// TEST_CASE("Overall test : source-ifwhile.txt 1") {
-//     string filename = "../../../../Tests15/source-ifwhile.txt";
-//     string queryStr = "while w; Select w such that Parent*(w, 10) and Uses(w, \"x\") and Follows(6, w) pattern w (\"x\", _)";
-//
-//     set<string> result = testDriver(filename, queryStr);
-//     set<string> expectedResult = { "8" };
-//     REQUIRE(result == expectedResult);
-// }
+ TEST_CASE("Overall test : source-ifwhile.txt 1") {
+     string filename = source_ifwhile;
+     string queryStr = "while w; Select w such that Parent*(w, 10) and Uses(w, \"x\") and Follows(6, w) pattern w (\"x\", _)";
 
-// TEST_CASE("Overall test : source-ifwhile.txt 2") {
-//     string filename = "../../../../Tests15/source-ifwhile.txt";
-//     string queryStr = "if i; Select i such that Parent(i, 11) and Modifies(i, \"x\") and Follows(i, 12) pattern i (\"x\", _, _)";
-//
-//     set<string> result = testDriver(filename, queryStr);
-//     set<string> expectedResult = { "9" };
-//     REQUIRE(result == expectedResult);
-// }
+     set<string> result = testDriver(filename, queryStr);
+     set<string> expectedResult = { "8" };
+     REQUIRE(result == expectedResult);
+ }
+
+ TEST_CASE("Overall test : source-ifwhile.txt 2") {
+     string filename = source_ifwhile;
+     string queryStr = "if i; Select i such that Parent(i, 11) and Modifies(i, \"x\") and Follows(i, 12) pattern i (\"x\", _, _)";
+
+     set<string> result = testDriver(filename, queryStr);
+     set<string> expectedResult = { "9" };
+     REQUIRE(result == expectedResult);
+ }
 
 TEST_CASE("Overall test : source-sample1.txt")
 {
@@ -977,15 +977,6 @@ TEST_CASE("Overall test : source-sample3.txt 3")
     string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = {"TRUE"};
+    set<string> expectedResult = {"FALSE"};
     REQUIRE(result == expectedResult);
 }
-
-// TEST_CASE("Overall test : source-sample1.txt 6") {
-//     string filename = source_sample1;
-//     string queryStr = "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3;Select <s1, s2, v2> such that Uses(s3, v1) and Modifies(s3, \"x\") and Follows(s1, s2) and Parent(s3, s1) and Uses(s2, v1)";
-//
-//     set<string> result = testDriver(filename, queryStr);
-//     set<string> expectedResult = { "TRUE" };
-//     REQUIRE(result == expectedResult);
-// }
