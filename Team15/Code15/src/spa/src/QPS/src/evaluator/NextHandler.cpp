@@ -168,8 +168,8 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
         std::string rightDeType = synonymTable.find(rightArg)->second;
         /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
         resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
-        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+        std::set<string> leftSynValuesStrSet = Utility::getFullSetFromPkb(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getFullSetFromPkb(pkb, rightDeType);
         //convert the set to vector
         std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
         std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());

@@ -162,15 +162,14 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
     Result result;
     bool isStar;
 
-    if (relationship == "Follows" || relationship == "Follows*")
+    if (relationship == "Follows" || relationship == "Follows*"
+    || relationship == "Parent" || relationship == "Parent*"
+    || relationship == "Next" || relationship == "Next*"
+    || relationship == "Calls" || relationship == "Calls*")
     {
-        FollowsHandler followsHandler = FollowsHandler(pkb);
-        isStar = relationship == "Follows" ? false : true;
-        result = followsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
-    } else if (relationship == "Parent" || relationship == "Parent*") {
-        ParentHandler parentHandler = ParentHandler(pkb);
-        isStar = relationship == "Parent" ? false : true;
-        result = parentHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        SuchThatHandler suchThatHandler = SuchThatHandler(pkb);
+        result = suchThatHandler.evaluate(relationship, suchThatCl, synonymTable);
+
     } else if (relationship == "Modifies") {
         std::string leftArg = suchThatCl.getLeftArg();
         std::string leftType = Utility::getReferenceType(leftArg);
@@ -194,18 +193,6 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
             UsesSHandler usesSHandler = UsesSHandler(pkb);
             result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
         }
-
-    } else if (relationship == "Calls" || relationship == "Calls*") {
-
-        CallsHandler callsHandler = CallsHandler(pkb);
-        isStar = relationship == "Calls" ? false : true;
-        result = callsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
-
-    } else if (relationship == "Next" || relationship == "Next*") {
-
-        NextHandler nextHandler = NextHandler(pkb);
-        isStar = relationship == "Next" ? false : true;
-        result = nextHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
 
     } else {
         throw PQLSyntaxError("PQL Syntax error: invalid relationship");

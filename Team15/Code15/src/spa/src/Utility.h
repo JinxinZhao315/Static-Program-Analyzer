@@ -58,26 +58,18 @@ public:
 	//remove exprToTrim in the front and end
     inline static const std::string trim(std::string input, std::string exprToTrim) {
         std::string trimmed = input;
-        std::size_t firstWhitespace = trimmed.find_first_not_of(exprToTrim);
+        std::size_t firstPos = trimmed.find_first_not_of(exprToTrim);
         // trim left
-        if (firstWhitespace != std::string::npos) {
-            trimmed = trimmed.substr(firstWhitespace);
+        if (firstPos != std::string::npos) {
+            trimmed = trimmed.substr(firstPos);
         }
         // trim right
-        std::size_t lastWhitespace = trimmed.find_last_not_of(exprToTrim);
-        if (lastWhitespace != std::string::npos) {
-            trimmed = trimmed.substr(0, lastWhitespace + 1);
+        std::size_t lastPos = trimmed.find_last_not_of(exprToTrim);
+        if (lastPos != std::string::npos) {
+            trimmed = trimmed.substr(0, lastPos + 1);
         }
         return trimmed;
     };
-
-//	inline static const std::set<std::string> getSetIntersection(std::set<std::string> firstSet, std::set<std::string> secondSet) {
-//		std::set<std::string> resultSet;
-//		std::set_intersection(firstSet.begin(), firstSet.end(),
-//			secondSet.begin(), secondSet.end(),
-//			std::inserter(resultSet, resultSet.begin()));
-//		return resultSet;
-//	}
 
 	inline static const std::string trim_double_quotes(std::string s) {
 		if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
@@ -86,7 +78,7 @@ public:
 		return s;
 	}
 
-    inline static const std::set<std::string> getResultFromPKB(PKB& pkb, std::string DeType) {
+    inline static const std::set<std::string> getFullSetFromPkb(PKB& pkb, std::string DeType) {
         std::set<std::string> ret;
         if (DeType == "constant") {
             ret = pkb.getAllConstVals();

@@ -60,7 +60,7 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         // Wildcard-Int
     }
     else if (leftType == Utility::UNDERSCORE && rightType == Utility::INTEGER) {
-        std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, rightArg); // = pkb.getFollowsStarLeaderNums(stoi(rightArg))
+        std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, rightArg);
         if (parentSet.empty()) {
             result.setResultTrue(false);
             return result;
@@ -68,7 +68,7 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         // Int-Wildcard
     }
     else if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
-        std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, leftArg); // = pkb.getFollowsStarFollowerNums(stoi(leftArg))
+        std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, leftArg);
     
         if (childSet.empty()) {
             result.setResultTrue(false);
@@ -77,7 +77,7 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         // Int-Int
     }
     else if (leftType == Utility::INTEGER && rightType == Utility::INTEGER) {
-        bool isParent = getIsParentFromPKB(isStar, leftArg, rightArg); // =pkb.areInFollowsStarRelationship(leftArg, rightArg)
+        bool isParent = getIsParentFromPKB(isStar, leftArg, rightArg);
         if (!isParent) {
             result.setResultTrue(false);
             return result;
@@ -86,15 +86,13 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
     }
     else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
-        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);*/
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (rightType == Utility::UNDERSCORE) {
             for (const auto& currSynonVal : currSynonValues) {
-                std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, currSynonVal); //=pkb.getFollowsStarFollowerNums(stoi(currSynonVal))
+                std::set<int> childSet = getParentFromPKB(isStar, GET_CHILD, currSynonVal);
                 if (!childSet.empty()) {
                     resultSynonValues.push_back(currSynonVal);
                 }
@@ -102,7 +100,7 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         }
         else if (rightType == Utility::INTEGER) {
             for (const auto& currSynonVal : currSynonValues) {
-                bool isRightParentStarLeft = getIsParentFromPKB(isStar, currSynonVal, rightArg); //=pkb.areInFollowsStarRelationship(currSynonVal, rightArg)
+                bool isRightParentStarLeft = getIsParentFromPKB(isStar, currSynonVal, rightArg);
                 if (isRightParentStarLeft) {
                     resultSynonValues.push_back(currSynonVal);
                 }
@@ -118,15 +116,13 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
     }
     else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
         string synonDeType = synonymTable.find(rightArg)->second;
-        /*resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
-        std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
         if (leftType == Utility::UNDERSCORE) {
             for (const auto& currSynonVal : currSynonValues) {
-                std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, currSynonVal); //=pkb.getFollowsStarLeaderNums(stoi(currSynonVal))
+                std::set<int> parentSet = getParentFromPKB(isStar, GET_PARENT, currSynonVal);
                 if (!parentSet.empty()) {
                     resultSynonValues.push_back(currSynonVal);
                 }
@@ -134,7 +130,7 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         }
         else if (leftType == Utility::INTEGER) {
             for (const auto& currSynonVal : currSynonValues) {
-                bool isRightParentStarLeft = getIsParentFromPKB(isStar, leftArg, currSynonVal); //=pkb.areInFollowsStarRelationship(leftArg, currSynonVal)
+                bool isRightParentStarLeft = getIsParentFromPKB(isStar, leftArg, currSynonVal);
                 if (isRightParentStarLeft) {
                     resultSynonValues.push_back(currSynonVal);
                 }
@@ -155,10 +151,8 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         }
         string leftDeType = synonymTable.find(leftArg)->second;
         string rightDeType = synonymTable.find(rightArg)->second;
-        /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
-        resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
-        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+        std::set<string> leftSynValuesStrSet = Utility::getFullSetFromPkb(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getFullSetFromPkb(pkb, rightDeType);
         //convert the set to vector
         std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
         std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
@@ -167,13 +161,11 @@ Result ParentHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resul
         initTable.combineTable(ResultTable(currRightValues, rightArg));
         int initTableSize = initTable.getColNum();
 
-        //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-        //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
         ResultTable tempTable({ leftArg, rightArg });
 
         for (int i = 0; i < initTableSize; i++) {
             std::vector<std::string> tuple = initTable.getTuple(i);
-            bool isRightParentStarLeft = getIsParentFromPKB(isStar, tuple[0], tuple[1]); //=pkb.areInFollowsStarRelationship(currLeftVal, currRightVal)
+            bool isRightParentStarLeft = getIsParentFromPKB(isStar, tuple[0], tuple[1]);
             if (isRightParentStarLeft) {
                 tempTable.insertTuple({ tuple[0], tuple[1] });
             }

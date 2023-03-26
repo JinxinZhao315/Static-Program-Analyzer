@@ -41,7 +41,7 @@ ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std:
 void ResultTable::resultTableCheckAndAdd(string synName, PKB pkb, string DeType) {
     if (!isSynExist(synName)) {
 
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, DeType);
+        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, DeType);
         std::vector<string> synValuesStrVector(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::vector<std::string>> tempResult = { synValuesStrVector };
         std::vector<string> synList = { synName };

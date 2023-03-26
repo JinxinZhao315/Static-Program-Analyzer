@@ -3,17 +3,16 @@
 
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/WithHandler.h"
 #include "SelectHandler.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
-#include "QPS/include/evaluator/ParentHandler.h"
+#include "QPS/include/evaluator/WithHandler.h"
+#include "QPS/include/evaluator/PatternHandler.h"
+#include "QPS/include/evaluator/SuchThatHandler.h"
+
 #include "QPS/include/evaluator/ModifiesPHandler.h"
 #include "QPS/include/evaluator/ModifiesSHandler.h"
-#include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/UsesSHandler.h"
 #include "QPS/include/evaluator/UsesPHandler.h"
-#include "QPS/include/evaluator/CallsHandler.h"
-#include "QPS/include/evaluator/NextHandler.h"
+
 #include "Utility.h"
 #include <numeric>
 #include <string>

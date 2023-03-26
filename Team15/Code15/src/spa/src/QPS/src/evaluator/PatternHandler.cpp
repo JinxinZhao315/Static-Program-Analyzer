@@ -86,7 +86,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     string patternType = synonymTable.find(patternSynon)->second;
 
     //resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
-    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
+    std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, patternType);
     std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 
     bool isPartialMatch;
@@ -137,7 +137,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
         string firstDeType = synonymTable.find(firstArg)->second;
         //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, firstDeType);
+        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, firstDeType);
         std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         //std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 

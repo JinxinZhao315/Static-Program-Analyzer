@@ -34,7 +34,7 @@ Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& result
 		string synonDeType = synonymTable.find(rightArg)->second;
 		/*resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
 		std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);*/
-		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
 		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
@@ -58,7 +58,7 @@ Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& result
 		//resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
 		// currSynonValues here are procedures in string format.
 		//std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
-		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
 		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
@@ -83,7 +83,7 @@ Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& result
 		//resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
 		// currSynonValues here are procedures in string format.
 		//std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
-		std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+		std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
 		std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 		std::vector<std::string> resultSynonValues;
 
@@ -110,8 +110,8 @@ Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& result
 		resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);
 		std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
 		std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);*/
-		std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-		std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+		std::set<string> leftSynValuesStrSet = Utility::getFullSetFromPkb(pkb, leftDeType);
+		std::set<string> rightSynValuesStrSet = Utility::getFullSetFromPkb(pkb, rightDeType);
 		//convert the set to vector
 		std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
 		std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
