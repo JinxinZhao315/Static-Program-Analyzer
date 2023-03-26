@@ -1,10 +1,23 @@
 procedure proc1 {
-//1  while (x > 0) {
-//2    if (x == 1) then {
-//3      x = x - 1;
-       } else {
-//4      x = x / 2;
-       }
-     }
-//5  print x;
-}
+//1  a = 50;
+//2  b = 100;
+//3  c = 0;
+//4  if (a > b) then {
+//5    a = a / 2;
+//6    c = a; }
+     else {
+//7    a = a + 51;
+//8    c = a - b; }
+//9  d = 0;
+//10 while (c > 0) {
+//11   c = c - 1;
+//12   call proc2;
+//13   d = d + 1; }
+//14 print d; }
+
+procedure proc2 {
+//15  while (c >= 1) {
+//16    if (C == 1) then {
+//17      c = c - 1; }
+        else {
+//18      d = c; } } }
