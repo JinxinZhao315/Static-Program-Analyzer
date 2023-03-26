@@ -160,9 +160,73 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
 Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable) {
     Result result;
-    bool isStar;
+    bool isStar = Utility::isStarRelationship(relationship);
+    Relationship enumRelationship = Utility::getRelationshipFromString(relationship);
+    switch (enumRelationship)
+    {
+    case MODIFIES: {
+        std::string leftArg = suchThatCl.getLeftArg();
+        std::string leftType = Utility::getReferenceType(leftArg);
 
-    if (relationship == "Follows" || relationship == "Follows*")
+        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        else {
+            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
+            result = modifiesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        break;
+    }
+    case USES: {
+        std::string leftArg = suchThatCl.getLeftArg();
+        std::string leftType = Utility::getReferenceType(leftArg);
+
+        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            UsesPHandler usesPHandler = UsesPHandler(pkb);
+            result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        else {
+            UsesSHandler usesSHandler = UsesSHandler(pkb);
+            result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        break;
+    }
+       
+    case CALLS:
+    case CALLSSTAR: {
+        CallsHandler callsHandler = CallsHandler(pkb);
+        result = callsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        break;
+    }
+    case AFFECTS:
+    case AFFECTSSTAR: {
+        AffectsHandler affectsHandler = AffectsHandler(pkb);
+        result = affectsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        break;
+    }
+    case NEXT:
+    case NEXTSTAR: {
+        NextHandler nextHandler = NextHandler(pkb);
+        result = nextHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        break;
+    }
+    case PARENT:
+    case PARENTSTAR: {
+        ParentHandler parentHandler = ParentHandler(pkb);
+        result = parentHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        break;
+    }
+    case FOLLOWS:
+    case FOLLOWSSTAR: {
+        FollowsHandler followsHandler = FollowsHandler(pkb);
+        result = followsHandler.evaluate(isStar, suchThatCl, resultTable, synonymTable);
+        break;
+    }
+    default:
+        throw PQLSyntaxError("PQL Syntax error: invalid relationship");
+    }
+    /*if (relationship == "Follows" || relationship == "Follows*")
     {
         FollowsHandler followsHandler = FollowsHandler(pkb);
         isStar = relationship == "Follows" ? false : true;
@@ -215,7 +279,7 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
     }
     else {
         throw PQLSyntaxError("PQL Syntax error: invalid relationship");
-    }
+    }*/
 
     return result;
 }

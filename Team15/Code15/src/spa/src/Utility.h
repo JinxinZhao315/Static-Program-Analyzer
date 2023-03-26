@@ -8,6 +8,25 @@
 #include "pkb/include/PKB.h"
 
 #pragma once
+enum Relationship {
+    MODIFIES,
+    USES,
+    CALLS,
+    CALLSSTAR,
+    AFFECTS,
+    AFFECTSSTAR,
+    NEXT,
+    NEXTSTAR,
+    PARENT,
+    PARENTSTAR,
+    FOLLOWS,
+    FOLLOWSSTAR
+};
+
+enum Synonym {
+    CONSTANT
+
+};
 
 class Utility {
 public:
@@ -71,20 +90,16 @@ public:
         return trimmed;
     };
 
-//	inline static const std::set<std::string> getSetIntersection(std::set<std::string> firstSet, std::set<std::string> secondSet) {
-//		std::set<std::string> resultSet;
-//		std::set_intersection(firstSet.begin(), firstSet.end(),
-//			secondSet.begin(), secondSet.end(),
-//			std::inserter(resultSet, resultSet.begin()));
-//		return resultSet;
-//	}
-
 	inline static const std::string trim_double_quotes(std::string s) {
 		if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
 			return s.substr(1, s.length() - 2);
 		}
 		return s;
 	}
+
+    inline static const bool isStarRelationship(std::string relationship) {
+        return relationship.find('*') != std::string::npos;
+    }
 
     inline static const std::set<std::string> getResultFromPKB(PKB& pkb, std::string DeType) {
         std::set<std::string> ret;
@@ -115,6 +130,48 @@ public:
             }
         }
         return ret;
+    }
+
+    inline static const Relationship getRelationshipFromString(std::string relationship) {
+        if (relationship == "Modifies") {
+            return MODIFIES;
+        }
+        else if (relationship == "Uses") {
+            return USES;
+        }
+        else if (relationship == "Calls") {
+            return CALLS;
+        }
+        else if (relationship == "Calls*") {
+            return CALLSSTAR;
+        }
+        else if (relationship == "Follows") {
+            return FOLLOWS;
+        }
+        else if (relationship == "Follows*") {
+            return FOLLOWSSTAR;
+        }
+        else if (relationship == "Parent") {
+            return PARENT;
+        }
+        else if (relationship == "Parent*") {
+            return PARENTSTAR;
+        }
+        else if (relationship == "Affects") {
+            return AFFECTS;
+        }
+        else if (relationship == "Affects*") {
+            return AFFECTSSTAR;
+        }
+        else if (relationship == "Next*") {
+            return NEXTSTAR;
+        }
+        else if (relationship == "Next") {
+            return NEXT;
+        }
+        else {
+            throw std::runtime_error("Unsupport relationship string");
+        }
     }
 };
 

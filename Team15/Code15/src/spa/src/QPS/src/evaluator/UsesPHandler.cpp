@@ -94,7 +94,7 @@ Result UsesPHandler::evaluate(SuchThatClause suchThatClause, ResultTable& result
 				resultSynonValues.push_back(currSynonVal);
 			}
 		}
-
+		
 		if (resultSynonValues.empty()) {
 			result.setResultTrue(false);
 			return result;
