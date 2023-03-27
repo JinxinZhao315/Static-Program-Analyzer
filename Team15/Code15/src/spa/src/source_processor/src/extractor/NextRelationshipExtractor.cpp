@@ -3,16 +3,14 @@
 /**
  * To be used to get prevCFGNode when at the end of the if-then/else block and link it to the
  */
-void storeLinesToLink(const Line& prevLine, pair<int, string>& justExited, const int& prevLineNumber, vector<int>& nodesToJoin) {
+void storeLinesToLink(const Line& prevLine, pair<int, string>& justExited, int prevLineNumber, vector<int>& nodesToJoin) {
     if (prevLine.getType() == "}") {
-        auto [parentLine, parentType] = justExited;
-        if (parentType == "while") {
-            nodesToJoin.push_back(parentLine);
-        }
+        if (justExited.second == "while") nodesToJoin.push_back(justExited.first);
     } else {
         nodesToJoin.push_back(prevLineNumber);
     }
 }
+
 void linkAllToLine(vector<int>& nodesToJoin, unordered_map<int, set<int>>& cfg, int targetLine) {
     for (auto nodeToJoin : nodesToJoin) {
         cfg[nodeToJoin].insert(targetLine);
@@ -25,11 +23,9 @@ void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& 
     for (auto it = nestingStack.rbegin(); it != nestingStack.rend(); ++it) {
         auto parentLine = it->first;
         auto parentType = it->second;
-        if (i >= 1) {
-            if (parentType == "while") {
-                linkAllToLine(nodesToJoin, cfg, parentLine);
-                return;
-            }
+        if (i >= 1 && parentType == "while") {
+            linkAllToLine(nodesToJoin, cfg, parentLine);
+            return;
         }
         if (followsRS.count(parentLine) > 0) {
             int lineThatFollowsParent = followsRS.at(parentLine);
@@ -46,13 +42,11 @@ void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& 
 unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const unordered_map<int, int>& followsRS) {
     unordered_map<int, set<int>> cfg;
 
-    if (program.size() < 2) {
-        return cfg;
-    }
+    if (program.size() < 2) return cfg;
     // intermediate data structures for each procedure
     vector<pair<int, string>> nestingStack;
     vector<int> nodesToJoin;
-    bool prevLineHasNumber = false;
+    bool linkPrevLine = false;
     int prevLineNumber;
     int currMaxLineNumber = 0;
     int nextLineNumber;
@@ -63,28 +57,27 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
         string lineType = line.getType();
         currMaxLineNumber = max(currMaxLineNumber, lineNumber);
         nextLineNumber = currMaxLineNumber + 1;
-        bool isPrevLineValid = prevLineHasNumber && prevLineNumber != lineNumber;
-
+        bool shouldLinkPrevLine = linkPrevLine && prevLineNumber != lineNumber;
 
         if (lineType == "procedure") {
-            nestingStack = vector<pair<int, string>>(); // clear stack
+            nestingStack.clear();
             nodesToJoin.clear();
-            prevLineHasNumber = false;
-            justExited = make_pair(0, "");;
+            linkPrevLine = false;
+            justExited = make_pair(0, "");
             continue;
         } else if (lineType == "if" || lineType == "while") {
-            if (isPrevLineValid) {
+            if (shouldLinkPrevLine) {
                 cfg[prevLineNumber].insert(lineNumber);
             }
             nestingStack.emplace_back(lineNumber, lineType);
             cfg[lineNumber].insert(nextLineNumber);
-            prevLineHasNumber = false;
+            linkPrevLine = false;
         } else if (lineType == "else") {
             auto [parentLine, parentType] = nestingStack.back();
             cfg[parentLine].insert(nextLineNumber);
             storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
             linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
-            prevLineHasNumber = false;
+            linkPrevLine = false;
         } else if (lineType == "}") { // when exiting nesting
             if (!nestingStack.empty()) {
                 auto [parentLine, parentType] = nestingStack.back();
@@ -100,12 +93,12 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
                 justExited = make_pair(parentLine, parentType);
                 nestingStack.pop_back();
             }
-            prevLineHasNumber = false;
+            linkPrevLine = false;
         } else {
-            if (isPrevLineValid) {
+            if (shouldLinkPrevLine) {
                 cfg[prevLineNumber].insert(lineNumber);
             }
-            prevLineHasNumber = true;
+            linkPrevLine = true;
         }
         if (lineNumber > 0) prevLineNumber = lineNumber;
         if (lineType != "}") justExited = make_pair(0, "");
