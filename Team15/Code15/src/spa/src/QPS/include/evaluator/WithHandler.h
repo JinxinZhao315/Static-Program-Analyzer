@@ -1,6 +1,7 @@
 #include <map>
 #include "QPS/include/model/WithClause.h"
 #include "QPS/include/evaluator/ClauseHandler.h"
+#include "./exceptions/PQLSemanticError.h"
 
 #pragma once
 

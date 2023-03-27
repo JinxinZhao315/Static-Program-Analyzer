@@ -45,15 +45,6 @@ public:
 	//SP modifies procedure-variable
 	void addAllModifiesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars);
 
-	//SP assign pattern
-	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
-
-	//SP while pattern
-	void addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine);
-
-	//SP if pattern
-	void addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine);
-
 	//SP calls
 	void addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees);
 
@@ -80,6 +71,15 @@ public:
 
 	//SP with call
 	void addAllWithCall(unordered_map<int, std::string> callLineNumToProcName);
+
+	//SP assign pattern
+	void addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine);
+
+	//SP while pattern
+	void addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine);
+
+	//SP if pattern
+	void addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine);
 
 	//QPS procedure
 	std::set<std::string> getAllProcNames();
@@ -159,33 +159,6 @@ public:
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
-	//QPS assign pattern
-	std::string getAssignVarFromStmt(int assignStmtNum);
-
-	std::set<int> getAssignStmtsFromVar(std::string lhsVarName);
-
-	std::set<std::vector<std::string>> getAssignExprsFromStmt(int assignStmtNum);
-
-	std::set<int> getAssignStmtsFromExpr(std::vector<std::string> rhsExpr);
-
-	std::set<std::vector<std::string>> getAssignExprsFromVar(std::string lhsVarName);
-
-	std::set<std::string> getAssignVarsFromExpr(std::vector<std::string> rhsExpr);
-
-	//QPS while pattern
-	std::set<int> getWhileStmtsWithVars();
-	
-	std::set<int> getWhileStmtsFromVar(std::string controlVarName);
-
-	std::set<std::string> getWhileVarsFromStmt(int whileStmtNum);
-
-	//QPS if pattern
-	std::set<int> getIfStmtsWithVars();
-
-	std::set<int> getIfStmtsFromVar(std::string controlVarName);
-
-	std::set<std::string> getIfVarsFromStmt(int ifStmtNum);
-
 	//QPS calls
 	std::set<std::string> getCallsCallerNames(std::string calleeName);
 
@@ -255,11 +228,32 @@ public:
 	//QPS with call
 	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
 
-	void requestAllNextStar();
+	//QPS assign pattern
+	std::string getAssignVarFromStmt(int assignStmtNum);
 
-	void requestAllAffects();
+	std::set<int> getAssignStmtsFromVar(std::string lhsVarName);
 
-	void requestAllAffectsStar();
+	std::set<std::vector<std::string>> getAssignExprsFromStmt(int assignStmtNum);
+
+	std::set<int> getAssignStmtsFromExpr(std::vector<std::string> rhsExpr);
+
+	std::set<std::vector<std::string>> getAssignExprsFromVar(std::string lhsVarName);
+
+	std::set<std::string> getAssignVarsFromExpr(std::vector<std::string> rhsExpr);
+
+	//QPS while pattern
+	std::set<int> getWhileStmtsWithVars();
+
+	std::set<int> getWhileStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getWhileVarsFromStmt(int whileStmtNum);
+
+	//QPS if pattern
+	std::set<int> getIfStmtsWithVars();
+
+	std::set<int> getIfStmtsFromVar(std::string controlVarName);
+
+	std::set<std::string> getIfVarsFromStmt(int ifStmtNum);
 
 private:
 	EntityTable<std::string> procTable;
@@ -274,9 +268,6 @@ private:
 	RelationshipTable<std::string, std::string> usesProcTable;
 	RelationshipTable<int, std::string> modifiesStmtTable;
 	RelationshipTable<std::string, std::string> modifiesProcTable;
-	PatternTable assignPatternTable;
-	PatternTable whilePatternTable;
-	PatternTable ifPatternTable;
 	RelationshipTable<std::string, std::string> callsTable;
 	RelationshipTable<std::string, std::string> callsStarTable;
 	RelationshipTable<int, int> nextTable;
@@ -286,4 +277,7 @@ private:
 	RelationshipTable<int, std::string> withReadTable;
 	RelationshipTable<int, std::string> withPrintTable;
 	RelationshipTable<int, std::string> withCallTable;
+	PatternTable assignPatternTable;
+	PatternTable whilePatternTable;
+	PatternTable ifPatternTable;
 };

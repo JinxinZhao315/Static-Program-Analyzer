@@ -32,7 +32,28 @@ TEST_CASE("PQLSyntaxChecker positive test 4: different format of Select Clause")
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("Select BOOLEAN"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2, a3; Select <a1, a2, a3>"));
 	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a1, a2; Select <		 a1 ,   a2  >"));
-	//REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a; Select<a, a>"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("procedure p; Select p.procName"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("call c; Select c.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("call c; Select c.procName"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("variable v; Select v.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("read r; Select r.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("read r; Select r.varName"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("print p; Select p.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("print p; Select p.varName"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("constant c; Select c.value"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("stmt s; Select s.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("while w; Select w.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("if i; Select i.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a; Select a.stmt#"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("read r; constant c; call call; Select <r.varName, c, call.procName>"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("variable v; Select <v.varName, v.varName>"));
+	REQUIRE_NOTHROW(query = preprocessor.preprocess("assign a; Select <a, a>"));
+	try { preprocessor.preprocess("assign a1, a2; Select a1.procName"); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
+	try { preprocessor.preprocess("call c; Select c.varName"); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
 }
 TEST_CASE("PQLSyntaxChecker positive test 5: Follows valid arg") {
 	PQLPreprocessor preprocessor;
@@ -193,6 +214,34 @@ TEST_CASE("PQLSyntaxChecker positive test 10: Modifies valid arg") {
 	catch (PQLSemanticError e) { REQUIRE(true); }
 }
 
+TEST_CASE("PQLSyntaxChecker positive test 10: With valid arg") {
+	PQLPreprocessor preprocessor;
+	//integer
+	REQUIRE_NOTHROW(preprocessor.preprocess("assign a; Select a with a.stmt#=10"));
+	REQUIRE_NOTHROW(preprocessor.preprocess("assign a; Select a with a.stmt#=a.stmt#"));
+	REQUIRE_NOTHROW(preprocessor.preprocess("assign a;constant c; Select a with a.stmt#=c.value"));
+	//ident
+	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; Select p with p.procName=\"proc1\""));
+	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; call c; Select p with p.procName=c.procName"));
+	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; variable v; Select p with p.procName=v.varName"));
+	//unmatched type
+	try { preprocessor.preprocess("assign a1; Select a1 with a1.stmt# = \"assign1\""); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
+	try { preprocessor.preprocess("assign a1;procedure p; Select a1 with a1.stmt# = p.procName"); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
+	try { preprocessor.preprocess("procedure p; Select p with p.procName = 10"); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
+	try { preprocessor.preprocess("procedure p; Select p with \"p\" = 10"); }
+	catch (PQLSyntaxError e) { REQUIRE(false); }
+	catch (PQLSemanticError e) { REQUIRE(true); }
+	//multiple with
+	REQUIRE_NOTHROW(preprocessor.preprocess("procedure p; assign a; Select p with p.procName=\"proc1\" and a.stmt# = 10"));
+	REQUIRE_NOTHROW(preprocessor.preprocess("call c; assign a; Select c with c.procName=\"proc1\" and c.stmt# = 10 and a.stmt#=10"));
+}
+
 TEST_CASE("PQLSyntaxChecker negative test 1: assigns") {
 	PQLPreprocessor preprocessor;
 	Query query;
@@ -280,10 +329,17 @@ TEST_CASE("PQLSyntaxChecker negative test 16: pattern clause if") {
     REQUIRE_THROWS_AS(query = preprocessor.preprocess("if i; Select i pattern i (_,\"t\",\"x\")"), PQLSyntaxError);
 }
 
-TEST_CASE("PQLSyntaxChecker positive test 17: Calls invalid arg") {
+TEST_CASE("PQLSyntaxChecker negative test 17: Calls invalid arg") {
 	PQLPreprocessor preprocessor;
 	Query query;
 	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(p1, 11)"), PQLSyntaxError);
 	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, p1)"), PQLSyntaxError);
 	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1, p2; Select p1 such that Calls(11, !@#)"), PQLSyntaxError);
+}
+
+TEST_CASE("PQLSyntaxChecker positive test 18: With inValid arg") {
+	PQLPreprocessor preprocessor;
+	Query query;
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1; Select p1 with p1.procName = \" space ident\""), PQLSyntaxError);
+	REQUIRE_THROWS_AS(query = preprocessor.preprocess("procedure p1; Select p1 with p1.procedureName = \"name\""), PQLSyntaxError);
 }

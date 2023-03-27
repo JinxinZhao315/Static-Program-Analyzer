@@ -30,6 +30,8 @@ public:
     Result getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable);
 private:
     PKB pkb;
+    // helper function
+    bool isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos);
 };
 
 

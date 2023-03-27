@@ -14,10 +14,19 @@ procedure proc3 {
 procedure proc4 {
 //8  read v;
 //9  read w;
-//10  x = v / 3;
-//11  y = w / 4;
-//12  z = v - w * x; }
+//10 while ((v >= 1) && (w >= 1)) {
+//11   if (v >= a) then {
+//12     x = v / 3; }
+       else {
+//13     y = w / 4; }
+//14   z = v - w * x; } }
 
 procedure proc5 {
-//13  print b;
-//14  read w; }
+//15  print b;
+//16  read w;
+//17  c = 10;
+//18  d = 5;
+//19  if (c > 5) then {
+//20    c = 10 - d; }
+      else {
+//21    c = d; } }

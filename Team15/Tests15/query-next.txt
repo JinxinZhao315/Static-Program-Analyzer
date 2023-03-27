@@ -1,5 +1,605 @@
 1 - next
 stmt s;
-Select s such that Next(1, 1)
+Select s such that Next(1, s)
+2
+5000
+2 - next
+stmt s;
+Select s such that Next(3, s)
+4
+5000
+3 - next
+stmt s;
+Select s such that Next(4, s)
+5, 7
+5000
+4 - next
+stmt s;
+Select s such that Next(5, s)
+6
+5000
+5 - next
+stmt s;
+Select s such that Next(7, s)
+8
+5000
+6 - next
+stmt s;
+Select s such that Next(6, s)
+9
+5000
+7 - next
+stmt s;
+Select s such that Next(8, s)
+9
+5000
+8 - next
+stmt s;
+Select s such that Next(9, s)
+10
+5000
+9 - next
+stmt s;
+Select s such that Next(10, s)
+11, 14
+5000
+10 - next
+stmt s;
+Select s such that Next(11, s)
+12
+5000
+11 - next
+stmt s;
+Select s such that Next(12, s)
+13
+5000
+12 - next
+stmt s;
+Select s such that Next(13, s)
+10
+5000
+13 - next
+stmt s;
+Select s such that Next(14, s)
 none
+5000
+14 - next
+stmt s;
+Select s such that Next(15, s)
+16
+5000
+15 - next
+stmt s;
+Select s such that Next(16, s)
+17, 18
+5000
+16 - next
+stmt s;
+Select s such that Next(17, s)
+15
+5000
+17 - next
+stmt s;
+Select s such that Next(18, s)
+15
+5000
+18 - next
+stmt s;
+Select s such that Next(s, 1)
+none
+5000
+19 - next
+stmt s;
+Select s such that Next(s, 2)
+1
+5000
+20 - next
+stmt s;
+Select s such that Next(s, 4)
+3
+5000
+21 - next
+stmt s;
+Select s such that Next(s, 5)
+4
+5000
+22 - next
+stmt s;
+Select s such that Next(s, 6)
+5
+5000
+23 - next
+stmt s;
+Select s such that Next(s, 7)
+4
+5000
+24 - next
+stmt s;
+Select s such that Next(s, 8)
+7
+5000
+25 - next
+stmt s;
+Select s such that Next(s, 9)
+6, 8
+5000
+26 - next
+stmt s;
+Select s such that Next(s, 9)
+6, 8
+5000
+27 - next
+stmt s;
+Select s such that Next(s, 10)
+9, 13
+5000
+28 - next
+stmt s;
+Select s such that Next(s, 11)
+10
+5000
+29 - next
+stmt s;
+Select s such that Next(s, 13)
+12
+5000
+30 - next
+stmt s;
+Select s such that Next(s, 14)
+10
+5000
+31 - next
+stmt s;
+Select s such that Next(s, 15)
+17, 18
+5000
+32 - next
+stmt s;
+Select s such that Next(s, 16)
+15
+5000
+33 - next
+stmt s;
+Select s such that Next(s, 17)
+16
+5000
+34 - next
+stmt s;
+Select s such that Next(s, 18)
+16
+5000
+35 - next
+stmt s;
+Select s such that Next(1, 2)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+36 - next
+stmt s;
+Select s such that Next(3, 4)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+37 - next
+stmt s;
+Select s such that Next(4, 5)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+38 - next
+stmt s;
+Select s such that Next(4, 7)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+39 - next
+stmt s;
+Select s such that Next(6, 9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+40 - next
+stmt s;
+Select s such that Next(8, 9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+41 - next
+stmt s;
+Select s such that Next(9, 10)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+42 - next
+stmt s;
+Select s such that Next(10, 11)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+43 - next
+stmt s;
+Select s such that Next(13, 10)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+44 - next
+stmt s;
+Select s such that Next(10, 14)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+45 - next
+stmt s;
+Select s such that Next(17, 15)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+46 - next
+stmt s;
+Select s such that Next(18, 15)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+47 - next
+stmt s;
+Select s such that Next(15, 16)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+48 - next
+stmt s;
+Select s such that Next(16, 17)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+49 - next
+stmt s;
+Select s such that Next(16, 18)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+50 - next
+stmt s;
+Select s such that Next(1, 3)
+none
+5000
+51 - next
+stmt s;
+Select s such that Next(2, 4)
+none
+5000
+52 - next
+stmt s;
+Select s such that Next(3, 5)
+none
+5000
+53 - next
+stmt s;
+Select s such that Next(4, 6)
+none
+5000
+54 - next
+stmt s;
+Select s such that Next(6, 7)
+none
+5000
+55 - next
+stmt s;
+Select s such that Next(4, 9)
+none
+5000
+56 - next
+stmt s;
+Select s such that Next(7, 9)
+none
+5000
+57 - next
+stmt s;
+Select s such that Next(8, 10)
+none
+5000
+58 - next
+stmt s;
+Select s such that Next(10, 12)
+none
+5000
+59 - next
+stmt s;
+Select s such that Next(9, 11)
+none
+5000
+60 - next
+stmt s;
+Select s such that Next(10, 10)
+none
+5000
+61 - next
+stmt s;
+Select s such that Next(11, 11)
+none
+5000
+62 - next
+stmt s;
+Select s such that Next(13, 13)
+none
+5000
+63 - next
+stmt s;
+Select s such that Next(13, 14)
+none
+5000
+64 - next
+stmt s;
+Select s such that Next(15, 15)
+none
+5000
+65 - next
+stmt s;
+Select s such that Next(15, 17)
+none
+5000
+66 - next
+stmt s;
+Select s such that Next(15, 18)
+none
+5000
+67 - next
+stmt s;
+Select s such that Next(17, 18)
+none
+5000
+68 - next
+stmt s;
+Select s such that Next(16, 16)
+none
+5000
+69 - next
+stmt s;
+Select s such that Next(17, 17)
+none
+5000
+70 - next
+stmt s;
+Select s such that Next(18, 18)
+none
+5000
+71 - next
+stmt s;
+Select s such that Next(2, 1)
+none
+5000
+72 - next
+stmt s;
+Select s such that Next(4, 3)
+none
+5000
+73 - next
+stmt s;
+Select s such that Next(4, 4)
+none
+5000
+74 - next
+stmt s;
+Select s such that Next(5, 4)
+none
+5000
+75 - next
+stmt s;
+Select s such that Next(5, 5)
+none
+5000
+76 - next
+stmt s;
+Select s such that Next(7, 6)
+none
+5000
+77 - next
+stmt s;
+Select s such that Next(6, 5)
+none
+5000
+78 - next
+stmt s;
+Select s such that Next(8, 7)
+none
+5000
+79 - next
+stmt s;
+Select s such that Next(9, 8)
+none
+5000
+80 - next
+stmt s;
+Select s such that Next(9, 6)
+none
+5000
+81 - next
+stmt s;
+Select s such that Next(9, 9)
+none
+5000
+82 - next
+stmt s;
+Select s such that Next(10, 9)
+none
+5000
+83 - next
+stmt s;
+Select s such that Next(11, 10)
+none
+5000
+84 - next
+stmt s;
+Select s such that Next(12, 11)
+none
+5000
+85 - next
+stmt s;
+Select s such that Next(14, 10)
+none
+5000
+86 - next
+stmt s;
+Select s such that Next(14, 13)
+none
+5000
+87 - next
+stmt s;
+Select s such that Next(16, 15)
+none
+5000
+88 - next
+stmt s;
+Select s such that Next(17, 16)
+none
+5000
+89 - next
+stmt s;
+Select s such that Next(18, 16)
+none
+5000
+90 - next
+stmt s;
+Select s such that Next(18, 17)
+none
+5000
+91 - next
+stmt s;
+Select s such that Next(11, 15)
+none
+5000
+92 - next
+stmt s;
+Select s such that Next(12, 15)
+none
+5000
+93 - next
+stmt s;
+Select s such that Next(14, 15)
+none
+5000
+94 - next*
+stmt s;
+Select s such that Next*(1, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+5000
+95 - next*
+stmt s;
+Select s such that Next*(15, s)
+15, 16, 17, 18
+5000
+96 - next*
+stmt s;
+Select s such that Next*(s, 14)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+97 - next*
+stmt s;
+Select s such that Next*(s, 18)
+15, 16, 17, 18
+5000
+98 - next*
+stmt s;
+Select s such that Next*(4, s)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+5000
+99 - next*
+stmt s;
+Select s such that Next*(5, s)
+6, 9, 10, 11, 12, 13, 14
+5000
+100 - next*
+stmt s;
+Select s such that Next*(6, s)
+9, 10, 11, 12, 13, 14
+5000
+101 - next*
+stmt s;
+Select s such that Next*(7, s)
+8, 9, 10, 11, 12, 13, 14
+5000
+102 - next*
+stmt s;
+Select s such that Next*(8, s)
+9, 10, 11, 12, 13, 14
+5000
+103 - next*
+stmt s;
+Select s such that Next*(10, s)
+10, 11, 12, 13, 14
+5000
+104 - next*
+stmt s;
+Select s such that Next*(11, s)
+10, 11, 12, 13, 14
+5000
+105 - next*
+stmt s;
+Select s such that Next*(13, s)
+10, 11, 12, 13, 14
+5000
+106 - next*
+stmt s;
+Select s such that Next*(14, s)
+none
+5000
+107 - next*
+stmt s;
+Select s such that Next*(16, s)
+15, 16, 17, 18
+5000
+108 - next*
+stmt s;
+Select s such that Next*(17, s)
+15, 16, 17, 18
+5000
+109 - next*
+stmt s;
+Select s such that Next*(18, s)
+15, 16, 17, 18
+5000
+110 - next*
+stmt s;
+Select s such that Next*(s, 17)
+15, 16, 17, 18
+5000
+111 - next*
+stmt s;
+Select s such that Next*(s, 16)
+15, 16, 17, 18
+5000
+112 - next*
+stmt s;
+Select s such that Next*(s, 15)
+15, 16, 17, 18
+5000
+113 - next*
+stmt s;
+Select s such that Next*(s, 13)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+114 - next*
+stmt s;
+Select s such that Next*(s, 11)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+115 - next*
+stmt s;
+Select s such that Next*(s, 10)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+116 - next*
+stmt s;
+Select s such that Next*(s, 9)
+1, 2, 3, 4, 5, 6, 7, 8
+5000
+117 - next*
+stmt s;
+Select s such that Next*(s, 8)
+1, 2, 3, 4, 7
+5000
+118 - next*
+stmt s;
+Select s such that Next*(s, 7)
+1, 2, 3, 4
+5000
+119 - next*
+stmt s;
+Select s such that Next*(s, 6)
+1, 2, 3, 4, 5
+5000
+120 - next*
+stmt s;
+Select s such that Next*(s, 5)
+1, 2, 3, 4
+5000
+121 - next*
+stmt s;
+Select s such that Next*(s, 4)
+1, 2, 3
 5000

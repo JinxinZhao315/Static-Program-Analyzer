@@ -36,39 +36,12 @@ ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std:
     }
 }
 
-std::set<std::string> ResultTable::getResultFromPKB(PKB& pkb, string DeType) {
-    std::set<std::string> ret;
-    if (DeType == "constant") {
-        ret = pkb.getAllConstVals();
-    }
-    else if (DeType == "procedure") {
-        ret = pkb.getAllProcNames();
-    }
-    else if (DeType == "variable") {
-        ret = pkb.getAllVarNames();
-    }
-    else {
-        std::set<int> allStmtIntSet;
 
-        if (DeType == "stmt") {
-            allStmtIntSet = pkb.getAllStmtNums();
-        } else if (DeType == "assign") {
-            allStmtIntSet = pkb.getAllStmtNumsByType("=");
-        } else {
-            allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
-        }
-
-        for (int stmtNum: allStmtIntSet) {
-            ret.insert(to_string(stmtNum));
-        }
-    }
-    return ret;
-}
 
 void ResultTable::resultTableCheckAndAdd(string synName, PKB pkb, string DeType) {
     if (!isSynExist(synName)) {
 
-        std::set<string> synValuesStrSet = getResultFromPKB(pkb, DeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, DeType);
         std::vector<string> synValuesStrVector(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::vector<std::string>> tempResult = { synValuesStrVector };
         std::vector<string> synList = { synName };
@@ -138,7 +111,9 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
     }
 }
 
-
+//void ResultTable::filterTable(void (*func)(int, int)) {
+//
+//}
 
 
 
@@ -214,8 +189,11 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
     }
 }
 
-std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb) {
+std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
+        if (isEarlyExit) {
+            return std::set<std::string>();
+        }
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
         for (int i = 0; i < selectedElem.size(); i++) {
@@ -250,6 +228,9 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
     else if (selectedElem.size() == 1) {
         //not BOOLEAN or BOOLEAN is a synonym
         if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+            if (isEarlyExit) {
+                return std::set<std::string>();
+            }
             std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
@@ -265,7 +246,8 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         }
         //BOOLEAN is BOOLEAN
         else {
-            if (isTableEmpty()) {
+            //no tuple satisfy the condition, there are some synonyms, or no synonym is declared in the later clause but clause evaluate to false
+            if ((isTableEmpty() && !isSynListEmpty()) || isEarlyExit) {
                 return { "FALSE" };
             }
             else {
@@ -348,4 +330,28 @@ std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTup
 }
 
 
+void ResultTable::deleteSynonym(std::string synonym) {
+    std::vector<std::string>::iterator synNamePos = std::find(synList.begin(), synList.end(), synonym);
+    int synIndex = std::distance(synList.begin(), synNamePos);
+    if (synNamePos != synList.end()) {
+        synList.erase(synNamePos);
+        rowNum--;
+        resultTable.erase(resultTable.begin() + synIndex);
+        removeDuplicates();
+    }
+}
 
+void ResultTable::removeDuplicates() {
+    std::set<std::vector<std::string>> distinctTupleSet;
+    for (int i = 0; i < colNum; i++) {
+        distinctTupleSet.insert(getTuple(i));
+    }
+    resultTable = {};
+    for (int i = 0; i < rowNum;i++) {
+        this->resultTable.push_back({});
+    }
+    for (std::vector<std::string> distinctTuple : distinctTupleSet) {
+        insertTuple(distinctTuple);
+    }
+    colNum = distinctTupleSet.size();
+}

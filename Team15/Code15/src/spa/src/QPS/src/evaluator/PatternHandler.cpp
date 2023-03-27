@@ -85,7 +85,9 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
 
-    resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
+    //resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
+    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
+    std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 
     bool isPartialMatch;
     if (secondType == Utility::UNDERSCORED_EXPR) {
@@ -109,13 +111,13 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
             if (patternType == "assign") {
                 // Result maintains current values of patternSynon, which is a assign synon
                 // No need to call PKB since all eligible assign synon values are already in resultTable
-                patternSynonVals = resultTable.getSynValues(patternSynon);
+                patternSynonVals = currSynonValues;
             } else {
                 patternSynonVals = getStmtsFromPkb(patternType, "", GET_ALL);
             }
 
         } else {
-            std::vector<std::string> patternSynonLineNums = resultTable.getSynValues(patternSynon);
+            std::vector<std::string> patternSynonLineNums = currSynonValues;
 
             for (const string& lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
@@ -134,10 +136,12 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     } else if (firstType == Utility::SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
-        std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
+        //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, firstDeType);
+        std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+        //std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
-        ResultTable tempResultTable({patternSynon, firstArg });
+        ResultTable tempTable({patternSynon, firstArg });
 
 
         if (secondType == Utility::UNDERSCORE) {
@@ -146,7 +150,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
                     vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
                     // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
                     for (const string& numStr : lineNumVec) { // Each num is a possible value of pattern synon
-                        tempResultTable.insertTuple({numStr, currFirstVal});
+                        tempTable.insertTuple({numStr, currFirstVal});
                     }
             }
 
@@ -157,13 +161,13 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
                 set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
                 if (!matchingLines.empty()) {
                     for (const string& lineStr : matchingLines) {
-                        tempResultTable.insertTuple({lineStr, currFirstVal });
+                        tempTable.insertTuple({lineStr, currFirstVal });
                     }
                 }
             }
         }
 
-        result.setClauseResult(tempResultTable);
+        result.setClauseResult(tempTable);
 
     } else if (firstType == Utility::QUOTED_IDENT) {
 

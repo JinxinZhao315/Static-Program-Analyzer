@@ -22,7 +22,6 @@ void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
     sourceProcessor.parseProgram(filename);
     sourceProcessor.storeDataInPKB(&this->pkb);
-    // sourceProcessor.printParsedProgram();
 }
 
 // method to evaluating a query
