@@ -8,11 +8,6 @@
 #include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/SuchThatHandler.h"
 
-#include "QPS/include/evaluator/ModifiesPHandler.h"
-#include "QPS/include/evaluator/ModifiesSHandler.h"
-#include "QPS/include/evaluator/UsesSHandler.h"
-#include "QPS/include/evaluator/UsesPHandler.h"
-
 #include "Utility.h"
 #include <numeric>
 #include <string>
@@ -26,7 +21,7 @@ class PQLEvaluator {
 public:
     PQLEvaluator(PKB& pkb);
     std::set<std::string> evaluate(Query query);
-    Result getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable);
+
 private:
     PKB pkb;
     // helper function

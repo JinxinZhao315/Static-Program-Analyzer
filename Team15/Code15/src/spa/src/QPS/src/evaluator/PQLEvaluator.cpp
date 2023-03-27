@@ -48,7 +48,8 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     {
         std::string relationship = suchThatCl.getRelationShip();
 
-        Result result = getSuchThatResult(suchThatCl, relationship, resultTable, synonymTable);
+        SuchThatHandler suchThatHandler(pkb);
+        Result result = suchThatHandler.evaluate(relationship, suchThatCl, synonymTable);
 
         if (!result.isResultTrue())
         {
@@ -158,48 +159,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     return retSet;
 }
 
-Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable) {
-    Result result;
-    bool isStar;
-
-    if (relationship == "Follows" || relationship == "Follows*"
-    || relationship == "Parent" || relationship == "Parent*"
-    || relationship == "Next" || relationship == "Next*"
-    || relationship == "Calls" || relationship == "Calls*")
-    {
-        SuchThatHandler suchThatHandler = SuchThatHandler(pkb);
-        result = suchThatHandler.evaluate(relationship, suchThatCl, synonymTable);
-
-    } else if (relationship == "Modifies") {
-        std::string leftArg = suchThatCl.getLeftArg();
-        std::string leftType = Utility::getReferenceType(leftArg);
-
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure") ) {
-            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
-            result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        }
-        else {
-            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
-            result = modifiesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        }
-    } else if (relationship == "Uses") {
-        std::string leftArg = suchThatCl.getLeftArg();
-        std::string leftType = Utility::getReferenceType(leftArg);
-
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            UsesPHandler usesPHandler = UsesPHandler(pkb);
-            result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        } else {
-            UsesSHandler usesSHandler = UsesSHandler(pkb);
-            result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        }
-
-    } else {
-        throw PQLSyntaxError("PQL Syntax error: invalid relationship");
-    }
-
-    return result;
-}
 
 bool PQLEvaluator::isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos) {
     std::string argName = argList[currArgPos];

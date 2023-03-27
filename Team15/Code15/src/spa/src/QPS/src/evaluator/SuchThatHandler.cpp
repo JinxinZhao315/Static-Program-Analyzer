@@ -59,7 +59,7 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(string relationship, string type
         if (type == GET_LEADER) {
             return pkb.getPreviousStmtNums(stoi(arg)).empty();
         }
-        else { //if (type == GET_FOLLOWER)
+        else {
             return pkb.getNextStmtNums(stoi(arg)).empty();
         }
     }
@@ -67,9 +67,17 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(string relationship, string type
         if (type == GET_LEADER) {
             return pkb.getStarPreviousStmtNums(stoi(arg)).empty();
         }
-        else { //  if (type == GET_FOLLOWER)
+        else {
             return pkb.getStarNextStmtNums(stoi(arg)).empty();
         }
+    } else if (relationship == "UsesP") {
+        return  pkb.getUsesVarsFromProc(arg).empty();
+    } else if (relationship == "UsesS") {
+        return pkb.getUsesVarsFromStmt(stoi(arg)).empty();
+    } else if (relationship == "ModifiesS") {
+        return pkb.getModifiesVarsFromStmt(stoi(arg)).empty();
+    } else if (relationship == "ModifiesP") {
+        return pkb.getModifiesVarsFromProc(arg).empty();
     }
 
     else {
@@ -96,6 +104,14 @@ bool SuchThatHandler:: getIsInRelationship(string relationship, string leftArg, 
         return pkb.areInCallsStarRelationship(leftArg, rightArg);
     } else if (relationship == "Calls"){
         return pkb.areInCallsRelationship(leftArg, rightArg);
+    } else if (relationship == "UsesP") {
+        return pkb.areInUsesProcRelationship(leftArg, rightArg);
+    } else if (relationship == "UsesS") {
+        return pkb.areInUsesStmtRelationship(stoi(leftArg), rightArg);
+    } else if (relationship == "ModifiesS") {
+        return pkb.areInModifiesStmtRelationship(stoi(leftArg), rightArg);
+    } else if (relationship == "ModifiesP") {
+        return pkb.areInModifiesProcRelationship(leftArg, rightArg);
     }
 
 
@@ -135,6 +151,20 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
     std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
 
+    if (relationship == "Uses") {
+        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            relationship = "UsesP";
+        } else {
+            relationship = "UsesS";
+        }
+    } else if (relationship == "Modifies") {
+        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            relationship = "ModifiesP";
+        } else {
+            relationship = "ModifiesS";
+        }
+    }
+
     // Wildcard-Wildcard
     if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
         bool isEmpty = getIsPkbEmpty(relationship);
@@ -145,14 +175,22 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
     }
     // Wildcard - Quoted_ident
     else if (leftType == Utility::UNDERSCORE && rightType == Utility::QUOTED_IDENT) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim(rightArg, Utility::QUOTE))) {
+        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg))) {
             result.setResultTrue(false);
             return result;
         }
     }
     // Quoted_ident - Wildcard
     else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::UNDERSCORE) {
-        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim(leftArg, Utility::QUOTE))) {
+        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg))) {
+            result.setResultTrue(false);
+            return result;
+        }
+    }
+    // Quoted_ident - Quoted_ident
+    else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
+        bool isInRelationship = getIsInRelationship(relationship, Utility::trim_double_quotes(leftArg), Utility::trim_double_quotes(rightArg));
+        if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
         }
@@ -178,13 +216,21 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
             result.setResultTrue(false);
             return result;
         }
-
     }
+    // Int - Quoted_ident
+    else if (leftType == Utility::INTEGER && rightType == Utility::QUOTED_IDENT) {
+        bool isInRelationship = getIsInRelationship(relationship, leftArg, Utility::trim_double_quotes(rightArg));
+        if (!isInRelationship) {
+            result.setResultTrue(false);
+            return result;
+        }
+    }
+
     // Quoted-ident - Quoted-ident
     else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
         bool isInRelationship = getIsInRelationship(relationship,
-                                           Utility::trim(leftArg, Utility::QUOTE),
-                                           Utility::trim(rightArg, Utility::QUOTE));
+                                           Utility::trim_double_quotes(leftArg),
+                                           Utility::trim_double_quotes(rightArg));
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
@@ -207,7 +253,7 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
             for (auto currSynonVal : currSynonValues) {
                 bool isInRelationship = getIsInRelationship(relationship,
                                                             currSynonVal,
-                                                            Utility::trim(rightArg, Utility::QUOTE));
+                                                            Utility::trim_double_quotes(rightArg));
                 if (isInRelationship) {
                     resultSynonValues.push_back(currSynonVal);
                 }
@@ -237,7 +283,7 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         else if (leftType == Utility::INTEGER || leftType == Utility::QUOTED_IDENT) {
             for (auto currSynonVal : currSynonValues) {
                 bool isInRelationship = getIsInRelationship(relationship,
-                                                            Utility::trim(leftArg, Utility::QUOTE),
+                                                            Utility::trim_double_quotes(leftArg),
                                                             currSynonVal);
                 if (isInRelationship) {
                     resultSynonValues.push_back(currSynonVal);
@@ -288,8 +334,6 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
 
         result.setClauseResult(tempTable);
     }
-
-
 
 
     else {
