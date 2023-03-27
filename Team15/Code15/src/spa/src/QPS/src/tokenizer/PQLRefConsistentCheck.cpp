@@ -14,8 +14,8 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
     //race condition when multithreads?
     //std::shared_ptr<PQLRefConsistentLogic> refConsistentLogic = std::make_shared<PQLRefConsistentLogic>();
     PQLRefConsistentLogic* refConsistentLogic = new PQLRefConsistentLogic();
-    bool suchThatFlag = true;
-    bool patternFlag = true;
+    bool isSuchThatFlag = true;
+    bool isPatternFlag = true;
 
     for (SuchThatClause suchThatClause : suchThatClauseVec) {
         
@@ -24,83 +24,140 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         std::string suchThatLeftVarName = suchThatClause.getLeftArg();
         std::string suchThatRightVarName = suchThatClause.getRightArg();
         std::string suchThatLeftType = Utility::getReferenceType(suchThatClause.getLeftArg());
+        //ReferenceType suchThatLeftType = Utility::getEnumReferenceType(suchThatClause.getLeftArg());
+       /* std::string leftType;
+        std::string rightType;
+        switch (suchThatLeftType)
+        {
+        case SYNONYM: {
+            leftType = varTable.find(suchThatLeftVarName)->second;
+            break;
+        }
+            
+        default:
+            break;
+        }
+        ReferenceType suchThatRightType = Utility::getEnumReferenceType(suchThatClause.getRightArg());
+        switch (suchThatRightType)
+        {
+        case SYNONYM: {
+            rightType = varTable.find(suchThatRightVarName)->second;
+            break;
+        }
 
-        if (suchThatLeftType == Utility::SYNONYM) {
+        default:
+            break;
+        }*/
+        if (suchThatLeftType == Utility::synonym) {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
         std::string suchThatRightType = Utility::getReferenceType(suchThatClause.getRightArg());
-        if (suchThatRightType == Utility::SYNONYM) {
+        if (suchThatRightType == Utility::synonym) {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
         
-
+        //Relationship relationship = Utility::getRelationshipFromString(suchThatRefType);
+       /* switch (relationship)
+        {
+        case MODIFIES:
+            break;
+        case USES:
+            break;
+        case CALLS:
+            break;
+        case CALLSSTAR:
+            break;
+        case AFFECTS:
+            break;
+        case AFFECTSSTAR:
+            break;
+        case NEXT:
+            break;
+        case NEXTSTAR:
+            break;
+        case PARENT:
+        case PARENTSTAR:
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Parent", leftType, rightType);
+            break;
+        case FOLLOWS:
+            break;
+        case FOLLOWSSTAR:
+            break;
+        default:
+            break;
+        }*/
         if (suchThatRefType == "Parent" || suchThatRefType == "Parent*") {
-            suchThatFlag = refConsistentLogic->hasRelationRef("Parent", suchThatLeftType, suchThatRightType);
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Parent", suchThatLeftType, suchThatRightType);
         }
 
         if (suchThatRefType == "Follows" || suchThatRefType == "Follows*") {
-            suchThatFlag = refConsistentLogic->hasRelationRef("Follows", suchThatLeftType, suchThatRightType);
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Follows", suchThatLeftType, suchThatRightType);
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == Utility::QUOTED_IDENT) {
-                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
+            if (suchThatLeftType == Utility::quoted_ident) {
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::INTEGER) {
-                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
+            else if (suchThatLeftType == Utility::integer) {
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::UNDERSCORE) {
-                suchThatFlag = false;
+            else if (suchThatLeftType == Utility::underscore) {
+                isSuchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure		
-                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
             else {
-                suchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == Utility::QUOTED_IDENT) {
-                suchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
+            if (suchThatLeftType == Utility::quoted_ident) {
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::INTEGER) {
-                suchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
+            else if (suchThatLeftType == Utility::integer) {
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::UNDERSCORE) {
-                suchThatFlag = false;
+            else if (suchThatLeftType == Utility::underscore) {
+                isSuchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
                 //leftArg type is procedure
-                suchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
             }
             else {
-                suchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
+                isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
             }
         }
         if (suchThatRefType == "Calls" || suchThatRefType == "Calls*") {
-            suchThatFlag = refConsistentLogic->hasRelationRef("Calls", suchThatLeftType, suchThatRightType);
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Calls", suchThatLeftType, suchThatRightType);
         }
         if (suchThatRefType == "Next" || suchThatRefType == "Next*") {
-            suchThatFlag = refConsistentLogic->hasRelationRef("Next", suchThatLeftType, suchThatRightType);
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Next", suchThatLeftType, suchThatRightType);
         }
-        if (suchThatFlag == false) {
+
+        if (suchThatRefType == "Affects" || suchThatRefType == "Affects*") {
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Affects", suchThatLeftType, suchThatRightType);
+        }
+
+        if (!isSuchThatFlag) {
             return false;
         }
     }
     for (PatternClause patternClause : patternClauseVec) {
         std::string patternSynonymName = patternClause.getPatternSynonym();
         std::string patternRefType = varTable.find(patternSynonymName)->second;
-        patternFlag = patternRefType == "while" || patternRefType == "if" || patternRefType == "assign";
-        if (patternFlag == false) {
+        isPatternFlag = patternRefType == "while" || patternRefType == "if" || patternRefType == "assign";
+        if (!isPatternFlag) {
             return false;
         }
 
         // If firstArg is a synonym, it must be a variable synonym
         std::string firstArg = patternClause.getFirstArg();
         std::string firstArgType = Utility::getReferenceType(firstArg);
-        if (firstArgType == Utility::SYNONYM) {
+        if (firstArgType == Utility::synonym) {
             if (varTable.find(firstArg)-> second != "variable") {
                 return false;
             }
@@ -129,12 +186,12 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         else {
             bool isRightValueIdent = withClause.isSecondArgIdent();
             bool isRightValueInt = withClause.isSecondArgInteger();
-            std::string actualRightValueType = Utility::SYNONYM;
+            std::string actualRightValueType = Utility::synonym;
             if (isRightValueIdent) {
-                actualRightValueType = Utility::QUOTED_IDENT;
+                actualRightValueType = Utility::quoted_ident;
             }
             if (isRightValueInt) {
-                actualRightValueType = Utility::INTEGER;
+                actualRightValueType = Utility::integer;
             }
             // If leftSynType isn't paired with correct attribute name and corresponding value, return false.
             return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, actualRightValueType);

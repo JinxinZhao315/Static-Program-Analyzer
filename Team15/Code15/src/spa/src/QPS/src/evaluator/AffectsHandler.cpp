@@ -1,53 +1,58 @@
-#include "QPS/include/evaluator/NextHandler.h"
+#include "QPS/include/evaluator/AffectsHandler.h"
 
-NextHandler::NextHandler(PKB& pkb) : ClauseHandler(pkb) {
+AffectsHandler::AffectsHandler(PKB& pkb) : ClauseHandler(pkb) {
 }
 
 
-std::set<int> NextHandler::getNextFromPKB(bool isStar, string type, string arg) {
+std::set<int> AffectsHandler::getAffectsFromPKB(bool isStar, string type, string arg) {
     std::set<int> ret;
     if (!isStar) {
         if (type == GET_LEADER) {
-            ret = pkb.getPreviousStmtNums(stoi(arg));
+            
+            ret = pkb.getAffectsModifierStmtNums(stoi(arg));
         }
         else { //if (type == GET_FOLLOWER)
-            ret = pkb.getNextStmtNums(stoi(arg));
+            
+            ret = pkb.getAffectsUserStmtNums(stoi(arg));
+            
         }
     }
     else {
         if (type == GET_LEADER) {
-            ret = pkb.getStarPreviousStmtNums(stoi(arg));
+            ret = pkb.getAffectsStarModifierStmtNums(stoi(arg));
+           
         }
         else { //  if (type == GET_FOLLOWER)
-            ret = pkb.getStarNextStmtNums(stoi(arg));
+            
+            ret = pkb.getAffectsStarUserStmtNums(stoi(arg));
         }
     }
     return ret;
 }
 
-bool NextHandler::getIsNextFromPKB(bool isStar, string leftArg, string rightArg) {
+bool AffectsHandler::getIsAffectsFromPKB(bool isStar, string leftArg, string rightArg) {
     bool ret;
     if (isStar) {
-        ret = pkb.areInNextStarRelationship(stoi(leftArg), stoi(rightArg));
+        ret = pkb.areInAffectsStarRelationship(stoi(leftArg), stoi(rightArg));
     }
     else {
-        ret = pkb.areInNextRelationship(stoi(leftArg), stoi(rightArg));
+        ret = pkb.areInAffectsRelationship(stoi(leftArg), stoi(rightArg));
     }
     return ret;
 }
 
-bool NextHandler::isNextEmptyFromPKB(bool isStar) {
+bool AffectsHandler::isAffectsEmptyFromPKB(bool isStar) {
     bool ret;
     if (isStar) {
-        ret = pkb.isNextStarEmpty();
+        ret = pkb.isAffectsStarEmpty();
     }
     else {
-        ret = pkb.isNextEmpty();
+        ret = pkb.isAffectsEmpty();
     }
     return ret;
 }
 
-Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
     //std::string leftType = Utility::getReferenceType(leftArg);
@@ -60,7 +65,6 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     case SYNONYM:
         switch (rightType)
         {
-        // SYNONYM-SYNONYM
         case SYNONYM: {
             if (leftArg == rightArg) {
                 result.setResultTrue(false);
@@ -82,9 +86,8 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
 
             for (int i = 0; i < initTableSize; i++) {
                 std::vector<std::string> tuple = initTable.getTuple(i);
-                bool isLeftNextRight = getIsNextFromPKB(isStar, tuple[0], tuple[1]);
-                if (isLeftNextRight) {
-
+                bool isLeftAffectsRight = getIsAffectsFromPKB(isStar, tuple[0], tuple[1]);
+                if (isLeftAffectsRight) {
                     tempTable.insertTuple({ tuple[0], tuple[1] });
                 }
             }
@@ -96,15 +99,15 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
             result.setClauseResult(tempTable);
             break;
         }
-        // SYNONYM-INTEGER
+            
         case INTEGER: {
             std::string synonDeType = synonymTable.find(leftArg)->second;
             resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
             std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
-                bool isNext = getIsNextFromPKB(isStar, currSynonVal, rightArg);
-                if (isNext) {
+                bool isAffects = getIsAffectsFromPKB(isStar, currSynonVal, rightArg);
+                if (isAffects) {
                     resultSynonValues.push_back(currSynonVal);
                 }
             }
@@ -115,15 +118,15 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
             result.setClauseResult(ResultTable(resultSynonValues, leftArg));
             break;
         }
-         // SYNONYM-UNDERSCORE
+            
         case UNDERSCORE: {
             std::string synonDeType = synonymTable.find(leftArg)->second;
             resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
             std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
-                std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, currSynonVal);
-                if (!nextSet.empty()) {
+                std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_FOLLOWER, currSynonVal);
+                if (!affectsSet.empty()) {
                     resultSynonValues.push_back(currSynonVal);
                 }
             }
@@ -134,6 +137,7 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
             result.setClauseResult(ResultTable(resultSynonValues, leftArg));
             break;
         }
+           
         default:
             break;
         }
@@ -141,60 +145,14 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     case INTEGER:
         switch (rightType)
         {
-        // INTEGER-SYNONYM
         case SYNONYM: {
             std::string synonDeType = synonymTable.find(rightArg)->second;
             resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
             std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
-                bool isNext = getIsNextFromPKB(isStar, leftArg, currSynonVal);
-                if (isNext) {
-                    resultSynonValues.push_back(currSynonVal);
-                }
-            }
-            if (resultSynonValues.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
-            result.setClauseResult(ResultTable(resultSynonValues, rightArg)); 
-            break;
-        }
-            
-        // INTEGER-INTEGER
-        case INTEGER: {
-            bool isNext = getIsNextFromPKB(isStar, leftArg, rightArg);
-            if (!isNext) {
-                result.setResultTrue(false);
-                return result;
-            }
-            break;
-        }
-        // INTEGER-UNDERSCORE
-        case UNDERSCORE: {
-            std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, leftArg);
-            if (nextSet.empty()) {
-                result.setResultTrue(false);
-                return result;
-            }
-            break;
-        }
-        default:
-            break;
-        }
-        break;
-    case UNDERSCORE:
-        switch (rightType)
-        {
-        // UNDERSCORE-SYNONYM
-        case SYNONYM: {
-            std::string synonDeType = synonymTable.find(rightArg)->second;
-            resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
-            std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
-            std::vector<std::string> resultSynonValues;
-            for (const std::string& currSynonVal : currSynonValues) {
-                std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, currSynonVal);
-                if (!nextSet.empty()) {
+                bool isAffects = getIsAffectsFromPKB(isStar, leftArg, currSynonVal);
+                if (isAffects) {
                     resultSynonValues.push_back(currSynonVal);
                 }
             }
@@ -204,21 +162,64 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
             }
             result.setClauseResult(ResultTable(resultSynonValues, rightArg));
             break;
-        
         }
-        // UNDERSCORE-INTEGER
+            
         case INTEGER: {
-            std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, rightArg);
-            if (nextSet.empty()) {
+            bool isAffects = getIsAffectsFromPKB(isStar, leftArg, rightArg);
+            if (!isAffects) {
                 result.setResultTrue(false);
                 return result;
-            } 
+            }
             break;
         }
-        // UNDERSCORE-UNDERSCORE
+            
         case UNDERSCORE: {
-            bool isNextEmpty = isNextEmptyFromPKB(isStar); 
-            if (isNextEmpty) {
+            std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_FOLLOWER, leftArg);
+            if (affectsSet.empty()) {
+                result.setResultTrue(false);
+                return result;
+            }
+            break;
+        }
+           
+        default:
+            break;
+        }
+        break;
+    case UNDERSCORE:
+        switch (rightType)
+        {
+        case SYNONYM: {
+            std::string synonDeType = synonymTable.find(rightArg)->second;
+            resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+            std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+            std::vector<std::string> resultSynonValues;
+            for (const std::string& currSynonVal : currSynonValues) {
+                std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_LEADER, currSynonVal);
+                if (!affectsSet.empty()) {
+                    resultSynonValues.push_back(currSynonVal);
+                }
+            }
+            if (resultSynonValues.empty()) {
+                result.setResultTrue(false);
+                return result;
+            }
+            result.setClauseResult(ResultTable(resultSynonValues, rightArg));
+            break;
+        }
+           
+        case INTEGER: {
+            std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_LEADER, rightArg);
+            if (affectsSet.empty()) {
+                result.setResultTrue(false);
+                return result;
+            }
+            break;
+        }
+           
+        case UNDERSCORE: {
+            bool isAffectsEmpty = isAffectsEmptyFromPKB(isStar); //
+            if (isAffectsEmpty) {
                 result.setResultTrue(false);
                 return result;
             }
@@ -234,29 +235,29 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     return result;
     //// UNDERSCORE-UNDERSCORE
     //if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
-    //    bool isNextEmpty = isNextEmptyFromPKB(isStar); //
-    //    if (isNextEmpty) {
+    //    bool isAffectsEmpty = isAffectsEmptyFromPKB(isStar); //
+    //    if (isAffectsEmpty) {
     //        result.setResultTrue(false);
     //        return result;
-    //    }     
+    //    }
     //}
     //// UNDERSCORE-INTEGER
     //else if (leftType == Utility::UNDERSCORE && rightType == Utility::INTEGER) {
-    //    std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, rightArg); 
-    //    if (nextSet.empty()) {
+    //    std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_LEADER, rightArg);
+    //    if (affectsSet.empty()) {
     //        result.setResultTrue(false);
     //        return result;
-    //    }       
+    //    }
     //}
     //// UNDERSCORE-SYNONYM
     //else if (leftType == Utility::UNDERSCORE) {
     //    std::string synonDeType = synonymTable.find(rightArg)->second;
-    //    resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
+    //    resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
     //    std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
     //    std::vector<std::string> resultSynonValues;
     //    for (const std::string& currSynonVal : currSynonValues) {
-    //        std::set<int> nextSet = getNextFromPKB(isStar, GET_LEADER, currSynonVal);
-    //        if (!nextSet.empty()) {
+    //        std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_LEADER, currSynonVal);
+    //        if (!affectsSet.empty()) {
     //            resultSynonValues.push_back(currSynonVal);
     //        }
     //    }
@@ -268,16 +269,16 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     //}
     //// INTEGER-UNDERSCORE
     //else if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
-    //    std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, leftArg);
-    //    if (nextSet.empty()) {
+    //    std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_FOLLOWER, leftArg);
+    //    if (affectsSet.empty()) {
     //        result.setResultTrue(false);
     //        return result;
     //    }
     //}
     //// INTEGER-INTEGER
     //else if (leftType == Utility::INTEGER && rightType == Utility::INTEGER) {
-    //    bool isNext = getIsNextFromPKB(isStar, leftArg, rightArg);
-    //    if (!isNext) {
+    //    bool isAffects = getIsAffectsFromPKB(isStar, leftArg, rightArg);
+    //    if (!isAffects) {
     //        result.setResultTrue(false);
     //        return result;
     //    }
@@ -285,12 +286,12 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     //// INTEGER-SYNONYM
     //else if (leftType == Utility::INTEGER) {
     //    std::string synonDeType = synonymTable.find(rightArg)->second;
-    //    resultTable.resultTableCheckAndAdd(rightArg, pkb,  synonDeType);
+    //    resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
     //    std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
     //    std::vector<std::string> resultSynonValues;
     //    for (const std::string& currSynonVal : currSynonValues) {
-    //        bool isNext = getIsNextFromPKB(isStar, leftArg, currSynonVal);
-    //        if (isNext) {
+    //        bool isAffects = getIsAffectsFromPKB(isStar, leftArg, currSynonVal);
+    //        if (isAffects) {
     //            resultSynonValues.push_back(currSynonVal);
     //        }
     //    }
@@ -303,12 +304,12 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     //// SYNONYM-UNDERSCORE
     //else if (rightType == Utility::UNDERSCORE) {
     //    std::string synonDeType = synonymTable.find(leftArg)->second;
-    //    resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
+    //    resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
     //    std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
     //    std::vector<std::string> resultSynonValues;
     //    for (const std::string& currSynonVal : currSynonValues) {
-    //        std::set<int> nextSet = getNextFromPKB(isStar, GET_FOLLOWER, currSynonVal);
-    //        if (!nextSet.empty()) {
+    //        std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_FOLLOWER, currSynonVal);
+    //        if (!affectsSet.empty()) {
     //            resultSynonValues.push_back(currSynonVal);
     //        }
     //    }
@@ -321,12 +322,12 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     //// SYNONYM-INTEGER
     //else if (rightType == Utility::INTEGER) {
     //    std::string synonDeType = synonymTable.find(leftArg)->second;
-    //    resultTable.resultTableCheckAndAdd(leftArg, pkb,  synonDeType);
+    //    resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
     //    std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
     //    std::vector<std::string> resultSynonValues;
     //    for (const std::string& currSynonVal : currSynonValues) {
-    //        bool isNext = getIsNextFromPKB(isStar, currSynonVal, rightArg);
-    //        if (isNext) {
+    //        bool isAffects = getIsAffectsFromPKB(isStar, currSynonVal, rightArg);
+    //        if (isAffects) {
     //            resultSynonValues.push_back(currSynonVal);
     //        }
     //    }
@@ -344,17 +345,11 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     //    }
     //    std::string leftDeType = synonymTable.find(leftArg)->second;
     //    std::string rightDeType = synonymTable.find(rightArg)->second;
-    //    /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
-    //    resultTable.resultTableCheckAndAdd(rightArg, pkb,  rightDeType);*/
     //    std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
     //    std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
     //    //convert the set to vector
     //    std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
     //    std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
-
-
-    //    //std::vector<std::string> currLeftValues = resultTable.getSynValues(leftArg);
-    //    //std::vector<std::string> currRightValues = resultTable.getSynValues(rightArg);
 
     //    ResultTable initTable(currLeftValues, leftArg);
     //    initTable.combineTable(ResultTable(currRightValues, rightArg));
@@ -364,9 +359,8 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
 
     //    for (int i = 0; i < initTableSize; i++) {
     //        std::vector<std::string> tuple = initTable.getTuple(i);
-    //        bool isLeftNextRight = getIsNextFromPKB(isStar, tuple[0], tuple[1]);
-    //        if (isLeftNextRight) {
-
+    //        bool isLeftAffectsRight = getIsAffectsFromPKB(isStar, tuple[0], tuple[1]);
+    //        if (isLeftAffectsRight) {
     //            tempTable.insertTuple({ tuple[0], tuple[1] });
     //        }
     //    }

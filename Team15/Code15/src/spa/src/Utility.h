@@ -8,6 +8,43 @@
 #include "pkb/include/PKB.h"
 
 #pragma once
+enum Relationship {
+    MODIFIES,
+    USES,
+    CALLS,
+    CALLSSTAR,
+    AFFECTS,
+    AFFECTSSTAR,
+    NEXT,
+    NEXTSTAR,
+    PARENT,
+    PARENTSTAR,
+    FOLLOWS,
+    FOLLOWSSTAR
+};
+
+enum ReferenceType {
+    SYNONYM,
+    INTEGER,
+    UNDERSCORE,
+    EXPR,
+    QUOTED_IDENT,
+    INVALID,
+    UNDERSCORED_EXPR,
+};
+
+enum DesignEntity {
+    PROCEDURE,
+    STMT,
+    READ,
+    PRINT,
+    ASSIGN,
+    CALL,
+    WHILE,
+    IF,
+    VARIABLE,
+    CONSTANT
+};
 
 class Utility {
 public:
@@ -20,18 +57,18 @@ public:
 	inline static const std::string underscoredExpr = "_\"[\\s\\S]*\"_";
 	inline static const std::string expr = "\"[\\s\\S]*\"";
 
-    inline static const std::string WHITESPACES = " \t\n";
-    inline static const std::string QUOTE = "\"";
-	inline static const std::string UNDERSCORE = "_";
-    inline static const std::string EXPR = "expr";
-    inline static const std::string UNDERSCORED_EXPR = "underscoredExpr";
-    inline static const std::string QUOTED_IDENT = "quotedIdent";
-    inline static const std::string INTEGER = "integer";
-    inline static const std::string SYNONYM = "synonym";
-    inline static const std::string INVALID = "Invalid";
+    inline static const std::string whiteSpaces = " \t\n";
+    inline static const std::string quote = "\"";
+	inline static const std::string underscore = "_";
+    inline static const std::string exprType = "expr";
+    inline static const std::string underscored_expr = "underscoredExpr";
+    inline static const std::string quoted_ident = "quotedIdent";
+    inline static const std::string integer = "integer";
+    inline static const std::string synonym = "synonym";
+    inline static const std::string invalid = "Invalid";
 
 
-	inline static const std::string getReferenceType(std::string input) {
+	inline static const ReferenceType getEnumReferenceType(std::string input) {
 		if (std::regex_match(input, std::regex(synonymFormat))) {
 			return SYNONYM;
 		}
@@ -47,13 +84,37 @@ public:
 		else if (std::regex_match(input, std::regex(expr))) {
 			return EXPR;
 		}
-		else if (std::regex_match(input, std::regex(UNDERSCORE))) {
+		else if (std::regex_match(input, std::regex(underscore))) {
 			return UNDERSCORE;
 		}
 		else {
 			return INVALID;
 		}
 	};
+
+    inline static const std::string getReferenceType(std::string input) {
+        if (std::regex_match(input, std::regex(synonymFormat))) {
+            return synonym;
+        }
+        else if (std::regex_match(input, std::regex(integerFormat))) {
+            return integer;
+        }
+        else if (std::regex_match(input, std::regex(quotedIdentFormat))) {
+            return quoted_ident;
+        }
+        else if (std::regex_match(input, std::regex(underscoredExpr))) {
+            return underscoredExpr;
+        }
+        else if (std::regex_match(input, std::regex(expr))) {
+            return expr;
+        }
+        else if (std::regex_match(input, std::regex(underscore))) {
+            return underscore;
+        }
+        else {
+            return invalid;
+        }
+    };
 
 	//remove exprToTrim in the front and end
     inline static const std::string trim(std::string input, std::string exprToTrim) {
@@ -71,20 +132,16 @@ public:
         return trimmed;
     };
 
-//	inline static const std::set<std::string> getSetIntersection(std::set<std::string> firstSet, std::set<std::string> secondSet) {
-//		std::set<std::string> resultSet;
-//		std::set_intersection(firstSet.begin(), firstSet.end(),
-//			secondSet.begin(), secondSet.end(),
-//			std::inserter(resultSet, resultSet.begin()));
-//		return resultSet;
-//	}
-
 	inline static const std::string trim_double_quotes(std::string s) {
 		if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"') {
 			return s.substr(1, s.length() - 2);
 		}
 		return s;
 	}
+
+    inline static const bool isStarRelationship(std::string relationship) {
+        return relationship.find('*') != std::string::npos;
+    }
 
     inline static const std::set<std::string> getResultFromPKB(PKB& pkb, std::string DeType) {
         std::set<std::string> ret;
@@ -116,6 +173,84 @@ public:
         }
         return ret;
     }
+    inline static const DesignEntity getDesignEntityFromString(std::string designEntity) {
+        if (designEntity == "procedure") {
+            return PROCEDURE;
+        }
+        else if (designEntity == "stmt") {
+            return STMT;
+        }
+        else if (designEntity == "constant") {
+            return CONSTANT;
+        }
+        else if (designEntity == "variable") {
+            return VARIABLE;
+        }
+        else if (designEntity == "read") {
+            return READ;
+        }
+        else if (designEntity == "print") {
+            return PRINT;
+        }
+        else if (designEntity == "if") {
+            return IF;
+        }
+        else if (designEntity == "while") {
+            return WHILE;
+        }
+        else if (designEntity == "call") {
+            return CALL;
+        }
+        else if (designEntity == "assign") {
+            return ASSIGN;
+        }
+        else {
+            throw std::runtime_error("Unsupport designEntity string");
+        }
+    }
+
+    inline static const Relationship getRelationshipFromString(std::string relationship) {
+        if (relationship == "Modifies") {
+            return MODIFIES;
+        }
+        else if (relationship == "Uses") {
+            return USES;
+        }
+        else if (relationship == "Calls") {
+            return CALLS;
+        }
+        else if (relationship == "Calls*") {
+            return CALLSSTAR;
+        }
+        else if (relationship == "Follows") {
+            return FOLLOWS;
+        }
+        else if (relationship == "Follows*") {
+            return FOLLOWSSTAR;
+        }
+        else if (relationship == "Parent") {
+            return PARENT;
+        }
+        else if (relationship == "Parent*") {
+            return PARENTSTAR;
+        }
+        else if (relationship == "Affects") {
+            return AFFECTS;
+        }
+        else if (relationship == "Affects*") {
+            return AFFECTSSTAR;
+        }
+        else if (relationship == "Next*") {
+            return NEXTSTAR;
+        }
+        else if (relationship == "Next") {
+            return NEXT;
+        }
+        else {
+            throw std::runtime_error("Unsupport relationship string");
+        }
+    }
+
 };
 
 
