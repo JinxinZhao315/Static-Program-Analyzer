@@ -118,3 +118,23 @@ stmt s;
 Select BOOLEAN such that Next*(6, 7)
 FALSE
 5000
+25 - boolean true true
+stmt s;
+Select BOOLEAN such that Next(10, 14) and Next*(12, 11)
+TRUE
+5000
+26 - boolean true false
+stmt s;
+Select BOOLEAN such that Next(10, 14) and Next*(6, 7)
+FALSE
+5000
+27 - boolean false true
+stmt s;
+Select BOOLEAN such that Next(13, 14) and Next*(12, 11)
+FALSE
+5000
+28 - boolean false false
+stmt s;
+Select BOOLEAN such that Next(13, 14) and Next*(6, 7)
+FALSE
+5000
