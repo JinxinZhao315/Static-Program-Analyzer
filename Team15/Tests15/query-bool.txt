@@ -1,0 +1,120 @@
+1 - boolean follows true
+stmt s;
+Select BOOLEAN such that Follows(7, 8)
+TRUE
+5000
+2 - boolean follows false
+stmt s;
+Select BOOLEAN such that Follows(6, 7)
+FALSE
+5000
+3 - boolean follows* true
+stmt s;
+Select BOOLEAN such that Follows*(1, 14)
+TRUE
+5000
+4 - boolean follows* false
+stmt s;
+Select BOOLEAN such that Follows*(11, 15)
+FALSE
+5000
+5 - boolean parent true
+stmt s;
+Select BOOLEAN such that Parent(15, 16)
+TRUE
+5000
+6 - boolean parent false
+stmt s;
+Select BOOLEAN such that Parent(15, 17)
+FALSE
+5000
+7 - boolean parent* true
+stmt s;
+Select BOOLEAN such that Parent*(15, 18)
+TRUE
+5000
+8 - boolean parent* false
+stmt s;
+Select BOOLEAN such that Parent*(10, 15)
+FALSE
+5000
+9 - boolean uses statement true
+stmt s;
+Select BOOLEAN such that Uses(10, "c")
+TRUE
+5000
+10 - boolean uses statement false
+stmt s;
+Select BOOLEAN such that Uses(4, "c")
+FALSE
+5000
+11 - boolean uses procedure true
+stmt s;
+Select BOOLEAN such that Uses("proc1", "d")
+TRUE
+5000
+12 - boolean uses procedure false
+stmt s;
+Select BOOLEAN such that Uses("proc2", "d")
+FALSE
+5000
+13 - boolean modifies statement true
+stmt s;
+Select BOOLEAN such that Modifies(4, "c")
+TRUE
+5000
+14 - boolean modifies statement false
+stmt s;
+Select BOOLEAN such that Modifies(14, "d")
+FALSE
+5000
+15 - boolean modifies procedure true
+stmt s;
+Select BOOLEAN such that Modifies("proc1", "b")
+TRUE
+5000
+16 - boolean modifies procedure false
+stmt s;
+Select BOOLEAN such that Modifies("proc2", "b")
+FALSE
+5000
+17 - boolean calls true
+stmt s;
+Select BOOLEAN such that Calls("proc1", "proc2")
+TRUE
+5000
+18 - boolean calls false
+stmt s;
+Select BOOLEAN such that Calls("proc2", "proc1")
+FALSE
+5000
+19 - boolean calls* true
+stmt s;
+Select BOOLEAN such that Calls*("proc1", "proc2")
+TRUE
+5000
+20 - boolean calls* false
+stmt s;
+Select BOOLEAN such that Calls*("proc2", "proc1")
+FALSE
+5000
+21 - boolean next true
+stmt s;
+Select BOOLEAN such that Next(10, 14)
+TRUE
+5000
+22 - boolean next false
+stmt s;
+Select BOOLEAN such that Next(13, 14)
+FALSE
+5000
+23 - boolean next* true
+stmt s;
+Select BOOLEAN such that Next*(12, 11)
+TRUE
+5000
+24 - boolean next* false
+stmt s;
+Select BOOLEAN such that Next*(6, 7)
+FALSE
+5000
