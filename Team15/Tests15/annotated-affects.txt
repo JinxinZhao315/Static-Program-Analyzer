@@ -1,0 +1,91 @@
+procedure proc1 {
+//1  read a;
+//2  read b;
+//3  call proc2; }
+
+procedure proc2 {
+//4  a = 0;
+//5  c = 5;
+//6  read d;
+//7  while (c != 0) {
+//8    a = a + 2 * d;
+//9    call proc3;
+//10   c = c - 1; }
+//11 if (a == 1) then {
+//12   a = a + 1; }
+     else {
+//13   b = 1; }
+//14 b = b + a + c;
+//15 d = b + 2;
+//16 a = a * d + b; }
+
+procedure proc3 {
+//17  b = 5;
+//18  e = b;
+//19  print e; }
+
+procedure proc4 {
+//20  read f;
+//21  g = 0;
+//22  h = 0;
+//23  if (f > 0) then {
+//24    f = f - 1; }
+      else {
+//25    g = g + 1; }
+//26  h = f; }
+
+procedure proc5 {
+//27  i = 0;
+//28  call proc6;
+//29  j = i; }
+
+procedure proc6 {
+//30  i = i + 1; }
+
+procedure proc7 {
+//31  k = 0;
+//32  call proc8;
+//33  l = k; }
+
+procedure proc8 {
+//34  read m; }
+
+procedure proc9 {
+//35  n = 1;
+//36  o = 2;
+//37  p = o;
+//38  call proc10;
+//39  p = n + o + p; }
+
+procedure proc10 {
+//40  n = 2;
+//41  q = 3;
+//42  if (p > 0) then {
+//43    q = n + 1; }
+      else {
+//44    o = p + n; }
+//45  n = q + 1; }
+
+procedure proc11 {
+//46  r = 0;
+//47  call proc12;
+//48  s = r; }
+
+procedure proc12 {
+//49  t = 0;
+//50  u = 1;
+//51  v = 2;
+//52  if (t != 2) then {
+//53    r = u + 1; }
+      else {
+//54    u = v; } }
+
+procedure proc13 {
+//55  w = 0;
+//56  read w;
+//57  x = w; }
+
+procedure proc14 {
+//58  y = 0;
+//59  z = y;
+//60  aa = z; }

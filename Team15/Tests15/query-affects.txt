@@ -1,0 +1,145 @@
+1 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(5, 10)
+TRUE
+5000
+2 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(8, 12)
+TRUE
+5000
+3 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(8, 14)
+TRUE
+5000
+4 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(10, 10)
+TRUE
+5000
+5 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(4, 8)
+TRUE
+5000
+6 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(4, 12)
+TRUE
+5000
+7 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(4, 14)
+TRUE
+5000
+8 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(4, 16)
+TRUE
+5000
+9 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(5, 14)
+TRUE
+5000
+10 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(13, 14)
+TRUE
+5000
+11 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(13, 15)
+FALSE
+5000
+12 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(13, 16)
+FALSE
+5000
+13 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(6, 7)
+FALSE
+5000
+14 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(13, 10)
+FALSE
+5000
+15 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(20, 26)
+TRUE
+5000
+16 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(27, 29)
+FALSE
+5000
+17 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(31, 33)
+TRUE
+5000
+18 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(35, 39)
+FALSE
+5000
+19 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(36, 39)
+FALSE
+5000
+20 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(37, 44)
+FALSE
+5000
+21 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(46, 48)
+FALSE
+5000
+22 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(55, 57)
+FALSE
+5000
+23 - boolean affects*
+stmt s;
+Select BOOLEAN such that Affects*(4, 8)
+TRUE
+5000
+24 - boolean affects*
+stmt s;
+Select BOOLEAN such that Affects*(4, 14)
+TRUE
+5000
+25 - boolean affects*
+stmt s;
+Select BOOLEAN such that Affects*(4, 15)
+TRUE
+5000
+26 - boolean affects*
+stmt s;
+Select BOOLEAN such that Affects*(4, 16)
+TRUE
+5000
+27 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(58, 59)
+TRUE
+5000
+28 - boolean affects
+stmt s;
+Select BOOLEAN such that Affects(59, 60)
+TRUE
+5000
+29 - boolean affects*
+stmt s;
+Select BOOLEAN such that Affects*(58, 60)
+TRUE
+5000
