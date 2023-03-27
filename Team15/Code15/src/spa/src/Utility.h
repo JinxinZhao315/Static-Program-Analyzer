@@ -23,9 +23,14 @@ enum Relationship {
     FOLLOWSSTAR
 };
 
-enum Synonym {
-    CONSTANT
-
+enum ReferenceType {
+    SYNONYM,
+    INTEGER,
+    UNDERSCORE,
+    EXPR,
+    QUOTED_IDENT,
+    INVALID,
+    UNDERSCORED_EXPR,
 };
 
 class Utility {
@@ -39,18 +44,18 @@ public:
 	inline static const std::string underscoredExpr = "_\"[\\s\\S]*\"_";
 	inline static const std::string expr = "\"[\\s\\S]*\"";
 
-    inline static const std::string WHITESPACES = " \t\n";
-    inline static const std::string QUOTE = "\"";
-	inline static const std::string UNDERSCORE = "_";
-    inline static const std::string EXPR = "expr";
-    inline static const std::string UNDERSCORED_EXPR = "underscoredExpr";
-    inline static const std::string QUOTED_IDENT = "quotedIdent";
-    inline static const std::string INTEGER = "integer";
-    inline static const std::string SYNONYM = "synonym";
-    inline static const std::string INVALID = "Invalid";
+    inline static const std::string whiteSpaces = " \t\n";
+    inline static const std::string quote = "\"";
+	inline static const std::string underscore = "_";
+    inline static const std::string exprType = "expr";
+    inline static const std::string underscored_expr = "underscoredExpr";
+    inline static const std::string quoted_ident = "quotedIdent";
+    inline static const std::string integer = "integer";
+    inline static const std::string synonym = "synonym";
+    inline static const std::string invalid = "Invalid";
 
 
-	inline static const std::string getReferenceType(std::string input) {
+	inline static const ReferenceType getEnumReferenceType(std::string input) {
 		if (std::regex_match(input, std::regex(synonymFormat))) {
 			return SYNONYM;
 		}
@@ -66,7 +71,7 @@ public:
 		else if (std::regex_match(input, std::regex(expr))) {
 			return EXPR;
 		}
-		else if (std::regex_match(input, std::regex(UNDERSCORE))) {
+		else if (std::regex_match(input, std::regex(underscore))) {
 			return UNDERSCORE;
 		}
 		else {

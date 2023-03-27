@@ -166,33 +166,63 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
     {
     case MODIFIES: {
         std::string leftArg = suchThatCl.getLeftArg();
-        std::string leftType = Utility::getReferenceType(leftArg);
+        //std::string leftType = Utility::getReferenceType(leftArg);
+        if ((synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
+        switch (leftType) {
+        case QUOTED_IDENT: {
+            ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
+            result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
+        }
+        default:
+            ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
+            result = modifiesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
+        }
 
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        /*if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
             ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
             result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
         }
         else {
             ModifiesSHandler modifiesSHandler = ModifiesSHandler(pkb);
             result = modifiesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        }
+        }*/
         break;
     }
     case USES: {
         std::string leftArg = suchThatCl.getLeftArg();
-        std::string leftType = Utility::getReferenceType(leftArg);
-
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        if ((synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            UsesPHandler usesPHandler = UsesPHandler(pkb);
+            result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+        }
+        //std::string leftType = Utility::getReferenceType(leftArg);
+        ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
+        switch (leftType) {
+        case QUOTED_IDENT: {
+            UsesPHandler usesPHandler = UsesPHandler(pkb);
+            result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
+        }
+        default:
+            UsesSHandler usesSHandler = UsesSHandler(pkb);
+            result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
+        }
+   /*     if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
             UsesPHandler usesPHandler = UsesPHandler(pkb);
             result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
         }
         else {
             UsesSHandler usesSHandler = UsesSHandler(pkb);
             result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);
-        }
+        }*/
         break;
-    }
-       
+    }     
     case CALLS:
     case CALLSSTAR: {
         CallsHandler callsHandler = CallsHandler(pkb);

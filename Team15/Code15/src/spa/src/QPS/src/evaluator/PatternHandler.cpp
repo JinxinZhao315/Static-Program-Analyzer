@@ -276,9 +276,9 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
 
 std::string PatternHandler::trimExpr(string input) {
     std::string trimmed = input;
-    trimmed = Utility::trim(trimmed, Utility::UNDERSCORE);
-    trimmed = Utility::trim(trimmed, Utility::QUOTE);
-    trimmed = Utility::trim(trimmed, Utility::WHITESPACES);
+    trimmed = Utility::trim(trimmed, Utility::underscore);
+    trimmed = Utility::trim(trimmed, Utility::quote);
+    trimmed = Utility::trim(trimmed, Utility::whiteSpaces);
     return trimmed;
 }
 
