@@ -152,5 +152,5 @@ void Extractor::extract(const vector<Line> &program) {
     this->callsRS = calls;
     this->callsStarRS = callsStar;
 
-    this->nextRS = extractNextRS(program, follows);
+    this->nextRS = extractNextRS(program, follows, this->callLineNumToProcName);
 }

@@ -1,7 +1,8 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/NextRelationshipExtractor.h"
-#include "source_processor/include/extractor/FollowsRelationshipExtractor.h"
+#include "source_processor/include/extractor/Extractor.h"
+
+ProcedureExtractor procedureExtractor;
 
 void printNodes(const unordered_map<int, set<int>>& myMap) {
     for (const auto& [key, value] : myMap) {
@@ -26,8 +27,10 @@ void compareCFG(const unordered_map<int, set<int>>& result, const unordered_map<
 TEST_CASE("Empty Program") {
     const vector<Line>& lines = {};
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
     unordered_map<int, set<int>> expected = {};
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -42,12 +45,14 @@ TEST_CASE("IfElseNoLinesBeforeAndAfter") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 3}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -64,6 +69,8 @@ TEST_CASE("IfElseWithLinesBeforeAndAfter") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -72,7 +79,7 @@ TEST_CASE("IfElseWithLinesBeforeAndAfter") {
             {4, {5}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -85,13 +92,15 @@ TEST_CASE("extractNextRelationship_whileNoLinesBeforeAndAfter") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
             {2, {1}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -106,6 +115,8 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -113,7 +124,7 @@ TEST_CASE("extractNextRelationship_whileWithLinesBeforeAndAfter") {
             {3, {2}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -131,6 +142,8 @@ TEST_CASE("extractNextRelationship_whileNestedInWhile") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -140,7 +153,7 @@ TEST_CASE("extractNextRelationship_whileNestedInWhile") {
             {5, {2}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -160,6 +173,8 @@ TEST_CASE("extractNextRelationship_ifElseNestedInWhile") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -170,7 +185,7 @@ TEST_CASE("extractNextRelationship_ifElseNestedInWhile") {
             {6, {2}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -190,6 +205,8 @@ TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 4}},
@@ -199,7 +216,7 @@ TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch") {
             {5, {4}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -221,6 +238,8 @@ TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch2") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 5}},
@@ -232,7 +251,7 @@ TEST_CASE("extractNextRelationship_ifElseWhileNestedInEachBranch2") {
             {7, {6}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -252,6 +271,8 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfElse") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 7}},
@@ -262,7 +283,7 @@ TEST_CASE("extractNextRelationship_whileWithNestedIfElse") {
             {6, {1}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -289,6 +310,8 @@ TEST_CASE("extractNextRelationship_ifElseEachBranchHasNestedWhileWithNestedIfEls
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 6}},
@@ -302,7 +325,7 @@ TEST_CASE("extractNextRelationship_ifElseEachBranchHasNestedWhileWithNestedIfEls
             {9, {6}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -323,6 +346,8 @@ TEST_CASE("ifWithNestedIfElseInThenAndNestedWhileInElse") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2, 5}},
@@ -331,7 +356,7 @@ TEST_CASE("ifWithNestedIfElseInThenAndNestedWhileInElse") {
             {6, {5}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -354,6 +379,8 @@ TEST_CASE("multiProcedureSimple") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -364,7 +391,7 @@ TEST_CASE("multiProcedureSimple") {
             {8, {9}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -393,6 +420,8 @@ TEST_CASE("multiProcedureIfElseInEachProc") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2,3}},
@@ -400,7 +429,7 @@ TEST_CASE("multiProcedureIfElseInEachProc") {
             {7, {8,9}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -435,6 +464,8 @@ TEST_CASE("multiProcedureIfElseInEachProcLineBeforeAndAfterIf") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -451,7 +482,7 @@ TEST_CASE("multiProcedureIfElseInEachProcLineBeforeAndAfterIf") {
             {14, {15}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -493,6 +524,8 @@ TEST_CASE("multiProcedureIfElseInEachProcMultipleLinesBeforeAfterAndInIf") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -521,7 +554,7 @@ TEST_CASE("multiProcedureIfElseInEachProcMultipleLinesBeforeAfterAndInIf") {
             {25, {26}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -544,6 +577,8 @@ TEST_CASE("multiProcedureWithWhileInEachProc") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -554,7 +589,7 @@ TEST_CASE("multiProcedureWithWhileInEachProc") {
             {6, {5}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -583,6 +618,8 @@ TEST_CASE("multiProcedureWithWhileInEachProcLinesBeforeAndAfterWhile") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -596,7 +633,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcLinesBeforeAndAfterWhile") {
             {11, {10}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -630,6 +667,8 @@ TEST_CASE("multiProcedureWithWhileInEachProcMultipleLinesBeforeAfterAndInWhile")
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -652,7 +691,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcMultipleLinesBeforeAfterAndInWhile")
             {19, {20}},
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -678,6 +717,8 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhile") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -690,7 +731,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhile") {
             {8, {5}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -724,6 +765,8 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileLineBeforeAft
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -742,7 +785,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileLineBeforeAft
             {15, {10}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -788,6 +831,8 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileMultipleLines
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -818,7 +863,7 @@ TEST_CASE("multiProcedureWithWhileInEachProcIfElseNestedInEachWhileMultipleLines
             {27, {28}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -848,6 +893,8 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIf") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2,4}},
@@ -862,7 +909,7 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIf") {
             {10, {9}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -904,6 +951,8 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfLineBeforeAndAfter") {
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -928,7 +977,7 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfLineBeforeAndAfter") {
             {21, {22}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
 
@@ -986,6 +1035,8 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfMultipleLinesBeforeAndAfte
             Line({"}"}, "}"),
     };
     auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
 
     unordered_map<int, set<int>> expected = {
             {1, {2}},
@@ -1026,6 +1077,6 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfMultipleLinesBeforeAndAfte
             {37, {38}}
     };
 
-    unordered_map<int, set<int>> result = extractNextRS(lines, follows);
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
