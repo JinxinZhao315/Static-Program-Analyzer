@@ -160,10 +160,10 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
     }
     // SYNONYM-SYNONYM
     else {
-        if (leftArg == rightArg) {
-            result.setResultTrue(false);
-            return result;
-        }
+        //if (leftArg == rightArg) {
+        //    result.setResultTrue(false);
+        //    return result;
+        //}
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
         /*resultTable.resultTableCheckAndAdd(leftArg, pkb,  leftDeType);
@@ -181,14 +181,25 @@ Result NextHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultT
         ResultTable initTable(currLeftValues, leftArg);
         initTable.combineTable(ResultTable(currRightValues, rightArg));
         int initTableSize = initTable.getColNum();
+        //in case leftArg == rightArg
+        vector<std::string> argVec;
+        if (leftArg == rightArg) {
+            argVec = std::vector<std::string>({ leftArg });
+        }
+        else {
+            argVec = std::vector<std::string>({ leftArg, rightArg });
+        }
 
-        ResultTable tempTable({ leftArg, rightArg });
+        ResultTable tempTable(argVec);
 
         for (int i = 0; i < initTableSize; i++) {
             std::vector<std::string> tuple = initTable.getTuple(i);
-            bool isLeftNextRight = getIsNextFromPKB(isStar, tuple[0], tuple[1]);
+            std::string leftArgVal = tuple[0];
+            std::string rightArgVal = leftArg == rightArg ? tuple[0] : tuple[1];
+
+            bool isLeftNextRight = getIsNextFromPKB(isStar, leftArgVal, rightArgVal);
             if (isLeftNextRight) {
-                tempTable.insertTuple({ tuple[0], tuple[1] });
+                tempTable.insertTuple(tuple);
             }
         }
         if (tempTable.isTableEmpty()) {
