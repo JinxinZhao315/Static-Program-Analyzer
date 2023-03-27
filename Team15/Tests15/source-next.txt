@@ -17,7 +17,7 @@ procedure proc1 {
 
 procedure proc2 {
   while (c >= 1) {
-    if (C == 1) then {
+    if (c == 1) then {
       c = c - 1; }
     else {
       d = c; } } }
