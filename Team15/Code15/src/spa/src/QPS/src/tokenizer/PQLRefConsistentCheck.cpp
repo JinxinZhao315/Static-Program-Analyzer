@@ -24,17 +24,69 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         std::string suchThatLeftVarName = suchThatClause.getLeftArg();
         std::string suchThatRightVarName = suchThatClause.getRightArg();
         std::string suchThatLeftType = Utility::getReferenceType(suchThatClause.getLeftArg());
+        //ReferenceType suchThatLeftType = Utility::getEnumReferenceType(suchThatClause.getLeftArg());
+       /* std::string leftType;
+        std::string rightType;
+        switch (suchThatLeftType)
+        {
+        case SYNONYM: {
+            leftType = varTable.find(suchThatLeftVarName)->second;
+            break;
+        }
+            
+        default:
+            break;
+        }
+        ReferenceType suchThatRightType = Utility::getEnumReferenceType(suchThatClause.getRightArg());
+        switch (suchThatRightType)
+        {
+        case SYNONYM: {
+            rightType = varTable.find(suchThatRightVarName)->second;
+            break;
+        }
 
-        if (suchThatLeftType == Utility::SYNONYM) {
+        default:
+            break;
+        }*/
+        if (suchThatLeftType == Utility::synonym) {
             suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
         }
 
         std::string suchThatRightType = Utility::getReferenceType(suchThatClause.getRightArg());
-        if (suchThatRightType == Utility::SYNONYM) {
+        if (suchThatRightType == Utility::synonym) {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
         
-
+        //Relationship relationship = Utility::getRelationshipFromString(suchThatRefType);
+       /* switch (relationship)
+        {
+        case MODIFIES:
+            break;
+        case USES:
+            break;
+        case CALLS:
+            break;
+        case CALLSSTAR:
+            break;
+        case AFFECTS:
+            break;
+        case AFFECTSSTAR:
+            break;
+        case NEXT:
+            break;
+        case NEXTSTAR:
+            break;
+        case PARENT:
+        case PARENTSTAR:
+            isSuchThatFlag = refConsistentLogic->hasRelationRef("Parent", leftType, rightType);
+            break;
+        case FOLLOWS:
+            break;
+        case FOLLOWSSTAR:
+            break;
+        default:
+            break;
+        }*/
         if (suchThatRefType == "Parent" || suchThatRefType == "Parent*") {
             isSuchThatFlag = refConsistentLogic->hasRelationRef("Parent", suchThatLeftType, suchThatRightType);
         }
@@ -44,13 +96,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         }
 
         if (suchThatRefType == "Modifies") {
-            if (suchThatLeftType == Utility::QUOTED_IDENT) {
+            if (suchThatLeftType == Utility::quoted_ident) {
                 isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesP", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::INTEGER) {
+            else if (suchThatLeftType == Utility::integer) {
                 isSuchThatFlag = refConsistentLogic->hasRelationRef("ModifiesS", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::UNDERSCORE) {
+            else if (suchThatLeftType == Utility::underscore) {
                 isSuchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
@@ -62,13 +114,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             }
         }
         if (suchThatRefType == "Uses") {
-            if (suchThatLeftType == Utility::QUOTED_IDENT) {
+            if (suchThatLeftType == Utility::quoted_ident) {
                 isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesP", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::INTEGER) {
+            else if (suchThatLeftType == Utility::integer) {
                 isSuchThatFlag = refConsistentLogic->hasRelationRef("UsesS", suchThatLeftType, suchThatRightType);
             }
-            else if (suchThatLeftType == Utility::UNDERSCORE) {
+            else if (suchThatLeftType == Utility::underscore) {
                 isSuchThatFlag = false;
             }
             else if (suchThatLeftType == "procedure") {
@@ -105,7 +157,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         // If firstArg is a synonym, it must be a variable synonym
         std::string firstArg = patternClause.getFirstArg();
         std::string firstArgType = Utility::getReferenceType(firstArg);
-        if (firstArgType == Utility::SYNONYM) {
+        if (firstArgType == Utility::synonym) {
             if (varTable.find(firstArg)-> second != "variable") {
                 return false;
             }
@@ -134,12 +186,12 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         else {
             bool isRightValueIdent = withClause.isSecondArgIdent();
             bool isRightValueInt = withClause.isSecondArgInteger();
-            std::string actualRightValueType = Utility::SYNONYM;
+            std::string actualRightValueType = Utility::synonym;
             if (isRightValueIdent) {
-                actualRightValueType = Utility::QUOTED_IDENT;
+                actualRightValueType = Utility::quoted_ident;
             }
             if (isRightValueInt) {
-                actualRightValueType = Utility::INTEGER;
+                actualRightValueType = Utility::integer;
             }
             // If leftSynType isn't paired with correct attribute name and corresponding value, return false.
             return refConsistentLogic->isWithRefCompatible(leftSynType, leftAttrName, actualRightValueType);

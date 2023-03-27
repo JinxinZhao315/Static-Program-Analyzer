@@ -33,6 +33,19 @@ enum ReferenceType {
     UNDERSCORED_EXPR,
 };
 
+enum DesignEntity {
+    PROCEDURE,
+    STMT,
+    READ,
+    PRINT,
+    ASSIGN,
+    CALL,
+    WHILE,
+    IF,
+    VARIABLE,
+    CONSTANT
+};
+
 class Utility {
 public:
 	inline static const std::unordered_set<std::string> designEntitySet = { "procedure", "stmt", "read", "print",
@@ -78,6 +91,30 @@ public:
 			return INVALID;
 		}
 	};
+
+    inline static const std::string getReferenceType(std::string input) {
+        if (std::regex_match(input, std::regex(synonymFormat))) {
+            return synonym;
+        }
+        else if (std::regex_match(input, std::regex(integerFormat))) {
+            return integer;
+        }
+        else if (std::regex_match(input, std::regex(quotedIdentFormat))) {
+            return quoted_ident;
+        }
+        else if (std::regex_match(input, std::regex(underscoredExpr))) {
+            return underscoredExpr;
+        }
+        else if (std::regex_match(input, std::regex(expr))) {
+            return expr;
+        }
+        else if (std::regex_match(input, std::regex(underscore))) {
+            return underscore;
+        }
+        else {
+            return invalid;
+        }
+    };
 
 	//remove exprToTrim in the front and end
     inline static const std::string trim(std::string input, std::string exprToTrim) {
@@ -136,6 +173,41 @@ public:
         }
         return ret;
     }
+    inline static const DesignEntity getDesignEntityFromString(std::string designEntity) {
+        if (designEntity == "procedure") {
+            return PROCEDURE;
+        }
+        else if (designEntity == "stmt") {
+            return STMT;
+        }
+        else if (designEntity == "constant") {
+            return CONSTANT;
+        }
+        else if (designEntity == "variable") {
+            return VARIABLE;
+        }
+        else if (designEntity == "read") {
+            return READ;
+        }
+        else if (designEntity == "print") {
+            return PRINT;
+        }
+        else if (designEntity == "if") {
+            return IF;
+        }
+        else if (designEntity == "while") {
+            return WHILE;
+        }
+        else if (designEntity == "call") {
+            return CALL;
+        }
+        else if (designEntity == "assign") {
+            return ASSIGN;
+        }
+        else {
+            throw std::runtime_error("Unsupport designEntity string");
+        }
+    }
 
     inline static const Relationship getRelationshipFromString(std::string relationship) {
         if (relationship == "Modifies") {
@@ -178,6 +250,7 @@ public:
             throw std::runtime_error("Unsupport relationship string");
         }
     }
+
 };
 
 

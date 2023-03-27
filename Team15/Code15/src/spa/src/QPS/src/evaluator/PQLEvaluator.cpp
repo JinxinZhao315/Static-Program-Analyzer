@@ -170,6 +170,7 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
         if ((synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
             ModifiesPHandler modifiesPHandler = ModifiesPHandler(pkb);
             result = modifiesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
         }
         ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
         switch (leftType) {
@@ -199,6 +200,7 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
         if ((synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
             UsesPHandler usesPHandler = UsesPHandler(pkb);
             result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
+            break;
         }
         //std::string leftType = Utility::getReferenceType(leftArg);
         ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
@@ -208,6 +210,7 @@ Result PQLEvaluator::getSuchThatResult(SuchThatClause suchThatCl, const string& 
             result = usesPHandler.evaluate(suchThatCl, resultTable, synonymTable);
             break;
         }
+      
         default:
             UsesSHandler usesSHandler = UsesSHandler(pkb);
             result = usesSHandler.evaluate(suchThatCl, resultTable, synonymTable);

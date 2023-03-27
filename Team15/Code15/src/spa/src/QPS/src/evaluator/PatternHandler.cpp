@@ -90,24 +90,24 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 
     bool isPartialMatch;
-    if (secondType == Utility::UNDERSCORED_EXPR) {
+    if (secondType == Utility::underscored_expr) {
         isPartialMatch = true;
     } else  { // secondType = EXPR (full match) or UNDERSCORED (this bool is then useless)
         isPartialMatch = false;
     }
 
     vector<string> secondArgPostfix;
-    if (secondType == Utility::EXPR || secondType == Utility::UNDERSCORED_EXPR) {
+    if (secondType == Utility::expr || secondType == Utility::underscored_expr) {
         string secondArgTrimmed = trimExpr(secondArg);
         vector<string> argTokens = simplifiedTokenise(secondArgTrimmed);
         secondArgPostfix = simplifiedConvertToPostfix(argTokens);
     }
 
-    if (firstType == Utility::UNDERSCORE) {
+    if (firstType == Utility::underscore) {
 
         std::vector<std::string> patternSynonVals;
 
-        if (secondType == Utility::UNDERSCORE) {
+        if (secondType == Utility::underscore) {
             if (patternType == "assign") {
                 // Result maintains current values of patternSynon, which is a assign synon
                 // No need to call PKB since all eligible assign synon values are already in resultTable
@@ -133,7 +133,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
         result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
-    } else if (firstType == Utility::SYNONYM) {
+    } else if (firstType == Utility::synonym) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
         //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
@@ -144,7 +144,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         ResultTable tempTable({patternSynon, firstArg });
 
 
-        if (secondType == Utility::UNDERSCORE) {
+        if (secondType == Utility::underscore) {
 
             for (const string& currFirstVal: currFirstSynonValues) {
                     vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
@@ -169,13 +169,13 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
         result.setClauseResult(tempTable);
 
-    } else if (firstType == Utility::QUOTED_IDENT) {
+    } else if (firstType == Utility::quoted_ident) {
 
         string firstArgTrimmed = trimExpr(firstArg);
         std::vector<std::string> patternSynonVals;
 
 
-        if (secondType == Utility::UNDERSCORE) {
+        if (secondType == Utility::underscore) {
 
             patternSynonVals = getStmtsFromPkb(patternType, firstArgTrimmed, GET_FROM_VAR);
             // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
