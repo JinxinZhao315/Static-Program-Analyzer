@@ -1080,3 +1080,80 @@ TEST_CASE("multiProcedureIfElseInEachProcWhileInEachIfMultipleLinesBeforeAndAfte
     unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
     compareCFG(result, expected);
 }
+
+TEST_CASE("A calls B") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, "procedure"),
+            Line(1, {"call", "B", ";"}, "call"),
+            Line({"}"}, "}"),
+
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(2, {"x", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2}},
+            {2, {1}}
+    };
+
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
+    compareCFG(result, expected);
+}
+
+TEST_CASE("A calls B from if-else") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, "procedure"),
+            Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, "if"),
+            Line(2, {"call", "B", ";"}, "call"),
+            Line({"}", "else", "{"}, "else"),
+            Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(4, {"x", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2, 3}},
+            {2, {4}},
+            {4, {2}}
+    };
+
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
+    compareCFG(result, expected);
+}
+
+TEST_CASE("A calls B from while") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, "procedure"),
+            Line(1, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
+            Line(2, {"call", "B", ";"}, "call"),
+            Line({"}"}, "}"),
+            Line({"}"}, "}"),
+
+            Line({"procedure", "B", "{"}, "procedure"),
+            Line(3, {"x", "=", "1", ";"}, "="),
+            Line({"}"}, "}"),
+    };
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    procedureExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = procedureExtractor.getCallLineNumToProcName();
+
+    unordered_map<int, set<int>> expected = {
+            {1, {2}},
+            {2, {1, 3}},
+            {3, {2}}
+    };
+
+    unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName);
+    compareCFG(result, expected);
+}

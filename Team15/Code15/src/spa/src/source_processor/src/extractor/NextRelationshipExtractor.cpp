@@ -18,32 +18,42 @@ void linkAllToLine(vector<int>& nodesToJoin, unordered_map<int, set<int>>& cfg, 
     nodesToJoin.clear();
 }
 
-void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& nestingStack, const unordered_map<int, int>& followsRS,  unordered_map<int, set<int>>& cfg) {
+void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& nestingStack,
+                     const unordered_map<int, int>& followsRS,
+                     unordered_map<int, set<int>>& cfg,
+                     unordered_map<string, set<int>>& exitPointsOfProc,
+                     const string& currProc) {
     int i = 0;
     for (auto it = nestingStack.rbegin(); it != nestingStack.rend(); ++it) {
         auto parentLine = it->first;
         auto parentType = it->second;
         if (i >= 1 && parentType == "while") {
             linkAllToLine(nodesToJoin, cfg, parentLine);
+            nodesToJoin.clear();
             return;
-        }
-        if (followsRS.count(parentLine) > 0) {
+        } else if (followsRS.count(parentLine) > 0) {
             int lineThatFollowsParent = followsRS.at(parentLine);
             linkAllToLine(nodesToJoin, cfg, lineThatFollowsParent);
+            nodesToJoin.clear();
             return;
         }
         i++;
     }
+    // No one to link to, save as exit point
+    exitPointsOfProc[currProc].insert(nodesToJoin.begin(), nodesToJoin.end());
     nodesToJoin.clear();
 }
 
-void linkCallStatements(const unordered_map<string, set<int>>& entryAndExitPointsOfProc,
+void linkCallStatements(const unordered_map<string, int>& entryPointOfProc,
+                        const unordered_map<string, set<int>>& exitPointsOfProc,
                         const unordered_map<int, string>& callLineNumToProcName,
                         unordered_map<int, set<int>>& cfg) {
     for (auto[callLine, procName] : callLineNumToProcName) {
-        set<int> entryAndExitPoints = entryAndExitPointsOfProc.at(procName);
-        for (int i: entryAndExitPoints) {
-            cfg[callLine].insert(i);
+        int entryPoint = entryPointOfProc.at(procName);
+        cfg[callLine].insert(entryPoint);
+        set<int> exitPoints = exitPointsOfProc.at(procName);
+        for (int exitPoint: exitPoints) {
+            cfg[exitPoint].insert(callLine);
         }
     }
 }
@@ -53,7 +63,8 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
     unordered_map<int, set<int>> cfg;
 
     if (program.size() < 2) return cfg;
-    unordered_map<string, set<int>> entryAndExitPointsOfProc;
+    unordered_map<string, int> entryPointOfProc;
+    unordered_map<string, set<int>> exitPointsOfProc;
     // intermediate data structures for each procedure
     vector<pair<int, string>> nestingStack;
     vector<int> nodesToJoin;
@@ -76,7 +87,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
             nodesToJoin.clear();
             linkPrevLine = false;
             justExited = make_pair(0, "");
-            entryAndExitPointsOfProc[currProc].insert(nextLineNumber); // add entry point of proc
+            entryPointOfProc[currProc] = nextLineNumber; // add entry point of proc
             continue;
         } else if (lineType == "if" || lineType == "while") {
             if (shouldLinkPrevLine) {
@@ -89,26 +100,26 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
             auto [parentLine, parentType] = nestingStack.back();
             cfg[parentLine].insert(nextLineNumber);
             storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
-            linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
+            linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
             linkPrevLine = false;
         } else if (lineType == "}") { // when exiting nesting
             if (!nestingStack.empty()) {
                 auto [parentLine, parentType] = nestingStack.back();
                 if (parentType == "if") {
                     storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
-                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
                 } else if (parentType == "while") {
                     storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
                     linkAllToLine(nodesToJoin, cfg, parentLine); //link control flow to head of while
                     nodesToJoin.push_back(parentLine);
-                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg);
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
                 }
                 justExited = make_pair(parentLine, parentType);
                 nestingStack.pop_back();
             } else { //exiting function
                 vector<int> temp;
                 storeLinesToLink(program[i - 1], justExited, prevLineNumber, temp);
-                entryAndExitPointsOfProc[currProc].insert(temp.begin(), temp.end()); // add exit point of proc
+                exitPointsOfProc[currProc].insert(temp.begin(), temp.end()); // add exit point of proc
             }
             linkPrevLine = false;
         } else {
@@ -120,7 +131,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
         if (lineNumber > 0) prevLineNumber = lineNumber;
         if (lineType != "}") justExited = make_pair(0, "");
     }
-    linkCallStatements(entryAndExitPointsOfProc, callLineNumToProcName, cfg);
+    linkCallStatements(entryPointOfProc, exitPointsOfProc, callLineNumToProcName, cfg);
     return cfg;
 }
 
