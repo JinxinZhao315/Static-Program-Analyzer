@@ -1,4 +1,5 @@
 #include "source_processor/include/extractor/CommonExtractorHeader.h"
+#include "common/include/utils/StringOperations.h"
 
 class ProcedureExtractor {
 public:
@@ -6,7 +7,6 @@ public:
     void extractCallLineNumToProcName(const vector<Line>& program);
     set<string> getProcedures();
     unordered_map<int, string> getCallLineNumToProcName();
-    string findProcedure(const vector<string>& tokens);
 private:
     set<string> procedures;
     unordered_map<int, string> callLineNumToProcName;

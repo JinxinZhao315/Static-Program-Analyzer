@@ -24,15 +24,6 @@ void ProcedureExtractor::extractProcedures(const vector<Line>& program) {
     }
 };
 
-string ProcedureExtractor::findProcedure(const vector<string>& tokens) {
-    for(auto token : tokens) {
-        if(find(procedures.begin(), procedures.end(), token) != procedures.end()) {
-            return token;
-        }
-    }
-    return "";
-}
-
 bool isEmptyProcedure(const string& procedure) {
     return procedure.empty();
 }
@@ -42,8 +33,8 @@ void ProcedureExtractor::extractCallLineNumToProcName(const vector<Line> &progra
         vector<string> tokens = line.getTokens();
         string type = line.getType();
         int lineNumber = line.getLineNumber();
-        string procedure = findProcedure(tokens);
-        if(!isEmptyProcedure(procedure) && type == "call") {
+        if(type == "call") {
+            string procedure = getProcedureNameFromCallStatement(tokens);
             callLineNumToProcName[lineNumber] = procedure;
         }
     }
