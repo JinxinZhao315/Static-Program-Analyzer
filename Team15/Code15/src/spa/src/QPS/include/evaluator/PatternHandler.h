@@ -19,7 +19,7 @@ private:
     string GET_FROM_VAR = "get_from_var";
     string GET_ALL = "get_all";
     set<string> findMatchingLineNums(bool isPartialMatch, const set<vector<string>>& allRHS, const vector<string>& substrTokens);
-    vector<string> getStmtsFromPkb(const string& patternSynonType, const string& arg, const string& type);
+    vector<string> getLineNumsFromPkb(DesignEntity patternSynonType, const string& arg, const string& type);
     static bool findIsPartialMatch(vector<string> fullstrVec, vector<string> substrVec);
     static string trimExpr(string input);
     static vector<string> simplifiedTokenise(const string& input);
