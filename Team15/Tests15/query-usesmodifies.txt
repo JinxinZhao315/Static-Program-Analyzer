@@ -1,7 +1,7 @@
 1 - all procedures
 procedure p;
 Select p
-proc1, proc2, proc3, proc4, proc5
+proc1, proc2, proc3, proc4, proc5, proc6, proc7, proc8, proc9
 5000
 2 - uses statement
 variable v;
@@ -36,7 +36,7 @@ Select s such that Uses(s, "d")
 8 - uses statement
 print p; variable v;
 Select v such that Uses(p, v)
-a, b
+a, b, g
 5000
 9 - modifies statement
 variable v;
@@ -66,7 +66,7 @@ Select r such that Modifies(r, "w")
 14 - modifies statement
 read r; variable v;
 Select v such that Modifies(r, v)
-v, w
+e, f, v, w
 5000
 15 - uses procedure
 procedure p;
@@ -106,7 +106,7 @@ a, b, v, w, x
 22 - uses procedure
 procedure p; variable v;
 Select p such that Uses(p, v)
-proc1, proc2, proc3, proc4, proc5
+proc1, proc2, proc3, proc4, proc5, proc6, proc7, proc8, proc9
 5000
 23 - modifies procedure
 procedure p;
@@ -127,4 +127,159 @@ v, w, x, y, z
 variable v;
 Select v such that Modifies("proc1", v)
 a, b, v, w, x, y, z
+5000
+27 - uses statement
+stmt s;
+Select s such that Uses(s, "h")
+24, 25, 27, 28, 30, 34, 37
+5000
+28 - uses statement
+stmt s;
+Select s such that Uses(s, "g")
+24, 25, 27, 29, 31
+5000
+29 - uses statement
+stmt s;
+Select s such that Uses(s, "f")
+24, 25, 27, 28, 30, 33, 36
+5000
+30 - uses statement
+stmt s;
+Select s such that Uses(s, "e")
+24, 25, 27
+5000
+31 - uses procedure
+procedure p;
+Select p such that Uses(p, "h")
+proc6, proc7, proc8, proc9
+5000
+32 - uses procedure
+procedure p;
+Select p such that Uses(p, "g")
+proc6, proc7
+5000
+33 - uses procedure
+procedure p;
+Select p such that Uses(p, "f")
+proc6, proc7, proc8, proc9
+5000
+34 - uses procedure
+procedure p;
+Select p such that Uses(p, "e")
+proc6, proc7
+5000
+35 - modifies statement
+stmt s;
+Select s such that Modifies(s, "h")
+24, 25, 27, 28, 30, 32, 35
+5000
+36 - modifies statement
+stmt s;
+Select s such that Modifies(s, "g")
+24, 25, 26, 27, 29, 31
+5000
+37 - modifies statement
+stmt s;
+Select s such that Modifies(s, "f")
+23, 24, 25, 27, 28, 30, 33, 36
+5000
+38 - modifies statement
+stmt s;
+Select s such that Modifies(s, "e")
+22
+5000
+39 - modifies procedure
+procedure p;
+Select p such that Modifies(p, "h")
+proc6, proc7, proc8, proc9
+5000
+40 - modifies procedure
+procedure p;
+Select p such that Modifies(p, "g")
+proc6, proc7
+5000
+41 - modifies procedure
+procedure p;
+Select p such that Modifies(p, "f")
+proc6, proc7, proc8, proc9
+5000
+42 - modifies procedure
+procedure p;
+Select p such that Modifies(p, "e")
+proc6
+5000
+43 - uses statement
+variable v;
+Select v such that Uses(24, v)
+e, f, g, h
+5000
+44 - uses statement
+variable v;
+Select v such that Uses(25, v)
+e, f, g, h
+5000
+45 - uses statement
+variable v;
+Select v such that Uses(27, v)
+e, f, g, h
+5000
+46 - uses statement
+variable v;
+Select v such that Uses(28, v)
+f, h
+5000
+47 - uses statement
+variable v;
+Select v such that Uses(30, v)
+f, h
+5000
+48 - uses procedure
+variable v;
+Select v such that Uses("proc9", v)
+f, h
+5000
+49 - uses procedure
+variable v;
+Select v such that Uses("proc7", v)
+e, f, g, h
+5000
+50 - uses procedure
+variable v;
+Select v such that Uses("proc6", v)
+e, f, g, h
+5000
+51 - modifies statement
+variable v;
+Select v such that Modifies(24, v)
+f, g, h
+5000
+52 - modifies statement
+variable v;
+Select v such that Modifies(25, v)
+f, g, h
+5000
+53 - modifies statement
+variable v;
+Select v such that Modifies(27, v)
+f, g, h
+5000
+54 - modifies statement
+variable v;
+Select v such that Modifies(28, v)
+f, h
+5000
+55 - modifies procedure
+variable v;
+Select v such that Modifies("proc9", v)
+f, h
+5000
+56 - modifies procedure
+variable v;
+Select v such that Modifies("proc7", v)
+f, g, h
+5000
+57 - modifies procedure
+variable v;
+Select v such that Modifies("proc6", v)
+e, f, g, h
 5000
