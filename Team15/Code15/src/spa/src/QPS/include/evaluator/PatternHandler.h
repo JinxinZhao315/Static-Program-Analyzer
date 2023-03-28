@@ -25,6 +25,8 @@ private:
     static vector<string> simplifiedTokenise(const string& input);
     static vector<string> simplifiedConvertToPostfix(vector<string> tokens);
     static bool isValidExprTerm(const string& token);
+    static bool isValidStart(const string& token);
+    static bool isValidEnd(const string& token);
 
 };
 

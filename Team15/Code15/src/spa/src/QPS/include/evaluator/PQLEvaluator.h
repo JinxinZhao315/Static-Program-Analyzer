@@ -1,13 +1,11 @@
 #include "QPS/include/model/Query.h"
 #include "pkb/include/PKB.h"
-
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "SelectHandler.h"
 #include "QPS/include/evaluator/WithHandler.h"
 #include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/SuchThatHandler.h"
-
 #include "Utility.h"
 #include <numeric>
 #include <string>

@@ -3,170 +3,192 @@
 
 SuchThatHandler::SuchThatHandler(PKB &pkb) : ClauseHandler(pkb) {}
 
-bool SuchThatHandler::getIsRelationshipSetEmpty(string relationship, string type, string arg) {
+bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, string type, string arg) {
     std::set<string> ret;
 
-    if (relationship == "Follows") {
-        if (type == GET_LEADER) {
-            int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
-            return leader == -1;
-        } else {
-            int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
-            return follower == -1;
-        }
-    } else if (relationship == "Follows*"){
-        if (type == GET_LEADER) {
-            return pkb.getFollowsStarLeaderNums(stoi(arg)).empty();
-        } else {
-            return pkb.getFollowsStarFollowerNums(stoi(arg)).empty();
-        }
-    }  else if (relationship == "Parent") {
-        if (type == GET_LEADER) {
-            int parent = pkb.getParentParentNum(stoi(arg), -1);
-            return parent == -1;
-        }
-        else {
-            std::set<int> children = pkb.getParentChildNums(stoi(arg));
-            return children.empty();
+    switch (relationship) {
+        case FOLLOWS:
+            if (type == GET_LEADER) {
+                int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
+                return leader == -1;
+            } else {
+                int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
+                return follower == -1;
+            }
+        case FOLLOWSSTAR:
+            if (type == GET_LEADER) {
+                return pkb.getFollowsStarLeaderNums(stoi(arg)).empty();
+            } else {
+                return pkb.getFollowsStarFollowerNums(stoi(arg)).empty();
+            }
+        case PARENT:
+            if (type == GET_LEADER) {
+                int parent = pkb.getParentParentNum(stoi(arg), -1);
+                return parent == -1;
+            }
+            else {
+                return pkb.getParentChildNums(stoi(arg)).empty();
+            }
+        case PARENTSTAR:
+            if (type == GET_LEADER) {
+                return pkb.getParentStarParentNums(stoi(arg)).empty();
+            }
+            else {
+                return pkb.getParentStarChildNums(stoi(arg)).empty();
+            }
+        case CALLS:
+            if (type == GET_LEADER) {
+                return pkb.getCallsCallerNames(arg).empty();
+            }
+            else {
+                return pkb.getCallsCalleeNames(arg).empty();
+            }
+        case CALLSSTAR:
+            if (type == GET_LEADER) {
+                return pkb.getCallsStarCallerNames(arg).empty();
+            }
+            else {
+                return pkb.getCallsStarCalleeNames(arg).empty();
+            }
+        case NEXT:
+            if (type == GET_LEADER) {
+                return pkb.getPreviousStmtNums(stoi(arg)).empty();
+            }
+            else {
+                return pkb.getNextStmtNums(stoi(arg)).empty();
+            }
+        case NEXTSTAR:
+            if (type == GET_LEADER) {
+                return pkb.getStarPreviousStmtNums(stoi(arg)).empty();
+            }
+            else {
+                return pkb.getStarNextStmtNums(stoi(arg)).empty();
+            }
+        case AFFECTS:
+            if (type == GET_LEADER) {
+                return pkb.getAffectsModifierStmtNums(stoi(arg)).empty();
+            }
+            else {
+                return pkb.getAffectsUserStmtNums(stoi(arg)).empty();
+            }
+        case AFFECTSSTAR:
+            if (type == GET_LEADER) {
+                return pkb.getAffectsStarModifierStmtNums(stoi(arg)).empty();
+            }
+            else {
+                return pkb.getAffectsStarUserStmtNums(stoi(arg)).empty();
+            }
+        case USESP:
+            return  pkb.getUsesVarsFromProc(arg).empty();
+        case USESS:
+            return pkb.getUsesVarsFromStmt(stoi(arg)).empty();
+        case MODIFIESS:
+            return pkb.getModifiesVarsFromStmt(stoi(arg)).empty();
+        case MODIFIESP:
+            return pkb.getModifiesVarsFromProc(arg).empty();
+        default:
+            throw PQLSyntaxError("Unknown relationship type");
 
-        }
-    } else if (relationship == "Parent*") {
-        if (type == GET_LEADER) {
-            return pkb.getParentStarParentNums(stoi(arg)).empty();
-        }
-        else {
-            return pkb.getParentStarChildNums(stoi(arg)).empty();
-        }
-    }  else if (relationship == "Calls") {
-        if (type == GET_LEADER) {
-            return pkb.getCallsCallerNames(arg).empty();
-        }
-        else {
-            return pkb.getCallsCalleeNames(arg).empty();
-        }
-    }
-    else if (relationship == "Calls*"){
-        if (type == GET_LEADER) {
-            return pkb.getCallsStarCallerNames(arg).empty();
-        }
-        else {
-            return pkb.getCallsStarCalleeNames(arg).empty();
-        }
-    }
-
-
-    else if (relationship == "Next") {
-        if (type == GET_LEADER) {
-            return pkb.getPreviousStmtNums(stoi(arg)).empty();
-        }
-        else {
-            return pkb.getNextStmtNums(stoi(arg)).empty();
-        }
-    }
-    else if (relationship == "Next*") {
-        if (type == GET_LEADER) {
-            return pkb.getStarPreviousStmtNums(stoi(arg)).empty();
-        }
-        else {
-            return pkb.getStarNextStmtNums(stoi(arg)).empty();
-        }
-    } else if (relationship == "UsesP") {
-        return  pkb.getUsesVarsFromProc(arg).empty();
-    } else if (relationship == "UsesS") {
-        return pkb.getUsesVarsFromStmt(stoi(arg)).empty();
-    } else if (relationship == "ModifiesS") {
-        return pkb.getModifiesVarsFromStmt(stoi(arg)).empty();
-    } else if (relationship == "ModifiesP") {
-        return pkb.getModifiesVarsFromProc(arg).empty();
-    }
-
-    else {
-        throw PQLSyntaxError("Unknown relationship type");
-    }
-
-}
-
-bool SuchThatHandler:: getIsInRelationship(string relationship, string leftArg, string rightArg) {
-
-    if (relationship == "Follows*") {
-        return pkb.areInFollowsStarRelationship(stoi(leftArg), stoi(rightArg));
-    } else if (relationship == "Follows") {
-        return pkb.areInFollowsRelationship(stoi(leftArg), stoi(rightArg));
-    }  else  if (relationship == "Parent*") {
-        return pkb.areInParentStarRelationship(stoi(leftArg), stoi(rightArg));
-    } else if (relationship == "Parent"){
-        return pkb.areInParentRelationship(stoi(leftArg), stoi(rightArg));
-    }  else if (relationship == "Next*") {
-        return pkb.areInNextStarRelationship(stoi(leftArg), stoi(rightArg));
-    } else if (relationship == "Next"){
-        return pkb.areInNextRelationship(stoi(leftArg), stoi(rightArg));
-    } else  if (relationship == "Calls*") {
-        return pkb.areInCallsStarRelationship(leftArg, rightArg);
-    } else if (relationship == "Calls"){
-        return pkb.areInCallsRelationship(leftArg, rightArg);
-    } else if (relationship == "UsesP") {
-        return pkb.areInUsesProcRelationship(leftArg, rightArg);
-    } else if (relationship == "UsesS") {
-        return pkb.areInUsesStmtRelationship(stoi(leftArg), rightArg);
-    } else if (relationship == "ModifiesS") {
-        return pkb.areInModifiesStmtRelationship(stoi(leftArg), rightArg);
-    } else if (relationship == "ModifiesP") {
-        return pkb.areInModifiesProcRelationship(leftArg, rightArg);
-    }
-
-
-    else {
-        throw PQLSyntaxError("Unknown relationship type");
     }
 
 }
 
+bool SuchThatHandler:: getIsInRelationship(Relationship relationship, string leftArg, string rightArg) {
 
-bool SuchThatHandler:: getIsPkbEmpty(string relationship) {
-    if (relationship == "Follows" || relationship == "Follows*") {
-        return pkb.isFollowsEmpty();
-    } else if (relationship == "Parent" || relationship == "Parent*") {
-        return  pkb.isParentEmpty();
-    }  else  if (relationship == "Next*") {
-        return pkb.isNextStarEmpty();
-    } else if (relationship == "Next"){
-        return pkb.isNextEmpty();
-    }  else if (relationship == "Calls*") {
-        return pkb.isCallsStarEmpty();
-    } else if (relationship == "Calls"){
-        return pkb.isCallsEmpty();
+    switch(relationship) {
+        case FOLLOWSSTAR:
+            return pkb.areInFollowsStarRelationship(stoi(leftArg), stoi(rightArg));
+        case FOLLOWS:
+            return pkb.areInFollowsRelationship(stoi(leftArg), stoi(rightArg));
+        case PARENTSTAR:
+            return pkb.areInParentStarRelationship(stoi(leftArg), stoi(rightArg));
+        case PARENT:
+            return pkb.areInParentRelationship(stoi(leftArg), stoi(rightArg));
+        case NEXTSTAR:
+            return pkb.areInNextStarRelationship(stoi(leftArg), stoi(rightArg));
+        case NEXT:
+            return pkb.areInNextRelationship(stoi(leftArg), stoi(rightArg));
+        case CALLSSTAR:
+            return pkb.areInCallsStarRelationship(leftArg, rightArg);
+        case CALLS:
+            return pkb.areInCallsRelationship(leftArg, rightArg);
+        case USESP:
+            return pkb.areInUsesProcRelationship(leftArg, rightArg);
+        case USESS:
+            return pkb.areInUsesStmtRelationship(stoi(leftArg), rightArg);
+        case MODIFIESS:
+            return pkb.areInModifiesStmtRelationship(stoi(leftArg), rightArg);
+        case MODIFIESP:
+            return pkb.areInModifiesProcRelationship(leftArg, rightArg);
+        case AFFECTSSTAR:
+            return pkb.areInAffectsStarRelationship(stoi(leftArg), stoi(rightArg));
+        case AFFECTS:
+            return pkb.areInAffectsRelationship(stoi(leftArg), stoi(rightArg));
+        default:
+            throw PQLSyntaxError("Unknown relationship type");
+
     }
 
-    else {
-        throw PQLSyntaxError("Unknown relationship type");
-    }
+
 }
 
 
-Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatClause,
+bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
+    switch (relationship) {
+        case FOLLOWS:
+            return pkb.isFollowsEmpty();
+        case FOLLOWSSTAR:
+            return pkb.isFollowsStarEmpty();
+        case PARENT:
+            return pkb.isParentEmpty();
+        case PARENTSTAR:
+            return  pkb.isParentStarEmpty();
+        case NEXTSTAR:
+            return pkb.isNextStarEmpty();
+        case NEXT:
+            return pkb.isNextEmpty();
+        case CALLSSTAR:
+            return pkb.isCallsStarEmpty();
+        case CALLS:
+            return pkb.isCallsEmpty();
+        case AFFECTSSTAR:
+            return pkb.isAffectsStarEmpty();
+        case AFFECTS:
+            return pkb.isAffectsEmpty();
+        default:
+            throw PQLSyntaxError("Unknown relationship type");
+
+    }
+
+}
+
+
+Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchThatClause,
                                  std::multimap<std::string, std::string> &synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
-    std::string leftType = Utility::getReferenceType(leftArg);
-    std::string rightType = Utility::getReferenceType(rightArg);
+
+    ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
+    ReferenceType rightType = Utility::getEnumReferenceType(rightArg);
+
     Result result;
 
-    if (relationship == "Uses") {
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            relationship = "UsesP";
+    if (relationship == USES) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            relationship = USESP;
         } else {
-            relationship = "UsesS";
+            relationship = USESS;
         }
-    } else if (relationship == "Modifies") {
-        if (leftType == Utility::QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            relationship = "ModifiesP";
+    } else if (relationship == MODIFIES) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+            relationship = MODIFIESP;
         } else {
-            relationship = "ModifiesS";
+            relationship = MODIFIESS;
         }
     }
 
     // Wildcard-Wildcard
-    if (leftType == Utility::UNDERSCORE && rightArg == Utility::UNDERSCORE) {
+    if (leftType == UNDERSCORE && rightType == UNDERSCORE) {
         bool isEmpty = getIsPkbEmpty(relationship);
         if (isEmpty) {
             result.setResultTrue(false);
@@ -174,43 +196,47 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         }
     }
     // Wildcard - Quoted_ident
-    else if (leftType == Utility::UNDERSCORE && rightType == Utility::QUOTED_IDENT) {
+    else if (leftType == UNDERSCORE && rightType == QUOTED_IDENT) {
         if (getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg))) {
             result.setResultTrue(false);
             return result;
         }
     }
+    // Wildcard-Int
+    else if (leftType == UNDERSCORE && rightType == INTEGER) {
+        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg)) {
+            result.setResultTrue(false);
+            return result;
+        }
+    }
+
     // Quoted_ident - Wildcard
-    else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::UNDERSCORE) {
+    else if (leftType == QUOTED_IDENT && rightType == UNDERSCORE) {
         if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg))) {
             result.setResultTrue(false);
             return result;
         }
     }
     // Quoted_ident - Quoted_ident
-    else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
-        bool isInRelationship = getIsInRelationship(relationship, Utility::trim_double_quotes(leftArg), Utility::trim_double_quotes(rightArg));
+    else if (leftType == QUOTED_IDENT && rightType == QUOTED_IDENT) {
+        bool isInRelationship = getIsInRelationship(relationship,
+                                                    Utility::trim_double_quotes(leftArg),
+                                                    Utility::trim_double_quotes(rightArg));
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
         }
     }
-    // Wildcard-Int
-    else if (leftType == Utility::UNDERSCORE && rightType == Utility::INTEGER) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg)) {
-            result.setResultTrue(false);
-            return result;
-        }
-    }
+
     // Int-Wildcard
-    else if (leftType == Utility::INTEGER && rightType == Utility::UNDERSCORE) {
+    else if (leftType == INTEGER && rightType == UNDERSCORE) {
         if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, leftArg)) {
             result.setResultTrue(false);
             return result;
         }
     }
     // Int-Int
-    else if (leftType == Utility::INTEGER && rightType == Utility::INTEGER) {
+    else if (leftType == INTEGER && rightType == INTEGER) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, rightArg);
         if (!isInRelationship) {
             result.setResultTrue(false);
@@ -218,7 +244,7 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         }
     }
     // Int - Quoted_ident
-    else if (leftType == Utility::INTEGER && rightType == Utility::QUOTED_IDENT) {
+    else if (leftType == INTEGER && rightType == QUOTED_IDENT) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, Utility::trim_double_quotes(rightArg));
         if (!isInRelationship) {
             result.setResultTrue(false);
@@ -226,30 +252,21 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         }
     }
 
-    // Quoted-ident - Quoted-ident
-    else if (leftType == Utility::QUOTED_IDENT && rightType == Utility::QUOTED_IDENT) {
-        bool isInRelationship = getIsInRelationship(relationship,
-                                           Utility::trim_double_quotes(leftArg),
-                                           Utility::trim_double_quotes(rightArg));
-        if (!isInRelationship) {
-            result.setResultTrue(false);
-            return result;
-        }
-    }
+
     // Synon - Wilcard / Int / Quoted-ident
-    else if (leftType == Utility::SYNONYM && rightType != Utility::SYNONYM) {
+    else if (leftType == SYNONYM && rightType != SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
-        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
-        if (rightType == Utility::UNDERSCORE) {
+        if (rightType == UNDERSCORE) {
             for (auto currSynonVal: currSynonValues) {
                 if (!getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, currSynonVal)) {
                     resultSynonValues.push_back(currSynonVal);
                 }
             }
-        } else if (rightType == Utility:: INTEGER || rightType == Utility::QUOTED_IDENT) {
+        } else if (rightType == INTEGER || rightType == QUOTED_IDENT) {
             for (auto currSynonVal : currSynonValues) {
                 bool isInRelationship = getIsInRelationship(relationship,
                                                             currSynonVal,
@@ -267,20 +284,20 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         result.setClauseResult(ResultTable(resultSynonValues, leftArg));
     }
     // Wilcard / Int / Quoted-ident - Synon
-    else if (leftType != Utility::SYNONYM && rightType == Utility::SYNONYM) {
+    else if (leftType != SYNONYM && rightType == SYNONYM) {
         string synonDeType = synonymTable.find(rightArg)->second;
-        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, synonDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
-        if (leftType == Utility::UNDERSCORE) {
+        if (leftType == UNDERSCORE) {
             for (auto currSynonVal : currSynonValues) {
                 if (!getIsRelationshipSetEmpty(relationship, GET_LEADER, currSynonVal)) {
                     resultSynonValues.push_back(currSynonVal);
                 }
             }
         }
-        else if (leftType == Utility::INTEGER || leftType == Utility::QUOTED_IDENT) {
+        else if (leftType == INTEGER || leftType == QUOTED_IDENT) {
             for (auto currSynonVal : currSynonValues) {
                 bool isInRelationship = getIsInRelationship(relationship,
                                                             Utility::trim_double_quotes(leftArg),
@@ -298,7 +315,7 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         result.setClauseResult(ResultTable(resultSynonValues, rightArg));
     }
     // Synon - Synon
-    else if (leftType == Utility::SYNONYM && rightType == Utility::SYNONYM) {
+    else if (leftType == SYNONYM && rightType == SYNONYM) {
         if (leftArg == rightArg) {
             result.setResultTrue(false);
             return result;
@@ -306,8 +323,8 @@ Result SuchThatHandler::evaluate(string relationship, SuchThatClause suchThatCla
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
 
-        std::set<string> leftSynValuesStrSet = Utility::getFullSetFromPkb(pkb, leftDeType);
-        std::set<string> rightSynValuesStrSet = Utility::getFullSetFromPkb(pkb, rightDeType);
+        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
 
         std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
         std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());

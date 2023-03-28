@@ -86,7 +86,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     string patternType = synonymTable.find(patternSynon)->second;
 
     //resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
-    std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, patternType);
+    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
     std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
 
     bool isPartialMatch;
@@ -122,8 +122,6 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
             for (const string& lineNum : patternSynonLineNums) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
                 set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
-                // TODO: Potential speed up here. Since we're only checking if matchingLines is empty or not,
-                //  can ask pkb to just return a bool, instead of getting the whole set out
                 if (!matchingLines.empty()) {
                     patternSynonVals.push_back(lineNum);
 
@@ -136,13 +134,10 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     } else if (firstType == Utility::synonym) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
-        std::set<string> synValuesStrSet = Utility::getFullSetFromPkb(pkb, firstDeType);
+        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, firstDeType);
         std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
-        //std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
 
         ResultTable tempTable({patternSynon, firstArg });
-
 
         if (secondType == Utility::underscore) {
 
@@ -191,7 +186,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
     } else {
-        throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
+        throw PQLSyntaxError("Unhandled left or right arg type in PatternHandler");
     }
 
     return result;
@@ -231,6 +226,13 @@ bool PatternHandler::isValidExprTerm(const string& token) {
            || regex_match(token, regex(Utility::integerFormat));
 }
 
+bool PatternHandler::isValidStart(const string &token) {
+    return isValidExprTerm(token) || token == "(";
+}
+
+bool PatternHandler::isValidEnd(const string &token) {
+    return isValidExprTerm(token) || token == ")";
+}
 
 vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
     vector<string> result;
@@ -239,7 +241,7 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
         throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
     }
     // To prevent dangling operators like expr = "+2"
-    if (! (isValidExprTerm(tokens.front()) && isValidExprTerm(tokens.back()))) {
+    if (! (isValidStart(tokens.front()) && isValidEnd(tokens.back()))) {
         throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
     }
     for (const string& token : tokens) {

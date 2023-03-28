@@ -21,7 +21,11 @@ enum Relationship
     PARENT,
     PARENTSTAR,
     FOLLOWS,
-    FOLLOWSSTAR
+    FOLLOWSSTAR,
+    USESS,
+    USESP,
+    MODIFIESS,
+    MODIFIESP,
 };
 
 enum ReferenceType
