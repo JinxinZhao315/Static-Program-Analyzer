@@ -61,7 +61,9 @@ vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType,
             lineNumSet = pkb.getIfStmtsFromVar(arg);
         }
     } else { // type == GET_ALL
-        if (patternSynonType == WHILE) {
+        if (patternSynonType == ASSIGN) {
+            lineNumSet = pkb.getAllStmtNumsByType("=");
+        } else if (patternSynonType == WHILE) {
             lineNumSet = pkb.getWhileStmtsWithVars();
         } else { // if (patternSynonType == "if")
             lineNumSet = pkb.getIfStmtsWithVars();
@@ -85,15 +87,14 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
-    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
-    std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+
 
     DesignEntity patternTypeEnum = Utility::getDesignEntityFromString(patternType);
 
     bool isPartialMatch;
     if (secondType == UNDERSCORED_EXPR) {
         isPartialMatch = true;
-    } else  { // secondType = EXPR (full match) or UNDERSCORED (this bool is then useless)
+    } else  { // secondType = EXPR (full match) or UNDERSCORE (this bool is then useless)
         isPartialMatch = false;
     }
 
@@ -106,36 +107,31 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
     if (firstType == UNDERSCORE) {
 
-        std::vector<std::string> patternSynonVals;
+        std::vector<std::string> resultPatternSynonVals;
+        std::vector<std::string> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, "", GET_ALL);
 
         if (secondType == UNDERSCORE) {
-            if (patternTypeEnum == ASSIGN) {
-                // Result maintains current values of patternSynon, which is a assign synon
-                // No need to call PKB since all eligible assign synon values are already in resultTable
-                patternSynonVals = currSynonValues;
-            } else {
-                patternSynonVals = getLineNumsFromPkb(patternTypeEnum, "", GET_ALL);
-            }
+
+            resultPatternSynonVals = currPatternSynonVals;
 
         } else {
-            std::vector<std::string> patternSynonLineNums = currSynonValues;
 
-            for (const string& lineNum : patternSynonLineNums) {
+            for (auto lineNum : currPatternSynonVals) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
                 set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
                 if (!matchingLines.empty()) {
-                    patternSynonVals.push_back(lineNum);
-
+                    resultPatternSynonVals.push_back(lineNum);
                 }
             }
         }
 
-        result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
+
+        result.setClauseResult(ResultTable(resultPatternSynonVals, patternSynon));
 
     } else if (firstType == SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+        std::set<std::string> currFirstSynonValues = Utility::getResultFromPKB(pkb, firstDeType);
 
         ResultTable tempTable({patternSynon, firstArg });
 
@@ -240,7 +236,7 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
     if (tokens.empty()) {
         throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
     }
-    // To prevent dangling operators like expr = "+2"
+    // To prevent dangling operators like exprFormat = "+2"
     if (! (isValidStart(tokens.front()) && isValidEnd(tokens.back()))) {
         throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
     }

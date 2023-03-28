@@ -62,15 +62,15 @@ public:
     inline static const std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";
     inline static const std::string integerFormat = "[1-9][0-9]*";
     inline static const std::string quotedIdentFormat = "\"[a-zA-Z][a-zA-Z0-9]*\"";
-    inline static const std::string underscoredExpr = "_\"[\\s\\S]*\"_";
-    inline static const std::string expr = "\"[\\s\\S]*\"";
+    inline static const std::string underscoredExprFormat = "_\"[\\s\\S]*\"_";
+    inline static const std::string exprFormat = "\"[\\s\\S]*\"";
 
     inline static const std::string whiteSpaces = " \t\n";
     inline static const std::string quote = "\"";
     inline static const std::string underscore = "_";
-    inline static const std::string exprType = "expr";
-    inline static const std::string underscored_expr = "underscoredExpr";
-    inline static const std::string quoted_ident = "quotedIdent";
+    inline static const std::string expr = "expr";
+    inline static const std::string underscored_expr = "underscored_expr";
+    inline static const std::string quoted_ident = "quoted_ident";
     inline static const std::string integer = "integer";
     inline static const std::string synonym = "synonym";
     inline static const std::string invalid = "Invalid";
@@ -89,11 +89,11 @@ public:
         {
             return QUOTED_IDENT;
         }
-        else if (std::regex_match(input, std::regex(underscoredExpr)))
+        else if (std::regex_match(input, std::regex(underscoredExprFormat)))
         {
             return UNDERSCORED_EXPR;
         }
-        else if (std::regex_match(input, std::regex(expr)))
+        else if (std::regex_match(input, std::regex(exprFormat)))
         {
             return EXPR;
         }
@@ -121,11 +121,11 @@ public:
         {
             return quoted_ident;
         }
-        else if (std::regex_match(input, std::regex(underscoredExpr)))
+        else if (std::regex_match(input, std::regex(underscoredExprFormat)))
         {
-            return underscoredExpr;
+            return underscored_expr;
         }
-        else if (std::regex_match(input, std::regex(expr)))
+        else if (std::regex_match(input, std::regex(exprFormat)))
         {
             return expr;
         }
