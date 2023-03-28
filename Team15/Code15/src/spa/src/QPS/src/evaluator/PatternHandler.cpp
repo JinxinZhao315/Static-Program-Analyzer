@@ -49,19 +49,21 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
     return false;
 }
 
-vector<string> PatternHandler::getStmtsFromPkb(const string& patternSynonType, const string& arg, const string& type) {
+vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType, const string& arg, const string& type) {
     set<int> lineNumSet;
     vector<string> strVec;
     if (type == GET_FROM_VAR) {
-        if (patternSynonType == "assign") {
+        if (patternSynonType == ASSIGN) {
             lineNumSet = pkb.getAssignStmtsFromVar(arg);
-        } else if (patternSynonType == "while") {
+        } else if (patternSynonType == WHILE) {
             lineNumSet = pkb.getWhileStmtsFromVar(arg);
-        } else { // if (patternSynonType == "if")
+        } else { // if (patternSynonType == IF)
             lineNumSet = pkb.getIfStmtsFromVar(arg);
         }
     } else { // type == GET_ALL
-        if (patternSynonType == "while") {
+        if (patternSynonType == ASSIGN) {
+            lineNumSet = pkb.getAllStmtNumsByType("=");
+        } else if (patternSynonType == WHILE) {
             lineNumSet = pkb.getWhileStmtsWithVars();
         } else { // if (patternSynonType == "if")
             lineNumSet = pkb.getIfStmtsWithVars();
@@ -80,74 +82,63 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     string patternSynon = patternClause.getPatternSynonym();
     string firstArg = patternClause.getFirstArg();
     string secondArg = patternClause.getSecondArg();
-    string firstType = Utility::getReferenceType(firstArg);
-    string secondType = Utility::getReferenceType(secondArg);
+    ReferenceType firstType = Utility::getEnumReferenceType(firstArg);
+    ReferenceType secondType = Utility::getEnumReferenceType(secondArg);
+
     Result result;
     string patternType = synonymTable.find(patternSynon)->second;
 
-    //resultTable.resultTableCheckAndAdd(patternSynon, pkb, patternType);
-    std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, patternType);
-    std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
+
+    DesignEntity patternTypeEnum = Utility::getDesignEntityFromString(patternType);
 
     bool isPartialMatch;
-    if (secondType == Utility::underscored_expr) {
+    if (secondType == UNDERSCORED_EXPR) {
         isPartialMatch = true;
-    } else  { // secondType = EXPR (full match) or UNDERSCORED (this bool is then useless)
+    } else  { // secondType = EXPR (full match) or UNDERSCORE (this bool is then useless)
         isPartialMatch = false;
     }
 
     vector<string> secondArgPostfix;
-    if (secondType == Utility::expr || secondType == Utility::underscored_expr) {
+    if (secondType == EXPR || secondType == UNDERSCORED_EXPR) {
         string secondArgTrimmed = trimExpr(secondArg);
         vector<string> argTokens = simplifiedTokenise(secondArgTrimmed);
         secondArgPostfix = simplifiedConvertToPostfix(argTokens);
     }
 
-    if (firstType == Utility::underscore) {
+    if (firstType == UNDERSCORE) {
 
-        std::vector<std::string> patternSynonVals;
+        std::vector<std::string> resultPatternSynonVals;
+        std::vector<std::string> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, "", GET_ALL);
 
-        if (secondType == Utility::underscore) {
-            if (patternType == "assign") {
-                // Result maintains current values of patternSynon, which is a assign synon
-                // No need to call PKB since all eligible assign synon values are already in resultTable
-                patternSynonVals = currSynonValues;
-            } else {
-                patternSynonVals = getStmtsFromPkb(patternType, "", GET_ALL);
-            }
+        if (secondType == UNDERSCORE) {
+
+            resultPatternSynonVals = currPatternSynonVals;
 
         } else {
-            std::vector<std::string> patternSynonLineNums = currSynonValues;
 
-            for (const string& lineNum : patternSynonLineNums) {
+            for (auto lineNum : currPatternSynonVals) {
                 set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
                 set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
-                // TODO: Potential speed up here. Since we're only checking if matchingLines is empty or not,
-                //  can ask pkb to just return a bool, instead of getting the whole set out
                 if (!matchingLines.empty()) {
-                    patternSynonVals.push_back(lineNum);
-
+                    resultPatternSynonVals.push_back(lineNum);
                 }
             }
         }
 
-        result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
-    } else if (firstType == Utility::synonym) {
+        result.setClauseResult(ResultTable(resultPatternSynonVals, patternSynon));
+
+    } else if (firstType == SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        //resultTable.resultTableCheckAndAdd(firstArg, pkb, firstDeType);
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, firstDeType);
-        std::vector<std::string> currFirstSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
-        //std::vector<std::string> currFirstSynonValues = resultTable.getSynValues(firstArg);
+        std::set<std::string> currFirstSynonValues = Utility::getResultFromPKB(pkb, firstDeType);
 
         ResultTable tempTable({patternSynon, firstArg });
 
-
-        if (secondType == Utility::underscore) {
+        if (secondType == UNDERSCORE) {
 
             for (const string& currFirstVal: currFirstSynonValues) {
-                    vector<string> lineNumVec = getStmtsFromPkb(patternType, currFirstVal, GET_FROM_VAR);
+                    vector<string> lineNumVec = getLineNumsFromPkb(patternTypeEnum, currFirstVal, GET_FROM_VAR);
                     // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
                     for (const string& numStr : lineNumVec) { // Each num is a possible value of pattern synon
                         tempTable.insertTuple({numStr, currFirstVal});
@@ -169,15 +160,15 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
         result.setClauseResult(tempTable);
 
-    } else if (firstType == Utility::quoted_ident) {
+    } else if (firstType == QUOTED_IDENT) {
 
         string firstArgTrimmed = trimExpr(firstArg);
         std::vector<std::string> patternSynonVals;
 
 
-        if (secondType == Utility::underscore) {
+        if (secondType == UNDERSCORE) {
 
-            patternSynonVals = getStmtsFromPkb(patternType, firstArgTrimmed, GET_FROM_VAR);
+            patternSynonVals = getLineNumsFromPkb(patternTypeEnum, firstArgTrimmed, GET_FROM_VAR);
             // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
 
         } else {
@@ -191,7 +182,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         result.setClauseResult(ResultTable(patternSynonVals, patternSynon));
 
     } else {
-        throw std::runtime_error("Unhandled left or right arg type in PatternHandler");
+        throw PQLSyntaxError("Unhandled left or right arg type in PatternHandler");
     }
 
     return result;
@@ -231,6 +222,13 @@ bool PatternHandler::isValidExprTerm(const string& token) {
            || regex_match(token, regex(Utility::integerFormat));
 }
 
+bool PatternHandler::isValidStart(const string &token) {
+    return isValidExprTerm(token) || token == "(";
+}
+
+bool PatternHandler::isValidEnd(const string &token) {
+    return isValidExprTerm(token) || token == ")";
+}
 
 vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
     vector<string> result;
@@ -238,8 +236,8 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
     if (tokens.empty()) {
         throw PQLSyntaxError("PQL Syntax Error: empty expression in pattern clause");
     }
-    // To prevent dangling operators like expr = "+2"
-    if (! (isValidExprTerm(tokens.front()) && isValidExprTerm(tokens.back()))) {
+    // To prevent dangling operators like exprFormat = "+2"
+    if (! (isValidStart(tokens.front()) && isValidEnd(tokens.back()))) {
         throw PQLSyntaxError("PQL Syntax Error: Invalid expression in pattern");
     }
     for (const string& token : tokens) {
