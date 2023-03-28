@@ -8,8 +8,11 @@
 class PQLRefConsistentLogic {
 private:
     // TODO: Put these constants into Utility class
-	std::string PROCEDURE = "procedure";
-	std::string IDENT_STRING = "quotedIdent";
+
+	std::string IDENT_STRING = Utility::quoted_ident;
+    std::string UNDERSCORE = Utility::underscore;
+    std::string INTEGER = Utility::integer;
+    std::string PROCEDURE = "procedure";
 	std::string STMT = "stmt";
 	std::string READ = "read";
 	std::string PRINT = "print";
@@ -17,8 +20,6 @@ private:
 	std::string WHILE = "while";
 	std::string IF = "if";
 	std::string ASSIGN = "assign";
-	std::string UNDERSCORE = "_";
-	std::string INTEGER = "integer";
 	std::string VARIABLE = "variable";
 	std::string PROCNAME = "procName";
 	std::string VARNAME = "varName";
