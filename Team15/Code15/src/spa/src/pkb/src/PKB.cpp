@@ -192,6 +192,14 @@ bool PKB::isFollowsEmpty() {
 	return followsTable.isEmpty();
 }
 
+bool PKB::isFollowsLeaderEmpty() {
+	return followsTable.isRightToLeftMapEmpty();
+}
+
+bool PKB::isFollowsFollowerEmpty() {
+	return followsTable.isLeftToRightMapEmpty();
+}
+
 //QPS follows*
 std::set<int> PKB::getFollowsStarLeaderNums(int followerNum) {
 	return followsStarTable.getAllLefts(followerNum);
@@ -207,6 +215,14 @@ bool PKB::areInFollowsStarRelationship(int leaderNum, int followerNum) {
 
 bool PKB::isFollowsStarEmpty() {
 	return followsStarTable.isEmpty();
+}
+
+bool PKB::isFollowsStarLeaderEmpty() {
+	return followsStarTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isFollowsStarFollowerEmpty() {
+	return followsStarTable.isLeftToAllRightsMapEmpty();
 }
 
 //QPS parent
@@ -226,6 +242,14 @@ bool PKB::isParentEmpty() {
 	return parentTable.isEmpty();
 }
 
+bool PKB::isParentParentEmpty() {
+	return parentTable.isRightToLeftMapEmpty();
+}
+
+bool PKB::isParentChildEmpty() {
+	return parentTable.isLeftToAllRightsMapEmpty();
+}
+
 //QPS parent*
 std::set<int> PKB::getParentStarParentNums(int childNum) {
 	return parentStarTable.getAllLefts(childNum);
@@ -241,6 +265,14 @@ bool PKB::areInParentStarRelationship(int parentNum, int childNum) {
 
 bool PKB::isParentStarEmpty() {
 	return parentStarTable.isEmpty();
+}
+
+bool PKB::isParentStarParentEmpty() {
+	return parentStarTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isParentStarChildEmpty() {
+	return parentStarTable.isLeftToAllRightsMapEmpty();
 }
 
 //QPS uses statement-variable
@@ -312,6 +344,14 @@ bool PKB::isCallsEmpty() {
 	return callsTable.isEmpty();
 }
 
+bool PKB::isCallsCallerEmpty() {
+	return callsTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isCallsCalleeEmpty() {
+	return callsTable.isLeftToAllRightsMapEmpty();
+}
+
 //QPS calls*
 std::set<std::string> PKB::getCallsStarCallerNames(std::string calleeName) {
 	return callsStarTable.getAllLefts(calleeName);
@@ -329,6 +369,14 @@ bool PKB::isCallsStarEmpty() {
 	return callsStarTable.isEmpty();
 }
 
+bool PKB::isCallsStarCallerEmpty() {
+	return callsStarTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isCallsStarCalleeEmpty() {
+	return callsStarTable.isLeftToAllRightsMapEmpty();
+}
+
 //QPS next
 std::set<int> PKB::getPreviousStmtNums(int nextStmtNum) {
 	return nextTable.getAllLefts(nextStmtNum);
@@ -344,6 +392,14 @@ bool PKB::areInNextRelationship(int previousStmtNum, int nextStmtNum) {
 
 bool PKB::isNextEmpty() {
 	return nextTable.isEmpty();
+}
+
+bool PKB::isPreviousStmtEmpty() {
+	return nextTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isNextStmtEmpty() {
+	return nextTable.isLeftToAllRightsMapEmpty();
 }
 
 //QPS next*
@@ -370,6 +426,14 @@ bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
 
 bool PKB::isNextStarEmpty() {
 	return nextStarTable.isEmpty();
+}
+
+bool PKB::isStarPreviousStmtEmpty() {
+	return nextStarTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isStarNextStmtEmpty() {
+	return nextStarTable.isLeftToAllRightsMapEmpty();
 }
 
 void PKB::clearNextStar() {
@@ -403,6 +467,14 @@ bool PKB::isAffectsEmpty() {
 	return affectsTable.isEmpty();
 }
 
+bool PKB::isAffectsModifierStmtEmpty() {
+	return affectsTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isAffectsUserStmtEmpty() {
+	return affectsTable.isLeftToAllRightsMapEmpty();
+}
+
 void PKB::clearAffects() {
 	affectsTable.clearMaps();
 	affectsTable.setToUnready();
@@ -432,6 +504,14 @@ bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 
 bool PKB::isAffectsStarEmpty() {
 	return affectsStarTable.isEmpty();
+}
+
+bool PKB::isAffectsStarModifierStmtEmpty() {
+	return affectsStarTable.isRightToAllLeftsMapEmpty();
+}
+
+bool PKB::isAffectsStarUserStmtEmpty() {
+	return affectsStarTable.isLeftToAllRightsMapEmpty();
 }
 
 void PKB::clearAffectsStar() {
