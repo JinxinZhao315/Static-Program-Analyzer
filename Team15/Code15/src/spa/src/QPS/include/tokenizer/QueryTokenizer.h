@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <stack>
 #include "QPS/include/model/SuchThatClause.h"
 #include "QPS/include/model/SelectClause.h"
 #include "QPS/include/model/PatternClause.h"

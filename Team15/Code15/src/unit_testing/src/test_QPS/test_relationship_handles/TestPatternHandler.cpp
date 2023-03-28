@@ -347,4 +347,7 @@ TEST_CASE("PatternHandler assign with operators test 1") {
 
     string retStr7 = TestUtility::testDriver("assign a; Select a pattern a (\"x\",_\"3*5\"_)", pkb);
     REQUIRE(retStr7 == "4");
+
+    string retStr9 = TestUtility::testDriver("assign a; Select a pattern a (\"k\",_\"(y+4)\"_)", pkb);
+    REQUIRE(retStr9 == "1");
 }

@@ -224,11 +224,26 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t firstComma = input.find_first_of(",");
     std::size_t secondComma = input.find_first_of(",", firstComma + 1);
-	std::size_t nextRightPar = input.find_first_of(")");
-	if (nextLeftPar == std::string::npos || firstComma == std::string::npos || nextRightPar == std::string::npos) {
-		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
-	}
-	if (nextRightPar <= firstComma + 1 || firstComma <= nextLeftPar + 1) {
+
+    if (nextLeftPar == std::string::npos || firstComma == std::string::npos) {
+        throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
+    }
+
+    stack<char> stk;
+    std::size_t nextRightPar = -1;
+    for (size_t i = nextLeftPar; i < input.length(); i++ ) {
+        if (input[i] == '(') {
+            stk.push('(');
+        } else if (input[i] == ')') {
+            stk.pop();
+        }
+        if (stk.empty()) {
+            nextRightPar = i;
+            break;
+        }
+    }
+
+	if ( !stk.empty() || nextRightPar <= firstComma + 1 || firstComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
     std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::whiteSpaces);
@@ -238,6 +253,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
     std::string secondArg;
     std::string thirdArg = "";
 
+    // pattern a (_, "(y+4)") such that...
     if (synonymType == "if") {
         // 3 arguments case
         if (secondComma == std::string::npos || secondComma > nextRightPar) {
@@ -255,7 +271,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
             throw PQLSemanticError("PQL Semantic error: pattern clause synonym type is not assign, while or if");
         }
 
-        if (secondComma < nextRightPar) {
+        if (secondComma != std::string::npos && secondComma < nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Too many commas in pattern clause assign and while type");
         }
 
