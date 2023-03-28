@@ -769,7 +769,7 @@ Select p such that Next(s, p)
 14
 5000
 155 - next
-stmt s; ptint p;
+stmt s; print p;
 Select p such that Next(p, s)
 none
 5000
@@ -889,7 +889,7 @@ Select p such that Next*(s, p)
 14
 5000
 179 - next*
-stmt s; ptint p;
+stmt s; print p;
 Select p such that Next*(p, s)
 none
 5000
