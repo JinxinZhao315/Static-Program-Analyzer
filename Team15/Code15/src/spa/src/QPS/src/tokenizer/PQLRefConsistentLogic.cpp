@@ -141,6 +141,8 @@ PQLRefConsistentLogic::PQLRefConsistentLogic() {
 	relationLogicMap.emplace("Calls*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
 	relationLogicMap.emplace("Next", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 	relationLogicMap.emplace("Next*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Affects", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace("Affects*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 
 	withLogicMap.emplace(PROCEDURE, procPairSet);
 	withLogicMap.emplace(CALL, callPairSet);
