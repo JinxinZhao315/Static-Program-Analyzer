@@ -1,17 +1,15 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 
 TEST_CASE("Parent Integer Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -19,17 +17,17 @@ TEST_CASE("Parent Integer Underscore test") {
     pkb.addAllParent({ {1, {2}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1,{2});
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select a such that Parent(1, _)", pkb);
@@ -49,10 +47,10 @@ TEST_CASE("Parent Integer Underscore test") {
 TEST_CASE("Parent* Integer Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -62,8 +60,8 @@ TEST_CASE("Parent* Integer Underscore test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -71,9 +69,9 @@ TEST_CASE("Parent* Integer Underscore test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -98,10 +96,10 @@ TEST_CASE("Parent* Integer Underscore test") {
 TEST_CASE("Parent Underscore Integer test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -109,17 +107,17 @@ TEST_CASE("Parent Underscore Integer test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -142,10 +140,10 @@ TEST_CASE("Parent Underscore Integer test") {
 TEST_CASE("Parent* Underscore Integer test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -154,8 +152,8 @@ TEST_CASE("Parent* Underscore Integer test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -163,9 +161,9 @@ TEST_CASE("Parent* Underscore Integer test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -187,10 +185,10 @@ TEST_CASE("Parent* Underscore Integer test") {
 
 TEST_CASE("Parent Integer Integer test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -198,17 +196,17 @@ TEST_CASE("Parent Integer Integer test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, {2});
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, {1});
     */
 
@@ -229,10 +227,10 @@ TEST_CASE("Parent Integer Integer test") {
 TEST_CASE("Parent* Integer Integer test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -241,8 +239,8 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -250,9 +248,9 @@ TEST_CASE("Parent* Integer Integer test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -274,10 +272,10 @@ TEST_CASE("Parent* Integer Integer test") {
 
 TEST_CASE("Parent Synonym Integer test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -285,17 +283,17 @@ TEST_CASE("Parent Synonym Integer test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -312,10 +310,10 @@ TEST_CASE("Parent Synonym Integer test") {
 TEST_CASE("Parent* Synonym Integer test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -324,8 +322,8 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -333,9 +331,9 @@ TEST_CASE("Parent* Synonym Integer test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -358,10 +356,10 @@ TEST_CASE("Parent* Synonym Integer test") {
 TEST_CASE("Parent Integer Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -369,17 +367,17 @@ TEST_CASE("Parent Integer Synonym test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -399,10 +397,10 @@ TEST_CASE("Parent Integer Synonym test") {
 TEST_CASE("Parent* Integer Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -411,8 +409,8 @@ TEST_CASE("Parent* Integer Synonym test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -420,9 +418,9 @@ TEST_CASE("Parent* Integer Synonym test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -445,10 +443,10 @@ TEST_CASE("Parent* Integer Synonym test") {
 TEST_CASE("Parent Synonym Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -456,17 +454,17 @@ TEST_CASE("Parent Synonym Synonym test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -489,10 +487,10 @@ TEST_CASE("Parent Synonym Synonym test") {
 TEST_CASE("Parent* Synonym Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -502,8 +500,8 @@ TEST_CASE("Parent* Synonym Synonym test") {
 
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -511,9 +509,9 @@ TEST_CASE("Parent* Synonym Synonym test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -536,10 +534,10 @@ TEST_CASE("Parent* Synonym Synonym test") {
 TEST_CASE("Parent Synonym Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -548,17 +546,17 @@ TEST_CASE("Parent Synonym Underscore test") {
 
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -575,10 +573,10 @@ TEST_CASE("Parent Synonym Underscore test") {
 TEST_CASE("Parent* Synonym Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -588,8 +586,8 @@ TEST_CASE("Parent* Synonym Underscore test") {
 
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -597,9 +595,9 @@ TEST_CASE("Parent* Synonym Underscore test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -616,10 +614,10 @@ TEST_CASE("Parent* Synonym Underscore test") {
 TEST_CASE("Parent Underscore Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -627,17 +625,17 @@ TEST_CASE("Parent Underscore Synonym test") {
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     */
 
@@ -654,10 +652,10 @@ TEST_CASE("Parent Underscore Synonym test") {
 TEST_CASE("Parent* Underscore Synonym test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -667,8 +665,8 @@ TEST_CASE("Parent* Underscore Synonym test") {
 
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
@@ -676,9 +674,9 @@ TEST_CASE("Parent* Underscore Synonym test") {
     pkb.addParent(1, { 2 });
     set<int> childSet1{ 2 };
     pkb.addParentStar(1, childSet1);
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, { 1 });
     set<int> childSet2{ 1,2 };
     pkb.addParentStar(5, childSet2);
@@ -695,10 +693,10 @@ TEST_CASE("Parent* Underscore Synonym test") {
 TEST_CASE("Parent/Parent* Underscore Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 4 })));
-    stmts.insert(make_pair("while", set<int>({ 1, 5 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -707,17 +705,17 @@ TEST_CASE("Parent/Parent* Underscore Underscore test") {
     pkb.addAllParentStar({ {1, {2}}, {5, {1, 2} } });
     //do not add one by one to pkb
     /*
-    pkb.addStmt("while", 1);
-    pkb.addStmt("=", 2);
+    pkb.addStmt(::WHILE, 1);
+    pkb.addStmt(KeywordsEnum::ASSIGN, 2);
 
     pkb.addVar("x");
     pkb.addVar("y");
     pkb.addVar("k");
     pkb.addParent(1, { 2 });
 
-    pkb.addStmt("read", 3);
-    pkb.addStmt("=", 4);
-    pkb.addStmt("while", 5);
+    pkb.addStmt(::READ, 3);
+    pkb.addStmt(::ASSIGN, 4);
+    pkb.addStmt(::WHILE, 5);
     pkb.addParent(5, {1});
     */
 

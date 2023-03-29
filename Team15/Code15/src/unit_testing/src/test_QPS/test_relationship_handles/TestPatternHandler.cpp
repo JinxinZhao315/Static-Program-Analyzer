@@ -2,16 +2,15 @@
 #include "QPS/include/PQLDriver.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 void testPatternFillPkb(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
     pkb.addAllConsts(set<string>({"1", "2", "3"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({1,2,4})));
-    stmts.insert(make_pair("read", set<int>({3})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({1,2,4})));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({3})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> patterns;
@@ -33,10 +32,10 @@ void testPatternFillPkb2(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "n", "m"}));
     pkb.addAllConsts(set<string>({"1", "0", "5"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({2,3,5,7})));
-    stmts.insert(make_pair("if", set<int>({1})));
-    stmts.insert(make_pair("while", set<int>({4,6})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({2,3,5,7})));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({1})));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({4,6})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> assignPatterns;
@@ -86,9 +85,9 @@ void testPatternFillPkb3(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
     pkb.addAllConsts(set<string>({"1", "2", "3", "4", "5"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({1,2,4})));
-    stmts.insert(make_pair("read", set<int>({3})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({1,2,4})));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({3})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> patterns;

@@ -1,13 +1,12 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 void testMulticlauseFillPkb1(PKB& pkb) {
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3, 4, 5 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3, 4, 5 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k", "m", "t", "i", "j"});
@@ -40,8 +39,8 @@ void testMulticlauseFillPkb1(PKB& pkb) {
 
 void testMulticlauseFillPkb2(PKB& pkb) {
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2, 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k", "m", "n"});
@@ -71,8 +70,8 @@ void testMulticlauseFillPkb2(PKB& pkb) {
 
 void testMulticlauseFillPkb3(PKB& pkb) {
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2, 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2, 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k", "m", "t", "n" });
@@ -108,10 +107,10 @@ void testMulticlauseFillPkb4(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "n", "m"}));
     pkb.addAllConsts(set<string>({"1", "0", "5"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({2,3,5,7})));
-    stmts.insert(make_pair("if", set<int>({1})));
-    stmts.insert(make_pair("while", set<int>({4,6})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({2,3,5,7})));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({1})));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({4,6})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> assignPatterns;

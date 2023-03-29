@@ -19,7 +19,7 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums);
+	void addAllStmts(std::unordered_map<KeywordsEnum, std::set<int>> stmtNums);
 
 	//SP follows
 	void addAllFollows(std::unordered_map<int, int> allLeaderToFollower);
@@ -93,7 +93,7 @@ public:
 	//QPS statement
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(std::string stmtType);
+	std::set<int> getAllStmtNumsByType(KeywordsEnum stmtType);
 
 	//QPS follow
 	int getFollowsLeaderNum(int followerNum, int invalidLeaderNum);

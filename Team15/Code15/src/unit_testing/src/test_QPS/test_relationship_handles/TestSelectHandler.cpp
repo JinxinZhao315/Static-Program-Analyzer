@@ -7,7 +7,6 @@
 #include "QPS/include/evaluator/SelectHandler.h"
 #include "QPS/include/model/Elem.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 using namespace std;
@@ -16,9 +15,9 @@ void testSelectSynPkb(PKB& pkb) {
     pkb.addAllVars(set<string>({ "x", "n", "m" }));
     pkb.addAllConsts(set<string>({ "1", "5" }));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 2, 3})));
-    stmts.insert(make_pair("if", set<int>({ 1 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 3})));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({ 1 })));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> assignPatterns;
@@ -42,13 +41,13 @@ void testSelectSynPkb(PKB& pkb) {
 std::set<string> testSelect(string queryStr) {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1 })));
-    stmts.insert(make_pair("while", set<int>({ 2 })));
-    stmts.insert(make_pair("if", set<int>({ 3 })));
-    stmts.insert(make_pair("print", set<int>({ 4 })));
-    stmts.insert(make_pair("call", set<int>({ 5 })));
-    stmts.insert(make_pair("read", set<int>({ 6 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 2 })));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({ 3 })));
+    stmts.insert(make_pair(KeywordsEnum::PRINT, set<int>({ 4 })));
+    stmts.insert(make_pair(KeywordsEnum::CALL, set<int>({ 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 6 })));
     pkb.addAllStmts(stmts);
     pkb.addAllFollows({ {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6} });
 
@@ -104,12 +103,12 @@ TEST_CASE("Select Handler test 1") {
     PKB pkb;
     pkb.addAllProcs(set<string>({ "p" }));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3, 7, 8 })));
-    stmts.insert(make_pair("if", set<int>({ 4 })));
-    stmts.insert(make_pair("while", set<int>({ 5 })));
-    stmts.insert(make_pair("call", set<int>({ 6 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3, 7, 8 })));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({ 4 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 5 })));
+    stmts.insert(make_pair(KeywordsEnum::CALL, set<int>({ 6 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars(set<string>({ "x", "y", "z" }));

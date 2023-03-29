@@ -10,13 +10,13 @@ string testWith(string queryStr);
 string testWith(string queryStr) {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1 })));
-    stmts.insert(make_pair("while", set<int>({ 2 })));
-    stmts.insert(make_pair("if", set<int>({ 3 })));
-    stmts.insert(make_pair("print", set<int>({ 4 })));
-    stmts.insert(make_pair("call", set<int>({ 5 })));
-    stmts.insert(make_pair("read", set<int>({ 6 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1 })));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 2 })));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({ 3 })));
+    stmts.insert(make_pair(KeywordsEnum::PRINT, set<int>({ 4 })));
+    stmts.insert(make_pair(KeywordsEnum::CALL, set<int>({ 5 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 6 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllWithCall({ {5, "foo"} });

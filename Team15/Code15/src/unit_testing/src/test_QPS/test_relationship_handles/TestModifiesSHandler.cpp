@@ -6,17 +6,15 @@
 #include "QPS/include/evaluator/ClauseHandler.h"
 #include "QPS/include/evaluator/ModifiesSHandler.h"
 #include "TestUtility.h"
-
-
 #include "catch.hpp"
 
 using namespace std;
 
 TEST_CASE("ModifiesS Integer Underscore test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -59,9 +57,9 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
 TEST_CASE("ModifiesS Integer IdentString test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -109,9 +107,9 @@ TEST_CASE("ModifiesS Integer IdentString test") {
 
 TEST_CASE("ModifiesS Integer Variable test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -164,9 +162,9 @@ TEST_CASE("ModifiesS Integer Variable test") {
 TEST_CASE("ModifiesS Statement Variable test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -211,9 +209,9 @@ TEST_CASE("ModifiesS Statement Variable test") {
 
 TEST_CASE("ModifiesS Statement IdentString test") {
     PKB pkb;
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
@@ -262,9 +260,9 @@ TEST_CASE("ModifiesS Statement IdentString test") {
 TEST_CASE("ModifiesS Statement Underscore test") {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("read", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k" });
