@@ -1,0 +1,5 @@
+1 - stress
+stmt s;
+Select s such that Parent(4, s)
+5, 14
+5000

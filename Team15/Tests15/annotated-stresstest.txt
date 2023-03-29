@@ -1,0 +1,275 @@
+procedure proc1 {
+1    x = 1;
+2    y = 50;
+3    if (1 != 2) then {
+4        x = x - 1; }
+    else {
+5        x = 1000; 
+    }
+6    while (1 == 1) {
+7        x = x * 10; 
+8        while (x < 9) {
+9            if (x > 4) then {
+10                x = x + 1; 
+            }
+            else {
+11                x = x + 2; 
+            }
+        }
+12        if (x == 8) then {
+13            while (y < 100) {
+14                y = (y + 1) * 2; 
+            } 
+        }
+        else {
+15            while (y > 0) {
+16                y = y / 2; 
+            } 
+        } 
+    } 
+} 
+
+procedure proc2 {
+17  a = 0;
+18  b = 100;
+19  c = 50;
+20  while (a < 50) {
+21    while (b > 1) {
+22        while ( (c == 0) && (!(b == 1)) ){
+23            if (a > 25) then {
+24                if (b < 50) then {
+25                    b = b / 2;
+26                    a = a + 5;
+                } 
+                else {
+27                    if (b < 75) then {
+28                        b = b / 3;
+                    } else {
+29                        b = b / 4;
+                    }
+                }
+            } else {
+30                a = a * 2;
+            }
+        }
+    }
+31    a = a + 1;
+  }
+}
+
+procedure proc3{
+32    read r;
+33    print r;
+34    if (r >= 0) then {
+35        while (r >= 0){
+36            call proc4;
+37            r = r - 1;
+        }
+    } else {
+38        r = r * 1;
+    }
+39    if (r < 0) then {
+40        while (r < 0){
+41            call proc5;
+42            r = r + 2;
+        }
+    } else {
+43        r = r - 1;
+44        call proc6;
+    }
+}
+
+procedure proc4{
+45    if (a > 0) then {
+46        call proc5;
+    } else {
+47        print a;
+    }
+}
+procedure proc5{
+48    if (b == 0) then {
+49        call proc7;
+    } else {
+50        read b;
+    }
+}
+procedure proc6{
+51    if (c == 0) then {
+52        call proc7;
+    } else {
+53        call proc8;
+    }
+}
+procedure proc7{
+54    if (d == 0) then {
+55        call proc7;
+    } else {
+56        print d;
+    }
+}
+
+
+procedure proc8 {
+57    r = 99;
+58    call proc9; 
+}
+
+procedure proc9 {
+59    s = r + 1;
+60    call proc10; 
+}
+
+procedure proc10 {
+61    print t;
+62    print u;
+63    call proc11; 
+}
+
+procedure proc11 {
+64    read v;
+65    read w;
+66    while ((v >= 1) && (w >= 1)) {
+67        if (v >= a) then {
+68            x = v / 3; 
+        }
+        else {
+69            y = w / 4; 
+        }
+70        z = v - w * x; 
+    } 
+}
+
+procedure proc12 {
+71  ae = aa + ab * ac - ad;
+}
+
+procedure proc13 {
+72    x = 1;
+73    y = 50;
+74    if (1 != 2) then {
+75        x = x - 1; 
+    }
+76    else {
+77        x = 1000; 
+    }
+78    while (1 != 1) {
+79        x = x * 10; 
+    }
+80    while (x < 9) {
+81        if (x > 4) then {
+82            x = x + 1; 
+        }
+        else {
+83            x = x + 2; 
+        }
+84        if (x == 8) then {
+85            while (y < 100) {
+86                y = (y + 1) * 2; 
+            } 
+        }
+        else {
+87            while (y > 0) {
+88                y = y / 2; 
+            } 
+        } 
+    } 
+}
+
+procedure proc14 {
+89    a = 10;
+90    b = 10;
+91    c = 10;
+92    d = 10;
+93    if ((1 != 2) || (1 > 2)) then {
+94    x = x - 1; }
+    else {
+95    x = 1000; }
+96    while ((1 != 1) && (1 < 2)) {
+97    x = x * 10; }
+98    while ((a != 20) && (b != 0)) {
+99    if ((a >= 15) && (b <= 5)) then {
+100       a = a + 1;
+101        b = b - 1; }
+    else {
+102        a = a + 2;
+103       b = b - 2; }
+104    if ((a - b == c) || (a - b == 18)) then {
+105        while (!(c == 100)) {
+106        c = c * 2; } }
+    else {
+107        while ((d < 100) || (d < c)) {
+108        d = d + d; } } } }
+
+procedure main {
+109    read d;
+110    read e;
+111    print d;
+112    print e;
+113    f = d + e;
+114    g = d - e;
+115    h = d * e;
+116    i = d / e;
+117    while ((d >= e) && !(f == g) || (h + i * 2 <= 0)){
+118        call proc1;
+119        j = f * (j + j * (9 + g) % 2 - (9) % 2 + h / 1) * (0) + (i + (d + (e + (i + (d + (e))))));
+120        k = 2147483647;
+121        if (10 == e) then {
+122            call proc2;
+        } else {
+123            l = d;
+124            print l;
+125            while (1 != 0){
+126                read m;
+127                read n;
+128                n = m;
+129                read o;
+130                o = m + n;
+131                read p;
+132                p = o + m + n;
+133                read q;
+134                q = p + o + m + n;
+135                print m;
+136                print n;
+137                print o;
+138                print q;
+139                call proc8;
+            }
+        }
+    }
+140    aa = 0;
+141    ab = 1;
+142    ac = 2;
+143    ad = 3;
+144    ae = 4;
+145    af = 5;
+146    ag = 6;
+147    ah = 7;
+148    ai = 8;
+149    aj = 9;
+150    ak = 10;
+151    al = 11;
+152    am = 12;
+153    an = 13;
+154    read ao;
+155    read ap;
+156    print aq;
+157    print ar;
+158    aa = ag - ab / ac;
+159    ac = 3 * (ab + 1);
+160    while (aa > ab) {
+161        if (aa < 3) then {
+162        aa = aa / 3 * 2;
+163        ab = 1 + ab - 2;
+164        ad = ae / af + ag;
+        } else {
+165        aa = 2 + aa - 3;
+166        ac = 7 * aa + 8;
+167        ad = ae * (af - ag);
+168        ae = aa + ab * ac - ad;
+169        af = aa * ab + ac * ad;
+170        ag = aa * (ab + ac) * ad;
+        }
+    }
+171    call proc13;
+172    call proc14;
+}
