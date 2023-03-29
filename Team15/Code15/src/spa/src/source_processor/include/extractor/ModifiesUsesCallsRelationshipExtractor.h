@@ -20,4 +20,5 @@ void updateCallStmtModifiesAndUsesRS(unordered_map<string, set<string>>& procedu
                                      unordered_map<string, set<string>>& procedureUsesRS,
                                      unordered_map<int, set<string>>& modifiesRS,
                                      unordered_map<int, set<string>>& usesRS,
-                                     const unordered_map<int, string>& callToProcName);
+                                     const unordered_map<int, string>& callToProcName,
+                                     const unordered_map<int, vector<int>>& callToStmtContainerStack);

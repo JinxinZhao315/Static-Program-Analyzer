@@ -15,5 +15,5 @@ public:
     void extractReadAndPrintLineNumToVarName(const vector<Line>& program);
     unordered_map<int, string> getReadLineNumToVarName();
     unordered_map<int, string> getPrintLineNumToVarName();
-    bool isVariable(string token, string previous);
+    bool isVariable(const string& token, const string& previous);
 };

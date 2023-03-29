@@ -22,15 +22,15 @@ void testSelectSynPkb(PKB& pkb) {
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> assignPatterns;
-    Line line2 = Line(2, vector<string>({ "n", "1", "+" }), "=");
-    Line line3 = Line(3, vector<string>({ "m", "1", "-" }), "=");
+    Line line2 = Line(2, vector<string>({ "n", "1", "+" }), IF);
+    Line line3 = Line(3, vector<string>({ "m", "1", "-" }), IF);
 
     assignPatterns.insert(make_pair("n", set<Line>({ line2 })));
     assignPatterns.insert(make_pair("m", set<Line>({ line3 })));
     pkb.addAllAssignPatterns(assignPatterns);
 
     unordered_map<string, set<Line>> ifPatterns;
-    Line line1 = Line(1, vector<string>({ "x", "5", ">" }), "if");
+    Line line1 = Line(1, vector<string>({ "x", "5", ">" }), IF);
     ifPatterns.insert(make_pair("x", set<Line>({ line1 })));
     pkb.addAllIfPatterns(ifPatterns);
 

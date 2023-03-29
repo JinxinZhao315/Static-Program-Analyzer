@@ -9,6 +9,7 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/test_source_processor/extractor/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/TestUtils/*.cpp"
         )
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
@@ -21,6 +22,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/test_source_processor/extractor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/models/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/utils/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/TestUtils/*.h"
         )
 
 add_executable(unit_testing ${srcs} ${headers})

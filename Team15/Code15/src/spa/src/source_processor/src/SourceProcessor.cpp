@@ -21,7 +21,7 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllProcs(extractor->getProcedures());
     pkb->addAllVars(extractor->getVariables());
     pkb->addAllConsts(extractor->getConstants());
-    pkb->addAllStmts(extractor->getStatements());
+    // pkb->addAllStmts(extractor->getStatements());
     pkb->addAllFollows(extractor->getFollowsRS());
     pkb->addAllFollowsStar(extractor->getFollowsStarRS());
     pkb->addAllParent(extractor->getParentRS());

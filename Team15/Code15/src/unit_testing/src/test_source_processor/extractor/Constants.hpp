@@ -1,5 +1,6 @@
 #pragma once
 #include "source_processor/include/extractor/CommonExtractorHeader.h"
+#include "catch.hpp"
 
 extern const vector<Line> mainProgram;
 extern const vector<Line> whileLoop;
@@ -35,3 +36,6 @@ extern const set<string> onlyCallStatementsVariables;
 extern const set<string> source2Variables;
 extern const set<string> source4Variables;
 extern const set<string> source6Variables;
+
+extern void printNodes(const unordered_map<int, set<int>>& myMap);
+extern void compareCFG(const unordered_map<int, set<int>>& result, const unordered_map<int, set<int>>& expected);

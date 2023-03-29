@@ -39,7 +39,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
     )
 
-add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/NextRelationshipExtractor.cpp src/source_processor/include/extractor/NextRelationshipExtractor.h)
+add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

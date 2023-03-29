@@ -17,7 +17,7 @@ set<string> Extractor::getProcedures() {
     return procedures;
 }
 
-unordered_map<string, set<int>> Extractor::getStatements() {
+unordered_map<KeywordsEnum, set<int>> Extractor::getStatements() {
     return statements;
 }
 
@@ -133,8 +133,8 @@ void Extractor::extract(const vector<Line> &program) {
     this->callLineNumToProcName = procedureExtractor->getCallLineNumToProcName();
     // Call and get results of extraction
     this->assignsRS = extractAssignmentRS(program, variables);
-    this->ifRS = extractConditionalRS("if", program, variables);
-    this->whileRS = extractConditionalRS("while", program, variables);
+    this->ifRS = extractConditionalRS(IF, program, variables);
+    this->whileRS = extractConditionalRS(WHILE, program, variables);
 
     auto [parents, parentsStar] = extractParentsRelationship(program);
     this->parentsRS = parents;
@@ -152,5 +152,5 @@ void Extractor::extract(const vector<Line> &program) {
     this->callsRS = calls;
     this->callsStarRS = callsStar;
 
-    this->nextRS = extractNextRS(program, follows, this->callLineNumToProcName);
+    this->nextRS = extractNextRS(program, follows);
 }

@@ -15,10 +15,11 @@ bool isNumeric(const string& token) {
     }
 }
 
-bool VariableExtractor::isVariable(string token, string previous) {
+bool VariableExtractor::isVariable(const string& token, const string& previous) {
     if(keywords->isKeyword(token) || isNumeric(token) || token.empty()) {
         return false;
-    } else if(previous != "procedure" && previous != "call") {
+    } else if(previous != keywords->keywordMap.second.at(PROCEDURE)
+        && previous != keywords->keywordMap.second.at(CALL)) {
         return true;
     } else {
         return false;
@@ -28,14 +29,13 @@ bool VariableExtractor::isVariable(string token, string previous) {
 void VariableExtractor::extractVariables(const vector<Line> &program) {
     for(auto line: program) {
         vector<string> tokens = line.getTokens();
-        string type = line.getType();
         set<string>* v = &variables;
         for(auto token = begin(tokens) + 1; token != end(tokens); token++) {
             if(isVariable(*token, *prev(token))) {
                 v->insert(*token);
-            } else if(*token == "=" && token != begin(tokens)) {
+            } else if(*token == keywords->keywordMap.second.at(ASSIGN) && token != begin(tokens)) {
                 v->insert(*(prev(token)));
-            } else if (*token == "read" && token != end(tokens)) {
+            } else if (*token == keywords->keywordMap.second.at(READ) && token != end(tokens)) {
                 v->insert(*next(token));
             }
         }
@@ -45,13 +45,13 @@ void VariableExtractor::extractVariables(const vector<Line> &program) {
 void VariableExtractor::extractReadAndPrintLineNumToVarName(const vector<Line> &program) {
     for(auto line : program) {
         vector<string> tokens = line.getTokens();
-        string type = line.getType();
+        KeywordsEnum type = line.getType();
         int lineNumber = line.getLineNumber();
-        for(auto token : tokens) {
+        for(const auto& token : tokens) {
             if(variables.count(token) > 0) {
-                if(type == "read") {
+                if(type == READ) {
                     readLineNumToVarName[lineNumber] = token;
-                } else if (type == "print"){
+                } else if (type == PRINT){
                     printLineNumToVarName[lineNumber] = token;
                 }
             }

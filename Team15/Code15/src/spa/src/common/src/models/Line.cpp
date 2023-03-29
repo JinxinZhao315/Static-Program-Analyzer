@@ -12,7 +12,7 @@ vector<string> Line::getTokens() {
     return tokens;
 }
 
-string Line::getType() const {
+KeywordsEnum Line::getType() const {
     return type;
 }
 
