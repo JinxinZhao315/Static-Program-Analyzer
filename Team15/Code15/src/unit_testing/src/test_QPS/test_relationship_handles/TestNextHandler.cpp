@@ -156,7 +156,7 @@ TEST_CASE("Next/Next* (Stmt, Stmt)")
     REQUIRE(retStr3 == "1,2,3,4,5");
 
     string retStr4 = testNext("stmt p; Select p such that Next*(p, p)");
-    REQUIRE(retStr4 == "none");
+    REQUIRE(retStr4 == "1,2,3,4");
 }
 
 TEST_CASE("Next/Next* (Stmt, _)")

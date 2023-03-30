@@ -316,40 +316,62 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     }
     // Synon - Synon
     else if (leftType == SYNONYM && rightType == SYNONYM) {
+        /*if (leftArg == rightArg) {
+            result.setResultTrue(false);
+            return result;
+        }*/
+        bool isSynLeftRightArgSame = false;
         if (leftArg == rightArg) {
-            result.setResultTrue(false);
-            return result;
+            isSynLeftRightArgSame = true;
         }
-        std::string leftDeType = synonymTable.find(leftArg)->second;
-        std::string rightDeType = synonymTable.find(rightArg)->second;
+       
+            std::string leftDeType = synonymTable.find(leftArg)->second;
+            std::string rightDeType = synonymTable.find(rightArg)->second;
 
-        std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-        std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+            std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+            std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
 
-        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
-        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
-
-
-        ResultTable initTable(currLeftValues, leftArg);
-        initTable.combineTable(ResultTable(currRightValues, rightArg));
-        int initTableSize = initTable.getColNum();
-        ResultTable tempTable({ leftArg, rightArg });
+            std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+            std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
 
-        for (int i = 0; i < initTableSize; i++) {
-            std::vector<std::string> tuple = initTable.getTuple(i);
-            bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
-            if (isInRelationship) {
-                tempTable.insertTuple({ tuple[0], tuple[1] });
+            ResultTable initTable(currLeftValues, leftArg);
+            initTable.combineTable(ResultTable(currRightValues, rightArg));
+            int initTableSize = initTable.getColNum();
+            ResultTable tempTable({ leftArg, rightArg });
+
+           
+            for (int i = 0; i < initTableSize; i++) {
+                
+                    std::vector<std::string> tuple = initTable.getTuple(i);
+                    std::pair<std::string, std::string> pairToInsert;
+                    bool isInRelationship;
+                    if (!isSynLeftRightArgSame ) {
+                        
+                        pairToInsert = std::make_pair(tuple[0], tuple[1]);
+                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
+                        
+                        
+                    }
+                    else {
+                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
+                        pairToInsert = std::make_pair(tuple[0], tuple[0]);
+                    }
+                    if (isInRelationship) {
+
+                        tempTable.insertTuple({ pairToInsert.first,  pairToInsert.second });
+                    }
+               
             }
-        }
 
-        if (tempTable.isTableEmpty()) {
-            result.setResultTrue(false);
-            return result;
-        }
+            if (tempTable.isTableEmpty()) {
+                result.setResultTrue(false);
+                return result;
+            }
 
-        result.setClauseResult(tempTable);
+            result.setClauseResult(tempTable);
+        
+
     }
 
 
