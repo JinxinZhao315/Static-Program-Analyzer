@@ -346,22 +346,17 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                     std::vector<std::string> tuple = initTable.getTuple(i);
                     std::pair<std::string, std::string> pairToInsert;
                     bool isInRelationship;
-                    if (!isSynLeftRightArgSame ) {
-                        
+                    if (!isSynLeftRightArgSame ) {                     
                         pairToInsert = std::make_pair(tuple[0], tuple[1]);
-                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
-                        
-                        
+                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);          
                     }
                     else {
                         isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
                         pairToInsert = std::make_pair(tuple[0], tuple[0]);
                     }
                     if (isInRelationship) {
-
                         tempTable.insertTuple({ pairToInsert.first,  pairToInsert.second });
-                    }
-               
+                    }             
             }
 
             if (tempTable.isTableEmpty()) {
