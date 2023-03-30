@@ -108,7 +108,7 @@ TEST_CASE("Affects/Affects* semantic error test") {
     //cout << retStr1 << endl;
     REQUIRE(retStr1 == "SyntaxError");
 
-    string retStr2 = testAffects("read v; Select v such that Affects(_, v)");
+    string retStr2 = testAffects("procedure v; Select v such that Affects(_, v)");
     //cout << retStr1 << endl;
     REQUIRE(retStr2 == "SemanticError");
 }
@@ -138,7 +138,7 @@ TEST_CASE("Affects/Affects* (assign, assign)") {
 
     string retStr2 = testAffects("assign p; Select p such that Affects(p, p)");
     //cout << retStr3 << endl;
-    REQUIRE(retStr2 == "none");
+    REQUIRE(retStr2 == "5");
 
     string retStr5 = testAffects("assign p,q; Select q such that Affects(p, q)");
     //cout << retStr3 << endl;

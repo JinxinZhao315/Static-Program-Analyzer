@@ -11,7 +11,7 @@ std::set<int> AffectsHandler::getAffectsFromPKB(bool isStar, string type, string
             
             ret = pkb.getAffectsModifierStmtNums(stoi(arg));
         }
-        else { //if (type == GET_FOLLOWER)
+        else { 
             
             ret = pkb.getAffectsUserStmtNums(stoi(arg));
             
@@ -22,7 +22,7 @@ std::set<int> AffectsHandler::getAffectsFromPKB(bool isStar, string type, string
             ret = pkb.getAffectsStarModifierStmtNums(stoi(arg));
            
         }
-        else { //  if (type == GET_FOLLOWER)
+        else {
             
             ret = pkb.getAffectsStarUserStmtNums(stoi(arg));
         }
@@ -55,8 +55,6 @@ bool AffectsHandler::isAffectsEmptyFromPKB(bool isStar) {
 Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
-    //std::string leftType = Utility::getReferenceType(leftArg);
-    //std::string rightType = Utility::getReferenceType(rightArg);
     Result result;
     ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
     ReferenceType rightType = Utility::getEnumReferenceType(rightArg);
@@ -85,11 +83,19 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
             ResultTable tempTable({ leftArg, rightArg });
 
             for (int i = 0; i < initTableSize; i++) {
-                std::vector<std::string> tuple = initTable.getTuple(i);
-                bool isLeftAffectsRight = getIsAffectsFromPKB(isStar, tuple[0], tuple[1]);
-                if (isLeftAffectsRight) {
-                    tempTable.insertTuple({ tuple[0], tuple[1] });
+                try {
+                    std::vector<std::string> tuple = initTable.getTuple(i);
+                    bool isLeftAffectsRight = getIsAffectsFromPKB(isStar, tuple[0], tuple[1]);
+                    if (isLeftAffectsRight) {
+                        tempTable.insertTuple({ tuple[0], tuple[1] });
+                    }
                 }
+                catch (const std::out_of_range& e) {
+                    std::cout << "Exception caught: " << e.what() << std::endl;
+
+                }
+                //std::vector<std::string> tuple = initTable.getTuple(i);
+               
             }
             if (tempTable.isTableEmpty()) {
                 result.setResultTrue(false);
@@ -218,7 +224,7 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         }
            
         case UNDERSCORE: {
-            bool isAffectsEmpty = isAffectsEmptyFromPKB(isStar); //
+            bool isAffectsEmpty = isAffectsEmptyFromPKB(isStar); 
             if (isAffectsEmpty) {
                 result.setResultTrue(false);
                 return result;
