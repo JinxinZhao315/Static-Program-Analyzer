@@ -56,8 +56,19 @@ enum DesignEntity
 class Utility
 {
 public:
-    inline static const std::unordered_set<std::string> designEntitySet = {"procedure", "stmt", "read", "print",
-                                                                           "assign", "call", "while", "if", "variable", "constant"};
+    inline static const std::string assign = "assign";
+    inline static const std::string variable = "variable";
+    inline static const std::string procedure = "procedure";
+    inline static const std::string print = "print";
+    inline static const std::string read = "read";
+    inline static const std::string constant = "constant";
+    inline static const std::string whileStmt = "while";
+    inline static const std::string ifStmt = "if";
+    inline static const std::string call = "call";
+    inline static const std::string stmt = "stmt";
+
+    inline static const std::unordered_set<std::string> designEntitySet = {procedure, stmt, read, print,
+                                                                           assign, call, whileStmt, ifStmt, variable, constant};
     inline static const std::unordered_set<std::string> attrNameSet = {"procName", "varName", "value", "stmt#"};
     inline static const std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";
     inline static const std::string integerFormat = "[1-9][0-9]*";
@@ -74,6 +85,28 @@ public:
     inline static const std::string integer = "integer";
     inline static const std::string synonym = "synonym";
     inline static const std::string invalid = "Invalid";
+
+    inline static const std::string parent = "Parent";
+    inline static const std::string parentStar = "Parent*";
+    inline static const std::string follows = "Follows";
+    inline static const std::string followsStar = "Follows*";
+    inline static const std::string modifiesS = "ModifiesS";
+    inline static const std::string modifiesP = "ModifiesP";
+    inline static const std::string modifies = "Modifies";
+    inline static const std::string usesS = "UsesS";
+    inline static const std::string usesP = "UsesP";
+    inline static const std::string uses = "Uses";
+    inline static const std::string calls = "Calls";
+    inline static const std::string callsStar = "Calls*";
+    inline static const std::string next = "Next";
+    inline static const std::string nextStar = "Next*";
+    inline static const std::string affects = "Affects";
+    inline static const std::string affectsStar = "Affects*";
+
+    inline static const std::string procName = "procName";
+    inline static const std::string varName = "varName";
+    inline static const std::string stmtNum = "stmt#";
+    inline static const std::string value = "value";
 
     inline static const ReferenceType getEnumReferenceType(std::string input)
     {
@@ -175,15 +208,15 @@ public:
     inline static const std::set<std::string> getResultFromPKB(PKB &pkb, std::string DeType)
     {
         std::set<std::string> ret;
-        if (DeType == "constant")
+        if (DeType == constant)
         {
             ret = pkb.getAllConstVals();
         }
-        else if (DeType == "procedure")
+        else if (DeType == procedure)
         {
             ret = pkb.getAllProcNames();
         }
-        else if (DeType == "variable")
+        else if (DeType == variable)
         {
             ret = pkb.getAllVarNames();
         }
@@ -191,11 +224,11 @@ public:
         {
             std::set<int> allStmtIntSet;
 
-            if (DeType == "stmt")
+            if (DeType == stmt)
             {
                 allStmtIntSet = pkb.getAllStmtNums();
             }
-            else if (DeType == "assign")
+            else if (DeType == assign)
             {
                 allStmtIntSet = pkb.getAllStmtNumsByType("=");
             }
@@ -213,43 +246,43 @@ public:
     }
     inline static const DesignEntity getDesignEntityFromString(std::string designEntity)
     {
-        if (designEntity == "procedure")
+        if (designEntity == procedure)
         {
             return PROCEDURE;
         }
-        else if (designEntity == "stmt")
+        else if (designEntity == stmt)
         {
             return STMT;
         }
-        else if (designEntity == "constant")
+        else if (designEntity == constant)
         {
             return CONSTANT;
         }
-        else if (designEntity == "variable")
+        else if (designEntity == variable)
         {
             return VARIABLE;
         }
-        else if (designEntity == "read")
+        else if (designEntity == read)
         {
             return READ;
         }
-        else if (designEntity == "print")
+        else if (designEntity == print)
         {
             return PRINT;
         }
-        else if (designEntity == "if")
+        else if (designEntity == ifStmt)
         {
             return IF;
         }
-        else if (designEntity == "while")
+        else if (designEntity == whileStmt)
         {
             return WHILE;
         }
-        else if (designEntity == "call")
+        else if (designEntity == call)
         {
             return CALL;
         }
-        else if (designEntity == "assign")
+        else if (designEntity == assign)
         {
             return ASSIGN;
         }
@@ -261,51 +294,51 @@ public:
 
     inline static const Relationship getRelationshipFromString(std::string relationship)
     {
-        if (relationship == "Modifies")
+        if (relationship == modifies)
         {
             return MODIFIES;
         }
-        else if (relationship == "Uses")
+        else if (relationship == uses)
         {
             return USES;
         }
-        else if (relationship == "Calls")
+        else if (relationship == calls)
         {
             return CALLS;
         }
-        else if (relationship == "Calls*")
+        else if (relationship == callsStar)
         {
             return CALLSSTAR;
         }
-        else if (relationship == "Follows")
+        else if (relationship == follows)
         {
             return FOLLOWS;
         }
-        else if (relationship == "Follows*")
+        else if (relationship == followsStar)
         {
             return FOLLOWSSTAR;
         }
-        else if (relationship == "Parent")
+        else if (relationship == parent)
         {
             return PARENT;
         }
-        else if (relationship == "Parent*")
+        else if (relationship == parentStar)
         {
             return PARENTSTAR;
         }
-        else if (relationship == "Affects")
+        else if (relationship == affects)
         {
             return AFFECTS;
         }
-        else if (relationship == "Affects*")
+        else if (relationship == affectsStar)
         {
             return AFFECTSSTAR;
         }
-        else if (relationship == "Next*")
+        else if (relationship == nextStar)
         {
             return NEXTSTAR;
         }
-        else if (relationship == "Next")
+        else if (relationship == next)
         {
             return NEXT;
         }

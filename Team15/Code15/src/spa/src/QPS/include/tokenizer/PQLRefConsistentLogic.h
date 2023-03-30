@@ -7,25 +7,23 @@
 
 class PQLRefConsistentLogic {
 private:
-    // TODO: Put these constants into Utility class
-
 	std::string IDENT_STRING = Utility::quoted_ident;
     std::string UNDERSCORE = Utility::underscore;
     std::string INTEGER = Utility::integer;
-    std::string PROCEDURE = "procedure";
-	std::string STMT = "stmt";
-	std::string READ = "read";
-	std::string PRINT = "print";
-	std::string CALL = "call";
-	std::string WHILE = "while";
-	std::string IF = "if";
-	std::string ASSIGN = "assign";
-	std::string VARIABLE = "variable";
-	std::string PROCNAME = "procName";
-	std::string VARNAME = "varName";
-	std::string STMTNUM = "stmt#";
-	std::string VALUE = "value";
-	std::string CONSTANT = "constant";
+    std::string PROCEDURE = Utility::procedure;
+	std::string STMT = Utility::stmt;
+	std::string READ = Utility::read;
+	std::string PRINT = Utility::print;
+	std::string CALL = Utility::call;
+	std::string WHILE = Utility::whileStmt;
+	std::string IF = Utility::ifStmt;
+	std::string ASSIGN = Utility::assign;
+	std::string VARIABLE = Utility::variable;
+	std::string PROCNAME = Utility::procName;
+	std::string VARNAME = Utility::varName;
+	std::string STMTNUM = Utility::stmtNum;
+	std::string VALUE = Utility::value;
+	std::string CONSTANT = Utility::constant;
 
 	std::unordered_map<std::string,
 		std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>> relationLogicMap;
