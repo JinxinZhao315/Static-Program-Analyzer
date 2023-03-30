@@ -11,5 +11,6 @@
 #include <utility>
 #include "common/include/models/Line.h"
 #include "common/include/utils/StringOperations.h"
+#include "common/include/utils/Transitive.h"
 
 using namespace std;

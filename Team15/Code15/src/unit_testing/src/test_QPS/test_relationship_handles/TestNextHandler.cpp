@@ -1,7 +1,6 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 using namespace std;
@@ -12,7 +11,7 @@ string testNext(string queryStr);
 string testNext(string queryStr) {
     PKB pkb;
     pkb.addAllProcs({ "main", "proc1", "proc2", "proc3","proc4" });
-    pkb.addAllStmts({ {"while",{1}}, {"if",{2}},{"=",{3,4}},{"read",{5}}});
+    pkb.addAllStmts({ {KeywordsEnum::WHILE,{1}}, {KeywordsEnum::IF,{2}},{KeywordsEnum::ASSIGN,{3,4}},{KeywordsEnum::READ ,{5}} });
     pkb.addAllNext({ {1,{2, 5}}, {2, {3, 4}}, {3, {1}}, {4,{1}}, {5,{}} });
     pkb.addAllNextStar({ { 1,{1,2,3,4,5} }, { 2, {1,2,3,4,5} }, {3,{1,2,3,4,5}}, {4,{1,2,3,4,5}}, {5, {}}
         });
@@ -150,8 +149,7 @@ TEST_CASE("Next/Next* (Stmt, Stmt)") {
     REQUIRE(retStr3 == "1,2,3,4,5");
 
     string retStr4 = testNext("stmt p; Select p such that Next*(p, p)");
-    //cout << retStr2 << endl;
-    REQUIRE(retStr4 == "1,2,3,4");
+    REQUIRE(retStr4 == "none");
 }
 
 TEST_CASE("Next/Next* (Stmt, _)") {

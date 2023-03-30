@@ -9,11 +9,11 @@ pair<vector<string>, vector<Line>> nonEmptyLines1 = {{
         "read z;",
     "}"
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"x", "=", "1", ";"}, "="),
-        Line(2, {"y", "=", "2", ";"}, "="),
-        Line(3, {"read", "z", ";"}, "read"),
-        Line({"}"}, "}")
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"x", "=", "1", ";"}, ASSIGN),
+        Line(2, {"y", "=", "2", ";"}, ASSIGN),
+        Line(3, {"read", "z", ";"}, READ),
+        Line({"}"}, CLOSE_CURLY)
     }
 };
 
@@ -25,12 +25,12 @@ pair<vector<string>, vector<Line>> nonEmptyLines2 = {{
         "}",
     "}",
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"read", "x", ";"}, "read"),
-        Line(2, {"if", "(", "x", ">", "0", ")", "{"}, "if"),
-        Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
-        Line({"}"}, "}"),
-        Line({"}"}, "}")
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"read", "x", ";"}, READ),
+        Line(2, {"if", "(", "x", ">", "0", ")", "{"}, IF),
+        Line(3, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY)
     }
 };
 
@@ -48,18 +48,18 @@ pair<vector<string>, vector<Line>> nonEmptyLines3 = {{
             "}",
         "}",
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"read", "x", ";"}, "read"),
-        Line(2, {"while", "(", "x", ">", "0", ")", "{"}, "while"),
-        Line(3, {"x", "=", "x", "+", "1", ";"}, "="),
-        Line(4, {"read", "z", ";"}, "read"),
-        Line(5, {"if", "(", "z", "!=", "0", ")", "{"}, "if"),
-        Line(6, {"x", "=", "x", "*", "z", "/", "5", ";"}, "="),
-        Line({"}","else", "{"}, "else"),
-        Line(7, {"x", "=", "z", "/", "x", "*", "4", ";"}, "="),
-        Line({"}"}, "}"),
-        Line({"}"}, "}"),
-        Line({"}"}, "}")
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"read", "x", ";"}, READ),
+        Line(2, {"while", "(", "x", ">", "0", ")", "{"}, WHILE),
+        Line(3, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+        Line(4, {"read", "z", ";"}, READ),
+        Line(5, {"if", "(", "z", "!=", "0", ")", "{"}, IF),
+        Line(6, {"x", "=", "x", "*", "z", "/", "5", ";"}, ASSIGN),
+        Line({"}","else", "{"}, ELSE),
+        Line(7, {"x", "=", "z", "/", "x", "*", "4", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY)
     }
 };
 
@@ -98,39 +98,39 @@ pair<vector<string>, vector<Line>> nonEmptyLines4 = {{
         "normSq = cenX * cenX + cenY * cenY;",
     "}",
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"flag", "=", "0", ";"}, "="),
-        Line(2, {"call", "computeCentroid", ";"}, "call"),
-        Line(3, {"call", "printResults", ";"}, "call"),
-        Line({"}"}, "}"),
-        Line({"procedure", "readPoint", "{"}, "procedure"),
-        Line(4, {"read", "x", ";"}, "read"),
-        Line(5, {"read", "y", ";"}, "read"),
-        Line({"}"}, "}"),
-        Line({"procedure", "printResults", "{"}, "procedure"),
-        Line(6, {"print", "flag", ";"}, "print"),
-        Line(7, {"print", "cenX", ";"}, "print"),
-        Line(8, {"print", "cenY", ";"}, "print"),
-        Line(9, {"print", "normSq", ";"}, "print"),
-        Line({"}"}, "}"),
-        Line({"procedure", "computeCentroid", "{"}, "procedure"),
-        Line(10, {"count", "=", "0", ";"}, "="),
-        Line(11, {"cenX", "=", "0", ";"}, "="),
-        Line(12, {"cenY", "=", "0", ";"}, "="),
-        Line(13, {"call", "readPoint", ";"}, "call"),
-        Line(14, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, "while"),
-        Line(15, {"count", "=", "count", "+", "1", ";"}, "="),
-        Line(16, {"cenX", "=", "cenX", "+", "x", ";"}, "="),
-        Line(17, {"cenY", "=", "cenY", "+", "y", ";"}, "="),
-        Line(18, {"call", "readPoint", ";"}, "call"),
-        Line(19, {"if", "(", "count", "==", "0", ")", "{"}, "if"),
-        Line(20, {"flag", "=", "1", ";"}, "="),
-        Line({"}", "else", "{"}, "else"),
-        Line(21, {"cenX", "=", "cenX", "/", "count", ";"}, "="),
-        Line(22, {"cenY", "=", "cenY", "/", "count", ";"}, "="),
-        Line({"}"}, "}"),
-        Line(23, {"normSq", "=", "cenX", "*", "cenX", "+", "cenY", "*", "cenY", ";"}, "="),
-        Line({"}"}, "}"),
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"flag", "=", "0", ";"}, ASSIGN),
+        Line(2, {"call", "computeCentroid", ";"}, CALL),
+        Line(3, {"call", "printResults", ";"}, CALL),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"procedure", "readPoint", "{"}, PROCEDURE),
+        Line(4, {"read", "x", ";"}, READ),
+        Line(5, {"read", "y", ";"}, READ),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"procedure", "printResults", "{"}, PROCEDURE),
+        Line(6, {"print", "flag", ";"}, PRINT),
+        Line(7, {"print", "cenX", ";"}, PRINT),
+        Line(8, {"print", "cenY", ";"}, PRINT),
+        Line(9, {"print", "normSq", ";"}, PRINT),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"procedure", "computeCentroid", "{"}, PROCEDURE),
+        Line(10, {"count", "=", "0", ";"}, ASSIGN),
+        Line(11, {"cenX", "=", "0", ";"}, ASSIGN),
+        Line(12, {"cenY", "=", "0", ";"}, ASSIGN),
+        Line(13, {"call", "readPoint", ";"}, CALL),
+        Line(14, {"while", "(", "(", "x", "!=", "0", ")", "&&", "(", "y", "!=", "0", ")", ")", "{"}, WHILE),
+        Line(15, {"count", "=", "count", "+", "1", ";"}, ASSIGN),
+        Line(16, {"cenX", "=", "cenX", "+", "x", ";"}, ASSIGN),
+        Line(17, {"cenY", "=", "cenY", "+", "y", ";"}, ASSIGN),
+        Line(18, {"call", "readPoint", ";"}, CALL),
+        Line(19, {"if", "(", "count", "==", "0", ")", "{"}, IF),
+        Line(20, {"flag", "=", "1", ";"}, ASSIGN),
+        Line({"}", "else", "{"}, ELSE),
+        Line(21, {"cenX", "=", "cenX", "/", "count", ";"}, ASSIGN),
+        Line(22, {"cenY", "=", "cenY", "/", "count", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line(23, {"normSq", "=", "cenX", "*", "cenX", "+", "cenY", "*", "cenY", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
     }
 };
 
@@ -141,11 +141,11 @@ pair<vector<string>, vector<Line>> nonEmptyLines5 = {{
         "read z;",
     "}"
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"x", "=", "1", ";"}, "="),
-        Line(2, {"y", "=", "2", ";"}, "="),
-        Line(3, {"read", "z", ";"}, "read"),
-        Line({"}"}, "}")
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"x", "=", "1", ";"}, ASSIGN),
+        Line(2, {"y", "=", "2", ";"}, ASSIGN),
+        Line(3, {"read", "z", ";"}, READ),
+        Line({"}"}, CLOSE_CURLY)
     }
 };
 
@@ -156,11 +156,11 @@ pair<vector<string>, vector<Line>> nonEmptyLines6 = {{
         "read readZ;",
     "}"
     }, {
-        Line({"procedure", "test", "{"}, "procedure"),
-        Line(1, {"printX", "=", "1", ";"}, "="),
-        Line(2, {"callY", "=", "2", ";"}, "="),
-        Line(3, {"read", "readZ", ";"}, "read"),
-        Line({"}"}, "}")
+        Line({"procedure", "test", "{"}, PROCEDURE),
+        Line(1, {"printX", "=", "1", ";"}, ASSIGN),
+        Line(2, {"callY", "=", "2", ";"}, ASSIGN),
+        Line(3, {"read", "readZ", ";"}, READ),
+        Line({"}"}, CLOSE_CURLY)
     }
 };
 
@@ -239,30 +239,30 @@ pair<vector<string>, vector<Line>> source4_tok = {{
     "}",
     "}",
     }, {
-        Line({"procedure", "proc1", "{"}, "procedure"),
-        Line(1, {"a", "=", "0", ";"}, "="),
-        Line(2, {"b", "=", "100", ";"}, "="),
-        Line(3, {"c", "=", "50", ";"}, "="),
-        Line(4, {"while", "(", "a", "<", "50", ")", "{"}, "while"),
-        Line(5, {"while", "(", "b", ">", "1", ")", "{"}, "while"),
-        Line(6, {"if", "(", "a", ">", "25", ")", "then", "{"}, "if"),
-        Line(7, {"if", "(", "b", "<", "50", ")", "then", "{"}, "if"),
-        Line(8, {"b", "=", "b", "/", "2", ";"}, "="),
-        Line(9, {"a", "=", "a", "+", "5", ";"}, "="),
-        Line({"}", "else", "{"}, "else"),
-        Line(10, {"if", "(", "b", "<", "75", ")", "then", "{"}, "if"),
-        Line(11, {"b", "=", "b", "/", "3", ";"}, "="),
-        Line({"}", "else", "{"}, "else"),
-        Line(12, {"b", "=", "b", "/", "4", ";"}, "="),
-        Line({"}"}, "}"),
-        Line({"}"}, "}"),
-        Line({"}", "else", "{"}, "else"),
-        Line(13, {"a", "=", "a", "*", "2", ";"}, "="),
-        Line({"}"}, "}"),
-        Line({"}"}, "}"),
-        Line(14, {"a", "=", "a", "+", "1", ";"}, "="),
-        Line({"}"}, "}"),
-        Line({"}"}, "}")
+        Line({"procedure", "proc1", "{"}, PROCEDURE),
+        Line(1, {"a", "=", "0", ";"}, ASSIGN),
+        Line(2, {"b", "=", "100", ";"}, ASSIGN),
+        Line(3, {"c", "=", "50", ";"}, ASSIGN),
+        Line(4, {"while", "(", "a", "<", "50", ")", "{"}, WHILE),
+        Line(5, {"while", "(", "b", ">", "1", ")", "{"}, WHILE),
+        Line(6, {"if", "(", "a", ">", "25", ")", "then", "{"}, IF),
+        Line(7, {"if", "(", "b", "<", "50", ")", "then", "{"}, IF),
+        Line(8, {"b", "=", "b", "/", "2", ";"}, ASSIGN),
+        Line(9, {"a", "=", "a", "+", "5", ";"}, ASSIGN),
+        Line({"}", "else", "{"}, ELSE),
+        Line(10, {"if", "(", "b", "<", "75", ")", "then", "{"}, IF),
+        Line(11, {"b", "=", "b", "/", "3", ";"}, ASSIGN),
+        Line({"}", "else", "{"}, ELSE),
+        Line(12, {"b", "=", "b", "/", "4", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}", "else", "{"}, ELSE),
+        Line(13, {"a", "=", "a", "*", "2", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY),
+        Line(14, {"a", "=", "a", "+", "1", ";"}, ASSIGN),
+        Line({"}"}, CLOSE_CURLY),
+        Line({"}"}, CLOSE_CURLY)
 }
 };
 

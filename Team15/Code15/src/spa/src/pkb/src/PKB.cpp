@@ -43,7 +43,7 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 }
 
 //SP statement
-void PKB::addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums) {
+void PKB::addAllStmts(std::unordered_map<KeywordsEnum, std::set<int>> stmtNums) {
 	stmtTable.addAllStatementNumbers(stmtNums);
 	stmtTable.addAllStatementNumbersByType(stmtNums);
 }
@@ -171,7 +171,7 @@ std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
 
-std::set<int> PKB::getAllStmtNumsByType(std::string stmtType) {
+std::set<int> PKB::getAllStmtNumsByType(KeywordsEnum stmtType) {
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 

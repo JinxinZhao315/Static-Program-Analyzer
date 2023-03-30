@@ -4,9 +4,9 @@ Tokeniser::Tokeniser() {
     keywords = new Keywords();
 }
 
-void Tokeniser::feedLines(vector<string> lines) {
+void Tokeniser::feedLines(const vector<string>& lines) {
     auto* tokenVector = new vector<vector<string>*>();
-    for(auto line : lines) {
+    for(const auto& line : lines) {
         vector<string>* tokens = tokenise(line);
         tokenVector->push_back(tokens);
     }
@@ -14,31 +14,22 @@ void Tokeniser::feedLines(vector<string> lines) {
     generateLineObjects(extractedTokens);
 }
 
-void Tokeniser::printTokens() {
-    for(vector<string>* line : *extractedTokens) {
-        for(const string& token : *line) {
-            cout << token << " ";
-        }
-        cout << endl;
-    }
-}
-
-void pushToken(vector<string>* tokens, string token) {
+void pushToken(vector<string>* tokens, const string& token) {
     tokens->push_back(token);
 }
 
-bool passesLengthCheck(string keyword, string token) {
-    if(keyword == "read"
-        || keyword == "print"
-        || keyword == "call"
-        || keyword == "procedure"
-        || keyword == "while"
-        || keyword == "if"
-        || keyword == "then"
-        || keyword == "else"
-        || keyword == "return"
-        || keyword == "true"
-        || keyword == "false"
+bool Tokeniser::passesLengthCheck(const string& keyword, const string& token) const {
+    if(keyword == keywords->keywordMap.second.at(READ)
+        || keyword == keywords->keywordMap.second.at(PRINT)
+        || keyword == keywords->keywordMap.second.at(CALL)
+        || keyword == keywords->keywordMap.second.at(PROCEDURE)
+        || keyword == keywords->keywordMap.second.at(WHILE)
+        || keyword == keywords->keywordMap.second.at(IF)
+        || keyword == keywords->keywordMap.second.at(THEN)
+        || keyword == keywords->keywordMap.second.at(ELSE)
+        || keyword == keywords->keywordMap.second.at(RETURN)
+        || keyword == keywords->keywordMap.second.at(TRUE)
+        || keyword == keywords->keywordMap.second.at(FALSE)
         ) {
         return keyword.length() == token.length();
     } else {
@@ -46,9 +37,9 @@ bool passesLengthCheck(string keyword, string token) {
     }
 }
 
-bool setStartsWithKeyword(vector<string>* keywords, vector<string>* tokens, string token, int* position) {
+bool Tokeniser::setStartsWithKeyword(vector<string>* keywordVector, vector<string>* tokens, const string& token, int* position) const {
     bool isKeyword = false;
-    for (auto keyword : *keywords) {
+    for (const auto& keyword : *keywordVector) {
         int keywordLength = keyword.length();
         if (token.find(keyword, *position) == *position && passesLengthCheck(keyword, token)) {
 
@@ -61,9 +52,9 @@ bool setStartsWithKeyword(vector<string>* keywords, vector<string>* tokens, stri
     return isKeyword;
 }
 
-int setNextKeywordPosition(vector<string>* keywords, string token, int currentPosition) {
+int Tokeniser::setNextKeywordPosition(vector<string>* keywordVector, const string& token, int currentPosition) const {
     int nextKeywordPosition = token.length();
-    for (auto keyword : *keywords) {
+    for (const auto& keyword : *keywordVector) {
         int keywordPosition = token.find(keyword, currentPosition);
         if (keywordPosition != -1 && keywordPosition < nextKeywordPosition && passesLengthCheck(keyword, token)) {
             nextKeywordPosition = keywordPosition;
@@ -72,15 +63,15 @@ int setNextKeywordPosition(vector<string>* keywords, string token, int currentPo
     return nextKeywordPosition;
 }
 
-void moveToNextKeyword(vector<string>* keywords, vector<string>* tokens, string token, int* currentPosition) {
-    int nextKeywordPosition = setNextKeywordPosition(keywords, token, *currentPosition);
+void Tokeniser::moveToNextKeyword(vector<string>* keywordVector, vector<string>* tokens, const string& token, int* currentPosition) const {
+    int nextKeywordPosition = setNextKeywordPosition(keywordVector, token, *currentPosition);
     int nonKeywordTokenLength = nextKeywordPosition - *currentPosition;
     string nonKeywordToken = token.substr(*currentPosition, nonKeywordTokenLength);
     pushToken(tokens, nonKeywordToken);
     *currentPosition = nextKeywordPosition;
 }
 
-vector<string>* Tokeniser::tokenise(string line) {
+vector<string>* Tokeniser::tokenise(const string& line) const {
     auto* tokens = new vector<string>();
     stringstream stream(line);
     string token;
@@ -94,17 +85,17 @@ vector<string>* Tokeniser::tokenise(string line) {
     return tokens;
 }
 
-string findKeyword(vector<string>* line, vector<string>* keywords) {
-    for (auto token : *line) {
-        if (find(keywords->begin(), keywords->end(), token) != keywords->end()) {
-            return token;
+KeywordsEnum Tokeniser::findKeyword(vector<string>* line) const {
+    for (const auto& token : *line) {
+        if(keywords->keywordMap.first.count(token) > 0) {
+            return keywords->keywordMap.first.at(token);
         }
     }
-    return "";
+    return NONE;
 }
 
-bool checkKeywordHasLineNumber(string keyword) {
-    return !(keyword == "procedure" || keyword == "else" || keyword == "}");
+bool checkKeywordHasLineNumber(KeywordsEnum keyword) {
+    return !(keyword == PROCEDURE || keyword == ELSE || keyword == CLOSE_CURLY);
 }
 
 bool checkElse(vector <string>* line) {
@@ -116,7 +107,7 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
     int lineNumber = 1;
     vector<Line> lines;
     for(auto line : *tokens) {
-        string keyword = findKeyword(line, keywords->getKeywords());
+        KeywordsEnum keyword = findKeyword(line);
         bool hasLineNumber = checkKeywordHasLineNumber(keyword);
         Line* extractedLine;
         if(hasLineNumber) {
@@ -125,7 +116,7 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
         } else {
             extractedLine = new Line(*line, keyword);
             if(checkElse(line)) {
-                extractedLine = new Line(*line, "else");
+                extractedLine = new Line(*line, ELSE);
             }
         }
         lines.push_back(*extractedLine);

@@ -10,9 +10,9 @@ string testUsesS(string queryStr);
 string testUsesS(string queryStr) {
     PKB pkb;
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({ 1, 2 })));
-    stmts.insert(make_pair("print", set<int>({ 3 })));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 1, 2 })));
+    stmts.insert(make_pair(KeywordsEnum::PRINT, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
     pkb.addAllVars({ "x", "y", "k", "m", "i", "j", "t"});

@@ -38,15 +38,11 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllWithRead(extractor->getReadLineNumToVarName());
     pkb->addAllWithPrint(extractor->getPrintLineNumToVarName());
     pkb->addAllWithCall(extractor->getCallLineNumToProcName());
-
     pkb->addAllNext(extractor->getNextRS());
     //TODO
     //Next*: pkb->addAllNextStar();
     //Affects: pkb->addAllAffects();
     //Affects*: pkb->addAllAffectsStar();
-    //with: pkb->addAllWithRead();
-    //with: pkb->addAllWithPrint();
-    //with: pkb->addAllWithCall();
 }
 
 void SourceProcessor::printParsedProgram() {

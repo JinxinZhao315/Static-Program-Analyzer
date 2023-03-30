@@ -1,137 +1,117 @@
 #include "source_processor/include/extractor/NextRelationshipExtractor.h"
 
-/**
- * To be used to get prevCFGNode when at the end of the if-then/else block and link it to the
- */
+Keywords nextKeywords;
+
 void storeLinesToLink(const Line& prevLine, pair<int, string>& justExited, int prevLineNumber, vector<int>& nodesToJoin) {
-    if (prevLine.getType() == "}") {
-        if (justExited.second == "while") nodesToJoin.push_back(justExited.first);
+    if (prevLine.getType() == CLOSE_CURLY) {
+        if (justExited.second == nextKeywords.keywordMap.second.at(WHILE)) nodesToJoin.push_back(justExited.first);
     } else {
         nodesToJoin.push_back(prevLineNumber);
     }
 }
 
-void linkAllToLine(vector<int>& nodesToJoin, unordered_map<int, set<int>>& cfg, int targetLine) {
+void linkAllToLine(vector<int>& nodesToJoin, unordered_map<int, set<int>>& nextRS, int targetLine) {
     for (auto nodeToJoin : nodesToJoin) {
-        cfg[nodeToJoin].insert(targetLine);
+        nextRS[nodeToJoin].insert(targetLine);
     }
     nodesToJoin.clear();
 }
 
-void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, string>>& nestingStack,
+void linkStoredLines(vector<int>& nodesToJoin, const vector<pair<int, KeywordsEnum>>& nestingStack,
                      const unordered_map<int, int>& followsRS,
-                     unordered_map<int, set<int>>& cfg,
-                     unordered_map<string, set<int>>& exitPointsOfProc,
-                     const string& currProc) {
+                     unordered_map<int, set<int>>& nextRS) {
     int i = 0;
     for (auto it = nestingStack.rbegin(); it != nestingStack.rend(); ++it) {
         auto parentLine = it->first;
         auto parentType = it->second;
-        if (i >= 1 && parentType == "while") {
-            linkAllToLine(nodesToJoin, cfg, parentLine);
+        if (i >= 1 && parentType == WHILE) {
+            linkAllToLine(nodesToJoin, nextRS, parentLine);
             nodesToJoin.clear();
             return;
         } else if (followsRS.count(parentLine) > 0) {
             int lineThatFollowsParent = followsRS.at(parentLine);
-            linkAllToLine(nodesToJoin, cfg, lineThatFollowsParent);
+            linkAllToLine(nodesToJoin, nextRS, lineThatFollowsParent);
             nodesToJoin.clear();
             return;
         }
         i++;
     }
-    // No one to link to, save as exit point
-    exitPointsOfProc[currProc].insert(nodesToJoin.begin(), nodesToJoin.end());
     nodesToJoin.clear();
 }
 
-void linkCallStatements(const unordered_map<string, int>& entryPointOfProc,
-                        const unordered_map<string, set<int>>& exitPointsOfProc,
-                        const unordered_map<int, string>& callLineNumToProcName,
-                        unordered_map<int, set<int>>& cfg) {
-    for (auto[callLine, procName] : callLineNumToProcName) {
-        int entryPoint = entryPointOfProc.at(procName);
-        cfg[callLine].insert(entryPoint);
-        set<int> exitPoints = exitPointsOfProc.at(procName);
-        for (int exitPoint: exitPoints) {
-            cfg[exitPoint].insert(callLine);
-        }
-    }
-}
+unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const unordered_map<int, int>& followsRS) {
+    unordered_map<int, set<int>> nextRS;
 
-unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const unordered_map<int, int>& followsRS,
-                                           const unordered_map<int, string>& callLineNumToProcName) {
-    unordered_map<int, set<int>> cfg;
+    if (program.size() < 2) return nextRS;
 
-    if (program.size() < 2) return cfg;
-    unordered_map<string, int> entryPointOfProc;
-    unordered_map<string, set<int>> exitPointsOfProc;
     // intermediate data structures for each procedure
-    vector<pair<int, string>> nestingStack;
+    vector<pair<int, KeywordsEnum>> nestingStack;
     vector<int> nodesToJoin;
     bool linkPrevLine = false;
     int prevLineNumber;
     int currMaxLineNumber = 0;
     int nextLineNumber;
-    string currProc;
     pair<int, string> justExited;
     for (int i = 0; i < program.size(); i++) {
-        Line line = program[i];
+        const Line& line = program[i];
         int lineNumber = line.getLineNumber();
-        string lineType = line.getType();
+        KeywordsEnum lineType = line.getType();
         currMaxLineNumber = max(currMaxLineNumber, lineNumber);
         nextLineNumber = currMaxLineNumber + 1;
         bool shouldLinkPrevLine = linkPrevLine && prevLineNumber != lineNumber;
-        if (lineType == "procedure") {
-            currProc = getProcedureNameFromProcedureStatement(line.getTokens());
+        if (lineType == PROCEDURE) {
             nestingStack.clear();
             nodesToJoin.clear();
             linkPrevLine = false;
             justExited = make_pair(0, "");
-            entryPointOfProc[currProc] = nextLineNumber; // add entry point of proc
             continue;
-        } else if (lineType == "if" || lineType == "while") {
+        } else if (lineType == IF || lineType == WHILE) {
             if (shouldLinkPrevLine) {
-                cfg[prevLineNumber].insert(lineNumber);
+                nextRS[prevLineNumber].insert(lineNumber);
             }
             nestingStack.emplace_back(lineNumber, lineType);
-            cfg[lineNumber].insert(nextLineNumber);
+            nextRS[lineNumber].insert(nextLineNumber);
             linkPrevLine = false;
-        } else if (lineType == "else") {
+        } else if (lineType == ELSE) {
             auto [parentLine, parentType] = nestingStack.back();
-            cfg[parentLine].insert(nextLineNumber);
+            nextRS[parentLine].insert(nextLineNumber);
             storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
-            linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
+            linkStoredLines(nodesToJoin, nestingStack, followsRS, nextRS);
             linkPrevLine = false;
-        } else if (lineType == "}") { // when exiting nesting
+        } else if (lineType == CLOSE_CURLY) { // when exiting nesting
             if (!nestingStack.empty()) {
                 auto [parentLine, parentType] = nestingStack.back();
-                if (parentType == "if") {
+                if (parentType == IF) {
                     storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
-                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
-                } else if (parentType == "while") {
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, nextRS);
+                } else if (parentType == WHILE) {
                     storeLinesToLink(program[i - 1], justExited, prevLineNumber, nodesToJoin);
-                    linkAllToLine(nodesToJoin, cfg, parentLine); //link control flow to head of while
+                    linkAllToLine(nodesToJoin, nextRS, parentLine); //link control flow to head of while
                     nodesToJoin.push_back(parentLine);
-                    linkStoredLines(nodesToJoin, nestingStack, followsRS, cfg, exitPointsOfProc, currProc);
+                    linkStoredLines(nodesToJoin, nestingStack, followsRS, nextRS);
                 }
                 justExited = make_pair(parentLine, parentType);
                 nestingStack.pop_back();
             } else { //exiting function
                 vector<int> temp;
                 storeLinesToLink(program[i - 1], justExited, prevLineNumber, temp);
-                exitPointsOfProc[currProc].insert(temp.begin(), temp.end()); // add exit point of proc
             }
             linkPrevLine = false;
         } else {
             if (shouldLinkPrevLine) {
-                cfg[prevLineNumber].insert(lineNumber);
+                nextRS[prevLineNumber].insert(lineNumber);
             }
             linkPrevLine = true;
         }
         if (lineNumber > 0) prevLineNumber = lineNumber;
-        if (lineType != "}") justExited = make_pair(0, "");
+        if (lineType != CLOSE_CURLY) justExited = make_pair(0, "");
     }
-    linkCallStatements(entryPointOfProc, exitPointsOfProc, callLineNumToProcName, cfg);
-    return cfg;
+    return nextRS;
+}
+
+unordered_map<int, set<int>> extractNextStarRS(const unordered_map<int, set<int>>& nextRS) {
+    unordered_map<int, set<int>> nextStarRS;
+    generateTransitiveRelationship(nextRS, nextStarRS);
+    return nextStarRS;
 }
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Keywords.h"
 
 using namespace std;
 
@@ -10,19 +11,20 @@ class Line {
 private:
     int lineNumber;
     vector<string> tokens;
-    string type;
+    KeywordsEnum type;
 public:
+    Line() {};
     Line(int lineNumber, vector<string> tokens) {
         this->lineNumber = lineNumber;
         this->tokens = tokens;
-        this->type= "";
+        this->type = NONE;
     };
-    Line(int lineNumber, vector<string> tokens, string type) {
+    Line(int lineNumber, vector<string> tokens, KeywordsEnum type) {
         this->lineNumber = lineNumber;
         this->tokens = tokens;
         this->type = type;
     }
-    Line(vector<string> tokens, string type) {
+    Line(vector<string> tokens, KeywordsEnum type) {
         this->lineNumber = 0;
         this->tokens = tokens;
         this->type = type;
@@ -30,7 +32,7 @@ public:
 
     int getLineNumber() const;
     vector<string> getTokens();
-    string getType() const;
+    KeywordsEnum getType() const;
     void printLine();
 
     bool operator<(const Line& l) const { // necessary to create set<Line>

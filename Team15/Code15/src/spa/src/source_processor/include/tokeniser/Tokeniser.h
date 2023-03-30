@@ -16,9 +16,14 @@ private:
     vector<Line> extractedLines;
 public:
     Tokeniser();
-    void feedLines(vector<string> lines);
+    void feedLines(const vector<string>& lines);
+    KeywordsEnum findKeyword(vector<string>* line) const;
+    bool passesLengthCheck(const string& keyword, const string& token) const;
+    bool setStartsWithKeyword(vector<string>* keywords, vector<string>* tokens, const string& token, int* position) const;
+    int setNextKeywordPosition(vector<string>* keywords, const string& token, int currentPosition) const;
+    void moveToNextKeyword(vector<string>* keywords, vector<string>* tokens, const string& token, int* currentPosition) const;
     Keywords* keywords;
-    vector<string>* tokenise(string line);
+    vector<string>* tokenise(const string& line) const;
     void printTokens();
     void printLines();
     void generateLineObjects(vector<vector<string>*>* tokens);

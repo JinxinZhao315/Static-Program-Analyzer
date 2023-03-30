@@ -57,6 +57,56 @@ TEST_CASE("extractModifiesUsesAndCallRS_twoReadStatements") {
     REQUIRE(result == expected);
 }
 
+TEST_CASE("extractModifiesUsesAndCallRS_twoProceduresCallModifiesVarInIfStmtContainer") {
+    const vector<Line> lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"if", "(", "y", "==", "0", ")", "{"}, IF),
+            Line(2, {"call", "B", ";"}, CALL),
+            Line({"}", "else", "{"}, ELSE),
+            Line(3, {"z", "=", "z", "/", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "B", "{"}, PROCEDURE),
+            Line(4, {"read", "x", ";"}, READ),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    const set<string> vars = {"x", "y", "z"};
+    auto result = extractModifiesUsesAndCallRS(lines, vars).modifiesRS;
+    unordered_map<int, set<string>> expected = {
+            {1, {"x", "z"}},
+            {2, {"x"}},
+            {3, {"z"}},
+            {4, {"x"}}
+    };
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("extractModifiesUsesAndCallRS_twoProceduresCallModifiesVarInWhileStmtContainer") {
+    const vector<Line> lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"while", "(", "y", "==", "0", ")", "{"}, WHILE),
+            Line(2, {"z", "=", "z", "/", "1", ";"}, ASSIGN),
+            Line({"}", "else", "{"}, ELSE),
+            Line(3, {"call", "B", ";"}, CALL),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "B", "{"}, PROCEDURE),
+            Line(4, {"while", "(", "y", "==", "0", ")", "{"}, WHILE),
+            Line(5, {"read", "x", ";"}, READ),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    const set<string> vars = {"x", "y", "z"};
+    auto result = extractModifiesUsesAndCallRS(lines, vars).modifiesRS;
+    unordered_map<int, set<string>> expected = {
+            {1, {"x", "z"}},
+            {2, {"z"}},
+            {3, {"x"}},
+            {4, {"x"}},
+            {5, {"x"}}
+    };
+    REQUIRE(result == expected);
+}
+
 // Test modifiesP
 TEST_CASE("extractModifiesUsesAndCallRS_manyModifies") {
     auto result = extractModifiesUsesAndCallRS(computeCentroid, computeCentroidVariables).procedureModifiesRS;

@@ -38,8 +38,8 @@ string source_follows = "Team15/Tests15/source-follows.txt";
 string source_parent = "Team15/Tests15/source-parent.txt";
 string source7 = "Team15/Tests15/source-7.txt";
 string uses_modifies = "Team15/Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "Team15/Tests15/source-usesmodifies2.txt";
 string source_with = "Team15/Tests15/with.txt";
+string source_ifwhile = "Team15/Tests15/source-ifwhile.txt";
 #elif _WIN32
 string source_sample1 = "./Team15/Tests15/source-sample1.txt";
 string source_sample2 = "./Team15/Tests15/source-sample2.txt";
@@ -49,17 +49,17 @@ string source_follows = "./Team15/Tests15/source-follows.txt";
 string source_parent = "./Team15/Tests15/source-parent.txt";
 string source7 = "./Team15/Tests15/source-7.txt";
 string uses_modifies = "./Team15/Tests15/source-usesmodifies.txt";
-string uses_modifies2 = "./Team15/Tests15/source-usesmodifies2.txt";
 string source_with = "./Team15/Tests15/with.txt";
 string source_stresstest = "../../../../../../Tests15/source-stresstest.txt";
+string source_ifwhile = "./Team15/Tests15/source-ifwhile.txt";
 #endif
 
 // TEST_CASE("Overall test : source-usesmodifies.txt 1") {
 //     string filename = uses_modifies;
 //     string queryStr = "stmt s; Select s such that Uses(s, \"a\")";
-//
+
 //     set<string> result = testDriver(filename, queryStr);
-//     set<string> expectedResult = { "6" };
+//     set<string> expectedResult = { "2", "3", "4", "5", "7", "10", "11" };
 //     REQUIRE(result == expectedResult);
 // }
 
@@ -991,13 +991,97 @@ string source_stresstest = "../../../../../../Tests15/source-stresstest.txt";
 //     REQUIRE(result == expectedResult);
 // }
 
+
+
+//TEST_CASE("Overall test : source7.txt 8")
+//{
+//    // Enter source of SIMPLE code
+//    string filename = source7;
+//    string queryStr = "stmt s; procedure p; Select p such that Calls(p, _)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"Loid", "Anya"};
+//    REQUIRE(result == expectedResult);
+//}
+//
+//TEST_CASE("Overall test : source7.txt 9")
+//{
+//    // Enter source of SIMPLE code
+//    string filename = source7;
+//    string queryStr = "stmt s; procedure p; Select p such that Calls(_, p)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"Anya", "Yor"};
+//    REQUIRE(result == expectedResult);
+//}
+//
+//TEST_CASE("Overall test : source7.txt 10")
+//{
+//    // Enter source of SIMPLE code
+//    string filename = source7;
+//    string queryStr = "stmt s; procedure p; Select p such that Calls*(_, _)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"Loid", "Anya", "Yor"};
+//    REQUIRE(result == expectedResult);
+//}
+//
+// TEST_CASE("Overall test : source-ifwhile.txt 1") {
+//     string filename = source_ifwhile;
+//     string queryStr = "while w; Select w such that Parent*(w, 10) and Uses(w, \"x\") and Follows(6, w) pattern w (\"x\", _)";
+//
+//     set<string> result = testDriver(filename, queryStr);
+//     set<string> expectedResult = { "8" };
+//     REQUIRE(result == expectedResult);
+// }
+//
+// TEST_CASE("Overall test : source-ifwhile.txt 2") {
+//     string filename = source_ifwhile;
+//     string queryStr = "if i; Select i such that Parent(i, 11) and Modifies(i, \"x\") and Follows(i, 12) pattern i (\"x\", _, _)";
+//
+//     set<string> result = testDriver(filename, queryStr);
+//     set<string> expectedResult = { "9" };
+//     REQUIRE(result == expectedResult);
+// }
+//
+//TEST_CASE("Overall test : source-sample1.txt")
+//{
+//    string filename = source_sample1;
+//    string queryStr = "stmt s; Select s such that Modifies(s, \"i\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"3", "4", "11", "12", "13", "14", "17"};
+//    REQUIRE(result == expectedResult);
+//}
+//
+//TEST_CASE("Overall test : source-sample1.txt 2")
+//{
+//    string filename = source_sample1;
+//    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"4", "5", "6", "7", "8", "9", "10", "12", "13", "16", "18", "19", "21", "22", "23", "24"};
+//    REQUIRE(result == expectedResult);
+//}
+//
+//TEST_CASE("Overall test : source-sample3.txt 3")
+//{
+//    string filename = source_sample3;
+//    string queryStr = "stmt s; Select BOOLEAN such that Uses(\"main\", \"flag\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = {"TRUE"};
+//    REQUIRE(result == expectedResult);
+//}
+
+
 TEST_CASE("Overall test : source-stresstest 1")
 {
     string filename = source_stresstest;
     string queryStr = "stmt s, s2; Select s such that Follows(s, s2)";
     PKB pkb;
     spDriver(filename, pkb);
-    
+
     set<string> result = qpsDriver(queryStr, pkb);
 
     string queryStr2 = "assign a1, a2, a3; stmt s1, s2, s3, s4, s5, s6, s7; variable v1, v2, v3;\

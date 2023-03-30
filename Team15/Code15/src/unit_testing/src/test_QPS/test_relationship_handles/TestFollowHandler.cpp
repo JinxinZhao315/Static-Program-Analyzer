@@ -1,7 +1,6 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/PQLDriver.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 
@@ -12,8 +11,8 @@ TEST_CASE("Follows* test")
     {
         PKB pkb;
 
-        unordered_map<string, set<int>> stmts;
-        stmts.insert(make_pair("read", set<int>({ 1, 2, 3, 4, 5 })));
+        unordered_map<KeywordsEnum, set<int>> stmts;
+        stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 1, 2, 3, 4, 5 })));
         pkb.addAllStmts(stmts);
 
         unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
@@ -109,8 +108,8 @@ TEST_CASE("Follows test 1")
         */
         PKB pkb;
 
-        unordered_map<string, set<int>> stmts;
-        stmts.insert(make_pair("read", set<int>({ 1, 2, 3, 4, 5 })));
+        unordered_map<KeywordsEnum, set<int>> stmts;
+        stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 1, 2, 3, 4, 5 })));
         pkb.addAllStmts(stmts);
 
         unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };
@@ -173,9 +172,9 @@ TEST_CASE("Follows test 2")
 
         PKB pkb;
 
-        unordered_map<string, set<int>> stmts;
-        stmts.insert(make_pair("read", set<int>({ 1, 3, 4, 5 })));
-        stmts.insert(make_pair("call", set<int>({ 2 })));
+        unordered_map<KeywordsEnum, set<int>> stmts;
+        stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 1, 3, 4, 5 })));
+        stmts.insert(make_pair(KeywordsEnum::CALL, set<int>({ 2 })));
         pkb.addAllStmts(stmts);
 
         unordered_map<int, int> follows = { {1, 2}, {2, 3}, {3, 4}, {4, 5} };

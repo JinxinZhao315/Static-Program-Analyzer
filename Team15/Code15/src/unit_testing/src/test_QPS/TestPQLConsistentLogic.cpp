@@ -16,7 +16,6 @@ TEST_CASE("Test Parent Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "call", "call") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "while", "if") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "assign", "integer") == true);
-		cout << "PQLRefConsistentLogic:Test Parent Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "variable", "integer") == false);
@@ -26,7 +25,6 @@ TEST_CASE("Test Parent Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent", "while", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test Parent Cases:Test Negative Cases:passed" << endl;
 	}
 }
 TEST_CASE("Test Parent* Cases") {
@@ -37,7 +35,6 @@ TEST_CASE("Test Parent* Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "call", "call") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "while", "if") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "assign", "integer") == true);
-		cout << "PQLRefConsistentLogic:Test Parent* Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "variable", "integer") == false);
@@ -47,7 +44,6 @@ TEST_CASE("Test Parent* Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Parent*", "while", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test Parent* Cases:Test Negative Cases:passed" << endl;
 	}
 }
 TEST_CASE("Test Follows* Cases") {
@@ -58,7 +54,6 @@ TEST_CASE("Test Follows* Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "call", "call") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "while", "if") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "assign", "integer") == true);
-		cout << "PQLRefConsistentLogic:Test Follows* Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "variable", "integer") == false);
@@ -68,7 +63,6 @@ TEST_CASE("Test Follows* Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows*", "while", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test Follows* Cases:Test Negative Cases:passed" << endl;
 	}
 }
 
@@ -80,7 +74,6 @@ TEST_CASE("Test Follows Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "call", "call") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "while", "if") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "assign", "integer") == true);
-		cout << "PQLRefConsistentLogic:Test Follows Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "variable", "integer") == false);
@@ -90,7 +83,6 @@ TEST_CASE("Test Follows Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("Follows", "while", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test Follows Cases:Test Negative Cases:passed" << endl;
 	}
 }
 TEST_CASE("Test ModifiesS Cases") {
@@ -101,7 +93,6 @@ TEST_CASE("Test ModifiesS Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "stmt", "variable") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "if", "_") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "integer", "quotedIdent") == true);
-		cout << "PQLRefConsistentLogic:Test ModifiesS Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "print", "variable") == false);
@@ -111,7 +102,6 @@ TEST_CASE("Test ModifiesS Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesS", "while", "while") == false);
-		cout << "PQLRefConsistentLogic:Test ModifiesS Cases:Test Negative Cases:passed" << endl;
 	}
 }
 
@@ -123,7 +113,6 @@ TEST_CASE("Test ModifiesP Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "quotedIdent", "variable") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "quotedIdent", "_") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "quotedIdent", "quotedIdent") == true);
-		cout << "PQLRefConsistentLogic:Test ModifiesP Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "print", "variable") == false);
@@ -133,7 +122,6 @@ TEST_CASE("Test ModifiesP Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("ModifiesP", "while", "while") == false);
-		cout << "PQLRefConsistentLogic:Test ModifiesP Cases:Test Negative Cases:passed" << endl;
 	}
 }
 
@@ -145,7 +133,6 @@ TEST_CASE("Test UsesP Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "quotedIdent", "variable") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "quotedIdent", "_") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "quotedIdent", "quotedIdent") == true);
-		cout << "PQLRefConsistentLogic:Test UsesP Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "print", "variable") == false);
@@ -155,7 +142,6 @@ TEST_CASE("Test UsesP Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "print", "procedure") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "quotedIdent", "if") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesP", "while", "while") == false);
-		cout << "PQLRefConsistentLogic:Test UsesP Cases:Test Negative Cases:passed" << endl;
 	}
 }
 
@@ -167,7 +153,6 @@ TEST_CASE("Test UsesS Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "if", "_") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "integer", "variable") == true);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "stmt", "quotedIdent") == true);
-		cout << "PQLRefConsistentLogic:Test UsesS Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "read", "variable") == false);
@@ -176,7 +161,6 @@ TEST_CASE("Test UsesS Cases") {
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "procedure", "variable") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "read", "_") == false);
 		REQUIRE(refConsistentLogic->hasRelationRef("UsesS", "variable", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test UsesS Cases:Test Negative Cases:passed" << endl;
 	}
 }
 
@@ -188,7 +172,6 @@ TEST_CASE("Test With Cases") {
 		REQUIRE(refConsistentLogic->isWithRefCompatible("read", "stmt#", "integer") == true);
 		REQUIRE(refConsistentLogic->isWithRefCompatible("constant", "value", "integer") == true);
 		REQUIRE(refConsistentLogic->isWithRefCompatible("while", "stmt#", "integer") == true);
-		cout << "PQLRefConsistentLogic:Test With Cases:Test Positive Cases:passed" << endl;
 	}
 	SECTION("Test Negative Cases") {
 		REQUIRE(refConsistentLogic->isWithRefCompatible("call", "value", "quotedIdent") == false);
@@ -197,6 +180,5 @@ TEST_CASE("Test With Cases") {
 		REQUIRE(refConsistentLogic->isWithRefCompatible("read", "procName", "quotedIdent") == false);
 		REQUIRE(refConsistentLogic->isWithRefCompatible("constant", "stmt#", "integer") == false);
 		REQUIRE(refConsistentLogic->isWithRefCompatible("while", "variable", "quotedIdent") == false);
-		cout << "PQLRefConsistentLogic:Test With Cases:Test Negative Cases:passed" << endl;
 	}
 }

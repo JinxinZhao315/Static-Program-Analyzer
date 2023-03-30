@@ -19,7 +19,7 @@ public:
     set<string> getVariables();
     set<string> getConstants();
     set<string> getProcedures();
-    unordered_map<string, set<int>> getStatements();
+    unordered_map<KeywordsEnum, set<int>> getStatements();
     void printEntities();
 
     unordered_map<int, int> getFollowsRS();
@@ -70,7 +70,7 @@ private:
     set<string> procedures;
     set<string> constants;
     set<string> variables;
-    unordered_map<string, set<int>> statements;
+    unordered_map<KeywordsEnum, set<int>> statements;
 
     unordered_map<int, string> readLineNumToVarName;
     unordered_map<int, string> printLineNumToVarName;

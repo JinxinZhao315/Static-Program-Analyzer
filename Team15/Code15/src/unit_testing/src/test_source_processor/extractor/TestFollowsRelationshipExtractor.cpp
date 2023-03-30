@@ -62,21 +62,21 @@ TEST_CASE("extractFollowsRelationship_superNested") {
 
 TEST_CASE("extractFollowsRelationship_source2") {
     const vector<Line>& lines = {
-            Line({"procedure", "A", "{"}, "procedure"),
-            Line(1, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
-            Line(2, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"}"}, "}"),
-            Line({"procedure", "B", "{"}, "procedure"),
-            Line(3, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
-            Line(4, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"}"}, "}"),
-            Line({"procedure", "C", "{"}, "procedure"),
-            Line(5, {"while", "(", "x", "==", "1", ")", "then", "{"}, "while"),
-            Line(6, {"x", "=", "x", "+", "1", ";"}, "="),
-            Line({"}"}, "}"),
-            Line({"}"}, "}"),
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(2, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "B", "{"}, PROCEDURE),
+            Line(3, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(4, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "C", "{"}, PROCEDURE),
+            Line(5, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(6, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
     };
     auto [result, result2] = extractFollowsRelationship(lines);
     unordered_map<int, int> expectedFollows = {};

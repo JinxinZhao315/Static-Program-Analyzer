@@ -6,6 +6,7 @@
 #include <set>
 #include"exceptions/PQLSyntaxError.h"
 #include "pkb/include/PKB.h"
+#include "common/include/models/Keywords.h"
 
 #pragma once
 
@@ -103,12 +104,24 @@ public:
             if (DeType == "stmt") {
                 allStmtIntSet = pkb.getAllStmtNums();
             }
+            else if (DeType == "read") {
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::READ);
+            }
+            else if (DeType == "print") {
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::PRINT);
+            }
             else if (DeType == "assign") {
-                allStmtIntSet = pkb.getAllStmtNumsByType("=");
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::ASSIGN);
             }
-            else {
-                allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
+            else if (DeType == "call") {
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::CALL);
             }
+            else if (DeType == "while") {
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::WHILE);
+            }
+            else if (DeType == "if") {
+                allStmtIntSet = pkb.getAllStmtNumsByType(KeywordsEnum::IF);
+            }            
 
             for (int stmtNum : allStmtIntSet) {
                 ret.insert(to_string(stmtNum));
