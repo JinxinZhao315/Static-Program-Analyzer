@@ -236,9 +236,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
             Result result = suchThatHandler.evaluate(Utility::getRelationshipFromString(relationship),
                 *suchThatCl, synonymTable);
 
-            if (!result.isResultTrue())
-            {
-                intermediateTable.clearResultTable();
+            if (!result.isResultTrue()) {
                 isEarlyExit = true;
                 break;
             }
@@ -263,16 +261,13 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
             WithHandler withHandler = WithHandler(pkb);
 
             Result result = withHandler.evaluate(*withCl, intermediateTable, synonymTable);
-            if (!result.isResultTrue())
-            {
+            if (!result.isResultTrue()) {
                 isEarlyExit = true;
-                intermediateTable.clearResultTable();
                 break;
             }
 
             intermediateTable.combineTable(result.getClauseResult());
-            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty())
-            {
+            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty()) {
                 isEarlyExit = true;
                 break;
             }
@@ -292,16 +287,13 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
 
             Result result = patternHandler.evaluate(*patternCl, intermediateTable, synonymTable);
 
-            if (!result.isResultTrue())
-            {
+            if (!result.isResultTrue()) {
                 isEarlyExit = true;
-                intermediateTable.clearResultTable();
                 break;
             }
 
             intermediateTable.combineTable(result.getClauseResult());
-            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty())
-            {
+            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty()) {
                 isEarlyExit = true;
                 break;
             }
