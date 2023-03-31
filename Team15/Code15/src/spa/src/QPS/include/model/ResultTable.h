@@ -2,7 +2,7 @@
 #include <string>
 #include <set>
 #include <assert.h>
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 #include "pkb/include/PKB.h"
 #include "Elem.h"
 #ifndef SPA_RESULTTABLE_H

@@ -2,7 +2,7 @@
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/PatternClause.h"
 #include "common/include/utils/StringOperations.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 #include <stack>
 #include <cstddef>
 

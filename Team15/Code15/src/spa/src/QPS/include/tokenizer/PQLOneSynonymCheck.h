@@ -1,5 +1,5 @@
 #include "QPS/include/model/Query.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 
 #pragma once
 class PQLOneSynonymCheck {

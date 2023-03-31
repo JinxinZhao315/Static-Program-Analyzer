@@ -13,7 +13,7 @@
 #include "QPS/include/tokenizer/PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 
 #pragma once
 
