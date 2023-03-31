@@ -194,3 +194,185 @@ bool PQLEvaluator::isArgUsedLater(std::vector<std::string> selectedSyn, std::vec
         return true;
     }
 }
+
+ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
+    std::multimap<std::string, std::string>synonymTable, std::vector<std::string>selectedElemName) {
+    std::vector<Clause*> clauseList = group.getClauseList();
+    std::vector<std::string> synList = group.getSynList();
+    ResultTable intermediateTable = ResultTable();
+    int clauseArgVecIndex = 0;
+    for (Clause* clause : clauseList) {
+        if (isEarlyExit == true) break;
+        switch (clause->getType())
+        {
+        case SUCH_THAT: {
+            SuchThatClause* suchThatCl = static_cast<SuchThatClause*>(clause);
+            std::string relationship = suchThatCl->getRelationShip();
+
+            SuchThatHandler suchThatHandler(pkb);
+            Result result = suchThatHandler.evaluate(Utility::getRelationshipFromString(relationship),
+                *suchThatCl, synonymTable);
+
+            if (!result.isResultTrue())
+            {
+                intermediateTable.clearResultTable();
+                isEarlyExit = true;
+                break;
+            }
+            intermediateTable.combineTable(result.getClauseResult());
+            // there used to be some syns in the table but now it is empty
+            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty()) {
+                isEarlyExit = true;
+                break;
+            }
+            // no such arg left in the following clause, can delete it in resultTable
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(suchThatCl->getLeftArg());
+            }
+            clauseArgVecIndex++;
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(suchThatCl->getRightArg());
+            }
+            clauseArgVecIndex++;
+        }
+        case WITH: {
+            WithClause* withCl = static_cast<WithClause*>(clause);
+            WithHandler withHandler = WithHandler(pkb);
+
+            Result result = withHandler.evaluate(*withCl, intermediateTable, synonymTable);
+            if (!result.isResultTrue())
+            {
+                isEarlyExit = true;
+                intermediateTable.clearResultTable();
+                break;
+            }
+
+            intermediateTable.combineTable(result.getClauseResult());
+            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty())
+            {
+                isEarlyExit = true;
+                break;
+            }
+
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(withCl->getFirstArgStr());
+            }
+            clauseArgVecIndex++;
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(withCl->getSecondArgStr());
+            }
+            clauseArgVecIndex++;
+        }
+        case PATTERN: {
+            PatternClause* patternCl = static_cast<PatternClause*>(clause);
+            PatternHandler patternHandler = PatternHandler(pkb);
+
+            Result result = patternHandler.evaluate(*patternCl, intermediateTable, synonymTable);
+
+            if (!result.isResultTrue())
+            {
+                isEarlyExit = true;
+                intermediateTable.clearResultTable();
+                break;
+            }
+
+            intermediateTable.combineTable(result.getClauseResult());
+            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty())
+            {
+                isEarlyExit = true;
+                break;
+            }
+
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(patternCl->getPatternSynonym());
+            }
+            clauseArgVecIndex++;
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(patternCl->getFirstArg());
+            }
+            clauseArgVecIndex++;
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(patternCl->getSecondArg());
+            }
+            clauseArgVecIndex++;
+            if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex))
+            {
+                intermediateTable.deleteSynonym(patternCl->getThirdArg());
+            }
+            clauseArgVecIndex++;
+        }
+        default:
+            break;
+        }
+    }
+    return intermediateTable;
+}
+
+std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup group) {
+    std::vector<Clause*> clauseList = group.getClauseList();
+    std::set<int> clauseListIntRep;
+    std::unordered_map<int, std::set<std::string>> clauseToSynMap;
+    std::unordered_map<std::string, std::set<int>> synToClauseMap;
+    std::unordered_map<std::string, std::set<std::string>> synToSynConnectionMap;
+    std::vector<ClauseEvalGroup> result;
+    //construct 2 hashmap
+    for (int i = 0; i < clauseList.size(); i++) {
+        std::set<std::string> clauseSynList = clauseList[i]->getSynList();
+        clauseToSynMap.insert(std::make_pair<>(i, clauseSynList));
+        clauseListIntRep.insert(i);
+        //there will be maximum 2 syn
+        if (clauseSynList.size() == 2) {
+            std::string firstSyn = *clauseSynList.begin();
+            std::string secondSyn = *clauseSynList.end();
+
+            synToSynConnectionMap[firstSyn].insert(secondSyn);
+            synToSynConnectionMap[secondSyn].insert(firstSyn);
+        }
+        for (std::string syn : clauseSynList) {
+            synToClauseMap[syn].insert(i);
+            //if (synToClauseMap.count(syn)) {
+            //    synToClauseMap[syn].insert();
+            //}
+        }
+    }
+
+    while (clauseListIntRep.size() > 0) {
+        auto firstClauseNum = clauseListIntRep.begin();
+        clauseListIntRep.erase(firstClauseNum);
+        std::set<std::string> synList = clauseToSynMap.at(*firstClauseNum);
+        std::set<std::string> visitedSynList;
+        std::set<int> currGroupClauses;
+        //BFS to traverse the syn connection graph, result syn stored in visitedSynList, currGroupClauses will also be filled
+        while (synList.size() > 0) {
+            std::set<std::string> tempSynList;
+            for (std::string syn : synList) {
+                //syn not visited yet
+                if (visitedSynList.count(syn) == 0) {
+                    std::set<int> relatedClauses = synToClauseMap.at(syn);
+                    currGroupClauses.insert(relatedClauses.begin(), relatedClauses.end());
+                    //find all the connected syn and add the syn in tempSynList
+                    std::set<std::string> relatedSyns = synToSynConnectionMap.at(syn);
+                    for (std::string relatedSyn : relatedSyns) {
+                        tempSynList.insert(relatedSyn);
+                    }
+                }
+                visitedSynList.insert(syn);
+            }
+            synList = tempSynList;
+        }
+        ClauseEvalGroup subGroup;
+        for (int i : currGroupClauses) {
+            subGroup.addClause(clauseList[i]);
+            clauseListIntRep.erase(i);
+        }
+        result.push_back(subGroup);
+    }
+    return result;
+}

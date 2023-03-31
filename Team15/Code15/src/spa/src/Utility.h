@@ -53,6 +53,14 @@ enum DesignEntity
     CONSTANT
 };
 
+enum ClauseType
+{
+    WITH,
+    SUCH_THAT,
+    SELECT,
+    PATTERN
+};
+
 class Utility
 {
 public:

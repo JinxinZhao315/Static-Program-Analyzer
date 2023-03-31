@@ -1,9 +1,10 @@
 #include <string>
 #include <vector> 
+#include "Clause.h"
 
 #pragma once
 
-class SuchThatClause {
+class SuchThatClause : public Clause {
 private:
     std::string relationship;
     std::string leftArg;
