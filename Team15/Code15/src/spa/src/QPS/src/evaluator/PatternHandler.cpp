@@ -131,7 +131,10 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     } else if (firstType == SYNONYM) {
 
         string firstDeType = synonymTable.find(firstArg)->second;
-        std::set<std::string> currFirstSynonValues = Utility::getResultFromPKB(pkb, firstDeType);
+        std::set<string> currFirstSynonValues = resultTable.containsSyn(firstArg)
+            ? resultTable.getSynValues(firstArg)
+            : Utility::getResultFromPKB(pkb, firstDeType);
+        //std::set<std::string> currFirstSynonValues = Utility::getResultFromPKB(pkb, firstDeType);
 
         ResultTable tempTable({patternSynon, firstArg });
 

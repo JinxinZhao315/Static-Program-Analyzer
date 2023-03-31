@@ -70,8 +70,14 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
             }
             std::string leftDeType = synonymTable.find(leftArg)->second;
             std::string rightDeType = synonymTable.find(rightArg)->second;
-            std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-            std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+            std::set<string> leftSynValuesStrSet = resultTable.containsSyn(leftArg)
+                ? resultTable.getSynValues(leftArg)
+                : Utility::getResultFromPKB(pkb, leftDeType);
+            std::set<string> rightSynValuesStrSet = resultTable.containsSyn(rightArg)
+                ? resultTable.getSynValues(rightArg)
+                : Utility::getResultFromPKB(pkb, rightDeType);
+            //std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+            //std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
             //convert the set to vector
             std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
             std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
@@ -108,8 +114,11 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
             
         case INTEGER: {
             std::string synonDeType = synonymTable.find(leftArg)->second;
-            resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
-            std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+            std::set<string> currSynonValues = resultTable.containsSyn(leftArg)
+                ? resultTable.getSynValues(leftArg)
+                : Utility::getResultFromPKB(pkb, synonDeType);
+            //resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
+            //std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
                 bool isAffects = getIsAffectsFromPKB(isStar, currSynonVal, rightArg);
@@ -127,8 +136,11 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
             
         case UNDERSCORE: {
             std::string synonDeType = synonymTable.find(leftArg)->second;
-            resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
-            std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+            //resultTable.resultTableCheckAndAdd(leftArg, pkb, synonDeType);
+            //std::vector<std::string> currSynonValues = resultTable.getSynValues(leftArg);
+            std::set<string> currSynonValues = resultTable.containsSyn(leftArg)
+                ? resultTable.getSynValues(leftArg)
+                : Utility::getResultFromPKB(pkb, synonDeType);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
                 std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_FOLLOWER, currSynonVal);
@@ -153,8 +165,11 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         {
         case SYNONYM: {
             std::string synonDeType = synonymTable.find(rightArg)->second;
-            resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
-            std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+            //resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+            //std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+            std::set<string> currSynonValues = resultTable.containsSyn(rightArg)
+                ? resultTable.getSynValues(rightArg)
+                : Utility::getResultFromPKB(pkb, synonDeType);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
                 bool isAffects = getIsAffectsFromPKB(isStar, leftArg, currSynonVal);
@@ -197,8 +212,11 @@ Result AffectsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         {
         case SYNONYM: {
             std::string synonDeType = synonymTable.find(rightArg)->second;
-            resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
-            std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+            //resultTable.resultTableCheckAndAdd(rightArg, pkb, synonDeType);
+            //std::vector<std::string> currSynonValues = resultTable.getSynValues(rightArg);
+            std::set<string> currSynonValues = resultTable.containsSyn(rightArg)
+                ? resultTable.getSynValues(rightArg)
+                : Utility::getResultFromPKB(pkb, synonDeType);
             std::vector<std::string> resultSynonValues;
             for (const std::string& currSynonVal : currSynonValues) {
                 std::set<int> affectsSet = getAffectsFromPKB(isStar, GET_LEADER, currSynonVal);

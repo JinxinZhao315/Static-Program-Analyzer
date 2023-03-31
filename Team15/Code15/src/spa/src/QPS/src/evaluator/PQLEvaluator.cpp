@@ -64,7 +64,7 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     for (ClauseEvalGroup group : clauseEvalGroups) {
         ResultTable tempTable = evalGroup(group, isEarlyExit, synonymTable, selectedElemName);
         if (isEarlyExit) {
-            return{};
+            break;
         }
         //only selected Elem will be combined in resultTable
         resultTable.combineTable(tempTable);
@@ -194,8 +194,10 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     //    }
     //    clauseArgVecIndex++;
     //}
-
-    selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    if (!isEarlyExit) {
+        selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
+    }
+    
 
     set<std::string> retSet = resultTable.getSelectedResult(selectedElems, pkb, isEarlyExit);
 
@@ -328,7 +330,15 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         clauseToSynMap.insert(std::make_pair<>(i, clauseSynList));
         clauseListIntRep.insert(i);
         //there will be maximum 2 syn
-        if (clauseSynList.size() == 2) {
+        switch (clauseSynList.size())
+        {
+        case 1: {
+            std::set<std::string>::iterator it = clauseSynList.begin();
+            std::string firstSyn = *it;
+            synToSynConnectionMap[firstSyn] = std::set<std::string>();
+            break;
+        }
+        case 2: {
             std::set<std::string>::iterator it = clauseSynList.begin();
             std::string firstSyn = *it;
             it++;
@@ -336,6 +346,10 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
 
             synToSynConnectionMap[firstSyn].insert(secondSyn);
             synToSynConnectionMap[secondSyn].insert(firstSyn);
+            break;
+        }
+        default:
+            break;
         }
         for (std::string syn : clauseSynList) {
             synToClauseMap[syn].insert(i);

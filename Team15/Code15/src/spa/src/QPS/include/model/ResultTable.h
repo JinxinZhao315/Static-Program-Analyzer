@@ -12,6 +12,7 @@
 class ResultTable {
 private:
     std::vector<std::vector<std::string>> resultTable;
+    std::unordered_map<std::string, std::set<std::string>> synValMap;
     std::vector<std::string> synList;
     int colNum;
     int rowNum;
@@ -53,7 +54,7 @@ public:
 
     std::vector<std::vector<std::string>> getResultTable();
 
-    std::vector<std::string> getSynValues(std::string synName);
+    std::set<std::string> getSynValues(std::string synName);
 
 
     void clearResultTable();
@@ -62,7 +63,7 @@ public:
 
     bool isTupleMatch(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex);
 
-    void deleteTuple(int index);
+    //void deleteTuple(int index);
 
     void insertTuple(std::vector<std::string> tuple);
 
@@ -78,6 +79,8 @@ public:
     void deleteSynonym(std::string synonym);
 
     void removeDuplicates();
+
+    bool containsSyn(std::string syn);
 };
 
 

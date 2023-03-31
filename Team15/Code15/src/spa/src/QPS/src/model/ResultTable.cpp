@@ -16,12 +16,15 @@ ResultTable::ResultTable(std::vector<std::string> synList) {
     this->colNum = 0;
     for (int i = 0; i < synList.size();i++) {
         this->resultTable.push_back({});
+        this->synValMap.insert(std::make_pair<>(synList[i], set<std::string>({})));
     }
 }
 
 ResultTable::ResultTable(std::vector<std::string> synResult, std::string synName) {
     this->resultTable = { synResult };
     this->synList = { synName };
+    std::set<std::string> synVal(synResult.begin(), synResult.end());
+    this->synValMap.insert(std::make_pair<>(synName, synVal));
     this->colNum = synResult.size();
     this->rowNum = 1;
 }
@@ -34,9 +37,13 @@ ResultTable::ResultTable(std::vector<std::vector<std::string>> resultTable, std:
     if (resultTable.size() > 0) {
         this->colNum = resultTable[0].size();
     }
+    for (int i = 0; i < resultTable.size(); i++) {
+        std::vector<std::string> synVec = resultTable[i];
+        std::string synName = synList[i];
+        std::set<std::string> synVal(synVec.begin(), synVec.end());
+        this->synValMap.insert(std::make_pair<>(synName, synVal));
+    }
 }
-
-
 
 void ResultTable::resultTableCheckAndAdd(string synName, PKB pkb, string DeType) {
     if (!isSynExist(synName)) {
@@ -60,6 +67,7 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
         this->synList = tempResultTable.synList;
         this->rowNum = tempResultTable.rowNum;
         this->colNum = tempResultTable.colNum;
+        this->synValMap = tempResultTable.synValMap;
     }
     //to combine the resultTable that clause handler evaluate to true
     else if (isTableEmpty() || tempResultTable.isSynListEmpty()) {
@@ -108,6 +116,7 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
         this->synList = newResultTable.synList;
         this->rowNum = newResultTable.rowNum;
         this->colNum = newResultTable.colNum;
+        this->synValMap = newResultTable.synValMap;
     }
 }
 
@@ -133,17 +142,8 @@ int ResultTable::getColNum() {
     return this->colNum;
 }
 
-std::vector<std::string> ResultTable::getSynValues(std::string synName) {
-    std::vector<std::string>::iterator itr = std::find(this->synList.begin(), this->synList.end(), synName);
-    int index = -1;
-    std::vector<std::string> synValues;
-    if (itr != this->synList.cend()) {
-        index = std::distance(this->synList.begin(), itr);
-    }
-    else {
-        return {};
-    }
-    return this->resultTable[index];
+std::set<std::string> ResultTable::getSynValues(std::string synName) {
+    return this->synValMap.at(synName);
 }
 
 std::vector<std::string> ResultTable::getTuple(int index) {
@@ -297,20 +297,22 @@ void ResultTable::clearResultTable() {
     colNum = 0;
 }
 
-void ResultTable::deleteTuple(int index) {
-    //traverse every row of the table
-    if (index >= 0 && index < colNum) {
-        for (int i = 0; i < resultTable.size(); i++) {
-            this->resultTable[i].erase(resultTable[i].begin() + index);
-        }
-        colNum--;
-    }
-}
+//void ResultTable::deleteTuple(int index) {
+//    //traverse every row of the table
+//    if (index >= 0 && index < colNum) {
+//        for (int i = 0; i < resultTable.size(); i++) {
+//            this->resultTable[i].erase(resultTable[i].begin() + index);
+//        }
+//        colNum--;
+//    }
+//}
 
 void ResultTable::insertTuple(std::vector<std::string> tuple) {
     if (tuple.size() == rowNum) {
         for (int i = 0; i < resultTable.size(); i++) {
             this->resultTable[i].push_back(tuple[i]);
+            std::string synName = this->synList[i];
+            this->synValMap.at(synName).insert(tuple[i]);
         }
         colNum++;
     }
@@ -354,4 +356,8 @@ void ResultTable::removeDuplicates() {
         insertTuple(distinctTuple);
     }
     colNum = distinctTupleSet.size();
+}
+
+bool ResultTable::containsSyn(std::string syn) {
+    return find(synList.begin(), synList.end(), syn) != synList.end();
 }

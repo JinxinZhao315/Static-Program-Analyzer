@@ -79,8 +79,14 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
             }
             std::string leftDeType = synonymTable.find(leftArg)->second;
             std::string rightDeType = synonymTable.find(rightArg)->second;
-            std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-            std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+            std::set<string> leftSynValuesStrSet = resultTable.containsSyn(leftArg)
+                ? Utility::getResultFromPKB(pkb, leftDeType)
+                : resultTable.getSynValues(leftArg);
+            std::set<string> rightSynValuesStrSet = resultTable.containsSyn(rightArg)
+                ? Utility::getResultFromPKB(pkb, rightDeType)
+                : resultTable.getSynValues(rightArg);
+            //std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+            //std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
             // convert the set to vector
             std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
             std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
@@ -113,7 +119,10 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         case INTEGER:
         {
             string synonDeType = synonymTable.find(leftArg)->second;
-            std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+            std::set<string> synValuesStrSet = resultTable.containsSyn(leftArg)
+                ? Utility::getResultFromPKB(pkb, synonDeType)
+                : resultTable.getSynValues(leftArg);
+            //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
             // currSynonValues here are statement line numbers in string format.
             std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
             std::vector<std::string> resultSynonValues;
@@ -136,7 +145,10 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         case UNDERSCORE:
         {
             string synonDeType = synonymTable.find(leftArg)->second;
-            std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+            std::set<string> synValuesStrSet = resultTable.containsSyn(leftArg)
+                ? Utility::getResultFromPKB(pkb, synonDeType)
+                : resultTable.getSynValues(leftArg);
+            //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
             // currSynonValues here are statement line numbers in string format.
             std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
             std::vector<std::string> resultSynonValues;
@@ -167,7 +179,10 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         case SYNONYM:
         {
             string synonDeType = synonymTable.find(rightArg)->second;
-            std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+            std::set<string> synValuesStrSet = resultTable.containsSyn(rightArg)
+                ? Utility::getResultFromPKB(pkb, synonDeType)
+                : resultTable.getSynValues(rightArg);
+            //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
             // currSynonValues here are statement line numbers in string format.
             std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
             std::vector<std::string> resultSynonValues;
@@ -218,7 +233,10 @@ Result FollowsHandler::evaluate(bool isStar, SuchThatClause suchThatClause, Resu
         case SYNONYM:
         {
             string synonDeType = synonymTable.find(rightArg)->second;
-            std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+            std::set<string> synValuesStrSet = resultTable.containsSyn(rightArg)
+                ? Utility::getResultFromPKB(pkb, synonDeType)
+                : resultTable.getSynValues(rightArg);
+            //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
             // currSynonValues here are statement line numbers in string format.
             std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
             std::vector<std::string> resultSynonValues;
