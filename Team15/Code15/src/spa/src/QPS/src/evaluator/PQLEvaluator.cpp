@@ -321,10 +321,11 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
     std::unordered_map<int, std::set<std::string>> clauseToSynMap;
     std::unordered_map<std::string, std::set<int>> synToClauseMap;
     std::unordered_map<std::string, std::set<std::string>> synToSynConnectionMap;
-    std::vector<ClauseEvalGroup> result;
+    std::vector<ClauseEvalGroup> groupWithoutSyn;
+    std::vector<ClauseEvalGroup> groupWithSyn;
     //construct 2 hashmap
     for (int i = 0; i < clauseList.size(); i++) {
-        std::set<std::string> clauseSynList = clauseList[i]->getSynList();
+        std::set<std::string> clauseSynList(clauseList[i]->getSynList().begin(), clauseList[i]->getSynList().end());
         clauseToSynMap.insert(std::make_pair<>(i, clauseSynList));
         clauseListIntRep.insert(i);
         //there will be maximum 2 syn
@@ -347,6 +348,13 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         auto firstClauseNum = clauseListIntRep.begin();
         clauseListIntRep.erase(firstClauseNum);
         std::set<std::string> synList = clauseToSynMap.at(*firstClauseNum);
+        //group with single syn
+        if (synList.size() == 0) {
+            ClauseEvalGroup subGroup;
+            subGroup.addClause(clauseList[*firstClauseNum]);
+            groupWithoutSyn.push_back(subGroup);
+            continue;
+        }
         std::set<std::string> visitedSynList;
         std::set<int> currGroupClauses;
         //BFS to traverse the syn connection graph, result syn stored in visitedSynList, currGroupClauses will also be filled
@@ -372,7 +380,9 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
             subGroup.addClause(clauseList[i]);
             clauseListIntRep.erase(i);
         }
-        result.push_back(subGroup);
+        groupWithSyn.push_back(subGroup);
     }
+    std::vector<ClauseEvalGroup> result = groupWithoutSyn;
+    result.insert(std::end(result), std::begin(groupWithSyn), std::end(groupWithSyn));
     return result;
 }

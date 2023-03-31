@@ -1,10 +1,16 @@
 #include "QPS/include/model/WithClause.h"
 
-WithClause::WithClause() {}
+WithClause::WithClause() : Clause(WITH) {}
 
-WithClause::WithClause(Ref firstArg, Ref rightArg) {
+WithClause::WithClause(Ref firstArg, Ref rightArg) : Clause(WITH) {
 	this->firstArg = firstArg;
 	this->secondArg = rightArg;
+	if (firstArg.isRefAttrRef()) {
+		addSyn(firstArg.getAttrRef().getSynName());
+	}
+	if (secondArg.isRefAttrRef()) {
+		addSyn(secondArg.getAttrRef().getSynName());
+	}
 }
 
 WithClause::~WithClause() {}

@@ -338,24 +338,33 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             ResultTable initTable(currLeftValues, leftArg);
             initTable.combineTable(ResultTable(currRightValues, rightArg));
             int initTableSize = initTable.getColNum();
-            ResultTable tempTable({ leftArg, rightArg });
+            vector<std::string> argVec;
+            if (isSynLeftRightArgSame) {
+                argVec = std::vector<std::string>({ leftArg });
+            }
+            else {
+                argVec = std::vector<std::string>({ leftArg, rightArg });
+            }
+            ResultTable tempTable(argVec);
 
            
             for (int i = 0; i < initTableSize; i++) {
                 
                     std::vector<std::string> tuple = initTable.getTuple(i);
-                    std::pair<std::string, std::string> pairToInsert;
-                    bool isInRelationship;
-                    if (!isSynLeftRightArgSame ) {                     
-                        pairToInsert = std::make_pair(tuple[0], tuple[1]);
-                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);          
-                    }
-                    else {
-                        isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
-                        pairToInsert = std::make_pair(tuple[0], tuple[0]);
-                    }
+                    std::string leftArgVal = tuple[0];
+                    std::string rightArgVal = isSynLeftRightArgSame ? tuple[0] : tuple[1];
+                    //std::pair<std::string, std::string> pairToInsert;
+                    bool isInRelationship = getIsInRelationship(relationship, leftArgVal, rightArgVal);
+                    //if (!isSynLeftRightArgSame ) {                     
+                    //    pairToInsert = std::make_pair(tuple[0], tuple[1]);
+                    //    isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);          
+                    //}
+                    //else {
+                    //    isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
+                    //    pairToInsert = std::make_pair(tuple[0], tuple[0]);
+                    //}
                     if (isInRelationship) {
-                        tempTable.insertTuple({ pairToInsert.first,  pairToInsert.second });
+                        tempTable.insertTuple(tuple);
                     }             
             }
 
@@ -365,8 +374,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             }
 
             result.setClauseResult(tempTable);
-        
-
     }
 
 

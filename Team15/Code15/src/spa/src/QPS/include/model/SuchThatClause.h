@@ -1,6 +1,6 @@
 #include <string>
 #include <vector> 
-#include "Clause.h"
+#include "QPS/include/model/Clause.h"
 
 #pragma once
 

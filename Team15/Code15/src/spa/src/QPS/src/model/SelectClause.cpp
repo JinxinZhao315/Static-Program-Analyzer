@@ -1,10 +1,10 @@
 #include "QPS/include/model/SelectClause.h"
 
-SelectClause::SelectClause() {}
+SelectClause::SelectClause() : Clause(SELECT) {}
 
 SelectClause::~SelectClause() {}
 
-SelectClause::SelectClause(std::vector<Elem> synNames) {
+SelectClause::SelectClause(std::vector<Elem> synNames) : Clause(SELECT) {
     this->synNames = synNames;
 }
 

@@ -7,11 +7,11 @@
 class Clause {
 private:
     ClauseType clauseType;
-    std::set<std::string> synList;
+    std::vector<std::string> synList;
 public:
     Clause(ClauseType clauseType);
-    void setSynList(std::set<std::string> synList);
+    void setSynList(std::vector<std::string> synList);
     void addSyn(std::string syn);
-    std::set<std::string> getSynList();
+    std::vector<std::string> getSynList();
     ClauseType getType();
 };

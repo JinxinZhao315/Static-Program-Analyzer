@@ -1,9 +1,10 @@
 #include <string>
 #include <vector>
+#include "Clause.h"
 
 #pragma once
 
-class PatternClause {
+class PatternClause : public Clause{
 private:
     std::string patternSynonym;
     std::string firstArg;

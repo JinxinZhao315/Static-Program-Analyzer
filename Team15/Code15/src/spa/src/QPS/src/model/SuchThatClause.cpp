@@ -6,7 +6,14 @@ SuchThatClause::SuchThatClause(std::string relationship, std::string leftArg, st
     this->relationship = relationship;
     this->leftArg = leftArg;
     this->rightArg = rightArg;
-    std::string leftType = Utility::getReferenceType
+    ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
+    ReferenceType rightType = Utility::getEnumReferenceType(rightArg);
+    if (leftType == SYNONYM) {
+        addSyn(leftArg);
+    }
+    if (rightType == SYNONYM) {
+        addSyn(rightArg);
+    }
 }
 
 std::string SuchThatClause::getRelationShip() {
