@@ -11,9 +11,8 @@ std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string in
 		return std::make_pair("", input);
 	}
 	else {
-		std::string declaration = Utility::trim(input.substr(0, lastSemicolon + 1), Utility::WHITESPACES);
-		std::string remainingQuery = Utility::trim(input.substr(lastSemicolon + 1), Utility::WHITESPACES);
-		//synonymTable = tokenizeDeclaration(declaration);
+		std::string declaration = Utility::trim(input.substr(0, lastSemicolon + 1), Utility::whiteSpaces);
+		std::string remainingQuery = Utility::trim(input.substr(lastSemicolon + 1), Utility::whiteSpaces);
 		return std::make_pair(declaration, remainingQuery);
 	}
 }
@@ -22,7 +21,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
     size_t semicolonPos = declaration.find(";");
     std::multimap<std::string, std::string> varTable;
     while (semicolonPos != std::string::npos) {
-        size_t whiteSpacePos = declaration.find_first_of(Utility::WHITESPACES);
+        size_t whiteSpacePos = declaration.find_first_of(Utility::whiteSpaces);
         std::string designEntity = declaration.substr(0, whiteSpacePos);
 
         bool isDeValid = syntaxChecker.validateDesignEntity(designEntity);
@@ -31,7 +30,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
             throw PQLSyntaxError("PQL syntax error: invalid design entity in declaration");
         }
         std::string synonymStr = Utility::trim(declaration.substr(whiteSpacePos, semicolonPos - whiteSpacePos),
-                                               Utility::WHITESPACES);
+                                               Utility::whiteSpaces);
         std::vector<std::string> synonymVector = tokenizeCsv(synonymStr);
 
         for (std::string synon: synonymVector) {
@@ -42,7 +41,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
             varTable.insert({synon, designEntity});
         }
 
-        declaration = Utility::trim(declaration.substr((semicolonPos + 1)), Utility::WHITESPACES);
+        declaration = Utility::trim(declaration.substr((semicolonPos + 1)), Utility::whiteSpaces);
         semicolonPos = declaration.find(";");
     }
 	return varTable;
@@ -81,7 +80,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
             // (with) s1.stmt# = 1
             // (pattern) a(_, "y")
             // (such that) Follows(a1, a3)
-            std::string nextKeyword = peekKeyword(input, Utility::WHITESPACES);
+            std::string nextKeyword = peekKeyword(input, Utility::whiteSpaces);
 
             if (nextKeyword == "such" || nextKeyword == "pattern" || nextKeyword == "with") {
                 throw PQLSyntaxError("PQL syntax error: Invalid use of and");
@@ -93,9 +92,18 @@ void QueryTokenizer::tokenizeClauses(std::string input,
                 tokenizeWithClause(input, withClauseVec, varTable);
             } else { // prevClauseType == "pattern"
                 nextKeyword = peekKeyword(input, "(");
-                if (nextKeyword == "" || Utility::getReferenceType(nextKeyword) != Utility::SYNONYM) {
-                    throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
-                }
+				if (nextKeyword == "") {
+					throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
+				}
+				ReferenceType refType = Utility::getEnumReferenceType(nextKeyword);
+				switch (refType)
+				{
+				case SYNONYM:
+					break;
+				default:
+					throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
+				}
+				
                 if (std::find(relationships.begin(), relationships.end(), nextKeyword) != relationships.end()) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
@@ -113,11 +121,11 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 	if (equalSignIndex == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid with clause, no \"=\" sign");
 	}
-	std::string firstArgStr = Utility::trim(input.substr(0, equalSignIndex), Utility::WHITESPACES);
+	std::string firstArgStr = Utility::trim(input.substr(0, equalSignIndex), Utility::whiteSpaces);
 	Ref firstArg = tokenizeRef(firstArgStr, varTable);
-	input = Utility::trim(input.substr(equalSignIndex + 1), Utility::WHITESPACES);
+	input = Utility::trim(input.substr(equalSignIndex + 1), Utility::whiteSpaces);
 
-	std::size_t secondArgEndIndex = input.find_first_of(Utility::WHITESPACES);
+	std::size_t secondArgEndIndex = input.find_first_of(Utility::whiteSpaces);
 	std::string secondArgStr = "";
 	//this with clause is the last clause
 	if (secondArgEndIndex == std::string::npos) {
@@ -126,7 +134,7 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 	}
 	else {
 		secondArgStr = input.substr(0, secondArgEndIndex);
-		input = Utility::trim(input.substr(secondArgEndIndex + 1), Utility::WHITESPACES);
+		input = Utility::trim(input.substr(secondArgEndIndex + 1), Utility::whiteSpaces);
 	}
 	Ref secondArg = tokenizeRef(secondArgStr, varTable);
 
@@ -136,7 +144,7 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 
 void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, 
 	SelectClause& selectClause) {
-	std::size_t elemEndIndex = input.find_first_of(Utility::WHITESPACES);
+	std::size_t elemEndIndex = input.find_first_of(Utility::whiteSpaces);
 	std::vector<std::string> elemStrList;
 	//multi clause
 	if (input.size() > 0 && input[0] == '<') {
@@ -145,24 +153,18 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 			throw PQLSyntaxError("PQL syntax error: Invalid multi-element list format in select clause");
 		}
 		elemStrList = tokenizeCsv(input.substr(1, rightAnglePos - 1));
-		input = Utility::trim(input.substr(rightAnglePos + 1), Utility::WHITESPACES);
+		input = Utility::trim(input.substr(rightAnglePos + 1), Utility::whiteSpaces);
 	}
 	//single clause, no whitespace on the left, so no other clauses except Select single element
 	else if (elemEndIndex == std::string::npos) {
-		//if (!syntaxChecker.validateSynonym(input)) {
-		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		//};
 		elemStrList.push_back(input);
 		input = "";
 	}
 	//single clause, but other restriction after the select clause
 	else {
 		std::string elem = input.substr(0, elemEndIndex);
-		//if (!syntaxChecker.validateSynonym(synonym)) {
-		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		//};
 		elemStrList.push_back(elem);
-		input = Utility::trim(input.substr(elemEndIndex + 1), Utility::WHITESPACES);
+		input = Utility::trim(input.substr(elemEndIndex + 1), Utility::whiteSpaces);
 	}
 	std::vector<Elem> elemList;
 	for (std::string elemStr : elemStrList) {
@@ -196,9 +198,9 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 	if (nextRightPar <= nextComma + 1 || nextComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid such that clause syntax");
 	}
-	std::string relationship = Utility::trim(input.substr(0, nextLeftPar), Utility::WHITESPACES);
-	std::string leftArg = Utility::trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1), Utility::WHITESPACES);
-	std::string rightArg = Utility::trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1), Utility::WHITESPACES);
+	std::string relationship = Utility::trim(input.substr(0, nextLeftPar), Utility::whiteSpaces);
+	std::string leftArg = Utility::trim(input.substr(nextLeftPar + 1, nextComma - nextLeftPar - 1), Utility::whiteSpaces);
+	std::string rightArg = Utility::trim(input.substr(nextComma + 1, nextRightPar - nextComma - 1), Utility::whiteSpaces);
 	if (!syntaxChecker.validateRelationship(relationship, leftArg, rightArg)) {
 		throw PQLSyntaxError("PQL syntax error: Invalid such that relationship");
 	}
@@ -212,45 +214,61 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t firstComma = input.find_first_of(",");
     std::size_t secondComma = input.find_first_of(",", firstComma + 1);
-	std::size_t nextRightPar = input.find_first_of(")");
-	if (nextLeftPar == std::string::npos || firstComma == std::string::npos || nextRightPar == std::string::npos) {
+
+    if (nextLeftPar == std::string::npos || firstComma == std::string::npos) {
+        throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
+    }
+
+    stack<char> stk;
+    std::size_t nextRightPar = -1;
+    for (size_t i = nextLeftPar; i < input.length(); i++ ) {
+        if (input[i] == '(') {
+            stk.push('(');
+        } else if (input[i] == ')') {
+            stk.pop();
+        }
+        if (stk.empty()) {
+            nextRightPar = i;
+            break;
+        }
+    }
+
+	if ( !stk.empty() || nextRightPar <= firstComma + 1 || firstComma <= nextLeftPar + 1) {
 		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
 	}
-	if (nextRightPar <= firstComma + 1 || firstComma <= nextLeftPar + 1) {
-		throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
-	}
-    std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::WHITESPACES);
+    std::string synonym = Utility::trim(input.substr(0, nextLeftPar), Utility::whiteSpaces);
     std::string synonymType = varTable.find(synonym)->second;
 
     std::string firstArg;
     std::string secondArg;
     std::string thirdArg = "";
 
+    // pattern a (_, "(y+4)") such that...
     if (synonymType == "if") {
         // 3 arguments case
         if (secondComma == std::string::npos || secondComma > nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Only 1 comma in pattern clause if type");
         }
         firstArg = Utility::trim(input.substr(nextLeftPar + 1, firstComma - nextLeftPar - 1),
-                                             Utility::WHITESPACES);
+                                             Utility::whiteSpaces);
         secondArg = Utility::trim(input.substr(firstComma + 1, secondComma - firstComma - 1),
-                                              Utility::WHITESPACES);
+                                              Utility::whiteSpaces);
         thirdArg = Utility::trim(input.substr(secondComma + 1, nextRightPar - secondComma - 1),
-                                              Utility::WHITESPACES);
+                                              Utility::whiteSpaces);
     } else {
         // 2 arguments case
         if (! (synonymType == "assign" || synonymType == "while")) {
             throw PQLSemanticError("PQL Semantic error: pattern clause synonym type is not assign, while or if");
         }
 
-        if (secondComma < nextRightPar) {
+        if (secondComma != std::string::npos && secondComma < nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Too many commas in pattern clause assign and while type");
         }
 
         firstArg = Utility::trim(input.substr(nextLeftPar + 1, firstComma - nextLeftPar - 1),
-                                             Utility::WHITESPACES);
+                                             Utility::whiteSpaces);
         secondArg = Utility::trim(input.substr(firstComma + 1, nextRightPar - firstComma - 1),
-                                              Utility::WHITESPACES);
+                                              Utility::whiteSpaces);
     }
 
     if (!syntaxChecker.validatePattern(synonym, synonymType, firstArg, secondArg, thirdArg)) {
@@ -261,23 +279,23 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {
-	input = Utility::trim(input, Utility::WHITESPACES);
-    std::size_t nextWhiteSpace = input.find_first_of(Utility::WHITESPACES);
+	input = Utility::trim(input, Utility::whiteSpaces);
+    std::size_t nextWhiteSpace = input.find_first_of(Utility::whiteSpaces);
 	if (nextWhiteSpace == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid keyword");
 	}
 	std::string keyword = input.substr(0, nextWhiteSpace);
-	input = Utility::trim(input.substr(nextWhiteSpace), Utility::WHITESPACES);
+	input = Utility::trim(input.substr(nextWhiteSpace), Utility::whiteSpaces);
 	return keyword;
 }
 
 std::string QueryTokenizer::peekKeyword(std::string input, std::string delimiter) {
-    input = Utility::trim(input, Utility::WHITESPACES);
+    input = Utility::trim(input, Utility::whiteSpaces);
     std::size_t nextDelimiter = input.find_first_of(delimiter);
     if (nextDelimiter == std::string::npos) {
         return "";
     }
-    std::string keyword = Utility::trim(input.substr(0, nextDelimiter), Utility::WHITESPACES);
+    std::string keyword = Utility::trim(input.substr(0, nextDelimiter), Utility::whiteSpaces);
     return keyword;
 }
 
@@ -286,9 +304,9 @@ std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
     std::string remainder = csv;
     size_t commaIndex = remainder.find(",");
     while (commaIndex != std::string::npos) {
-        std::string str = Utility::trim(remainder.substr(0, commaIndex), Utility::WHITESPACES);
+        std::string str = Utility::trim(remainder.substr(0, commaIndex), Utility::whiteSpaces);
         ret.push_back(str);
-        remainder = Utility::trim(remainder.substr((commaIndex + 1)), Utility::WHITESPACES);
+        remainder = Utility::trim(remainder.substr((commaIndex + 1)), Utility::whiteSpaces);
         commaIndex = remainder.find(",");
     }
 
@@ -300,16 +318,23 @@ std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
 }
 
 Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, std::string> varTable) {
-	std::string type = Utility::getReferenceType(input);
-	if (type == Utility::QUOTED_IDENT) {
+	ReferenceType type = Utility::getEnumReferenceType(input);
+	bool isIdent;
+	switch (type)
+	{
+	case INTEGER:
 		input = Utility::trim_double_quotes(input);
-		return Ref(input, true);
-	}
-	else if (type == Utility::INTEGER) {
+		isIdent = false;
+		return Ref(input, isIdent);
+	case QUOTED_IDENT:
 		input = Utility::trim_double_quotes(input);
-		return Ref(input, false);
+		isIdent = true;
+		return Ref(input, isIdent);
+	default:
+		break;
 	}
-	else if (syntaxChecker.validateAttrRef(input)) {
+
+	if (syntaxChecker.validateAttrRef(input)) {
 		std::size_t periodIndex = input.find_first_of(".");
 		std::string synName = input.substr(0, periodIndex);
 		std::string synType = varTable.find(synName)->second;

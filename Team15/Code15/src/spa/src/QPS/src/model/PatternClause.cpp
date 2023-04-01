@@ -1,11 +1,15 @@
 #include "QPS/include/model/PatternClause.h"
 
-PatternClause::PatternClause() {}
+PatternClause::PatternClause() : Clause(PATTERN){}
 
 PatternClause::PatternClause(std::string patternSynonym,
-    std::string firstArg, std::string secondArg, std::string thrirdArg) {
+    std::string firstArg, std::string secondArg, std::string thrirdArg) : Clause(PATTERN) {
     this->patternSynonym = patternSynonym;
+    addSyn(patternSynonym);
     this->firstArg = firstArg;
+    if (Utility::getEnumReferenceType(firstArg) == SYNONYM) {
+        addSyn(firstArg);
+    }
     this->secondArg = secondArg;
     this->thirdArg = thrirdArg;
 }

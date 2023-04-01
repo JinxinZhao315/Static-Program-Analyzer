@@ -1,20 +1,13 @@
 #include "QPS/include/model/Query.h"
 #include "pkb/include/PKB.h"
-
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/WithHandler.h"
 #include "SelectHandler.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
-#include "QPS/include/evaluator/ParentHandler.h"
-#include "QPS/include/evaluator/ModifiesPHandler.h"
-#include "QPS/include/evaluator/ModifiesSHandler.h"
+#include "QPS/include/evaluator/WithHandler.h"
 #include "QPS/include/evaluator/PatternHandler.h"
-#include "QPS/include/evaluator/UsesSHandler.h"
-#include "QPS/include/evaluator/UsesPHandler.h"
-#include "QPS/include/evaluator/CallsHandler.h"
-#include "QPS/include/evaluator/NextHandler.h"
-#include "Utility.h"
+#include "QPS/include/evaluator/SuchThatHandler.h"
+#include "common/include/utils/Utility.h"
+#include "../model/ClauseEvalGroup.h"
 #include <numeric>
 #include <string>
 #include <set>
@@ -27,11 +20,14 @@ class PQLEvaluator {
 public:
     PQLEvaluator(PKB& pkb);
     std::set<std::string> evaluate(Query query);
-    Result getSuchThatResult(SuchThatClause suchThatCl, const string& relationship, ResultTable resultTable, std::multimap<std::string, std::string> synonymTable);
+
 private:
     PKB pkb;
     // helper function
     bool isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos);
+    std::vector<ClauseEvalGroup> separateEvalGroup(ClauseEvalGroup group);
+    ResultTable evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
+    std::multimap<std::string, std::string>synonymTable, std::vector<std::string>selectedElemName);
 };
 
 

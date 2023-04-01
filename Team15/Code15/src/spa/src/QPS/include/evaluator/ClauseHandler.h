@@ -4,7 +4,7 @@
 #include "QPS/include/model/SuchThatClause.h"
 #include "QPS/include/model/PatternClause.h"
 #include "QPS/include/model/WithClause.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 
 
 #ifndef SPA_CLAUSEHANDLER_H

@@ -1,9 +1,10 @@
 #include <string>
 #include <vector> 
+#include "QPS/include/model/Clause.h"
 
 #pragma once
 
-class SuchThatClause {
+class SuchThatClause : public Clause {
 private:
     std::string relationship;
     std::string leftArg;

@@ -3,7 +3,7 @@
 PQLSyntaxChecker::PQLSyntaxChecker() {}
 
 bool PQLSyntaxChecker::validateSynonym(std::string input) {
-	return Utility::getReferenceType(input) == Utility::SYNONYM;
+	return Utility::getReferenceType(input) == Utility::synonym;
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
@@ -34,39 +34,39 @@ bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
 
 bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string synonymType, std::string firstArg,
                                        std::string secondArg, std::string thirdArg) {
-    if (Utility::getReferenceType(synonym) != Utility::SYNONYM) {
+    if (Utility::getReferenceType(synonym) != Utility::synonym) {
         return false;
     }
     if (synonymType == "assign") {
         return validateEntRef(firstArg) && validateExprSpec(secondArg);
     } else if (synonymType == "while") {
-        return validateEntRef(firstArg) && secondArg == Utility::UNDERSCORE;
+        return validateEntRef(firstArg) && secondArg == Utility::underscore;
     } else { // if (synonymType == "if")
-        return validateEntRef(firstArg) && secondArg == Utility::UNDERSCORE && thirdArg == Utility::UNDERSCORE;
+        return validateEntRef(firstArg) && secondArg == Utility::underscore && thirdArg == Utility::underscore;
     }
 }
 
 
 bool PQLSyntaxChecker::validateExprSpec(std::string input) {
     std::string type = Utility::getReferenceType(input);
-	return type == Utility::EXPR ||
-            type == Utility::QUOTED_IDENT || // Because when expr only has 1 variable name e.g. x1, it also matches quoted ident
-            type == Utility::UNDERSCORED_EXPR ||
-            type == Utility::UNDERSCORE;
+	return type == Utility::expr ||
+            type == Utility::quoted_ident || // Because when expr only has 1 variable name e.g. x1, it also matches quoted ident
+            type == Utility::underscored_expr ||
+            type == Utility::underscore;
 }
 
 bool PQLSyntaxChecker::validateStmtRef(std::string input) {
     std::string type = Utility::getReferenceType(input);
-	return type == Utility::SYNONYM ||
-            type == Utility::INTEGER ||
-            type == Utility::UNDERSCORE;
+	return type == Utility::synonym ||
+            type == Utility::integer ||
+            type == Utility::underscore;
 }
 
 bool PQLSyntaxChecker::validateEntRef(std::string input) {
     std::string type = Utility::getReferenceType(input);
-	return type == Utility::SYNONYM ||
-            type== Utility::UNDERSCORE ||
-            type == Utility::QUOTED_IDENT;
+	return type == Utility::synonym ||
+            type== Utility::underscore ||
+            type == Utility::quoted_ident;
 }
 
 bool PQLSyntaxChecker::validateAttrRef(std::string input) {
@@ -80,7 +80,7 @@ bool PQLSyntaxChecker::validateAttrRef(std::string input) {
 
 bool PQLSyntaxChecker::validateRef(std::string input) {
     std::string type = Utility::getReferenceType(input);
-    return type == Utility::QUOTED_IDENT ||
-        type == Utility::INTEGER ||
+    return type == Utility::quoted_ident ||
+        type == Utility::integer ||
         validateAttrRef(input);
 }

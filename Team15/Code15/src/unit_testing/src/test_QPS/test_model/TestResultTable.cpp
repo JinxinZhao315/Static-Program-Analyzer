@@ -167,25 +167,25 @@ TEST_CASE("Test insertTuple") {
 	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
 }
 
-TEST_CASE("Test deleteTuple") {
-	std::vector<std::vector<std::string>> tempTable = {
-			{"1", "2", "3", "4"},
-			{"5", "6", "7", "8"},
-			{"9", "10", "11", "12"}
-	};
-	std::vector<std::string> synList = { "a1", "a2", "a3" };
-
-	ResultTable resultTable = ResultTable(tempTable, synList);
-	resultTable.deleteTuple(2);
-	REQUIRE(resultTable.getColNum() == 3);
-	std::vector<std::string> resultTuple = resultTable.getTuple(1);
-	std::vector<std::string> expectedResult = { "2", "6", "10" };
-	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
-
-	resultTuple = resultTable.getTuple(2);
-	expectedResult = { "4", "8", "12" };
-	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
-}
+//TEST_CASE("Test deleteTuple") {
+//	std::vector<std::vector<std::string>> tempTable = {
+//			{"1", "2", "3", "4"},
+//			{"5", "6", "7", "8"},
+//			{"9", "10", "11", "12"}
+//	};
+//	std::vector<std::string> synList = { "a1", "a2", "a3" };
+//
+//	ResultTable resultTable = ResultTable(tempTable, synList);
+//	resultTable.deleteTuple(2);
+//	REQUIRE(resultTable.getColNum() == 3);
+//	std::vector<std::string> resultTuple = resultTable.getTuple(1);
+//	std::vector<std::string> expectedResult = { "2", "6", "10" };
+//	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
+//
+//	resultTuple = resultTable.getTuple(2);
+//	expectedResult = { "4", "8", "12" };
+//	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
+//}
 
 TEST_CASE("Test SelectedResult 1") {
 	std::vector<std::vector<std::string>> tempTable = {

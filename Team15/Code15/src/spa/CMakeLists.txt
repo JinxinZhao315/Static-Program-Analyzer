@@ -23,6 +23,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/models/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/utils/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/*.h"
@@ -39,6 +40,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
     )
 
+
 add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h)
+
 
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
