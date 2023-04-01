@@ -1,19 +1,20 @@
-#include <utility>
-
 #include "source_processor/include/extractor/AffectsRelationshipExtractor.h"
 
-void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<int>* path, vector<vector<int>>* paths) {
+void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<int>* path,
+         vector<vector<int>>* paths, unordered_map<int, int>* visited) {
     path->push_back(lineNum1);
-    if(lineNum1 == lineNum2) {
+    (*visited)[lineNum1]++;
+    if(lineNum1 == lineNum2 && path->size() > 1) {
         paths->push_back(*path);
     } else {
         set<int> currOptions = cfg[lineNum1];
         for(auto option : currOptions) {
-            if (find(path->begin(), path->end(), option) == path->end()) {
-                dfs(cfg, option, lineNum2, path, paths);
+            if ((*visited)[option] < 2) {
+                dfs(cfg, option, lineNum2, path, paths, visited);
             }
         }
     }
+    (*visited)[lineNum1]--;
     path->pop_back();
 }
 
@@ -41,7 +42,7 @@ bool checkUses(const Line& line, const string& variable, unordered_map<int, set<
     return usedVars.find(variable) != usedVars.end();
 }
 
-bool checkPath(vector<int> path, const string& variable, const unordered_map<int, set<string>>& modifiesRS,
+bool checkPath(const vector<int>& path, const string& variable, const unordered_map<int, set<string>>& modifiesRS,
                const vector<Line>& program, int lineNum1, int lineNum2) {
     bool check = false;
     for(auto node : path) {
@@ -60,24 +61,42 @@ bool checkAffects(bool checkModifies, bool checkUses, bool checkPath) {
     return checkModifies && checkUses && !checkPath;
 }
 
-set<string> extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
-                                          unordered_map<int, set<int>> cfg,
+bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, int lineNum1, int lineNum2,
+                         const unordered_map<int, set<int>>& cfg,
+                         const set<string>& variables,
+                         const unordered_map<int, set<string>>& modifiesRS,
+                         const unordered_map<int, set<string>>& usesRS) {
+    for(auto node : path) {
+        if(extractAffectsRS(program, lineNum1, node, cfg, variables, modifiesRS, usesRS, false)
+            && extractAffectsRS(program, node, lineNum2, cfg, variables, modifiesRS, usesRS, false)
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
+                                          const unordered_map<int, set<int>>& cfg,
                                           const set<string>& variables,
                                           const unordered_map<int, set<string>>& modifiesRS,
-                                          const unordered_map<int, set<string>>& usesRS
+                                          const unordered_map<int, set<string>>& usesRS,
+                                          bool findAffectsStar
 ) {
     set<string> affectedVars;
     unordered_map<int, set<int>> result;
     Line line1 = findLine(program, lineNum1);
     Line line2 = findLine(program, lineNum2);
-    if(!checkAssign(line1, line2)) return affectedVars;
+    if(!checkAssign(line1, line2)) return false;
     vector<int> path;
     vector<vector<int>> paths;
+    unordered_map<int, int> visited;
 
-    //TODO: check if nextStarRS can be used instead of DFS
-    extractNextStarRS(cfg); // the value is the set of nodes that it will visit later on which can then be used for affects
+    // TODO: check if nextStarRS can be used instead of DFS
+    // extractNextStarRS(cfg);
+    // the value is the set of nodes that it will visit later on which can then be used for affects
 
-    dfs(std::move(cfg), lineNum1, lineNum2, &path, &paths);
+    dfs(cfg, lineNum1, lineNum2, &path, &paths, &visited);
     for(const auto& v : variables) {
         bool modifies = checkModifies(line1, v, modifiesRS);
         bool uses = checkUses(line2, v, usesRS);
@@ -88,7 +107,16 @@ set<string> extractAffectsRS(const vector<Line>& program, int lineNum1, int line
                 break;
             }
         }
-        if(checkAffects(modifies, uses, pathCheck)) affectedVars.insert(v);
+        if(checkAffects(modifies, uses, pathCheck)) {
+            affectedVars.insert(v);
+        } else if(findAffectsStar) {
+            for(auto option : paths) {
+                if(checkTransitivePath(option, program, lineNum1, lineNum2, cfg, variables, modifiesRS, usesRS)) {
+                    affectedVars.insert(v);
+                }
+            }
+        }
     }
-    return affectedVars;
+    bool affects = !affectedVars.empty();
+    return affects;
 }

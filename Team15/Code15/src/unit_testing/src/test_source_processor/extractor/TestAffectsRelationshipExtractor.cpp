@@ -2,566 +2,6 @@
 #include "Constants.hpp"
 #include "source_processor/include/extractor/Extractor.h"
 #include "source_processor/include/extractor/AffectsRelationshipExtractor.h"
-//
-//ProcedureExtractor affectsTestProcExtractor;
-//
-//TEST_CASE("Affects: A calls B") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"call", "B", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(2, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {1}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: A calls B from if-else") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"if", "(", "x", "==", "1", ")", "then", "{"}, IF),
-//        Line(2, {"call", "B", ";"}, CALL),
-//        Line({"}", "else", "{"}, ELSE),
-//        Line(3, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}"}, CLOSE_CURLY),
-//
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2, 3}},
-//        {2, {4}},
-//        {4, {2}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: A calls B from while") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(2, {"call", "B", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}"}, CLOSE_CURLY),
-//
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(3, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {1, 3}},
-//        {3, {2}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallsAtProcEnds") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(3, {"call", "B", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(5, {"x", "=", "1", ";"}, ASSIGN),
-//        Line(6, {"call", "C", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(7, {"z", "=", "0", ";"}, ASSIGN),
-//        Line(8, {"z", "=", "1", ";"}, ASSIGN),
-//        Line(9, {"z", "=", "2", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3}},
-//        {3, {4}},
-//        {4, {5}},
-//        {5, {6}},
-//        {6, {3, 7}},
-//        {7, {8}},
-//        {8, {9}},
-//        {9, {6}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallsAtProcMiddle") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"call", "B", ";"}, CALL),
-//        Line(3, {"y", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(5, {"call", "C", ";"}, CALL),
-//        Line(6, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(7, {"z", "=", "0", ";"}, ASSIGN),
-//        Line(8, {"z", "=", "2", ";"}, ASSIGN),
-//        Line(9, {"z", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3, 4}},
-//        {4, {5}},
-//        {5, {6, 7}},
-//        {6, {2}},
-//        {7, {8}},
-//        {8, {9}},
-//        {9, {5}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallsAtProcStart") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"call", "B", ";"}, CALL),
-//        Line(2, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(3, {"y", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"call", "C", ";"}, CALL),
-//        Line(5, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(6, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(7, {"z", "=", "0", ";"}, ASSIGN),
-//        Line(8, {"z", "=", "2", ";"}, ASSIGN),
-//        Line(9, {"z", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2, 4}},
-//        {2, {3}},
-//        {4, {5, 7}},
-//        {5, {6}},
-//        {6, {1}},
-//        {7, {8}},
-//        {8, {9}},
-//        {9, {4}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallCycle") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"call", "B", ";"}, CALL),
-//        Line(2, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(3, {"y", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(5, {"x", "=", "1", ";"}, ASSIGN),
-//        Line(6, {"call", "A", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2, 4}},
-//        {2, {3}},
-//        {3, {6}},
-//        {4, {5}},
-//        {5, {6}},
-//        {6, {1}},
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallCycleInWhileLoop") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(3, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(4, {"call", "B", ";"}, CALL),
-//        Line(5, {"y", "=", "2", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(6, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(7, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(8, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(9, {"call", "A", ";"}, CALL),
-//        Line(10, {"y", "=", "2", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3, 9}},
-//        {3, {4}},
-//        {4, {5, 6}},
-//        {5, {2}},
-//        {6, {7}},
-//        {7, {4, 8}},
-//        {8, {9}},
-//        {9, {1, 10}},
-//        {10, {7}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithIndirectCallCycle") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"call", "B", ";"}, CALL),
-//        Line(3, {"y", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(4, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(5, {"call", "C", ";"}, CALL),
-//        Line(6, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(7, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(8, {"call", "A", ";"}, CALL),
-//        Line(9, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3, 4}},
-//        {3, {8}},
-//        {4, {5}},
-//        {5, {6, 7}},
-//        {6, {2}},
-//        {7, {8}},
-//        {8, {1, 9}},
-//        {9, {5}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallInWhileLoop") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(3, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(4, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(5, {"call", "B", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(6, {"y", "=", "3", ";"}, ASSIGN),
-//        Line(7, {"y", "=", "4", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(8, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(9, {"x", "=", "1", ";"}, ASSIGN),
-//        Line(10, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(11, {"x", "=", "2", ";"}, ASSIGN),
-//        Line(12, {"x", "=", "3", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(13, {"x", "=", "4", ";"}, ASSIGN),
-//        Line(14, {"x", "=", "5", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3}},
-//        {3, {4,6}},
-//        {4, {5}},
-//        {5, {3,8}},
-//        {6, {7}},
-//        {8, {9}},
-//        {9, {10}},
-//        {10, {11, 13}},
-//        {11, {12}},
-//        {12, {10}},
-//        {13, {14}},
-//        {14, {5}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCycleCallInIfStatement") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"if", "(", "x", "==", "1", ")", "then", "{"}, IF),
-//        Line(3, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(4, {"call", "B", ";"}, CALL),
-//        Line(5, {"y", "=", "1", ";"}, ASSIGN),
-//        Line({"}", "else", "{"}, ELSE),
-//        Line(6, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
-//        Line(7, {"call", "C", ";"}, CALL),
-//        Line(8, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(9, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(10, {"call", "A", ";"}, CALL),
-//        Line(11, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(12, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(13, {"call", "A", ";"}, CALL),
-//        Line(14, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3,6}},
-//        {3, {4}},
-//        {4, {5,9}},
-//        {5, {10, 13}},
-//        {6, {7}},
-//        {7, {8,12}},
-//        {8, {10, 13}},
-//        {9, {10}},
-//        {10, {1, 11}},
-//        {11, {4}},
-//        {12, {13}},
-//        {13, {1, 14}},
-//        {14, {7}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallInIfStatement") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(3, {"if", "(", "y", "==", "1", ")", "then", "{"}, IF),
-//        Line(4, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(5, {"call", "B", ";"}, CALL),
-//        Line({"}", "else", "{"}, ELSE),
-//        Line(6, {"call", "C", ";"}, CALL),
-//        Line(7, {"y", "=", "y", "+", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(8, {"y", "=", "3", ";"}, ASSIGN),
-//        Line(9, {"y", "=", "4", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(10, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(11, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(12, {"z", "=", "0", ";"}, ASSIGN),
-//        Line(13, {"z", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3}},
-//        {3, {4,6}},
-//        {4, {5}},
-//        {5, {8,10}},
-//        {6, {7,12}},
-//        {7, {8}},
-//        {8, {9}},
-//        {10, {11}},
-//        {11, {5}},
-//        {12, {13}},
-//        {13, {6}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallInNestedWhileLoop") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(3, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(4, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(5, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
-//        Line(6, {"y", "=", "3", ";"}, ASSIGN),
-//        Line(7, {"call", "B", ";"}, CALL),
-//        Line(8, {"y", "=", "3", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(9, {"y", "=", "4", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(10, {"y", "=", "5", ";"}, ASSIGN),
-//        Line(11, {"y", "=", "6", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(12, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(13, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3}},
-//        {3, {4, 10}},
-//        {4, {5}},
-//        {5, {6, 9}},
-//        {6, {7}},
-//        {7, {8, 12}},
-//        {8, {5}},
-//        {9, {3}},
-//        {10, {11}},
-//        {12, {13}},
-//        {13, {7}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-//
-//TEST_CASE("Affects: multiProcedureSimpleWithCallInNestedIfStatement") {
-//const vector<Line>& lines = {
-//        Line({"procedure", "A", "{"}, PROCEDURE),
-//        Line(1, {"y", "=", "0", ";"}, ASSIGN),
-//        Line(2, {"y", "=", "1", ";"}, ASSIGN),
-//        Line(3, {"if", "(", "y", "==", "1", ")", "then", "{"}, IF),
-//        Line(4, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(5, {"if", "(", "y", "==", "1", ")", "then", "{"}, IF),
-//        Line(6, {"y", "=", "2", ";"}, ASSIGN),
-//        Line(7, {"call", "B", ";"}, CALL),
-//        Line({"}", "else", "{"}, ELSE),
-//        Line(8, {"call", "C", ";"}, CALL),
-//        Line(9, {"y", "=", "y", "+", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"}", "else", "{"}, ELSE),
-//        Line(10, {"call", "D", ";"}, CALL),
-//        Line(11, {"y", "=", "y", "+", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line(12, {"y", "=", "3", ";"}, ASSIGN),
-//        Line(13, {"y", "=", "4", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "B", "{"}, PROCEDURE),
-//        Line(14, {"x", "=", "0", ";"}, ASSIGN),
-//        Line(15, {"x", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "C", "{"}, PROCEDURE),
-//        Line(16, {"z", "=", "0", ";"}, ASSIGN),
-//        Line(17, {"call", "B", ";"}, CALL),
-//        Line({"}"}, CLOSE_CURLY),
-//        Line({"procedure", "D", "{"}, PROCEDURE),
-//        Line(18, {"call", "C", ";"}, CALL),
-//        Line(19, {"z", "=", "1", ";"}, ASSIGN),
-//        Line({"}"}, CLOSE_CURLY),
-//};
-//auto [follows, followsStar] = extractFollowsRelationship(lines);
-//affectsTestProcExtractor.extractCallLineNumToProcName(lines);
-//auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
-//
-//unordered_map<int, set<int>> expected = {
-//        {1, {2}},
-//        {2, {3}},
-//        {3, {4,10}},
-//        {4, {5}},
-//        {5, {6,8}},
-//        {6, {7}},
-//        {7, {12,14}},
-//        {8, {9, 16}},
-//        {9, {12}},
-//        {10, {11,18}},
-//        {11, {12}},
-//        {12, {13}},
-//        {14, {15}},
-//        {15, {7, 17}},
-//        {16, {17}},
-//        {17, {8, 14, 18}},
-//        {18, {16,19}},
-//        {19, {10}}
-//};
-//
-//unordered_map<int, set<int>> result = extractNextRS(lines, follows, callLineNumToProcName, false);
-//compareCFG(result, expected);
-//}
-
-void printPaths(vector<vector<int>> paths) {
-    for(auto path: paths) {
-        for (auto node: path) {
-            cout << node << " ";
-        }
-        cout << endl;
-    }
-}
 
 TEST_CASE("test affects simple") {
     const vector<Line>& lines = {
@@ -581,9 +21,8 @@ TEST_CASE("test affects simple") {
     auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
     auto modifiesRS = modifiesUses.modifiesRS;
     auto usesRS = modifiesUses.usesRS;
-    set<string> result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS);
-    set<string> expected = {"y"};
-    REQUIRE(expected == result);
+    bool result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    REQUIRE(result);
 }
 
 TEST_CASE("test affects with calls") {
@@ -608,12 +47,11 @@ TEST_CASE("test affects with calls") {
     auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
     auto modifiesRS = modifiesUses.modifiesRS;
     auto usesRS = modifiesUses.usesRS;
-    set<string> result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS);
-    set<string> expected = {};
-    REQUIRE(expected == result);
+    bool result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    REQUIRE(!result);
 }
 
-TEST_CASE("test affects complex") {
+TEST_CASE("test affects and affects star complex") {
     const vector<Line>& lines = {
             Line({"procedure", "A", "{"}, PROCEDURE),
             Line(1, {"x", "=", "0", ";"}, ASSIGN),
@@ -645,49 +83,425 @@ TEST_CASE("test affects complex") {
     auto modifiesRS = modifiesUses.modifiesRS;
     auto usesRS = modifiesUses.usesRS;
 
-    set<string> result1 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS);
-    set<string> expected1 = { "i" };
-    set<string> result2 = extractAffectsRS(lines, 4, 8, cfg, variables, modifiesRS, usesRS);
-    set<string> expected2 = { "x" };
-    set<string> result3 = extractAffectsRS(lines, 4, 10, cfg, variables, modifiesRS, usesRS);
-    set<string> expected3 = { "x" };
-    set<string> result4 = extractAffectsRS(lines, 6, 6, cfg, variables, modifiesRS, usesRS);
-    set<string> expected4 = { "i" };
-    set<string> result5 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS);
-    set<string> expected5 = { "x" };
-    set<string> result6 = extractAffectsRS(lines, 1, 8, cfg, variables, modifiesRS, usesRS);
-    set<string> expected6 = { "x" };
-    set<string> result7 = extractAffectsRS(lines, 1, 10, cfg, variables, modifiesRS, usesRS);
-    set<string> expected7 = { "x" };
-    set<string> result8 = extractAffectsRS(lines, 1, 12, cfg, variables, modifiesRS, usesRS);
-    set<string> expected8 = { "x" };
-    set<string> result9 = extractAffectsRS(lines, 2, 10, cfg, variables, modifiesRS, usesRS);
-    set<string> expected9 = { "i" };
-    set<string> result10 = extractAffectsRS(lines, 9, 10, cfg, variables, modifiesRS, usesRS);
-    set<string> expected10 = { "z" };
+    bool result1 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 4, 8, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 4, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 6, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 1, 8, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 1, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 1, 12, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 9, 10, cfg, variables, modifiesRS, usesRS, false);
 
-    set<string> result11 = extractAffectsRS(lines, 9, 11, cfg, variables, modifiesRS, usesRS);
-    set<string> expected11 = { };
-    set<string> result12 = extractAffectsRS(lines, 9, 12, cfg, variables, modifiesRS, usesRS);
-    set<string> expected12 = { };
-    set<string> result13 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS);
-    set<string> expected13 = { };
-    set<string> result14 = extractAffectsRS(lines, 9, 6, cfg, variables, modifiesRS, usesRS);
-    set<string> expected14 = { };
+    bool result11 = extractAffectsRS(lines, 9, 11, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 9, 12, cfg, variables, modifiesRS, usesRS, false);
+    bool result13 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 9, 6, cfg, variables, modifiesRS, usesRS, false);
 
-    REQUIRE(result1 == expected1);
-    REQUIRE(result2 == expected2);
-    REQUIRE(result3 == expected3);
-    REQUIRE(result4 == expected4);
-    REQUIRE(result5 == expected5);
-    REQUIRE(result6 == expected6);
-    REQUIRE(result7 == expected7);
-    REQUIRE(result8 == expected8);
-    REQUIRE(result9 == expected9);
-    REQUIRE(result10 == expected10);
+    bool result15 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 10, cfg, variables, modifiesRS, usesRS, true);
+    bool result17 = extractAffectsRS(lines, 1, 11, cfg, variables, modifiesRS, usesRS, true);
+    bool result18 = extractAffectsRS(lines, 1, 12, cfg, variables, modifiesRS, usesRS, true);
 
-    REQUIRE(result11 == expected11);
-    REQUIRE(result12 == expected12);
-    REQUIRE(result13 == expected13);
-    REQUIRE(result14 == expected14);
+    REQUIRE(result1);
+    REQUIRE(result2);
+    REQUIRE(result3);
+    REQUIRE(result4);
+    REQUIRE(result5);
+    REQUIRE(result6);
+    REQUIRE(result7);
+    REQUIRE(result8);
+    REQUIRE(result9);
+    REQUIRE(result10);
+
+    REQUIRE(!result11);
+    REQUIRE(!result12);
+    REQUIRE(!result13);
+    REQUIRE(!result14);
+
+    REQUIRE(result15);
+    REQUIRE(result16);
+    REQUIRE(result17);
+    REQUIRE(result18);
+}
+
+TEST_CASE("test affects star simple") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"v", "=", "x", ";"}, ASSIGN),
+            Line(3, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(result1);
+    REQUIRE(result2);
+    REQUIRE(result3);
+}
+
+TEST_CASE("test affects with while") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(3, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line(4, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+
+    bool result4 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+
+    bool result6 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(!result1);
+    REQUIRE(result2);
+    REQUIRE(!result3);
+
+    REQUIRE(!result4);
+    REQUIRE(!result5);
+
+    REQUIRE(result6);
+    REQUIRE(result7);
+}
+
+TEST_CASE("test affects with if") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"if", "(", "a", "!=", "0", ")", "{"}, IF),
+            Line(3, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}", "else", "{"}, ELSE),
+            Line(4, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+
+    bool result4 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+
+    bool result6 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(!result1);
+    REQUIRE(result2);
+    REQUIRE(!result3);
+
+    REQUIRE(!result4);
+    REQUIRE(!result5);
+
+    REQUIRE(!result6);
+    REQUIRE(!result7);
+
+}
+
+TEST_CASE("test affects with nested if") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"if", "(", "a", "!=", "0", ")", "{"}, IF),
+            Line(3, {"if", "(", "a", "!=", "0", ")", "{"}, IF),
+            Line(4, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}", "else", "{"}, ELSE),
+            Line(5, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}", "else", "{"}, ELSE),
+            Line(6, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result1);
+    REQUIRE(!result2);
+    REQUIRE(result3);
+    REQUIRE(!result4);
+    REQUIRE(!result5);
+
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result6);
+    REQUIRE(!result7);
+    REQUIRE(!result8);
+    REQUIRE(!result9);
+
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result10);
+    REQUIRE(!result11);
+    REQUIRE(!result12);
+
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result13);
+    REQUIRE(!result14);
+
+    bool result15 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(!result15);
+    REQUIRE(!result16);
+}
+
+TEST_CASE("test affects with nested while") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(3, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(4, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line(5, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result1);
+    REQUIRE(!result2);
+    REQUIRE(result3);
+    REQUIRE(!result4);
+
+    bool result5 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result5);
+    REQUIRE(!result6);
+    REQUIRE(!result7);
+
+    bool result8 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result8);
+    REQUIRE(!result9);
+
+    bool result10 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, true);
+    REQUIRE(result10);
+    REQUIRE(result11);
+}
+
+TEST_CASE("test affects with if nested in while") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(3, {"if", "(", "a", "!=", "0", ")", "{"}, IF),
+            Line(4, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}", "else", "{"}, ELSE),
+            Line(5, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line(6, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result1);
+    REQUIRE(!result2);
+    REQUIRE(result3);
+    REQUIRE(result4);
+    REQUIRE(!result5);
+
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result6);
+    REQUIRE(!result7);
+    REQUIRE(!result8);
+    REQUIRE(!result9);
+
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result10);
+    REQUIRE(!result11);
+    REQUIRE(!result12);
+
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result13);
+    REQUIRE(result14);
+
+    bool result15 = extractAffectsRS(lines, 5, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(result15);
+    REQUIRE(result16);
+}
+
+TEST_CASE("test affects with while nested in if") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"if", "(", "a", "!=", "0", ")", "{"}, IF),
+            Line(3, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(4, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}", "else", "{"}, ELSE),
+            Line(5, {"v", "=", "x", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line(6, {"x", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result1);
+    REQUIRE(!result2);
+    REQUIRE(result3);
+    REQUIRE(result4);
+    REQUIRE(!result5);
+
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result6);
+    REQUIRE(!result7);
+    REQUIRE(!result8);
+    REQUIRE(!result9);
+
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result10);
+    REQUIRE(!result11);
+    REQUIRE(!result12);
+
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+
+    REQUIRE(!result13);
+    REQUIRE(result14);
+
+    bool result15 = extractAffectsRS(lines, 5, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+
+    REQUIRE(result15);
+    REQUIRE(result16);
 }
