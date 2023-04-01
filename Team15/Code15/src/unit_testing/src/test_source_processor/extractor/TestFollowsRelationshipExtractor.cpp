@@ -60,10 +60,27 @@ TEST_CASE("extractFollowsRelationship_superNested") {
     REQUIRE(result2 == expectedFollowsStar);
 }
 
-//TEST_CASE("extractFollowsRelationship_source2") {
-//    auto [result, result2] = extractFollowsRelationship(source2);
-//    unordered_map<int, int> expectedFollows = {{1,2},{2,3},{3,4},{5,14},{8,9}};
-//    unordered_map<int, set<int>> expectedFollowsStar = {{1,{2,3,4}},{2,{3,4}},{3,{4}},{5,{14}},{8,{9}}};
-//    REQUIRE(result == expectedFollows);
-//    REQUIRE(result2 == expectedFollowsStar);
-//}
+TEST_CASE("extractFollowsRelationship_source2") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(2, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "B", "{"}, PROCEDURE),
+            Line(3, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(4, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"procedure", "C", "{"}, PROCEDURE),
+            Line(5, {"while", "(", "x", "==", "1", ")", "then", "{"}, WHILE),
+            Line(6, {"x", "=", "x", "+", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY),
+    };
+    auto [result, result2] = extractFollowsRelationship(lines);
+    unordered_map<int, int> expectedFollows = {};
+    unordered_map<int, set<int>> expectedFollowsStar = {};
+    REQUIRE(result == expectedFollows);
+    REQUIRE(result2 == expectedFollowsStar);
+}

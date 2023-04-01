@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int Line::getLineNumber() {
+int Line::getLineNumber() const {
     return lineNumber;
 }
 
@@ -12,7 +12,7 @@ vector<string> Line::getTokens() {
     return tokens;
 }
 
-string Line::getType() {
+KeywordsEnum Line::getType() const {
     return type;
 }
 

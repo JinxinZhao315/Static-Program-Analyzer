@@ -10,6 +10,7 @@
 #include "ProcedureExtractor.h"
 #include "VariableExtractor.h"
 #include "StatementExtractor.h"
+#include "NextRelationshipExtractor.h"
 
 class Extractor {
 public:
@@ -18,7 +19,7 @@ public:
     set<string> getVariables();
     set<string> getConstants();
     set<string> getProcedures();
-    unordered_map<string, set<int>> getStatements();
+    unordered_map<KeywordsEnum, set<int>> getStatements();
     void printEntities();
 
     unordered_map<int, int> getFollowsRS();
@@ -44,6 +45,8 @@ public:
     unordered_map<int, string> getPrintLineNumToVarName();
     unordered_map<int, string> getCallLineNumToProcName();
 
+    unordered_map<int, set<int>> getNextRS();
+
 private:
     unordered_map<int, set<int>> parentsRS;
     unordered_map<int, set<int>> parentsStarRS;
@@ -67,11 +70,13 @@ private:
     set<string> procedures;
     set<string> constants;
     set<string> variables;
-    unordered_map<string, set<int>> statements;
+    unordered_map<KeywordsEnum, set<int>> statements;
 
     unordered_map<int, string> readLineNumToVarName;
     unordered_map<int, string> printLineNumToVarName;
     unordered_map<int, string> callLineNumToProcName;
+
+    unordered_map<int, set<int>> nextRS;
 
     VariableExtractor* variableExtractor;
     ProcedureExtractor* procedureExtractor;

@@ -19,7 +19,7 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//SP statement
-	void addAllStmts(std::unordered_map<std::string, std::set<int>> stmtNums);
+	void addAllStmts(std::unordered_map<KeywordsEnum, std::set<int>> stmtNums);
 
 	//SP follows
 	void addAllFollows(std::unordered_map<int, int> allLeaderToFollower);
@@ -93,7 +93,7 @@ public:
 	//QPS statement
 	std::set<int> getAllStmtNums();
 
-	std::set<int> getAllStmtNumsByType(std::string stmtType);
+	std::set<int> getAllStmtNumsByType(KeywordsEnum stmtType);
 
 	//QPS follow
 	int getFollowsLeaderNum(int followerNum, int invalidLeaderNum);
@@ -104,6 +104,10 @@ public:
 
 	bool isFollowsEmpty();
 
+	bool isFollowsLeaderEmpty();
+
+	bool isFollowsFollowerEmpty();
+
 	//QPS follows*
 	std::set<int> getFollowsStarLeaderNums(int followerNum);
 
@@ -112,6 +116,10 @@ public:
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
 	bool isFollowsStarEmpty();
+
+	bool isFollowsStarLeaderEmpty();
+
+	bool isFollowsStarFollowerEmpty();
 
 	//QPS parent
 	int getParentParentNum(int childNum, int invalidParentNum);
@@ -122,6 +130,10 @@ public:
 
 	bool isParentEmpty();
 
+	bool isParentParentEmpty();
+
+	bool isParentChildEmpty();
+
 	//QPS parent*
 	std::set<int> getParentStarParentNums(int childNum);
 
@@ -130,6 +142,10 @@ public:
 	bool areInParentStarRelationship(int parentNum, int childNum);
 
 	bool isParentStarEmpty();
+
+	bool isParentStarParentEmpty();
+
+	bool isParentStarChildEmpty();
 
 	//QPS uses statement-variable
 	std::set<std::string> getUsesVarsFromStmt(int stmtNum);
@@ -168,6 +184,10 @@ public:
 
 	bool isCallsEmpty();
 
+	bool isCallsCallerEmpty();
+
+	bool isCallsCalleeEmpty();
+
 	//QPS calls*
 	std::set<std::string> getCallsStarCallerNames(std::string calleeName);
 
@@ -176,6 +196,10 @@ public:
 	bool areInCallsStarRelationship(std::string callerName, std::string calleeName);
 
 	bool isCallsStarEmpty();
+
+	bool isCallsStarCallerEmpty();
+
+	bool isCallsStarCalleeEmpty();
 
 	//QPS next
 	std::set<int> getPreviousStmtNums(int nextStmtNum);
@@ -186,6 +210,10 @@ public:
 
 	bool isNextEmpty();
 
+	bool isPreviousStmtEmpty();
+
+	bool isNextStmtEmpty();
+
 	//QPS next*
 	std::set<int> getStarPreviousStmtNums(int nextStmtNum);
 
@@ -194,6 +222,10 @@ public:
 	bool areInNextStarRelationship(int previousStmtNum, int nextStmtNum);
 
 	bool isNextStarEmpty();
+
+	bool isStarPreviousStmtEmpty();
+
+	bool isStarNextStmtEmpty();
 
 	void clearNextStar();
 
@@ -206,6 +238,10 @@ public:
 
 	bool isAffectsEmpty();
 
+	bool isAffectsModifierStmtEmpty();
+
+	bool isAffectsUserStmtEmpty();
+
 	void clearAffects();
 
 	//QPS affects*
@@ -216,6 +252,10 @@ public:
 	bool areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum);
 
 	bool isAffectsStarEmpty();
+
+	bool isAffectsStarModifierStmtEmpty();
+
+	bool isAffectsStarUserStmtEmpty();
 
 	void clearAffectsStar();
 

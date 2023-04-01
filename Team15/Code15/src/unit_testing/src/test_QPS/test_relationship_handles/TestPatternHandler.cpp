@@ -2,22 +2,21 @@
 #include "QPS/include/PQLDriver.h"
 #include "exceptions/PQLSyntaxError.h"
 #include "TestUtility.h"
-
 #include "catch.hpp"
 
 void testPatternFillPkb(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
     pkb.addAllConsts(set<string>({"1", "2", "3"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({1,2,4})));
-    stmts.insert(make_pair("read", set<int>({3})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({1,2,4})));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({3})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> patterns;
-    Line line1 = Line(1, vector<string>({"x", "y", "+"}), "=");
-    Line line2 = Line(2, vector<string>({"1", "2", "+"}), "=");
-    Line line4 = Line(4, vector<string>({"3"}), "=");
+    Line line1 = Line(1, vector<string>({"x", "y", "+"}), ASSIGN);
+    Line line2 = Line(2, vector<string>({"1", "2", "+"}), ASSIGN);
+    Line line4 = Line(4, vector<string>({"3"}), ASSIGN);
     patterns.insert(make_pair("k", set<Line>({line1})));
     patterns.insert(make_pair("m", set<Line>({line2})));
     patterns.insert(make_pair("x", set<Line>({line4})));
@@ -33,17 +32,17 @@ void testPatternFillPkb2(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "n", "m"}));
     pkb.addAllConsts(set<string>({"1", "0", "5"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({2,3,5,7})));
-    stmts.insert(make_pair("if", set<int>({1})));
-    stmts.insert(make_pair("while", set<int>({4,6})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({2,3,5,7})));
+    stmts.insert(make_pair(KeywordsEnum::IF, set<int>({1})));
+    stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({4,6})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> assignPatterns;
-    Line line2 = Line(2, vector<string>({"n", "1", "+"}), "=");
-    Line line3 = Line(3, vector<string>({"m", "1", "-"}), "=");
-    Line line5 = Line(5, vector<string>({"y", "1", "-"}), "=");
-    Line line7 = Line(7, vector<string>({"x", "1", "-"}), "=");
+    Line line2 = Line(2, vector<string>({"n", "1", "+"}), ASSIGN);
+    Line line3 = Line(3, vector<string>({"m", "1", "-"}), ASSIGN);
+    Line line5 = Line(5, vector<string>({"y", "1", "-"}), ASSIGN);
+    Line line7 = Line(7, vector<string>({"x", "1", "-"}), ASSIGN);
 
     assignPatterns.insert(make_pair("n", set<Line>({line2})));
     assignPatterns.insert(make_pair("m", set<Line>({line3})));
@@ -52,14 +51,14 @@ void testPatternFillPkb2(PKB& pkb) {
     pkb.addAllAssignPatterns(assignPatterns);
 
     unordered_map<string, set<Line>> ifPatterns;
-    Line line1 = Line(1, vector<string>({"x", "5", ">"}), "if");
+    Line line1 = Line(1, vector<string>({"x", "5", ">"}), IF);
     ifPatterns.insert(make_pair("x", set<Line>({line1})));
     pkb.addAllIfPatterns(ifPatterns);
 
     unordered_map<string, set<Line>> whilePatterns;
-    Line line4 = Line(4, vector<string>({"y", "0", ">"}), "while");
+    Line line4 = Line(4, vector<string>({"y", "0", ">"}), WHILE);
     whilePatterns.insert(make_pair("y", set<Line>({line4})));
-    Line line6 = Line(6, vector<string>({"x", "0", ">"}), "while");
+    Line line6 = Line(6, vector<string>({"x", "0", ">"}), WHILE);
     whilePatterns.insert(make_pair("x", set<Line>({line6})));
     pkb.addAllWhilePatterns(whilePatterns);
 
@@ -86,15 +85,15 @@ void testPatternFillPkb3(PKB& pkb) {
     pkb.addAllVars(set<string>({"x", "y", "k", "m", "t"}));
     pkb.addAllConsts(set<string>({"1", "2", "3", "4", "5"}));
 
-    unordered_map<string, set<int>> stmts;
-    stmts.insert(make_pair("=", set<int>({1,2,4})));
-    stmts.insert(make_pair("read", set<int>({3})));
+    unordered_map<KeywordsEnum, set<int>> stmts;
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({1,2,4})));
+    stmts.insert(make_pair(KeywordsEnum::READ, set<int>({3})));
     pkb.addAllStmts(stmts);
 
     unordered_map<string, set<Line>> patterns;
-    Line line1 = Line(1, vector<string>({"x", "y", "4", "+", "+"}), "=");
-    Line line2 = Line(2, vector<string>({"1", "2", "+", "3", "+"}), "=");
-    Line line4 = Line(4, vector<string>({"1", "3", "5", "*", "+"}), "=");
+    Line line1 = Line(1, vector<string>({"x", "y", "4", "+", "+"}), ASSIGN);
+    Line line2 = Line(2, vector<string>({"1", "2", "+", "3", "+"}), ASSIGN);
+    Line line4 = Line(4, vector<string>({"1", "3", "5", "*", "+"}), ASSIGN);
     patterns.insert(make_pair("k", set<Line>({line1})));
     patterns.insert(make_pair("m", set<Line>({line2})));
     patterns.insert(make_pair("x", set<Line>({line4})));

@@ -4,10 +4,10 @@ tuple<unordered_map<int, set<int>>, unordered_map<int, set<int> >> extractParent
     vector<int> v;
     unordered_map<int, set<int>> parentsRS;
     unordered_map<int, int> parent;
-    for (Line line: program) {
+    for (const Line& line: program) {
         int currLineNumber = line.getLineNumber();
-        string lineType = line.getType();
-        if (lineType == "procedure") {
+        KeywordsEnum lineType = line.getType();
+        if (lineType == PROCEDURE) {
             v.clear();
             continue;
         }
@@ -16,11 +16,11 @@ tuple<unordered_map<int, set<int>>, unordered_map<int, set<int> >> extractParent
             parent[currLineNumber] = v.back();
             parentsRS[v.back()].insert(currLineNumber);
         }
-        if (lineType == "if" || lineType == "while") {
+        if (lineType == IF || lineType == WHILE) {
             v.push_back(currLineNumber);
-        } else if (lineType == "else") {
+        } else if (lineType == ELSE) {
             continue;
-        } else if (lineType == "}") {
+        } else if (lineType == CLOSE_CURLY) {
             if (!v.empty()) {
                 v.pop_back(); // jump out of a block
                 continue;
@@ -28,24 +28,8 @@ tuple<unordered_map<int, set<int>>, unordered_map<int, set<int> >> extractParent
         }
     }
     // store info for last procedure
-//    parentsRS = unordered_map<int, int>(tempParents.begin(), tempParents.end());
     unordered_map<int, set<int>> parentsStarRS;
-    for (const auto& p : parent) {
-        int child = p.first;
-        int parentLine = p.second;
-
-        while (parentLine) {
-            // Initialize set for parent if it does not exist
-            parentsStarRS[parentLine].insert(child);
-
-            // Check if there is a transitive relationship
-            if (parent.count(parentLine)) {
-                parentLine = parent.at(parentLine);
-            } else {
-                parentLine = 0;
-            }
-        }
-    }
+    generateTransitiveRelationship(parentsRS, parentsStarRS);
 
     return make_tuple(parentsRS, parentsStarRS);
 }

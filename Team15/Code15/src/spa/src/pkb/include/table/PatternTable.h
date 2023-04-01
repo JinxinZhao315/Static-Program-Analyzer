@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "common/include/models/Line.h"
+#include "pkb/include/hasher/VectorHasher.h"
 
 class PatternTable {
 public:
@@ -104,9 +105,9 @@ private:
 	std::unordered_map<int, std::set<std::string>> stmtToVarsMap;
 	std::unordered_map<std::string, std::set<int>> varToStmtsMap;
 	std::unordered_map<int, std::set<std::vector<std::string>>> stmtToExprsMap;
-	std::map<std::vector<std::string>, std::set<int>> exprToStmtsMap;
+	std::unordered_map<std::vector<std::string>, std::set<int>, VectorHasher> exprToStmtsMap;
 	std::unordered_map<std::string, std::set<std::vector<std::string>>> varToExprsMap;
-	std::map<std::vector<std::string>, std::set<std::string>> exprToVarsMap;
+	std::unordered_map<std::vector<std::string>, std::set<std::string>, VectorHasher> exprToVarsMap;
 
 	inline void addStmt(int stmtNum) {
 		allStmtsSet.insert(stmtNum);

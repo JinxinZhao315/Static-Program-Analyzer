@@ -5,8 +5,8 @@ unordered_map<string, set<Line>> extractAssignmentRS(const vector<Line>& program
     for (Line line: program) {
         int currLineNumber = line.getLineNumber();
         vector<string> tokens = line.getTokens();
-        string lineType = line.getType();
-        if (lineType != "=") continue;
+        KeywordsEnum lineType = line.getType();
+        if (lineType != ASSIGN) continue;
         auto [LHS, RHS] = getLHSandRHSofAssignStatement(tokens);
         string varName = LHS[0];
         vector<string> postfixRHS = convertToPostfix(RHS, variables);

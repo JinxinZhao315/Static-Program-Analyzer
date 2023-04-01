@@ -14,8 +14,8 @@ procedure proc3 {
 procedure proc4 {
 //8  read v;
 //9  read w;
-//10 while ((v >= 1) && (w >= 1)) {
-//11   if (v >= a) then {
+//10 while ((v >= 1) && (w <= 100)) {
+//11   if (v == a) then {
 //12     x = v / 3; }
        else {
 //13     y = w / 4; }
@@ -26,7 +26,32 @@ procedure proc5 {
 //16  read w;
 //17  c = 10;
 //18  d = 5;
-//19  if (c > 5) then {
+//19  if (c < 20) then {
 //20    c = 10 - d; }
       else {
 //21    c = d; } }
+
+procedure proc6 {
+//22  read e;
+//23  read f;
+//24  while (e != f) {
+//25    call proc7; } }
+
+procedure proc7 {
+//26  g = 0;
+//27  if (e > f) {
+//28    call proc8;
+//29    g = g + 1; }
+      else {
+//30    call proc9;
+//31    g = g - 1; } }
+
+procedure proc8 {
+//32  h = 0;
+//33  f = f * 2;
+//34  print h; }
+
+procedure proc9 {
+//35  h = 1;
+//36  f = f / 2;
+//37  print h; }

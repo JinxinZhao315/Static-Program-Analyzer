@@ -9,8 +9,8 @@ string findProcedureName(vector<string> tokens) {
     return "";
 }
 
-bool isProcedure(Line line) {
-    return line.getType() == "procedure";
+bool isProcedure(const Line& line) {
+    return line.getType() == PROCEDURE;
 }
 
 void ProcedureExtractor::extractProcedures(const vector<Line>& program) {
@@ -24,26 +24,13 @@ void ProcedureExtractor::extractProcedures(const vector<Line>& program) {
     }
 };
 
-string ProcedureExtractor::findProcedure(vector<string> tokens) {
-    for(auto token : tokens) {
-        if(find(procedures.begin(), procedures.end(), token) != procedures.end()) {
-            return token;
-        }
-    }
-    return "";
-}
-
-bool isEmptyProcedure(string procedure) {
-    return procedure == "";
-}
-
 void ProcedureExtractor::extractCallLineNumToProcName(const vector<Line> &program) {
     for(auto line: program) {
         vector<string> tokens = line.getTokens();
-        string type = line.getType();
+        KeywordsEnum type = line.getType();
         int lineNumber = line.getLineNumber();
-        string procedure = findProcedure(tokens);
-        if(!isEmptyProcedure(procedure) && type == "call") {
+        if(type == CALL) {
+            string procedure = getProcedureNameFromCallStatement(tokens);
             callLineNumToProcName[lineNumber] = procedure;
         }
     }

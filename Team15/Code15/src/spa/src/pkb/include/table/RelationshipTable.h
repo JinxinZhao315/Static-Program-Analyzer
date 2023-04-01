@@ -84,6 +84,22 @@ public:
 		return leftToRightMap.empty() && rightToLeftMap.empty() && leftToAllRightsMap.empty() && rightToAllLeftsMap.empty();
 	}
 
+	inline bool isLeftToRightMapEmpty() {
+		return leftToRightMap.empty();
+	}
+
+	inline bool isRightToLeftMapEmpty() {
+		return rightToLeftMap.empty();
+	}
+
+	inline bool isLeftToAllRightsMapEmpty() {
+		return leftToAllRightsMap.empty();
+	}
+
+	inline bool isRightToAllLeftsMapEmpty() {
+		return rightToAllLeftsMap.empty();
+	}
+
 	inline void clearMaps() {
 		clearLeftToRightMap();
 		clearRightToLeftMap();

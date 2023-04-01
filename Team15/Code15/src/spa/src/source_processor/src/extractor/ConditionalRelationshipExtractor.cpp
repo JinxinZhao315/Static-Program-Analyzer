@@ -1,23 +1,24 @@
 #include "source_processor/include/extractor/ConditionalRelationshipExtractor.h"
 
-vector<string> getCondition(const string& conditionType, const vector<string>& tokens) {
+Keywords keywords;
+
+vector<string> getCondition(KeywordsEnum conditionType, const vector<string>& tokens) {
+    int nesting = 0;
     auto* brackets = new stack<string>();
     auto* condition = new vector<string>();
     for(const auto& token : tokens) {
-        if(token == "(") {
+        if(token == keywords.keywordMap.second.at(OPEN_PAREN)) {
             brackets->push(token);
-        } else if (token == ")") {
+        } else if (token == keywords.keywordMap.second.at(CLOSE_CURLY)) {
             brackets->pop();
         }
         if(!brackets->empty()) {
             condition->push_back(token);
-        } else if (token != conditionType) {
+        } else if (token != keywords.keywordMap.second.at(conditionType)) {
             condition->push_back(token);
             break;
         }
     }
-    condition->erase(condition->begin());
-    condition->erase(condition->end() - 1);
     return *condition;
 }
 
@@ -34,11 +35,11 @@ void getLineVariables(const set<string>& variables, const vector<string>& tokens
     }
 }
 
-unordered_map<string, set<Line>> extractConditionalRS(const string& conditionType, const vector<Line>& program, const set<string>& variables) {
+unordered_map<string, set<Line>> extractConditionalRS(KeywordsEnum conditionType, const vector<Line>& program, const set<string>& variables) {
     unordered_map<string, set<Line>> conditionalRS;
     for(auto line : program) {
         int lineNumber = line.getLineNumber();
-        string type = line.getType();
+        KeywordsEnum type = line.getType();
         vector<string> tokens = line.getTokens();
         if(type != conditionType) continue;
         vector<string> condition = getCondition(conditionType, tokens);
