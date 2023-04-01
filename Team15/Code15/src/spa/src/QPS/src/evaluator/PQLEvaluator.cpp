@@ -27,25 +27,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         selectedElemName.push_back(e.getSynName());
     }
 
-    /*for (SuchThatClause suchThatCl : suchThatVec)
-    {
-        clauseArgVec.push_back(suchThatCl.getLeftArg());
-        clauseArgVec.push_back(suchThatCl.getRightArg());
-    }
-
-    for (PatternClause &patternCl : patternVec)
-    {
-        clauseArgVec.push_back(patternCl.getPatternSynonym());
-        clauseArgVec.push_back(patternCl.getFirstArg());
-        clauseArgVec.push_back(patternCl.getSecondArg());
-        clauseArgVec.push_back(patternCl.getThirdArg());
-    }
-
-    for (WithClause &withCl : withVec)
-    {
-        clauseArgVec.push_back(withCl.getFirstArgStr());
-        clauseArgVec.push_back(withCl.getSecondArgStr());
-    }*/
     for (int i = 0; i < suchThatVec.size(); i++) {
         originEvalGroup.addClause(&suchThatVec[i]);
     }
@@ -58,8 +39,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         originEvalGroup.addClause(&withVec[i]);
     }
 
-    // selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
-
     std::vector<ClauseEvalGroup> clauseEvalGroups = separateEvalGroup(originEvalGroup);
     for (ClauseEvalGroup group : clauseEvalGroups) {
         ResultTable tempTable = evalGroup(group, isEarlyExit, synonymTable, selectedElemName);
@@ -70,130 +49,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         resultTable.combineTable(tempTable);
     }
 
-
-    //for (SuchThatClause suchThatCl : suchThatVec)
-    //{
-    //    std::string relationship = suchThatCl.getRelationShip();
-
-    //    SuchThatHandler suchThatHandler(pkb);
-    //    Result result = suchThatHandler.evaluate(Utility::getRelationshipFromString(relationship),
-    //                                             suchThatCl,
-    //                                             synonymTable);
-
-    //    if (!result.isResultTrue())
-    //    {
-
-    //        resultTable.clearResultTable();
-
-    //        isEarlyExit = true;
-
-    //        break;
-    //    }
-    //    resultTable.combineTable(result.getClauseResult());
-    //    // there used to be some syns in the table but now it is empty
-    //    if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty())
-    //    {
-
-    //        isEarlyExit = true;
-
-    //        break;
-    //    }
-    //    // no such arg left in the following clause, can delete it in resultTable
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(suchThatCl.getLeftArg());
-    //    }
-    //    clauseArgVecIndex++;
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(suchThatCl.getRightArg());
-    //    }
-    //    clauseArgVecIndex++;
-    //}
-
-    //for (PatternClause &patternCl : patternVec)
-    //{
-    //    if (isEarlyExit)
-    //    {
-    //        break;
-    //    }
-    //    PatternHandler patternHandler = PatternHandler(pkb);
-
-    //    Result result = patternHandler.evaluate(patternCl, resultTable, synonymTable);
-
-    //    if (!result.isResultTrue())
-    //    {
-    //        isEarlyExit = true;
-
-    //        resultTable.clearResultTable();
-    //        isEarlyExit = true;
-    //        break;
-    //    }
-
-    //    resultTable.combineTable(result.getClauseResult());
-    //    if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty())
-    //    {
-    //        isEarlyExit = true;
-    //        break;
-    //    }
-
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(patternCl.getPatternSynonym());
-    //    }
-    //    clauseArgVecIndex++;
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(patternCl.getFirstArg());
-    //    }
-    //    clauseArgVecIndex++;
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(patternCl.getSecondArg());
-    //    }
-    //    clauseArgVecIndex++;
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(patternCl.getThirdArg());
-    //    }
-    //    clauseArgVecIndex++;
-    //}
-
-    //for (WithClause &withCl : withVec)
-    //{
-    //    if (isEarlyExit)
-    //    {
-    //        break;
-    //    }
-    //    WithHandler withHandler = WithHandler(pkb);
-
-    //    Result result = withHandler.evaluate(withCl, resultTable, synonymTable);
-    //    if (!result.isResultTrue())
-    //    {
-    //        isEarlyExit = true;
-    //        resultTable.clearResultTable();
-    //        isEarlyExit = true;
-    //        break;
-    //    }
-
-    //    resultTable.combineTable(result.getClauseResult());
-    //    if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty())
-    //    {
-    //        isEarlyExit = true;
-    //        break;
-    //    }
-
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(withCl.getFirstArgStr());
-    //    }
-    //    clauseArgVecIndex++;
-    //    if (!isArgUsedLater(selectedElemName, clauseArgVec, clauseArgVecIndex))
-    //    {
-    //        resultTable.deleteSynonym(withCl.getSecondArgStr());
-    //    }
-    //    clauseArgVecIndex++;
-    //}
     if (!isEarlyExit) {
         selectHandler.evalSelect(query.getSelectClause(), synonymTable, resultTable); // update resultTable and return the synonym name
     }
@@ -353,9 +208,6 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         }
         for (std::string syn : clauseSynList) {
             synToClauseMap[syn].insert(i);
-            //if (synToClauseMap.count(syn)) {
-            //    synToClauseMap[syn].insert();
-            //}
         }
     }
 
