@@ -13,7 +13,6 @@ std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string in
 	else {
 		std::string declaration = Utility::trim(input.substr(0, lastSemicolon + 1), Utility::whiteSpaces);
 		std::string remainingQuery = Utility::trim(input.substr(lastSemicolon + 1), Utility::whiteSpaces);
-		//synonymTable = tokenizeDeclaration(declaration);
 		return std::make_pair(declaration, remainingQuery);
 	}
 }
@@ -105,9 +104,6 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 					throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
 				}
 				
-               /* if (nextKeyword == "" || Utility::getEnumReferenceType(nextKeyword) != Utility::synonym) {
-                    throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
-                }*/
                 if (std::find(relationships.begin(), relationships.end(), nextKeyword) != relationships.end()) {
                     throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
                 }
@@ -161,18 +157,12 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 	}
 	//single clause, no whitespace on the left, so no other clauses except Select single element
 	else if (elemEndIndex == std::string::npos) {
-		//if (!syntaxChecker.validateSynonym(input)) {
-		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		//};
 		elemStrList.push_back(input);
 		input = "";
 	}
 	//single clause, but other restriction after the select clause
 	else {
 		std::string elem = input.substr(0, elemEndIndex);
-		//if (!syntaxChecker.validateSynonym(synonym)) {
-		//	throw PQLSyntaxError("PQL syntax error: Invalid synonym");
-		//};
 		elemStrList.push_back(elem);
 		input = Utility::trim(input.substr(elemEndIndex + 1), Utility::whiteSpaces);
 	}
@@ -343,14 +333,7 @@ Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, st
 	default:
 		break;
 	}
-	//if (type == Utility::QUOTED_IDENT) {
-	//	input = Utility::trim_double_quotes(input);
-	//	return Ref(input, true);
-	//}
-	//else if (type == Utility::INTEGER) {
-	//	input = Utility::trim_double_quotes(input);
-	//	return Ref(input, false);
-	//}
+
 	if (syntaxChecker.validateAttrRef(input)) {
 		std::size_t periodIndex = input.find_first_of(".");
 		std::string synName = input.substr(0, periodIndex);

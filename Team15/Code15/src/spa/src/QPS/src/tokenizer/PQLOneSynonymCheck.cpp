@@ -52,8 +52,6 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::string suchThatLeftArg = suchThatClause.getLeftArg();
         std::string suchThatRightArg = suchThatClause.getRightArg();
-        //std::string suchThatLeftType = Utility::getReferenceType(suchThatLeftArg);
-        //std::string suchThatRightType = Utility::getReferenceType(suchThatRightArg);
         ReferenceType suchThatLeftType = Utility::getEnumReferenceType(suchThatLeftArg);
         ReferenceType suchThatRightType = Utility::getEnumReferenceType(suchThatRightArg);
         switch (suchThatLeftType)
@@ -75,19 +73,9 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
             }
             break;
         }
-           
-
         default:
             break;
         }
-        /*if (suchThatLeftType == Utility::SYNONYM && varTable.count(suchThatLeftArg) != 1) {
-            return false;
-        }
-
-        if (suchThatRightType == Utility::SYNONYM && varTable.count(suchThatRightArg) != 1) {
-            return false;
-        }*/
-
     }
 
     // Pattern Clause
@@ -95,8 +83,6 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
         // In a pattern clause, only the pattern synonym and the first argument can be synonyms
         std::string patternSynonym = patternClause.getPatternSynonym();
         std::string patternFirstArg = patternClause.getFirstArg();
-        //std::string patternSynonymType = Utility::getReferenceType(patternSynonym);
-    	//std::string patternFirstType = Utility::getReferenceType(patternFirstArg);
         ReferenceType patternSynonymType = Utility::getEnumReferenceType(patternSynonym);
         ReferenceType patternFirstType = Utility::getEnumReferenceType(patternFirstArg);
         switch (patternSynonymType)
@@ -118,18 +104,9 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
             }
             break;
         }
-
-
         default:
             break;
         }
-       /* if (patternSynonymType == Utility::SYNONYM && varTable.count(patternSynonym) != 1) {
-            return false;
-        }
-
-        if (patternFirstType == Utility::SYNONYM && varTable.count(patternFirstArg) != 1) {
-            return false;
-        }*/
     }
 
     //attrRef synName should be in varTable

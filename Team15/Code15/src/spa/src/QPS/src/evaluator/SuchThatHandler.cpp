@@ -316,10 +316,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     }
     // Synon - Synon
     else if (leftType == SYNONYM && rightType == SYNONYM) {
-        /*if (leftArg == rightArg) {
-            result.setResultTrue(false);
-            return result;
-        }*/
+
         bool isSynLeftRightArgSame = false;
         if (leftArg == rightArg) {
             isSynLeftRightArgSame = true;
