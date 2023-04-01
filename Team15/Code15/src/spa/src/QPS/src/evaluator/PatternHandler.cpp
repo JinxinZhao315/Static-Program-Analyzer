@@ -53,17 +53,17 @@ vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType,
     set<int> lineNumSet;
     vector<string> strVec;
     if (type == GET_FROM_VAR) {
-        if (patternSynonType == ASSIGN) {
+        if (patternSynonType == ASSIGN_ENTITY) {
             lineNumSet = pkb.getAssignStmtsFromVar(arg);
-        } else if (patternSynonType == WHILE) {
+        } else if (patternSynonType == WHILE_ENTITY) {
             lineNumSet = pkb.getWhileStmtsFromVar(arg);
-        } else { // if (patternSynonType == IF)
+        } else { // if (patternSynonType == IF_ENTITY)
             lineNumSet = pkb.getIfStmtsFromVar(arg);
         }
     } else { // type == GET_ALL
-        if (patternSynonType == ASSIGN) {
-            lineNumSet = pkb.getAllStmtNumsByType("=");
-        } else if (patternSynonType == WHILE) {
+        if (patternSynonType == ASSIGN_ENTITY) {
+            lineNumSet = pkb.getAllStmtNumsByType(ASSIGN);
+        } else if (patternSynonType == WHILE_ENTITY) {
             lineNumSet = pkb.getWhileStmtsWithVars();
         } else { // if (patternSynonType == "if")
             lineNumSet = pkb.getIfStmtsWithVars();

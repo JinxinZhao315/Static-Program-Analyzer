@@ -40,14 +40,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
     )
 
-<<<<<<< HEAD
-add_library(spa ${srcs} ${headers} "src/QPS/include/evaluator/AffectsHandler.h")
 
-# this makes the headers accessible for other projects which uses spa lib
-target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-=======
 add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h)
->>>>>>> d19da07951c5bba6a63cf37f914104da7044f563
+
 
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

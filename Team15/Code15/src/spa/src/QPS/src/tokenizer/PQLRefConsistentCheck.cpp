@@ -32,11 +32,11 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
             suchThatRightType = varTable.find(suchThatRightVarName)->second;
         }
 
-        if (suchThatRefType == PARENT || suchThatRefType == PARENTSTAR) {
+        if (suchThatRefType == PARENT || suchThatRefType == PARENT_STAR) {
             isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::parent, suchThatLeftType, suchThatRightType);
         }
 
-        if (suchThatRefType == FOLLOWS || suchThatRefType == FOLLOWSSTAR) {
+        if (suchThatRefType == FOLLOWS || suchThatRefType == FOLLOWS_STAR) {
             isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::follows , suchThatLeftType, suchThatRightType);
         }
 
@@ -76,14 +76,14 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
                 isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::usesS, suchThatLeftType, suchThatRightType);
             }
         }
-        if (suchThatRefType == CALLS || suchThatRefType == CALLSSTAR) {
+        if (suchThatRefType == CALLS || suchThatRefType == CALLS_STAR) {
             isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::calls , suchThatLeftType, suchThatRightType);
         }
-        if (suchThatRefType == NEXT || suchThatRefType == NEXTSTAR) {
+        if (suchThatRefType == NEXT || suchThatRefType == NEXT_STAR) {
             isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::next, suchThatLeftType, suchThatRightType);
         }
 
-        if (suchThatRefType == AFFECTS || suchThatRefType == AFFECTSSTAR) {
+        if (suchThatRefType == AFFECTS || suchThatRefType == AFFECTS_STAR) {
             isSuchThatFlag = refConsistentLogic->hasRelationRef(Utility::affects, suchThatLeftType, suchThatRightType);
         }
 
@@ -95,7 +95,7 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
         std::string patternSynonymName = patternClause.getPatternSynonym();
         std::string patternRefType = varTable.find(patternSynonymName)->second;
         DesignEntity enumPatternRefType = Utility::getDesignEntityFromString(patternRefType);
-        isPatternFlag = enumPatternRefType == WHILE || enumPatternRefType == IF || enumPatternRefType == ASSIGN;
+        isPatternFlag = enumPatternRefType == WHILE_ENTITY || enumPatternRefType == IF_ENTITY || enumPatternRefType == ASSIGN_ENTITY;
         if (!isPatternFlag) {
             return false;
         }

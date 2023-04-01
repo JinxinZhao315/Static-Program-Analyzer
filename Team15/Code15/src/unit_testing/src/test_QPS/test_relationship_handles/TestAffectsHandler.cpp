@@ -11,7 +11,7 @@ string testAffects(string queryStr);
 
 string testAffects(string queryStr) {
     PKB pkb;
-    pkb.addAllStmts({ {"while",{2}}, {"if",{3}},{"=",{1,4,5,7,8}},{"read",{6}} });
+    pkb.addAllStmts({ {KeywordsEnum::WHILE,{2}}, {KeywordsEnum::IF,{3}},{KeywordsEnum::ASSIGN,{1,4,5,7,8}},{KeywordsEnum::READ,{6}} });
     pkb.addAllAffects({ {1,{4, 5,7}}, {2,{}},{3,{}}, {4, {}}, {5,{4, 5,7}},{6,{}}, {8,{}}, {7,{8}} });
     pkb.addAllAffectsStar({ { 1,{4,5,7,8} }, {2,{}},{3,{}},{ 5, {4,5,7,8} }, {7,{8}}, {8,{}}, {4, {}},{6,{}}
         });

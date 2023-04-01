@@ -15,7 +15,7 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
                 int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
                 return follower == -1;
             }
-        case FOLLOWSSTAR:
+        case FOLLOWS_STAR:
             if (type == GET_LEADER) {
                 return pkb.getFollowsStarLeaderNums(stoi(arg)).empty();
             } else {
@@ -29,7 +29,7 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
             else {
                 return pkb.getParentChildNums(stoi(arg)).empty();
             }
-        case PARENTSTAR:
+        case PARENT_STAR:
             if (type == GET_LEADER) {
                 return pkb.getParentStarParentNums(stoi(arg)).empty();
             }
@@ -43,7 +43,7 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
             else {
                 return pkb.getCallsCalleeNames(arg).empty();
             }
-        case CALLSSTAR:
+        case CALLS_STAR:
             if (type == GET_LEADER) {
                 return pkb.getCallsStarCallerNames(arg).empty();
             }
@@ -57,7 +57,7 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
             else {
                 return pkb.getNextStmtNums(stoi(arg)).empty();
             }
-        case NEXTSTAR:
+        case NEXT_STAR:
             if (type == GET_LEADER) {
                 return pkb.getStarPreviousStmtNums(stoi(arg)).empty();
             }
@@ -71,20 +71,20 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
             else {
                 return pkb.getAffectsUserStmtNums(stoi(arg)).empty();
             }
-        case AFFECTSSTAR:
+        case AFFECTS_STAR:
             if (type == GET_LEADER) {
                 return pkb.getAffectsStarModifierStmtNums(stoi(arg)).empty();
             }
             else {
                 return pkb.getAffectsStarUserStmtNums(stoi(arg)).empty();
             }
-        case USESP:
+        case USES_P:
             return  pkb.getUsesVarsFromProc(arg).empty();
-        case USESS:
+        case USES_S:
             return pkb.getUsesVarsFromStmt(stoi(arg)).empty();
-        case MODIFIESS:
+        case MODIFIES_S:
             return pkb.getModifiesVarsFromStmt(stoi(arg)).empty();
-        case MODIFIESP:
+        case MODIFIES_P:
             return pkb.getModifiesVarsFromProc(arg).empty();
         default:
             throw PQLSyntaxError("Unknown relationship type");
@@ -96,31 +96,31 @@ bool SuchThatHandler::getIsRelationshipSetEmpty(Relationship relationship, strin
 bool SuchThatHandler:: getIsInRelationship(Relationship relationship, string leftArg, string rightArg) {
 
     switch(relationship) {
-        case FOLLOWSSTAR:
+        case FOLLOWS_STAR:
             return pkb.areInFollowsStarRelationship(stoi(leftArg), stoi(rightArg));
         case FOLLOWS:
             return pkb.areInFollowsRelationship(stoi(leftArg), stoi(rightArg));
-        case PARENTSTAR:
+        case PARENT_STAR:
             return pkb.areInParentStarRelationship(stoi(leftArg), stoi(rightArg));
         case PARENT:
             return pkb.areInParentRelationship(stoi(leftArg), stoi(rightArg));
-        case NEXTSTAR:
+        case NEXT_STAR:
             return pkb.areInNextStarRelationship(stoi(leftArg), stoi(rightArg));
         case NEXT:
             return pkb.areInNextRelationship(stoi(leftArg), stoi(rightArg));
-        case CALLSSTAR:
+        case CALLS_STAR:
             return pkb.areInCallsStarRelationship(leftArg, rightArg);
         case CALLS:
             return pkb.areInCallsRelationship(leftArg, rightArg);
-        case USESP:
+        case USES_P:
             return pkb.areInUsesProcRelationship(leftArg, rightArg);
-        case USESS:
+        case USES_S:
             return pkb.areInUsesStmtRelationship(stoi(leftArg), rightArg);
-        case MODIFIESS:
+        case MODIFIES_S:
             return pkb.areInModifiesStmtRelationship(stoi(leftArg), rightArg);
-        case MODIFIESP:
+        case MODIFIES_P:
             return pkb.areInModifiesProcRelationship(leftArg, rightArg);
-        case AFFECTSSTAR:
+        case AFFECTS_STAR:
             return pkb.areInAffectsStarRelationship(stoi(leftArg), stoi(rightArg));
         case AFFECTS:
             return pkb.areInAffectsRelationship(stoi(leftArg), stoi(rightArg));
@@ -137,21 +137,21 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
     switch (relationship) {
         case FOLLOWS:
             return pkb.isFollowsEmpty();
-        case FOLLOWSSTAR:
+        case FOLLOWS_STAR:
             return pkb.isFollowsStarEmpty();
         case PARENT:
             return pkb.isParentEmpty();
-        case PARENTSTAR:
+        case PARENT_STAR:
             return  pkb.isParentStarEmpty();
-        case NEXTSTAR:
+        case NEXT_STAR:
             return pkb.isNextStarEmpty();
         case NEXT:
             return pkb.isNextEmpty();
-        case CALLSSTAR:
+        case CALLS_STAR:
             return pkb.isCallsStarEmpty();
         case CALLS:
             return pkb.isCallsEmpty();
-        case AFFECTSSTAR:
+        case AFFECTS_STAR:
             return pkb.isAffectsStarEmpty();
         case AFFECTS:
             return pkb.isAffectsEmpty();
@@ -175,15 +175,15 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     if (relationship == USES) {
         if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            relationship = USESP;
+            relationship = USES_P;
         } else {
-            relationship = USESS;
+            relationship = USES_S;
         }
     } else if (relationship == MODIFIES) {
         if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
-            relationship = MODIFIESP;
+            relationship = MODIFIES_P;
         } else {
-            relationship = MODIFIESS;
+            relationship = MODIFIES_S;
         }
     }
 

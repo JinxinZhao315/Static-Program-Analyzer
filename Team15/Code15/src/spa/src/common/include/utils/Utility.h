@@ -13,19 +13,19 @@ enum Relationship
     MODIFIES,
     USES,
     CALLS,
-    CALLSSTAR,
+    CALLS_STAR,
     AFFECTS,
-    AFFECTSSTAR,
+    AFFECTS_STAR,
     NEXT,
-    NEXTSTAR,
+    NEXT_STAR,
     PARENT,
-    PARENTSTAR,
+    PARENT_STAR,
     FOLLOWS,
-    FOLLOWSSTAR,
-    USESS,
-    USESP,
-    MODIFIESS,
-    MODIFIESP,
+    FOLLOWS_STAR,
+    USES_S,
+    USES_P,
+    MODIFIES_S,
+    MODIFIES_P,
 };
 
 enum ReferenceType
@@ -41,16 +41,16 @@ enum ReferenceType
 
 enum DesignEntity
 {
-    PROCEDURE,
-    STMT,
-    READ,
-    PRINT,
-    ASSIGN,
-    CALL,
-    WHILE,
-    IF,
-    VARIABLE,
-    CONSTANT
+    PROCEDURE_ENTITY,
+    STMT_ENTITY,
+    READ_ENTITY,
+    PRINT_ENTITY,
+    ASSIGN_ENTITY,
+    CALL_ENTITY,
+    WHILE_ENTITY,
+    IF_ENTITY,
+    VARIABLE_ENTITY,
+    CONSTANT_ENTITY
 };
 
 enum ClauseType
@@ -115,6 +115,7 @@ public:
     inline static const std::string varName = "varName";
     inline static const std::string stmtNum = "stmt#";
     inline static const std::string value = "value";
+    inline static const Keywords keywords = Keywords();
 
     inline static const ReferenceType getEnumReferenceType(std::string input)
     {
@@ -238,11 +239,11 @@ public:
             }
             else if (DeType == assign)
             {
-                allStmtIntSet = pkb.getAllStmtNumsByType("=");
+                allStmtIntSet = pkb.getAllStmtNumsByType(ASSIGN);
             }
             else
             {
-                allStmtIntSet = pkb.getAllStmtNumsByType(DeType);
+                allStmtIntSet = pkb.getAllStmtNumsByType(getKeyWordsFromEntity(DeType));
             }
 
             for (int stmtNum : allStmtIntSet)
@@ -254,6 +255,109 @@ public:
     }
     inline static const DesignEntity getDesignEntityFromString(std::string designEntity)
     {
+        if (designEntity == procedure)
+        {
+            return PROCEDURE_ENTITY;
+        }
+        else if (designEntity == stmt)
+        {
+            return STMT_ENTITY;
+        }
+        else if (designEntity == constant)
+        {
+            return CONSTANT_ENTITY;
+        }
+        else if (designEntity == variable)
+        {
+            return VARIABLE_ENTITY;
+        }
+        else if (designEntity == read)
+        {
+            return READ_ENTITY;
+        }
+        else if (designEntity == print)
+        {
+            return PRINT_ENTITY;
+        }
+        else if (designEntity == ifStmt)
+        {
+            return IF_ENTITY;
+        }
+        else if (designEntity == whileStmt)
+        {
+            return WHILE_ENTITY;
+        }
+        else if (designEntity == call)
+        {
+            return CALL_ENTITY;
+        }
+        else if (designEntity == assign)
+        {
+            return ASSIGN_ENTITY;
+        }
+        else
+        {
+            throw std::runtime_error("Unsupport designEntity string");
+        }
+    }
+
+    inline static const Relationship getRelationshipFromString(std::string relationship)
+    {
+        if (relationship == modifies)
+        {
+            return MODIFIES;
+        }
+        else if (relationship == uses)
+        {
+            return USES;
+        }
+        else if (relationship == calls)
+        {
+            return CALLS;
+        }
+        else if (relationship == callsStar)
+        {
+            return CALLS_STAR;
+        }
+        else if (relationship == follows)
+        {
+            return FOLLOWS;
+        }
+        else if (relationship == followsStar)
+        {
+            return FOLLOWS_STAR;
+        }
+        else if (relationship == parent)
+        {
+            return PARENT;
+        }
+        else if (relationship == parentStar)
+        {
+            return PARENT_STAR;
+        }
+        else if (relationship == affects)
+        {
+            return AFFECTS;
+        }
+        else if (relationship == affectsStar)
+        {
+            return AFFECTS_STAR;
+        }
+        else if (relationship == nextStar)
+        {
+            return NEXT_STAR;
+        }
+        else if (relationship == next)
+        {
+            return NEXT;
+        }
+        else
+        {
+            throw std::runtime_error("Unsupport relationship string");
+        }
+    }
+
+    inline static const KeywordsEnum getKeyWordsFromEntity(std::string designEntity) {
         if (designEntity == procedure)
         {
             return PROCEDURE;
@@ -292,67 +396,11 @@ public:
         }
         else if (designEntity == assign)
         {
-            return ASSIGN;
+            return ASSIGN_STMT;
         }
         else
         {
             throw std::runtime_error("Unsupport designEntity string");
-        }
-    }
-
-    inline static const Relationship getRelationshipFromString(std::string relationship)
-    {
-        if (relationship == modifies)
-        {
-            return MODIFIES;
-        }
-        else if (relationship == uses)
-        {
-            return USES;
-        }
-        else if (relationship == calls)
-        {
-            return CALLS;
-        }
-        else if (relationship == callsStar)
-        {
-            return CALLSSTAR;
-        }
-        else if (relationship == follows)
-        {
-            return FOLLOWS;
-        }
-        else if (relationship == followsStar)
-        {
-            return FOLLOWSSTAR;
-        }
-        else if (relationship == parent)
-        {
-            return PARENT;
-        }
-        else if (relationship == parentStar)
-        {
-            return PARENTSTAR;
-        }
-        else if (relationship == affects)
-        {
-            return AFFECTS;
-        }
-        else if (relationship == affectsStar)
-        {
-            return AFFECTSSTAR;
-        }
-        else if (relationship == nextStar)
-        {
-            return NEXTSTAR;
-        }
-        else if (relationship == next)
-        {
-            return NEXT;
-        }
-        else
-        {
-            throw std::runtime_error("Unsupport relationship string");
         }
     }
 };
