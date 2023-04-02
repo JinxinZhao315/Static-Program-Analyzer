@@ -57,3 +57,19 @@ void SourceProcessor::printParsedProgram() {
 void SourceProcessor::extract(const vector<Line>& program) {
     extractor->extract(program);
 }
+
+bool SourceProcessor::getAffectsRS(int lineNum1, int lineNum2) {
+    return extractor->getAffectsRS(lineNum1, lineNum2);
+}
+
+bool SourceProcessor::getAffectsStarRS(int lineNum1, int lineNum2) {
+    return extractor->getAffectsStarRS(lineNum1, lineNum2);
+}
+
+set<int> SourceProcessor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
+    return extractor->getAffectsRSWithWildcard(lineNum, wildcardIsFirstArg);
+}
+
+set<int> SourceProcessor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
+    return extractor->getAffectsStarRSWithWildcard(lineNum, wildcardIsFirstArg);
+}

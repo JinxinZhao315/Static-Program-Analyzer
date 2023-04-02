@@ -15,4 +15,10 @@ public:
     void printParsedProgram();
     void extract(const vector<Line>& program);
     void storeDataInPKB();
+
+    // TODO: get pkb to use these
+    bool getAffectsRS(int lineNum1, int lineNum2);
+    bool getAffectsStarRS(int lineNum1, int lineNum2);
+    set<int> getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
+    set<int> getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
 };
