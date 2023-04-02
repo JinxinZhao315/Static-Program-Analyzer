@@ -85,6 +85,7 @@ public:
     inline static const std::string exprFormat = "\"[\\s\\S]*\"";
 
     inline static const std::string whiteSpaces = " \t\n";
+    inline static const std::string ending = ".";
     inline static const std::string quote = "\"";
     inline static const std::string underscore = "_";
     inline static const std::string expr = "expr";
@@ -115,6 +116,7 @@ public:
     inline static const std::string varName = "varName";
     inline static const std::string stmtNum = "stmt#";
     inline static const std::string value = "value";
+
     inline static const Keywords keywords = Keywords();
 
     inline static const ReferenceType getEnumReferenceType(std::string input)

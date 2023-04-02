@@ -161,7 +161,23 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
     }
 
 }
+void SuchThatHandler::clearPKBTable(Relationship relationship) {
+    switch (relationship)
+    {
+    case AFFECTS:
+        pkb.clearAffects();
+        break;
+    case AFFECTS_STAR:
+        pkb.clearAffectsStar();
+        break;
+    case NEXT_STAR:
+        pkb.clearNextStar();
+        break;
 
+    default:
+        break;
+    }
+}
 
 Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchThatClause,
                                  std::multimap<std::string, std::string> &synonymTable) {
@@ -171,16 +187,18 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
     ReferenceType rightType = Utility::getEnumReferenceType(rightArg);
 
+    bool shouldClearPKBTable = relationship == NEXT_STAR || relationship == AFFECTS || relationship == AFFECTS_STAR;
+
     Result result;
 
     if (relationship == USES) {
-        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == Utility::procedure)) {
             relationship = USES_P;
         } else {
             relationship = USES_S;
         }
     } else if (relationship == MODIFIES) {
-        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == Utility::procedure)) {
             relationship = MODIFIES_P;
         } else {
             relationship = MODIFIES_S;
