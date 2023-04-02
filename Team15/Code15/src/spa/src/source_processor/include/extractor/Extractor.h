@@ -49,8 +49,9 @@ public:
     unordered_map<int, set<int>> getNextRS();
 
     bool getAffectsRS(int lineNum1, int lineNum2);
-
     bool getAffectsStarRS(int lineNum1, int lineNum2);
+    set<int> getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
+    set<int> getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
 
 private:
     unordered_map<int, set<int>> parentsRS;

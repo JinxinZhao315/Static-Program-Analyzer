@@ -76,6 +76,24 @@ bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, i
     return false;
 }
 
+set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bool wildCardIsFirstArg,
+                                    const unordered_map<int, set<int>>& cfg,
+                                    const set<string>& variables,
+                                    const unordered_map<int, set<string>>& modifiesRS,
+                                    const unordered_map<int, set<string>>& usesRS,
+                                    bool findAffectsStar) {
+    set<int> stmtLineNums;
+    for(auto line : program) {
+        int otherLineNum = line.getLineNumber();
+        if(wildCardIsFirstArg && extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
+            stmtLineNums.insert(otherLineNum);
+        } else if(!wildCardIsFirstArg && extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
+            stmtLineNums.insert(otherLineNum);
+        }
+    }
+    return stmtLineNums;
+}
+
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                           const unordered_map<int, set<int>>& cfg,
                                           const set<string>& variables,
