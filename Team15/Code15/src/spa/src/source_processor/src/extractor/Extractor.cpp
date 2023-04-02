@@ -158,6 +158,24 @@ set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFir
     // return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variables, modifies, uses, true);
 }
 
+unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards() {
+    // const vector<Line>& program = pkb.getAllLines();
+    // const unordered_map<int, set<int>>& modifies = pkb->getAllModifiesStmt();
+    // const unordered_map<int, set<int>>& uses = pkb->getAllUsesStmt();
+    const set<string>& variables = pkb->getAllVarNames();
+    // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
+    // return extractAffectsWithMultipleWildcards(program, cfg, variables, modifies, uses, false);
+}
+
+unordered_map<int, set<int>> Extractor::getAffectsStarRSWithMultipleWildcards() {
+    // const vector<Line>& program = pkb.getAllLines();
+    // const unordered_map<int, set<int>>& modifies = pkb->getAllModifiesStmt();
+    // const unordered_map<int, set<int>>& uses = pkb->getAllUsesStmt();
+    const set<string>& variables = pkb->getAllVarNames();
+    // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
+    // return extractAffectsWithMultipleWildcards(program, cfg, variables, modifies, uses, true);
+}
+
 void Extractor::extract(const vector<Line> &program) {
     this->constants = extractConstants(program);
     this->statements = extractStatements(program);
@@ -193,5 +211,3 @@ void Extractor::extract(const vector<Line> &program) {
 
     this->nextRS = extractNextRS(program, follows);
 }
-
-

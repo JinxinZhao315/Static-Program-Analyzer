@@ -73,3 +73,11 @@ set<int> SourceProcessor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsF
 set<int> SourceProcessor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
     return extractor->getAffectsStarRSWithWildcard(lineNum, wildcardIsFirstArg);
 }
+
+unordered_map<int, set<int>> SourceProcessor::getAffectsRSWithMultipleWildcards() {
+    return extractor->getAffectsRSWithMultipleWildcards();
+}
+
+unordered_map<int, set<int>> SourceProcessor::getAffectsStarRSWithMultipleWildcards() {
+    return extractor->getAffectsStarRSWithMultipleWildcards();
+}
