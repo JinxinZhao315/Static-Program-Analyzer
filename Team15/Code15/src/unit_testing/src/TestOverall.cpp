@@ -515,10 +515,10 @@ TEST_CASE("Overall test : source-sample1.txt 2")
 
 TEST_CASE("Overall test : optimization test 1") {
     string filename = source_optimization;
-    string queryStr = "assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
-    Select BOOLEAN such that Next* (n1, n2) and Next* (n3, n4) and Next* (n5, n6) and Next* (n7, n8) and Next* (n9, n10) and Follows(1,2) pattern a(v, _)";
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6) and Follows* (n7, n8) and Follows* (n9, n10) pattern a(v, _)";
     
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "FALSE" };
+    set<string> expectedResult = { "TRUE" };
     REQUIRE(result == expectedResult);
 }
