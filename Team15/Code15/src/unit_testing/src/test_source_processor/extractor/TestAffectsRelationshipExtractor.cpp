@@ -505,3 +505,52 @@ TEST_CASE("test affects with while nested in if") {
     REQUIRE(result15);
     REQUIRE(result16);
 }
+
+TEST_CASE("test affects with wildcards simple") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"v", "=", "x", ";"}, ASSIGN),
+            Line(3, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result2 = extractAffectsWithWildcard(lines, 1, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected1 = { 2 };
+    set<int> expected2 = {  };
+
+    REQUIRE(result1 == expected1);
+    REQUIRE(result2 == expected2);
+
+    set<int> result3 = extractAffectsWithWildcard(lines, 2, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result4 = extractAffectsWithWildcard(lines, 2, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected3 = { 3 };
+    set<int> expected4 = { 1 };
+
+    REQUIRE(result3 == expected3);
+    REQUIRE(result4 == expected4);
+
+    set<int> result5 = extractAffectsWithWildcard(lines, 3, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result6 = extractAffectsWithWildcard(lines, 3, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected5 = { };
+    set<int> expected6 = { 2 };
+
+    REQUIRE(result5 == expected5);
+    REQUIRE(result6 == expected6);
+}
