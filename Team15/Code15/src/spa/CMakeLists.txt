@@ -13,7 +13,6 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/tokenizer/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/table/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/extractor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/parser/*.cpp"
@@ -24,6 +23,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/models/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/utils/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/common/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/*.h"
@@ -32,6 +32,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/tokenizer/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/hasher/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/table/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/extractor/*.h"
@@ -39,9 +40,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
     )
 
+
 add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h)
 
-# this makes the headers accessible for other projects which uses spa lib
+
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-

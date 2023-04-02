@@ -12,8 +12,6 @@ endif()
 find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
 if(CLANG_TIDY_EXE)
     set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}" "--fix-errors" "-checks=*")
-else()
-    message(WARNING "clang-tidy not found.")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -32,10 +30,9 @@ set(AUTOTESTER_ROOT "${CMAKE_CURRENT_LIST_DIR}/lib/autotester/${CMAKE_SYSTEM_PRO
 
 list(APPEND CMAKE_PREFIX_PATH "${AUTOTESTER_ROOT}")
 find_package(autotester REQUIRED)
-include_directories("${CMAKE_CURRENT_LIST_DIR}/lib")#include catch.hpp
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib")
 
 add_subdirectory(src/spa)
 add_subdirectory(src/autotester)
-#add_subdirectory(src/autotester_gui)
 add_subdirectory(src/unit_testing)
 add_subdirectory(src/integration_testing)

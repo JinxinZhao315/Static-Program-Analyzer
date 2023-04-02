@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <stack>
 #include "QPS/include/model/SuchThatClause.h"
 #include "QPS/include/model/SelectClause.h"
 #include "QPS/include/model/PatternClause.h"
@@ -12,7 +13,7 @@
 #include "QPS/include/tokenizer/PQLSyntaxChecker.h"
 #include "exceptions/PQLSemanticError.h"
 #include "exceptions/PQLSyntaxError.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 
 #pragma once
 

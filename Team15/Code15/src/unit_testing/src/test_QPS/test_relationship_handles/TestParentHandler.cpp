@@ -9,6 +9,7 @@ TEST_CASE("Parent Integer Underscore test") {
 
     unordered_map<KeywordsEnum, set<int>> stmts;
     stmts.insert(make_pair(KeywordsEnum::WHILE, set<int>({ 1, 5 })));
+    stmts.insert(make_pair(KeywordsEnum::ASSIGN, set<int>({ 2, 4 })));
     stmts.insert(make_pair(KeywordsEnum::READ, set<int>({ 3 })));
     pkb.addAllStmts(stmts);
 
@@ -543,22 +544,6 @@ TEST_CASE("Parent Synonym Underscore test") {
     pkb.addAllVars({ "x", "y", "k" });
 
     pkb.addAllParent({ {1, {2}}, {5, {1}} });
-
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt(::WHILE, 1);
-    pkb.addStmt(::ASSIGN, 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-    pkb.addParent(1, { 2 });
-
-    pkb.addStmt(::READ, 3);
-    pkb.addStmt(::ASSIGN, 4);
-    pkb.addStmt(::WHILE, 5);
-    pkb.addParent(5, { 1 });
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; while w; Select w such that Parent(w, _)", pkb);
     REQUIRE(retStr1 == "1,5");

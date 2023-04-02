@@ -129,18 +129,20 @@ PQLRefConsistentLogic::PQLRefConsistentLogic() {
 	createConstantPairSet();
 	createStmtPairSet();
 
-	relationLogicMap.emplace("ModifiesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
-	relationLogicMap.emplace("ModifiesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
-	relationLogicMap.emplace("UsesP", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
-	relationLogicMap.emplace("UsesS", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtUsesSet, varSet));
-	relationLogicMap.emplace("Follows", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	relationLogicMap.emplace("Follows*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	relationLogicMap.emplace("Parent", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	relationLogicMap.emplace("Parent*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	relationLogicMap.emplace("Calls", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
-	relationLogicMap.emplace("Calls*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
-	relationLogicMap.emplace("Next", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
-	relationLogicMap.emplace("Next*", std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::modifiesP, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
+	relationLogicMap.emplace(Utility::modifiesS, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtModifiesSet, varSet));
+	relationLogicMap.emplace(Utility::usesP, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procUsesModifiesSet, varSet));
+	relationLogicMap.emplace(Utility::usesS, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtUsesSet, varSet));
+	relationLogicMap.emplace(Utility::follows, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::followsStar, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::parent, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::parentStar, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::calls, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
+	relationLogicMap.emplace(Utility::callsStar, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(procCallsSet, procCallsSet));
+	relationLogicMap.emplace(Utility::next, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::nextStar, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::affects, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
+	relationLogicMap.emplace(Utility::affectsStar, std::pair<std::unordered_set<std::string>, std::unordered_set<std::string>>(stmtSet, stmtSet));
 
 	withLogicMap.emplace(PROCEDURE, procPairSet);
 	withLogicMap.emplace(CALL, callPairSet);

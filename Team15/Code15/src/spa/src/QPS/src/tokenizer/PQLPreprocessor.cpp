@@ -9,8 +9,6 @@ Query PQLPreprocessor::preprocess(std::string input) {
     Query query = Query();
     std::multimap<std::string, std::string> varTable;
     SelectClause selectClause;
-//    SuchThatClause suchThatClause;
-//    PatternClause patternClause;
 
     std::vector<SuchThatClause> suchThatClauseVec;
     std::vector<PatternClause> patternClauseVec;
@@ -32,6 +30,5 @@ Query PQLPreprocessor::preprocess(std::string input) {
     if (!isSemanticValid) {
         throw PQLSemanticError(semanticCheckPair.second);
     }
-
 	return query;
 }

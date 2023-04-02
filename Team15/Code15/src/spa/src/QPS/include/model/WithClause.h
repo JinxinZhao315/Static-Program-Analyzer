@@ -1,8 +1,9 @@
 #include "Ref.h"
+#include "QPS/include/model/Clause.h"
 
 #pragma once
 
-class WithClause {
+class WithClause : public Clause{
 private:
 	Ref firstArg;
 	Ref secondArg;

@@ -9,6 +9,10 @@ using namespace std;
 
 enum KeywordsEnum {
     PROCEDURE,
+    VARIABLE,
+    STMT,
+    ASSIGN_STMT,
+    CONSTANT,
     WHILE,
     IF,
     THEN,

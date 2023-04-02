@@ -1,145 +1,325 @@
-1 - boolean affects
+1 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(5, 10)
 TRUE
 5000
-2 - boolean affects
+2 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(8, 12)
 TRUE
 5000
-3 - boolean affects
+3 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(8, 14)
 TRUE
 5000
-4 - boolean affects
+4 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(10, 10)
 TRUE
 5000
-5 - boolean affects
+5 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(4, 8)
 TRUE
 5000
-6 - boolean affects
+6 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(4, 12)
 TRUE
 5000
-7 - boolean affects
+7 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(4, 14)
 TRUE
 5000
-8 - boolean affects
+8 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(4, 16)
 TRUE
 5000
-9 - boolean affects
+9 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(5, 14)
 TRUE
 5000
-10 - boolean affects
+10 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(13, 14)
 TRUE
 5000
-11 - boolean affects
+11 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(13, 15)
 FALSE
 5000
-12 - boolean affects
+12 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(13, 16)
 FALSE
 5000
-13 - boolean affects
+13 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(6, 7)
 FALSE
 5000
-14 - boolean affects
+14 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(13, 10)
 FALSE
 5000
-15 - boolean affects
+15 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(20, 26)
 TRUE
 5000
-16 - boolean affects
+16 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(27, 29)
 FALSE
 5000
-17 - boolean affects
+17 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(31, 33)
 TRUE
 5000
-18 - boolean affects
+18 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(35, 39)
 FALSE
 5000
-19 - boolean affects
+19 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(36, 39)
 FALSE
 5000
-20 - boolean affects
+20 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(37, 44)
 FALSE
 5000
-21 - boolean affects
+21 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(46, 48)
 FALSE
 5000
-22 - boolean affects
+22 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(55, 57)
 FALSE
 5000
-23 - boolean affects*
+23 - affects* boolean
 stmt s;
 Select BOOLEAN such that Affects*(4, 8)
 TRUE
 5000
-24 - boolean affects*
+24 - affects* boolean
 stmt s;
 Select BOOLEAN such that Affects*(4, 14)
 TRUE
 5000
-25 - boolean affects*
+25 - affects* boolean
 stmt s;
 Select BOOLEAN such that Affects*(4, 15)
 TRUE
 5000
-26 - boolean affects*
+26 - affects* boolean
 stmt s;
 Select BOOLEAN such that Affects*(4, 16)
 TRUE
 5000
-27 - boolean affects
+27 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(58, 59)
 TRUE
 5000
-28 - boolean affects
+28 - affects boolean
 stmt s;
 Select BOOLEAN such that Affects(59, 60)
 TRUE
 5000
-29 - boolean affects*
+29 - affects* boolean
 stmt s;
 Select BOOLEAN such that Affects*(58, 60)
 TRUE
+5000
+30 - affects read
+assign a; read r; 
+Select a such that Affects(r, a)
+none
+5000
+31 - affects read
+assign a; read r;
+Select a such that Affects(a, r)
+none
+5000
+32 - affects print
+assign a; print p; 
+Select a such that Affects(p, a)
+none
+5000
+33 - affects print
+assign a; print p; 
+Select a such that Affects(a, p)
+none
+5000
+34 - affects call
+assign a; call c; 
+Select a such that Affects(c, a)
+none
+5000
+35 - affects call
+assign a; call c; 
+Select a such that Affects(a, c)
+none
+5000
+36 - affects while
+assign a; while w; 
+Select a such that Affects(w, a)
+none
+5000
+37 - affects while
+assign a; while w; 
+Select a such that Affects(a, w)
+none
+5000
+38 - affects if
+assign a; if i; 
+Select a such that Affects(i, a)
+none
+5000
+39 - affects if
+assign a; if i; 
+Select a such that Affects(a, i)
+none
+5000
+40 - affects procedure
+assign a; procedure p;
+Select a such that Affects(a, p)
+SemanticError
+5000
+41 - affects procedure
+assign a; procedure p;
+Select a such that Affects(p, a)
+SemanticError
+5000
+42 - affects variable
+assign a; variable v;
+Select a such that Affects(a, v)
+SemanticError
+5000
+43 - affects variable
+assign a; variable v;
+Select a such that Affects(v, a)
+SemanticError
+5000
+44 - affects constant
+assign a; constant c;
+Select a such that Affects(a, c)
+SemanticError
+5000
+45 - affects constant
+assign a; constant c;
+Select a such that Affects(c, a)
+SemanticError
+5000
+46 - affects* read
+assign a; read r; 
+Select a such that Affects*(r, a)
+none
+5000
+47 - affects* read
+assign a; read r;
+Select a such that Affects*(a, r)
+none
+5000
+48 - affects* print
+assign a; print p; 
+Select a such that Affects*(p, a)
+none
+5000
+49 - affects* print
+assign a; print p; 
+Select a such that Affects*(a, p)
+none
+5000
+50 - affects* call
+assign a; call c; 
+Select a such that Affects*(c, a)
+none
+5000
+51 - affects* call
+assign a; call c; 
+Select a such that Affects*(a, c)
+none
+5000
+52 - affects* while
+assign a; while w; 
+Select a such that Affects*(w, a)
+none
+5000
+53 - affects* while
+assign a; while w; 
+Select a such that Affects*(a, w)
+none
+5000
+54 - affects* if
+assign a; if i; 
+Select a such that Affects*(i, a)
+none
+5000
+55 - affects* if
+assign a; if i; 
+Select a such that Affects*(a, i)
+none
+5000
+56 - affects* procedure
+assign a; procedure p;
+Select a such that Affects*(a, p)
+SemanticError
+5000
+57 - affects* procedure
+assign a; procedure p;
+Select a such that Affects*(p, a)
+SemanticError
+5000
+58 - affects* variable
+assign a; variable v;
+Select a such that Affects*(a, v)
+SemanticError
+5000
+59 - affects* variable
+assign a; variable v;
+Select a such that Affects*(v, a)
+SemanticError
+5000
+60 - affects* constant
+assign a; constant c;
+Select a such that Affects*(a, c)
+SemanticError
+5000
+61 - affects* constant
+assign a; constant c;
+Select a such that Affects*(c, a)
+SemanticError
+5000
+62 - affects assign
+assign a1, a2;
+Select a2 such that Affects(a1, a2) with a1.stmt# = 4
+8, 12, 14
+5000
+63 - affects assign
+assign a1, a2;
+Select a1 such that Affects(a1, a2) with a2.stmt# = 14
+4, 5, 8, 10, 12, 13, 17
+5000
+64 - affects statement
+stmt s1, s2;
+Select s2 such that Affects(s1, s2) with s1.stmt# = 4
+8, 12, 14
+5000
+65 - affects statement
+stmt s1, s2;
+Select s1 such that Affects(s1, s2) with s2.stmt# = 14
+4, 5, 8, 10, 12, 13, 17
 5000

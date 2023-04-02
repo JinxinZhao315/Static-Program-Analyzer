@@ -1,6 +1,6 @@
 #include "QPS/include/model/Query.h"
 #include "PQLRefConsistentLogic.h"
-#include "Utility.h"
+#include "common/include/utils/Utility.h"
 #include <memory>
 
 #pragma once

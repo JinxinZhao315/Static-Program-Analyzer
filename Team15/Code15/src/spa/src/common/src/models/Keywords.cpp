@@ -5,6 +5,10 @@ Keywords::Keywords() {
     auto* keys = new vector<string>();
     *keys = {
             "procedure",
+            "variable",
+            "stmt", 
+            "assign", 
+            "constant", 
             "while",
             "if",
             "then",
@@ -38,6 +42,10 @@ Keywords::Keywords() {
     };
     keywordMap = {{
         {"procedure", PROCEDURE },
+        {"variable", VARIABLE},
+        {"stmt", STMT},
+        {"assign", ASSIGN_STMT},
+        {"constant", CONSTANT},
         {"while", WHILE},
         {"if", IF },
         {"then", THEN},
@@ -70,6 +78,10 @@ Keywords::Keywords() {
         {"false", FALSE},
         {"", NONE}}, {
         {PROCEDURE, "procedure" },
+        {VARIABLE, "variable"},
+        {STMT, "stmt"},
+        {ASSIGN_STMT, "assign"},
+        {CONSTANT, "constant"},
         {WHILE, "while"},
         {IF, "if" },
         {THEN, "then"},
