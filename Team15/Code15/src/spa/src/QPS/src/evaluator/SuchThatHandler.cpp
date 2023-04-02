@@ -161,21 +161,20 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
     }
 
 }
-void SuchThatHandler::clearPKBTable(Relationship relationship) {
+void SuchThatHandler::clearPkbTable(Relationship relationship) {
     switch (relationship)
     {
-    case AFFECTS:
-        pkb.clearAffects();
-        break;
-    case AFFECTS_STAR:
-        pkb.clearAffectsStar();
-        break;
-    case NEXT_STAR:
-        pkb.clearNextStar();
-        break;
-
-    default:
-        break;
+        case AFFECTS:
+            pkb.clearAffects();
+            break;
+        case AFFECTS_STAR:
+            pkb.clearAffectsStar();
+            break;
+        case NEXT_STAR:
+            pkb.clearNextStar();
+            break;
+        default:
+            break;
     }
 }
 
@@ -186,8 +185,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     ReferenceType leftType = Utility::getEnumReferenceType(leftArg);
     ReferenceType rightType = Utility::getEnumReferenceType(rightArg);
-
-    bool shouldClearPKBTable = relationship == NEXT_STAR || relationship == AFFECTS || relationship == AFFECTS_STAR;
 
     Result result;
 
@@ -208,6 +205,9 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Wildcard-Wildcard
     if (leftType == UNDERSCORE && rightType == UNDERSCORE) {
         bool isEmpty = getIsPkbEmpty(relationship);
+
+        clearPkbTable(relationship); 
+
         if (isEmpty) {
             result.setResultTrue(false);
             return result;
@@ -215,14 +215,19 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     }
     // Wildcard - Quoted_ident
     else if (leftType == UNDERSCORE && rightType == QUOTED_IDENT) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg))) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg));
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
     }
     // Wildcard-Int
     else if (leftType == UNDERSCORE && rightType == INTEGER) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg)) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg);
+        
+        clearPkbTable(relationship);
+
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -230,7 +235,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     // Quoted_ident - Wildcard
     else if (leftType == QUOTED_IDENT && rightType == UNDERSCORE) {
-        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg))) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg));
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -248,7 +254,11 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     // Int-Wildcard
     else if (leftType == INTEGER && rightType == UNDERSCORE) {
-        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, leftArg)) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, leftArg);
+        
+        clearPkbTable(relationship);
+
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -256,6 +266,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Int-Int
     else if (leftType == INTEGER && rightType == INTEGER) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, rightArg);
+        clearPkbTable(relationship);
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
@@ -264,6 +275,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Int - Quoted_ident
     else if (leftType == INTEGER && rightType == QUOTED_IDENT) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, Utility::trim_double_quotes(rightArg));
+
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
@@ -274,6 +286,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Synon - Wilcard / Int / Quoted-ident
     else if (leftType == SYNONYM && rightType != SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
+        //Todo: should put this function here instead?
         std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
@@ -294,6 +307,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                 }
             }
         }
+
+        clearPkbTable(relationship);
 
         if (resultSynonValues.empty()) {
             result.setResultTrue(false);
@@ -325,6 +340,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                 }
             }
         }
+
+        clearPkbTable(relationship);
 
         if (resultSynonValues.empty()) {
             result.setResultTrue(false);
@@ -373,6 +390,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                         tempTable.insertTuple(tuple);
                     }             
             }
+
+            clearPkbTable(relationship);
 
             if (tempTable.isTableEmpty()) {
                 result.setResultTrue(false);
