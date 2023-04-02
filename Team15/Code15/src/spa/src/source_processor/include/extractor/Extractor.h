@@ -52,6 +52,8 @@ public:
     bool getAffectsStarRS(int lineNum1, int lineNum2);
     set<int> getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
     set<int> getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg);
+    unordered_map<int, set<int>> getAffectsRSWithMultipleWildcards();
+    unordered_map<int, set<int>> getAffectsStarRSWithMultipleWildcards();
 
 private:
     unordered_map<int, set<int>> parentsRS;

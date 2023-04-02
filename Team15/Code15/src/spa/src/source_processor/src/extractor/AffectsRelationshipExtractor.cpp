@@ -85,13 +85,39 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
     set<int> stmtLineNums;
     for(auto line : program) {
         int otherLineNum = line.getLineNumber();
-        if(wildCardIsFirstArg && extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
-            stmtLineNums.insert(otherLineNum);
-        } else if(!wildCardIsFirstArg && extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
-            stmtLineNums.insert(otherLineNum);
+        if(lineNum > 0 && otherLineNum > 0) {
+            if (wildCardIsFirstArg &&
+                extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
+                stmtLineNums.insert(otherLineNum);
+            } else if (!wildCardIsFirstArg &&
+                       extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS,
+                                        findAffectsStar)) {
+                stmtLineNums.insert(otherLineNum);
+            }
         }
     }
     return stmtLineNums;
+}
+
+unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Line>& program,
+                                                       const unordered_map<int, set<int>>& cfg,
+                                                       const set<string>& variables,
+                                                       const unordered_map<int, set<string>>& modifiesRS,
+                                                       const unordered_map<int, set<string>>& usesRS,
+                                                       bool findAffectsStar) {
+    unordered_map<int, set<int>> allAffects;
+    for(int i = 0; i < program.size(); i++) {
+        const Line& line = program[i];
+        int lineNum = line.getLineNumber();
+        for(int j = 0; j < program.size(); j++) {
+            const Line& otherLine = program[j];
+            int otherLineNum = otherLine.getLineNumber();
+            if(lineNum > 0 && otherLineNum > 0 && i != j
+                && extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
+                    allAffects[lineNum].insert(otherLineNum);
+            };
+        }
+    }
 }
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
