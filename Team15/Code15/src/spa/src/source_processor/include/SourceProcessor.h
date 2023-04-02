@@ -8,10 +8,11 @@ private:
     Tokeniser *tokeniser;
     Parser *parser;
     Extractor *extractor;
+    PKB *pkb;
 public:
-    SourceProcessor();
+    SourceProcessor(PKB* pkb);
     void parseProgram(string fileName);
     void printParsedProgram();
     void extract(const vector<Line>& program);
-    void storeDataInPKB(PKB* pkb);
+    void storeDataInPKB();
 };

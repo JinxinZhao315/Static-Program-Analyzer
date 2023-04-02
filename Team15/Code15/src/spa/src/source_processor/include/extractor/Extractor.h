@@ -11,10 +11,11 @@
 #include "VariableExtractor.h"
 #include "StatementExtractor.h"
 #include "NextRelationshipExtractor.h"
+#include "AffectsRelationshipExtractor.h"
 
 class Extractor {
 public:
-    Extractor();
+    Extractor(PKB* pkb);
     void extract(const vector<Line>& program);
     set<string> getVariables();
     set<string> getConstants();
@@ -46,6 +47,10 @@ public:
     unordered_map<int, string> getCallLineNumToProcName();
 
     unordered_map<int, set<int>> getNextRS();
+
+    bool getAffectsRS(int lineNum1, int lineNum2);
+
+    bool getAffectsStarRS(int lineNum1, int lineNum2);
 
 private:
     unordered_map<int, set<int>> parentsRS;
@@ -80,4 +85,6 @@ private:
 
     VariableExtractor* variableExtractor;
     ProcedureExtractor* procedureExtractor;
+
+    PKB* pkb;
 };

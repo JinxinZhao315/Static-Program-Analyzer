@@ -12,5 +12,6 @@
 #include "common/include/models/Line.h"
 #include "common/include/utils/StringOperations.h"
 #include "common/include/utils/Transitive.h"
+#include "pkb/include/PKB.h"
 
 using namespace std;

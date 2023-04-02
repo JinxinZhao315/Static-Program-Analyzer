@@ -1,13 +1,14 @@
-#include "source_processor//include/SourceProcessor.h"
+#include "source_processor/include/SourceProcessor.h"
 #include "common/include/models/Line.h"
 #include <iostream>
 
 using namespace std;
 
-SourceProcessor::SourceProcessor() {
+SourceProcessor::SourceProcessor(PKB* pkb) {
     tokeniser = new Tokeniser();
     parser = new Parser();
-    extractor = new Extractor();
+    this->pkb = pkb;
+    extractor = new Extractor(pkb);
 }
 
 void SourceProcessor::parseProgram(string fileName) {
@@ -17,11 +18,11 @@ void SourceProcessor::parseProgram(string fileName) {
     extract(extractedLines);
 }
 
-void SourceProcessor::storeDataInPKB(PKB* pkb) {
+void SourceProcessor::storeDataInPKB() {
     pkb->addAllProcs(extractor->getProcedures());
     pkb->addAllVars(extractor->getVariables());
     pkb->addAllConsts(extractor->getConstants());
-    // pkb->addAllStmts(extractor->getStatements());
+    pkb->addAllStmts(extractor->getStatements());
     pkb->addAllFollows(extractor->getFollowsRS());
     pkb->addAllFollowsStar(extractor->getFollowsStarRS());
     pkb->addAllParent(extractor->getParentRS());
