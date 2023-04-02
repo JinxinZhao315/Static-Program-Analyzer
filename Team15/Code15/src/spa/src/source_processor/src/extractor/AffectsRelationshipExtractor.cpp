@@ -119,6 +119,7 @@ unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Li
             };
         }
     }
+    return allAffects;
 }
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
