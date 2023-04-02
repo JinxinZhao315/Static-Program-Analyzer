@@ -51,6 +51,7 @@ string source7 = "../../../../../../Tests15/source-7.txt";
 string uses_modifies = "../../../../../../Tests15/source-usesmodifies.txt";
 string source_with = "../../../../../../Tests15/with.txt";
 string source_ifwhile = "../../../../../../Tests15/source-ifwhile.txt";
+string source_optimization = "../../../../../../Tests15/source-optimization.txt";
 #endif
 
 TEST_CASE("Overall test : source-usesmodifies.txt 1")
@@ -509,5 +510,15 @@ TEST_CASE("Overall test : source-sample1.txt 2")
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = {"4", "5", "6", "7", "8", "9", "10", "12", "13", "16", "18", "19", "21", "22", "23", "24"};
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : optimization test 1") {
+    string filename = source_optimization;
+    string queryStr = "assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+    Select BOOLEAN such that Next* (n1, n2) and Next* (n3, n4) and Next* (n5, n6) and Next* (n7, n8) and Next* (n9, n10) and Follows(1,2) pattern a(v, _)";
+    
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "FALSE" };
     REQUIRE(result == expectedResult);
 }
