@@ -522,3 +522,13 @@ TEST_CASE("Overall test : source-sample1.txt 2")
 //    set<string> expectedResult = { "TRUE" };
 //    REQUIRE(result == expectedResult);
 //}
+
+TEST_CASE("Overall test : source-sample1.txt 2")
+{
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
+    REQUIRE(result == expectedResult);
+}
