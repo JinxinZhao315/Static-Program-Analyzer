@@ -85,7 +85,7 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
     set<int> stmtLineNums;
     for(auto line : program) {
         int otherLineNum = line.getLineNumber();
-        if(otherLineNum > 0) {
+        if(lineNum > 0 && otherLineNum > 0) {
             if (wildCardIsFirstArg &&
                 extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
                 stmtLineNums.insert(otherLineNum);

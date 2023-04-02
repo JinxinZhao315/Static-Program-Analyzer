@@ -211,5 +211,3 @@ void Extractor::extract(const vector<Line> &program) {
 
     this->nextRS = extractNextRS(program, follows);
 }
-
-
