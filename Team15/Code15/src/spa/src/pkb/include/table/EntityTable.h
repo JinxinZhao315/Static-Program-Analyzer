@@ -1,7 +1,8 @@
 #pragma once
 
-#include <string>
 #include <set>
+#include <string>
+#include <vector>
 
 #include "common/include/models/Line.h"
 
@@ -11,13 +12,22 @@ public:
 	inline EntityTable() = default;
 
 	inline void addAllEntities(std::set<E> entities) {
-		entityTable = entities;
+		entitySet = entities;
 	}
 
-	inline std::set<E> getAllEntities() {
-		return entityTable;
+	inline void addAllEntities(std::vector<E> entities) {
+		entityVector = entities;
+	}
+
+	inline std::set<E> getEntitySet() {
+		return entitySet;
+	}
+
+	inline std::vector<E> getEntityVector() {
+		return entityVector;
 	}
 
 private:
-	std::set<E> entityTable;
+	std::set<E> entitySet;
+	std::vector<E> entityVector;
 };

@@ -121,7 +121,7 @@ unordered_map<int, set<int>> Extractor::getNextRS() {
 }
 
 bool Extractor::getAffectsRS(int lineNum1, int lineNum2) {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();
@@ -131,7 +131,7 @@ bool Extractor::getAffectsRS(int lineNum1, int lineNum2) {
 }
 
 bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();
@@ -141,7 +141,7 @@ bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
 }
 
 set<int> Extractor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();
@@ -151,7 +151,7 @@ set<int> Extractor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstAr
 }
 
 set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();
@@ -161,7 +161,7 @@ set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFir
 }
 
 unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards() {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();
@@ -171,7 +171,7 @@ unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards() {
 }
 
 unordered_map<int, set<int>> Extractor::getAffectsStarRSWithMultipleWildcards() {
-    const set<Line>& program = pkb->getAllLines();
+    const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
     const set<string>& variables = pkb->getAllVarNames();

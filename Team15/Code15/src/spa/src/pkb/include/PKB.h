@@ -20,7 +20,7 @@ public:
 	void addAllConsts(std::set<std::string> constVals);
 
 	//add line
-	void addAllLines(std::set<Line> allLines);
+	void addAllLines(std::vector<Line> allLines);
 
 	//add statement
 	void addAllStmts(std::unordered_map<KeywordsEnum, std::set<int>> stmtNums);
@@ -96,7 +96,7 @@ public:
 	std::set<std::string> getAllConstVals();
 
 	//get line
-	std::set<Line> getAllLines();
+	std::vector<Line> getAllLines();
 
 	//get statement
 	std::set<int> getAllStmtNums();

@@ -45,7 +45,7 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 }
 
 //add line
-void PKB::addAllLines(std::set<Line> allLines) {
+void PKB::addAllLines(std::vector<Line> allLines) {
 	lineTable.addAllEntities(allLines);
 }
 
@@ -161,22 +161,22 @@ void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> contr
 //GET
 //get procedure
 std::set<std::string> PKB::getAllProcNames() {
-	return procTable.getAllEntities();
+	return procTable.getEntitySet();
 }
 
 //get variable
 std::set<std::string> PKB::getAllVarNames() {
-	return varTable.getAllEntities();
+	return varTable.getEntitySet();
 }
 
 //get constant
 std::set<std::string> PKB::getAllConstVals() {
-	return constTable.getAllEntities();
+	return constTable.getEntitySet();
 }
 
 //get line
-std::set<Line> PKB::getAllLines() {
-	return lineTable.getAllEntities();
+std::vector<Line> PKB::getAllLines() {
+	return lineTable.getEntityVector();
 }
 
 //get statement
