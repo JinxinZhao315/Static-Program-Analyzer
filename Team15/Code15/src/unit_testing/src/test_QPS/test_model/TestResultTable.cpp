@@ -145,7 +145,7 @@ TEST_CASE("Test mergeTuple") {
 	std::vector<std::string> oldTuple = { "1", "2", "3" };
 	std::vector<std::string> newTuple = { "3", "4", "5" };
 	std::vector<int> commonSynIndex = { 2, -1, -1 };
-	std::vector<std::string>resultTuple = resultTable.mergeTuple(oldTuple, newTuple, commonSynIndex);
+	std::vector<std::string>resultTuple = Utility::mergeTuple(oldTuple, newTuple, commonSynIndex);
 	std::vector<std::string> expectedResult = { "1", "2", "3", "4", "5"};
 	REQUIRE(std::equal(resultTuple.begin(), resultTuple.end(), expectedResult.begin(), expectedResult.end()));
 }

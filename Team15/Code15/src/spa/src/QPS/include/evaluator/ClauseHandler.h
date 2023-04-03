@@ -16,10 +16,13 @@ public:
     PKB pkb;
     explicit ClauseHandler(PKB &pkb);
 
+
     virtual Result evaluate(bool isStar, SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};
     virtual Result evaluate(SuchThatClause suchThatClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};
     virtual Result evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};
     virtual Result evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {return {};};
-};
+
+    void removeUselessSyns(std::vector<std::string>synsToCheck, ResultTable& resultTable, std::vector<std::string>evalSynList, int& synEvalPosition);
+ };
 
 #endif // SPA_CLAUSEHANDLER_H

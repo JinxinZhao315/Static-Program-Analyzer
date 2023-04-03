@@ -67,8 +67,6 @@ public:
 
     void insertTuple(std::vector<std::string> tuple);
 
-    std::vector<std::string> mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex);
-
     std::vector<std::string> getTuple(int index);
 
     std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit);

@@ -403,4 +403,29 @@ public:
             throw std::runtime_error("Unsupport designEntity string");
         }
     }
+
+
+    inline static const bool isSynUsedLater(std::vector<std::string> argList, int currArgPos)
+    {
+        auto synNextOccur = std::find(argList.begin() + currArgPos + 1, argList.end(), argList[currArgPos]);
+        if (synNextOccur == argList.end())
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+    inline static const std::vector<std::string> mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex) {
+        std::vector<std::string> resultTuple = oldTuple;
+        for (int i = 0; i < currTuple.size(); i++) {
+            if (commonSynIndex[i] < 0) {
+                resultTuple.push_back(currTuple[i]);
+            }
+        }
+        return resultTuple;
+    }
 };

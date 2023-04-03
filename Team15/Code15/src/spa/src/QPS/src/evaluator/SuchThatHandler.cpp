@@ -164,7 +164,8 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
 
 
 Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchThatClause,
-    ResultTable& resultTable, std::multimap<std::string, std::string> &synonymTable) {
+    ResultTable& resultTable, std::multimap<std::string, std::string> &synonymTable, 
+    int& synEvalPosition, std::vector<std::string>evalSynList) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
 
@@ -328,45 +329,110 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
         }
         std::string leftDeType = synonymTable.find(leftArg)->second;
         std::string rightDeType = synonymTable.find(rightArg)->second;
-        std::set<string> leftSynValuesStrSet = resultTable.containsSyn(leftArg) 
-            ? resultTable.getSynValues(leftArg)
-            : Utility::getResultFromPKB(pkb, leftDeType);
-        std::set<string> rightSynValuesStrSet = resultTable.containsSyn(rightArg) 
-            ? resultTable.getSynValues(rightArg)
-            : Utility::getResultFromPKB(pkb, rightDeType);
-        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
-        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
-
         ResultTable tempTable;
-        if (isSynLeftRightArgSame) {
-            tempTable = ResultTable({ leftArg });
-            for (int i = 0; i < currLeftValues.size(); i++) {
-                std::vector<std::string> tuple = std::vector{ currLeftValues[i] };
-                bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
-                if (isInRelationship) {
-                    tempTable.insertTuple(tuple);
-                }
-            }
-        }
-        else {
-            tempTable = ResultTable({ leftArg, rightArg });
-            for (int i = 0; i < currLeftValues.size(); i++) {
-                for (int j = 0; j < currRightValues.size(); j++) {
-                    std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
-                    bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
+        std::vector<std::string> synsToCheck = suchThatClause.getSynList();
+        //no common syn in resultTable
+        if (!resultTable.containsSyn(leftArg) && !resultTable.containsSyn(rightArg)) {
+            std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
+            std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
+            std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+            std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
+            if (isSynLeftRightArgSame) {
+                tempTable = ResultTable({ leftArg });
+                for (int i = 0; i < currLeftValues.size(); i++) {
+                    std::vector<std::string> tuple = std::vector{ currLeftValues[i]};
+                    bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
                     if (isInRelationship) {
                         tempTable.insertTuple(tuple);
                     }
                 }
             }
+            else {
+                tempTable = ResultTable({ leftArg, rightArg });
+                for (int i = 0; i < currLeftValues.size(); i++) {
+                    for (int j = 0; j < currRightValues.size(); j++) {
+                        std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
+                        bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
+                        if (isInRelationship) {
+                            tempTable.insertTuple(tuple);
+                        }
+                    }
+                }
+            }
+            //delete unnecessary synonym before merging
+            removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+            resultTable.combineTable(tempTable);
+        }
+        //both syns in resultTable, just filter the resultTable
+        else if (resultTable.containsSyn(leftArg) && resultTable.containsSyn(rightArg)) {
+            tempTable = ResultTable(resultTable.getSynList());
+            std::vector<std::string> resultTableSynList = resultTable.getSynList();
+            std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), leftArg);
+            int leftSynIndex = it - resultTableSynList.begin();
+            it = std::find(resultTableSynList.begin(), resultTableSynList.end(), rightArg);
+            int rightSynIndex = it - resultTableSynList.begin();
+            for (int i = 0; i < resultTable.getColNum(); i++) {
+                std::vector<std::string> tuple = resultTable.getTuple(i);
+                bool isInRelationship = getIsInRelationship(relationship, tuple[leftSynIndex], tuple[rightSynIndex]);
+                if (isInRelationship) {
+                    tempTable.insertTuple(tuple);
+                }
+            }
+            resultTable = tempTable;
+            removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+        }
+        //one syn is in resultTable but another one not
+        else {
+            
+            std::vector<std::string> resultTableSynList = resultTable.getSynList();
+            std::vector<std::string> tempSynList = resultTableSynList;
+            std::string synInTable;
+            std::string synOutsideTable;
+            std::string synOutsideTableType;
+            if (resultTable.containsSyn(leftArg)) {
+                synInTable = leftArg;
+                synOutsideTable = rightArg;
+                synOutsideTableType = rightDeType;
+                tempSynList.push_back(rightArg);
+            }
+            else {
+                synInTable = rightArg;
+                synOutsideTable = leftArg;
+                synOutsideTableType = leftDeType;
+                tempSynList.push_back(leftArg);
+            }
+            tempTable = ResultTable(tempSynList);
+            std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), synInTable);
+            int synInTableIndex = it - resultTableSynList.begin();
+            std::set<std::string> synOutsideTableSet = Utility::getResultFromPKB(pkb, synOutsideTableType);
+            std::vector<std::string> synOutsideTableVec(synOutsideTableSet.begin(), synOutsideTableSet.end());
+
+            for (int i = 0; i < resultTable.getColNum(); i++) {
+                std::vector<std::string> tuple = resultTable.getTuple(i);
+                for (int j = 0; j < synOutsideTableVec.size(); j++) {
+                    bool isInRelationship;
+                    if (resultTable.containsSyn(leftArg)) {
+                        isInRelationship = getIsInRelationship(relationship, tuple[synInTableIndex], synOutsideTableVec[j]);
+                    }
+                    else {
+                        isInRelationship = getIsInRelationship(relationship, synOutsideTableVec[j], tuple[synInTableIndex]);
+                    }
+                    
+                    if (isInRelationship) {
+                        tempTable.insertTuple(Utility::mergeTuple(tuple, { synOutsideTableVec[j] }, {-1}));
+                    }
+                }
+            }
+            resultTable = tempTable;
+            removeUselessSyns(synsToCheck, resultTable, evalSynList, synEvalPosition);
         }
             
-        if (tempTable.isTableEmpty()) {
+        if (resultTable.isTableEmpty()) {
             result.setResultTrue(false);
             return result;
         }
 
-        result.setClauseResult(tempTable);
+        /*result.setClauseResult(tempTable);*/
     }
 
 

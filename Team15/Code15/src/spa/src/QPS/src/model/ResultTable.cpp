@@ -106,7 +106,7 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
             for (int j = 0; j < tempResultTable.colNum; j++) {
                 std::vector<std::string> currTuple = tempResultTable.getTuple(j);
                 if (isTupleMatch(oldTuple, currTuple, commonSynIndex)) {
-                    newResultTable.insertTuple(mergeTuple(oldTuple, currTuple, commonSynIndex));
+                    newResultTable.insertTuple(Utility::mergeTuple(oldTuple, currTuple, commonSynIndex));
                 }
             }
         }
@@ -313,17 +313,6 @@ void ResultTable::insertTuple(std::vector<std::string> tuple) {
         //should throw exception ???
     }
 }
-
-std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTuple, std::vector<std::string> currTuple, std::vector<int> commonSynIndex) {
-    std::vector<std::string> resultTuple = oldTuple;
-    for (int i = 0; i < currTuple.size(); i++) {
-        if (commonSynIndex[i] < 0) {
-            resultTuple.push_back(currTuple[i]);
-        }
-    }
-    return resultTuple;
-}
-
 
 void ResultTable::deleteSynonym(std::string synonym) {
     std::vector<std::string>::iterator synNamePos = std::find(synList.begin(), synList.end(), synonym);

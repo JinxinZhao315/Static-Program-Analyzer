@@ -59,26 +59,11 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
     return retSet;
 }
 
-
-bool PQLEvaluator::isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos)
-{
-    std::string argName = argList[currArgPos];
-    auto argNextOccur = std::find(argList.begin() + currArgPos + 1, argList.end(), argName);
-    bool isArgSelected = std::find(selectedSyn.begin(), selectedSyn.end(), argName) != selectedSyn.end();
-    if (argNextOccur == argList.end() && !isArgSelected)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
 ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
     std::multimap<std::string, std::string>synonymTable, std::vector<std::string>selectedElemName) {
     std::vector<Clause*> clauseList = group.getClauseList();
     std::vector<std::string> synList = group.getSynList();
+    synList.insert(synList.end(), selectedElemName.begin(), selectedElemName.end());
     ResultTable intermediateTable = ResultTable();
     int clauseArgVecIndex = 0;
     for (Clause* clause : clauseList) {
@@ -91,26 +76,26 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
 
             SuchThatHandler suchThatHandler(pkb);
             Result result = suchThatHandler.evaluate(Utility::getRelationshipFromString(relationship),
-                *suchThatCl, intermediateTable, synonymTable);
+                *suchThatCl, intermediateTable, synonymTable, clauseArgVecIndex, synList);
 
             if (!result.isResultTrue()) {
                 isEarlyExit = true;
                 break;
             }
-            intermediateTable.combineTable(result.getClauseResult());
+            //intermediateTable.combineTable(result.getClauseResult());
             // there used to be some syns in the table but now it is empty
-            if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty()) {
-                isEarlyExit = true;
-                break;
-            }
+            //if (intermediateTable.isTableEmpty() && !intermediateTable.isSynListEmpty()) {
+            //    isEarlyExit = true;
+            //    break;
+            //}
             // no such arg left in the following clause, can delete it in resultTable
-            std::vector<std::string> usedSyns = suchThatCl->getSynList();
-            for (int i = 0; i < usedSyns.size(); i++) {
-                if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex)) {
-                    intermediateTable.deleteSynonym(usedSyns[i]);
-                }
-                clauseArgVecIndex++;
-            }
+            //std::vector<std::string> usedSyns = suchThatCl->getSynList();
+            //for (int i = 0; i < usedSyns.size(); i++) {
+            //    if (!Utility::isSynUsedLater(synList, clauseArgVecIndex)) {
+            //        intermediateTable.deleteSynonym(usedSyns[i]);
+            //    }
+            //    clauseArgVecIndex++;
+            //}
             break;
         }
         case WITH: {
@@ -131,7 +116,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
 
             std::vector<std::string> usedSyns = withCl->getSynList();
             for (int i = 0; i < usedSyns.size(); i++) {
-                if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex)) {
+                if (!Utility::isSynUsedLater(synList, clauseArgVecIndex)) {
                     intermediateTable.deleteSynonym(usedSyns[i]);
                 }
                 clauseArgVecIndex++;
@@ -156,7 +141,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
             }
             std::vector<std::string> usedSyns = patternCl->getSynList();
             for (int i = 0; i < usedSyns.size(); i++) {
-                if (!isArgUsedLater(selectedElemName, synList, clauseArgVecIndex)) {
+                if (!Utility::isSynUsedLater(synList, clauseArgVecIndex)) {
                     intermediateTable.deleteSynonym(usedSyns[i]);
                 }
                 clauseArgVecIndex++;
