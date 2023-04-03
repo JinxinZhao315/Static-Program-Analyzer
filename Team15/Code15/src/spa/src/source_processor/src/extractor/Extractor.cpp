@@ -124,36 +124,36 @@ bool Extractor::getAffectsRS(int lineNum1, int lineNum2) {
     const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
-    const set<string>& variables = pkb->getAllVarNames();
+    const set<string>& variablesForAffects = pkb->getAllVarNames();
     const unordered_map<int, set<int>>& cfg = pkb->getPreviousToNextStmtsMap();
-    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, false);
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, false);
 }
 
 bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
     const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
-    const set<string>& variables = pkb->getAllVarNames();
+    const set<string>& variablesForAffects = pkb->getAllVarNames();
     const unordered_map<int, set<int>>& cfg = pkb->getPreviousToNextStmtsMap();
-    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, true);
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, true);
 }
 
 set<int> Extractor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
     const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
-    const set<string>& variables = pkb->getAllVarNames();
+    const set<string>& variablesForAffects = pkb->getAllVarNames();
     const unordered_map<int, set<int>>& cfg = pkb->getPreviousToNextStmtsMap();
-    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variables, modifies, uses, false);
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, false);
 }
 
 set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg) {
     const vector<Line>& program = pkb->getAllLines();
     const unordered_map<int, set<string>>& modifies = pkb->getStmtModifiesVarsMap();
     const unordered_map<int, set<string>>& uses = pkb->getStmtUsesVarsMap();
-    const set<string>& variables = pkb->getAllVarNames();
+    const set<string>& variablesForAffects = pkb->getAllVarNames();
     const unordered_map<int, set<int>>& cfg = pkb->getPreviousToNextStmtsMap();
-    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variables, modifies, uses, true);
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, true);
 }
 
 unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards() {
