@@ -42,4 +42,5 @@ public:
     unordered_map<int, set<int>> getAffectsStarRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
             set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
             const unordered_map<int, set<int>>& cfg);
+    unordered_map<int, set<int>> getNextStarRS(const unordered_map<int, set<int>>& nextRS);
 };

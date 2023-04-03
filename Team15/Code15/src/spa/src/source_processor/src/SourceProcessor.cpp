@@ -40,10 +40,6 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllWithPrint(extractor->getPrintLineNumToVarName());
     pkb->addAllWithCall(extractor->getCallLineNumToProcName());
     pkb->addAllNext(extractor->getNextRS());
-    //TODO
-    //Next*: pkb->addAllNextStar();
-    //Affects: pkb->addAllAffects();
-    //Affects*: pkb->addAllAffectsStar();
 }
 
 void SourceProcessor::printParsedProgram() {
@@ -92,4 +88,8 @@ unordered_map<int, set<int>> SourceProcessor::getAffectsStarRSWithMultipleWildca
         set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
                                                                                     const unordered_map<int, set<int>>& cfg) {
     return extractor->getAffectsStarRSWithMultipleWildcards(program, modifies, uses, variablesForAffects, cfg);
+}
+
+unordered_map<int, set<int>> SourceProcessor::getNextStarRS(const unordered_map<int, set<int>>& nextRS) {
+    return extractNextStarRS(nextRS);
 }
