@@ -11,9 +11,9 @@ using namespace std;
 
 void spDriver(std::string filename, PKB &pkb)
 {
-    SourceProcessor sourceProcessor = SourceProcessor(&pkb);
+    SourceProcessor sourceProcessor = SourceProcessor();
     sourceProcessor.parseProgram(filename);
-    sourceProcessor.storeDataInPKB();
+    sourceProcessor.storeDataInPKB(&pkb);
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
 {
@@ -523,7 +523,7 @@ TEST_CASE("Overall test : source-sample1.txt 2")
 //    REQUIRE(result == expectedResult);
 //}
 
-TEST_CASE("Overall test : source-sample1.txt 2")
+TEST_CASE("Overall test : source-sample1.txt 3")
 {
     string filename = source_sample1;
     string queryStr = "stmt s; Select s such that Uses(s, \"x\")";

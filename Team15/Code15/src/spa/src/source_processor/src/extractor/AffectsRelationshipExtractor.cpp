@@ -85,13 +85,14 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
     set<int> stmtLineNums;
     for(auto line : program) {
         int otherLineNum = line.getLineNumber();
-        if(lineNum > 0 && otherLineNum > 0) {
-            if (wildCardIsFirstArg &&
-                extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
-                stmtLineNums.insert(otherLineNum);
-            } else if (!wildCardIsFirstArg &&
-                       extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS,
-                                        findAffectsStar)) {
+        if(lineNum > 0 && otherLineNum > 0 && lineNum != otherLineNum) {
+            bool affects;
+            if (wildCardIsFirstArg) {
+                affects = extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar);
+            } else {
+                affects = extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar);
+            }
+            if(affects) {
                 stmtLineNums.insert(otherLineNum);
             }
         }
@@ -118,6 +119,7 @@ unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Li
             };
         }
     }
+    return allAffects;
 }
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
