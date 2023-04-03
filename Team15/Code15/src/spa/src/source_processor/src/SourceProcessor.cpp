@@ -10,10 +10,11 @@ SourceProcessor::SourceProcessor() {
     extractor = new Extractor();
 }
 
-void SourceProcessor::parseProgram(string fileName) {
+void SourceProcessor::parseProgram(string fileName, PKB* pkb) {
     parser->parseProgram(fileName);
     tokeniser->feedLines(parser->getParsedProgram());
     vector<Line> extractedLines = tokeniser->getExtractedLines();
+    pkb->addAllLines(extractedLines);
     extract(extractedLines);
 }
 

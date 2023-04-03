@@ -121,7 +121,6 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
         }
         lines.push_back(*extractedLine);
     }
-    // TODO: pkb.storeAllLines(lines);
     this->extractedLines = lines;
 }
 
