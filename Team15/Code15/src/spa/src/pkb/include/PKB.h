@@ -65,9 +65,17 @@ public:
 	void addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts);
 
 	//add affects
+	void addAffectsModifierToUsers(int modifier, std::set<int> users);
+
+	void addAffectsUserToModifiers(int user, std::set<int> modifiers);
+
 	void addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
 	//add affects*
+	void addAffectsStarModifierToUsers(int modifier, std::set<int> users);
+
+	void addAffectsStarUserToModifiers(int user, std::set<int> modifiers);
+
 	void addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers);
 
 	//add with (read)
@@ -247,6 +255,8 @@ public:
 	void clearNextStar();
 
 	//get affects
+	std::unordered_map<int, std::set<int>> getAffectsModifierToUserStmtsMap();
+
 	std::set<int> getAffectsModifierStmtNums(int userStmtNum);
 
 	std::set<int> getAffectsUserStmtNums(int modifierStmtNum);
@@ -262,6 +272,8 @@ public:
 	void clearAffects();
 
 	//get affects*
+	std::unordered_map<int, std::set<int>> getAffectsStarModifierToUserStmtsMap();
+
 	std::set<int> getAffectsStarModifierStmtNums(int userStmtNum);
 
 	std::set<int> getAffectsStarUserStmtNums(int modifierStmtNum);
@@ -338,5 +350,5 @@ private:
 	PatternTable assignPatternTable;
 	PatternTable whilePatternTable;
 	PatternTable ifPatternTable;
-    SourceProcessor* sourceProcessor;
+	SourceProcessor* sp;
 };
