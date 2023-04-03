@@ -11,9 +11,9 @@ using namespace std;
 
 void spDriver(std::string filename, PKB &pkb)
 {
-    SourceProcessor sourceProcessor = SourceProcessor(&pkb);
+    SourceProcessor sourceProcessor = SourceProcessor();
     sourceProcessor.parseProgram(filename);
-    sourceProcessor.storeDataInPKB();
+    sourceProcessor.storeDataInPKB(&pkb);
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
 {
