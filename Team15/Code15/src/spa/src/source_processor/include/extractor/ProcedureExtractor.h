@@ -1,3 +1,4 @@
+#pragma once
 #include "source_processor/include/extractor/CommonExtractorHeader.h"
 #include "common/include/utils/StringOperations.h"
 
