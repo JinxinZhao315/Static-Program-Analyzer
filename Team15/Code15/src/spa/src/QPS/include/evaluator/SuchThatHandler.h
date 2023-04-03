@@ -11,7 +11,8 @@
 class SuchThatHandler : public ClauseHandler{
 public:
     explicit SuchThatHandler(PKB& pkb);
-    Result evaluate(Relationship relationship, SuchThatClause suchThatClause, std::multimap<std::string, std::string>& synonymTable);
+    Result evaluate(Relationship relationship, SuchThatClause suchThatClause, 
+        ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
 
 private:
     string GET_LEADER = "get_leader";

@@ -58,8 +58,6 @@ void ResultTable::resultTableCheckAndAdd(string synName, PKB pkb, string DeType)
     }
 }
 
-
-
 void ResultTable::combineTable(ResultTable tempResultTable) {
     //the table has just been initialized
     if (isSynListEmpty()) {
@@ -119,12 +117,6 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
         this->synValMap = newResultTable.synValMap;
     }
 }
-
-//void ResultTable::filterTable(void (*func)(int, int)) {
-//
-//}
-
-
 
 std::vector<std::string> ResultTable::getSynList() {
     return this->synList;
@@ -231,18 +223,19 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
             if (isEarlyExit) {
                 return std::set<std::string>();
             }
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
-            int synIndex = it - synList.begin();
-            std::set<std::string> selectedSynResult;
-            for (int i = 0; i < colNum; i++) {
-                if (selectedElem[0].isElemSynonym()) {
-                    selectedSynResult.insert(resultTable[synIndex][i]);
-                }
-                else {
-                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
-                }
-            }
-            return selectedSynResult;
+            return getSynValues(selectedElem[0].getSynName());
+            //std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
+            //int synIndex = it - synList.begin();
+            //std::set<std::string> selectedSynResult;
+            //for (int i = 0; i < colNum; i++) {
+            //    if (selectedElem[0].isElemSynonym()) {
+            //        selectedSynResult.insert(resultTable[synIndex][i]);
+            //    }
+            //    else {
+            //        selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
+            //    }
+            //}
+            //return selectedSynResult;
         }
         //BOOLEAN is BOOLEAN
         else {

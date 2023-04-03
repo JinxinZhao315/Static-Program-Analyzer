@@ -128,6 +128,7 @@ bool Extractor::getAffectsRS(int lineNum1, int lineNum2) {
     const set<string>& variables = pkb->getAllVarNames();
     // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
     // return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, false)
+    return true;
 }
 
 bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
@@ -137,6 +138,7 @@ bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
     const set<string>& variables = pkb->getAllVarNames();
     // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
     // return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, true);
+    return true;
 }
 
 void Extractor::extract(const vector<Line> &program) {

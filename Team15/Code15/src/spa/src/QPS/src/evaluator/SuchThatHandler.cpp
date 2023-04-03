@@ -164,7 +164,7 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
 
 
 Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchThatClause,
-                                 std::multimap<std::string, std::string> &synonymTable) {
+    ResultTable& resultTable, std::multimap<std::string, std::string> &synonymTable) {
     std::string leftArg = suchThatClause.getLeftArg();
     std::string rightArg = suchThatClause.getRightArg();
 
@@ -256,7 +256,10 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Synon - Wilcard / Int / Quoted-ident
     else if (leftType == SYNONYM && rightType != SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::set<string> synValuesStrSet = resultTable.containsSyn(leftArg)
+            ? resultTable.getSynValues(leftArg)
+            : Utility::getResultFromPKB(pkb, synonDeType);
+        //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
@@ -286,7 +289,10 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Wilcard / Int / Quoted-ident - Synon
     else if (leftType != SYNONYM && rightType == SYNONYM) {
         string synonDeType = synonymTable.find(rightArg)->second;
-        std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
+        std::set<string> synValuesStrSet = resultTable.containsSyn(rightArg)
+            ? resultTable.getSynValues(rightArg)
+            : Utility::getResultFromPKB(pkb, synonDeType);
+        //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
 
@@ -316,52 +322,51 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     }
     // Synon - Synon
     else if (leftType == SYNONYM && rightType == SYNONYM) {
-
         bool isSynLeftRightArgSame = false;
         if (leftArg == rightArg) {
             isSynLeftRightArgSame = true;
         }
-       
-            std::string leftDeType = synonymTable.find(leftArg)->second;
-            std::string rightDeType = synonymTable.find(rightArg)->second;
+        std::string leftDeType = synonymTable.find(leftArg)->second;
+        std::string rightDeType = synonymTable.find(rightArg)->second;
+        std::set<string> leftSynValuesStrSet = resultTable.containsSyn(leftArg) 
+            ? resultTable.getSynValues(leftArg)
+            : Utility::getResultFromPKB(pkb, leftDeType);
+        std::set<string> rightSynValuesStrSet = resultTable.containsSyn(rightArg) 
+            ? resultTable.getSynValues(rightArg)
+            : Utility::getResultFromPKB(pkb, rightDeType);
+        std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
+        std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
 
-            std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
-            std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
-
-            std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
-            std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
-
-
-            ResultTable initTable(currLeftValues, leftArg);
-            initTable.combineTable(ResultTable(currRightValues, rightArg));
-            int initTableSize = initTable.getColNum();
-            vector<std::string> argVec;
-            if (isSynLeftRightArgSame) {
-                argVec = std::vector<std::string>({ leftArg });
+        ResultTable tempTable;
+        if (isSynLeftRightArgSame) {
+            tempTable = ResultTable({ leftArg });
+            for (int i = 0; i < currLeftValues.size(); i++) {
+                std::vector<std::string> tuple = std::vector{ currLeftValues[i] };
+                bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[0]);
+                if (isInRelationship) {
+                    tempTable.insertTuple(tuple);
+                }
             }
-            else {
-                argVec = std::vector<std::string>({ leftArg, rightArg });
-            }
-            ResultTable tempTable(argVec);
-
-           
-            for (int i = 0; i < initTableSize; i++) {
-                
-                    std::vector<std::string> tuple = initTable.getTuple(i);
-                    std::string leftArgVal = tuple[0];
-                    std::string rightArgVal = isSynLeftRightArgSame ? tuple[0] : tuple[1];               
-                    bool isInRelationship = getIsInRelationship(relationship, leftArgVal, rightArgVal);
+        }
+        else {
+            tempTable = ResultTable({ leftArg, rightArg });
+            for (int i = 0; i < currLeftValues.size(); i++) {
+                for (int j = 0; j < currRightValues.size(); j++) {
+                    std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
+                    bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
                     if (isInRelationship) {
                         tempTable.insertTuple(tuple);
-                    }             
+                    }
+                }
             }
+        }
+            
+        if (tempTable.isTableEmpty()) {
+            result.setResultTrue(false);
+            return result;
+        }
 
-            if (tempTable.isTableEmpty()) {
-                result.setResultTrue(false);
-                return result;
-            }
-
-            result.setClauseResult(tempTable);
+        result.setClauseResult(tempTable);
     }
 
 

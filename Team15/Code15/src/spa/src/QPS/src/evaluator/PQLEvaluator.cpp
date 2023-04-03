@@ -91,7 +91,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
 
             SuchThatHandler suchThatHandler(pkb);
             Result result = suchThatHandler.evaluate(Utility::getRelationshipFromString(relationship),
-                *suchThatCl, synonymTable);
+                *suchThatCl, intermediateTable, synonymTable);
 
             if (!result.isResultTrue()) {
                 isEarlyExit = true;
