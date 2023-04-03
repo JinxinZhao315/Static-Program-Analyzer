@@ -26,6 +26,7 @@ enum Relationship
     USES_P,
     MODIFIES_S,
     MODIFIES_P,
+    INVALID_RELATIONSHIP
 };
 
 enum ReferenceType
@@ -50,7 +51,8 @@ enum DesignEntity
     WHILE_ENTITY,
     IF_ENTITY,
     VARIABLE_ENTITY,
-    CONSTANT_ENTITY
+    CONSTANT_ENTITY,
+    INVALID_ENTITY
 };
 
 enum ClauseType
@@ -299,7 +301,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport designEntity string");
+            return INVALID_ENTITY;
         }
     }
 
@@ -355,7 +357,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport relationship string");
+            return INVALID_RELATIONSHIP;
         }
     }
 
@@ -402,7 +404,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport designEntity string");
+            return NONE;
         }
     }
 };
