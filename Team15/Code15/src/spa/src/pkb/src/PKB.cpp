@@ -26,7 +26,7 @@ PKB::PKB() {
 	assignPatternTable = PatternTable();
 	whilePatternTable = PatternTable();
 	ifPatternTable = PatternTable();
-	sp = &SourceProcessor();
+	sp = new SourceProcessor();
 }
 
 //ADD

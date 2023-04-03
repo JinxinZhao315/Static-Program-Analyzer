@@ -23,7 +23,7 @@ public:
     void extract(const vector<Line>& program);
     void storeDataInPKB(PKB* pkb);
 
-    // TODO: get pkb to use these
+    //API for PKB
     bool getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
             set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
             const unordered_map<int, set<int>>& cfg);
