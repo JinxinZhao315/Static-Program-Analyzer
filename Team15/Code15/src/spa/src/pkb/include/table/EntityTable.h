@@ -3,6 +3,8 @@
 #include <string>
 #include <set>
 
+#include "common/include/models/Line.h"
+
 template <typename E>
 class EntityTable {
 public:
