@@ -13,6 +13,9 @@
 #include "NextRelationshipExtractor.h"
 #include "AffectsRelationshipExtractor.h"
 
+class VariableExtractor;
+class ProcedureExtractor;
+
 class Extractor {
 public:
     Extractor();

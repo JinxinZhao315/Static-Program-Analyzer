@@ -4,6 +4,9 @@
 #include "pkb/include/table/EntityTable.h"
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
+#include "source_processor/include/SourceProcessor.h"
+
+class SourceProcessor;
 
 class PKB {
 public:
@@ -335,4 +338,5 @@ private:
 	PatternTable assignPatternTable;
 	PatternTable whilePatternTable;
 	PatternTable ifPatternTable;
+    SourceProcessor* sourceProcessor;
 };

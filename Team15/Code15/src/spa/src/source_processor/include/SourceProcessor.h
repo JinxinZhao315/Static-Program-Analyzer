@@ -1,13 +1,21 @@
+#pragma once
+
 #include "tokeniser/Tokeniser.h"
 #include "parser/Parser.h"
 #include "extractor/Extractor.h"
 #include "pkb/include/PKB.h"
+
+class PKB;
+class Extractor;
+class Tokeniser;
+class Parser;
 
 class SourceProcessor {
 private:
     Tokeniser *tokeniser;
     Parser *parser;
     Extractor *extractor;
+    PKB* pkb;
 public:
     SourceProcessor();
     void parseProgram(string fileName);
