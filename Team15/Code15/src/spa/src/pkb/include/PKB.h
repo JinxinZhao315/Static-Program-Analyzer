@@ -240,6 +240,8 @@ public:
 	bool isNextStmtEmpty();
 
 	//get next*
+	void prepareNextStarTable();
+
 	std::set<int> getStarPreviousStmtNums(int nextStmtNum);
 
 	std::set<int> getStarNextStmtNums(int previousStmtNum);

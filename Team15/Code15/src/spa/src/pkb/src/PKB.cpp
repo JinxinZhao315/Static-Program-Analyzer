@@ -442,15 +442,26 @@ bool PKB::isNextStmtEmpty() {
 }
 
 //get next*
+void PKB::prepareNextStarTable() {
+	if (isNextStarEmpty()) {
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, std::set<int>> nextStarMap = sp->getNextStarRS(nextMap);
+		addAllNextStar(nextStarMap);
+	}
+}
+
 std::set<int> PKB::getStarPreviousStmtNums(int nextStmtNum) {
+	prepareNextStarTable();
 	return nextStarTable.getAllLefts(nextStmtNum);
 }
 
 std::set<int> PKB::getStarNextStmtNums(int previousStmtNum) {
+	prepareNextStarTable();
 	return nextStarTable.getAllRights(previousStmtNum);
 }
 
 bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
+	prepareNextStarTable();
 	return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);
 }
 
