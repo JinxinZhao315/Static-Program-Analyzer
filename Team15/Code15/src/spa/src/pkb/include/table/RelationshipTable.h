@@ -55,6 +55,10 @@ public:
 		return pair->second;
 	}
 
+	inline std::unordered_map<L, std::set<R>> getLeftToAllRightsMap() {
+		return leftToAllRightsMap;
+	}
+
 	inline bool inOneToOneRelationship(L left, R right) {
 		auto pair = rightToLeftMap.find(right);
 		if (pair == rightToLeftMap.end()) {
@@ -122,8 +126,8 @@ public:
 private:
 	std::unordered_map<L, R> leftToRightMap;
 	std::unordered_map<R, L> rightToLeftMap;
-	std::unordered_map<L, std::set<R> > leftToAllRightsMap;
-	std::unordered_map<R, std::set<L> > rightToAllLeftsMap;
+	std::unordered_map<L, std::set<R>> leftToAllRightsMap;
+	std::unordered_map<R, std::set<L>> rightToAllLeftsMap;
 	bool isReady = false;
 
 	inline void addRightToLeft(L left, R right) {
