@@ -24,6 +24,4 @@ public:
 	bool isFirstArgInteger();
 	bool isSecondArgInteger();
 
-	std::string getFirstArgStr();
-	std::string getSecondArgStr();
 }; 

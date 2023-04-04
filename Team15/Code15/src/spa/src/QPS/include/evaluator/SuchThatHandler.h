@@ -22,6 +22,7 @@ private:
     bool getIsInRelationship(Relationship relationship, string leftArg, string rightArg);
     bool getIsPkbEmpty(Relationship relationship);
     std::set<std::string> getRelationshipSet(Relationship relationship, string type, string arg);
+    void clearPkbTable(Relationship relatiionship);
 };
 
 

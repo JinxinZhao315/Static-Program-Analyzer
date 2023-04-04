@@ -505,3 +505,95 @@ TEST_CASE("test affects with while nested in if") {
     REQUIRE(result15);
     REQUIRE(result16);
 }
+
+TEST_CASE("test affects with wildcards simple") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "a", ";"}, ASSIGN),
+            Line(2, {"v", "=", "x", ";"}, ASSIGN),
+            Line(3, {"z", "=", "v", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY)
+    };
+
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result2 = extractAffectsWithWildcard(lines, 1, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected1 = { 2 };
+    set<int> expected2 = {  };
+
+    REQUIRE(result1 == expected1);
+    REQUIRE(result2 == expected2);
+
+    set<int> result3 = extractAffectsWithWildcard(lines, 2, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result4 = extractAffectsWithWildcard(lines, 2, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected3 = { 3 };
+    set<int> expected4 = { 1 };
+
+    REQUIRE(result3 == expected3);
+    REQUIRE(result4 == expected4);
+
+    set<int> result5 = extractAffectsWithWildcard(lines, 3, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result6 = extractAffectsWithWildcard(lines, 3, true, cfg, variables, modifiesRS, usesRS, false);
+
+    set<int> expected5 = { };
+    set<int> expected6 = { 2 };
+
+    REQUIRE(result5 == expected5);
+    REQUIRE(result6 == expected6);
+
+    unordered_map<int, set<int>> result7 = extractAffectsWithMultipleWildcards(lines, cfg, variables, modifiesRS, usesRS, false);
+    unordered_map<int, set<int>> expected7 = {
+            {1, {2}},
+            {2, {3}},
+    };
+
+    REQUIRE(result7 == expected7);
+
+    set<int> result8 = extractAffectsWithWildcard(lines, 1, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result9 = extractAffectsWithWildcard(lines, 1, true, cfg, variables, modifiesRS, usesRS, true);
+
+    set<int> expected8 = { 2, 3 };
+    set<int> expected9 = {  };
+
+    REQUIRE(result8 == expected8);
+    REQUIRE(result9 == expected9);
+
+    set<int> result10 = extractAffectsWithWildcard(lines, 2, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result11 = extractAffectsWithWildcard(lines, 2, true, cfg, variables, modifiesRS, usesRS, true);
+
+    set<int> expected10 = { 3 };
+    set<int> expected11 = { 1 };
+
+    REQUIRE(result10 == expected10);
+    REQUIRE(result11 == expected11);
+
+    set<int> result12 = extractAffectsWithWildcard(lines, 3, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result13 = extractAffectsWithWildcard(lines, 3, true, cfg, variables, modifiesRS, usesRS, true);
+
+    set<int> expected12 = { };
+    set<int> expected13 = { 1, 2 };
+
+    REQUIRE(result12 == expected12);
+    REQUIRE(result13 == expected13);
+
+    unordered_map<int, set<int>> result14 = extractAffectsWithMultipleWildcards(lines, cfg, variables, modifiesRS, usesRS, true);
+    unordered_map<int, set<int>> expected14 = {
+            {1, {2, 3}},
+            {2, {3}},
+    };
+
+    REQUIRE(result14 == expected14);
+}

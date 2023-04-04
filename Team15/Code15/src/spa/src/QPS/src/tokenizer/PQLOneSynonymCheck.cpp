@@ -15,39 +15,34 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
     std::vector<WithClause> withClauseVec = query.getWithClauseVec();
 
-
-	//PQLConstants::RelRefType suchThatType = suchThatClause->relRefType;
-	// A synonym name can only be declared once.
+    // All the synonyms used in clauses must be declared exactly once.
 	for (auto iter = varTable.begin(); iter != varTable.end(); iter++) {
-		// Only can be greater than 1.
+
 		if (varTable.count(iter->first) != 1) {
 			return false;
 		}
 	}
-	// All the synonyms used in clauses must be declared exactly once.
+
 
 	// Select Clause
-	// toDo remove type attribute in selectClause
-	// Check if haven't been defined after checking all synonyms declared once.
     std::vector<Elem> elemVec = selectClause.getSynNameVec();
 
     for (Elem elem : elemVec) {
         if (elemVec.size() > 1) {
-            if (varTable.count(elem.getSynName()) != 1) {//multiple synonyms, can't be BOOLEAN
+            if (varTable.count(elem.getSynName()) != 1) { //multiple synonyms, can't be BOOLEAN
                 return false;
             }
         }
-        else {//synNameVec.size == 1
-            if (elem.getSynName() == "BOOLEAN" && varTable.count(elem.getSynName()) > 1) {//if single syn and BOOLEAN, count can be 0 or 1
+        else {
+            if (elem.getSynName() == "BOOLEAN" && varTable.count(elem.getSynName()) > 1) { //if single syn and BOOLEAN, count can be 0 or 1
                 return false;
             }
-            else if (elem.getSynName() != "BOOLEAN" && varTable.count(elem.getSynName()) != 1) {//single syn, count can only be 1
+            else if (elem.getSynName() != "BOOLEAN" && varTable.count(elem.getSynName()) != 1) { //single syn, count can only be 1
                 return false;
             }
         }
     }
 
-    // to do check whether integer or underscore(non synonym)
     // SuchThat Clause
     for (SuchThatClause suchThatClause: suchThatClauseVec) {
         std::string suchThatLeftArg = suchThatClause.getLeftArg();

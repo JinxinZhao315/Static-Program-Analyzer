@@ -70,22 +70,3 @@ bool WithClause::isFirstArgInteger() {
 bool WithClause::isSecondArgInteger() {
 	return this->secondArg.isRefInteger();
 }
-
-//get the string of first arg, if const return value, if attrRef return string
-std::string WithClause::getFirstArgStr() {
-	if (isFirstArgIdent() || isFirstArgInteger()) {
-		return getFirstArgConstValue();
-	}
-	else {
-		return getFirstArgAttrRef().getSynName();
-	}
-}
-
-std::string WithClause::getSecondArgStr() {
-	if (isSecondArgIdent() || isSecondArgInteger()) {
-		return getSecondArgConstValue();
-	}
-	else {
-		return getSecondArgAttrRef().getSynName();
-	}
-}

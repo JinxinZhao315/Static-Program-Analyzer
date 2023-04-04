@@ -1,6 +1,5 @@
 #include <map>
 #include "PatternClause.h"
-#include "SynonymTable.h"
 #include "SelectClause.h"
 #include "WithClause.h"
 #include "SuchThatClause.h"
@@ -10,7 +9,6 @@ class Query
 {
 
 private:
-    //Todo: SynonymTable synonymTable;
 	std::multimap<std::string, std::string> synonymTable;
     SelectClause selectClause;
     std::vector<PatternClause> patternClauseVec;

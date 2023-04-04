@@ -25,7 +25,7 @@ procedure proc3 {
 //19  print e; }
 
 procedure proc4 {
-//20  read f;
+//20  f = 0;
 //21  g = 0;
 //22  h = 0;
 //23  if (f > 0) then {

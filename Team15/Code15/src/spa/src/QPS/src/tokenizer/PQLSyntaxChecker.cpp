@@ -7,18 +7,21 @@ bool PQLSyntaxChecker::validateSynonym(std::string input) {
 }
 
 bool PQLSyntaxChecker::validateRelationship(std::string relationship, std::string leftArg, std::string rightArg) {
-	if (relationship == "Follows" || relationship == "Follows*" || relationship == "Parent" || relationship == "Parent*") {
-		return validateStmtRef(leftArg) && validateStmtRef(rightArg);
+    Relationship enumRelationship = Utility::getRelationshipFromString(relationship);
+    ReferenceType enumLeftRefType = Utility::getEnumReferenceType(leftArg);
+    ReferenceType enumRightRefType = Utility::getEnumReferenceType(rightArg);
+	if (enumRelationship == FOLLOWS || enumRelationship == FOLLOWS_STAR || enumRelationship == PARENT || enumRelationship == PARENT_STAR) {
+		return validateStmtRef(enumLeftRefType) && validateStmtRef(enumRightRefType);
 	}
-	else if (relationship == "Uses" || relationship == "Modifies") {
-		return (validateStmtRef(leftArg) || validateEntRef(leftArg)) && validateEntRef(rightArg);
+	else if (enumRelationship == USES || enumRelationship == MODIFIES) {
+		return (validateStmtRef(enumLeftRefType) || validateEntRef(enumLeftRefType)) && validateEntRef(enumRightRefType);
     }
-    else if (relationship == "Calls" || relationship == "Calls*") {
-        return validateEntRef(leftArg) && validateEntRef(rightArg);
+    else if (enumRelationship == CALLS || enumRelationship == CALLS_STAR) {
+        return validateEntRef(enumLeftRefType) && validateEntRef(enumRightRefType);
     }
-    else if (relationship == "Next" || relationship == "Next*" ||
-        relationship == "Affects" || relationship == "Affects*") {
-        return validateStmtRef(leftArg) && validateStmtRef(rightArg);
+    else if (enumRelationship == NEXT || enumRelationship == NEXT_STAR ||
+        enumRelationship == AFFECTS || enumRelationship == AFFECTS_STAR) {
+        return validateStmtRef(enumLeftRefType) && validateStmtRef(enumRightRefType);
     }
 	else {
 		return false;
@@ -34,53 +37,47 @@ bool PQLSyntaxChecker::validateDesignEntity(std::string designEntity) {
 
 bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string synonymType, std::string firstArg,
                                        std::string secondArg, std::string thirdArg) {
-    if (Utility::getReferenceType(synonym) != Utility::synonym) {
+    ReferenceType enumReferenceType = Utility::getEnumReferenceType(synonym);
+    if (enumReferenceType != SYNONYM) {
         return false;
     }
-    if (synonymType == "assign") {
-        return validateEntRef(firstArg) && validateExprSpec(secondArg);
-    } else if (synonymType == "while") {
-        return validateEntRef(firstArg) && secondArg == Utility::underscore;
-    } else { // if (synonymType == "if")
-        return validateEntRef(firstArg) && secondArg == Utility::underscore && thirdArg == Utility::underscore;
+    DesignEntity enumDesignEntity = Utility::getDesignEntityFromString(synonymType);
+    ReferenceType firstType = Utility::getEnumReferenceType(firstArg);
+    ReferenceType secondType = Utility::getEnumReferenceType(secondArg);
+
+    if (enumDesignEntity == ASSIGN_ENTITY) {
+        return validateEntRef(firstType) && validateExprSpec(secondType);
+    } else if (enumDesignEntity == WHILE_ENTITY) {
+        return validateEntRef(firstType) && secondArg == Utility::underscore;
+    } else {
+        return validateEntRef(firstType) && secondArg == Utility::underscore && thirdArg == Utility::underscore;
     }
 }
 
 
-bool PQLSyntaxChecker::validateExprSpec(std::string input) {
-    std::string type = Utility::getReferenceType(input);
-	return type == Utility::expr ||
-            type == Utility::quoted_ident || // Because when expr only has 1 variable name e.g. x1, it also matches quoted ident
-            type == Utility::underscored_expr ||
-            type == Utility::underscore;
+bool PQLSyntaxChecker::validateExprSpec(ReferenceType type) {
+	return type == EXPR ||
+            type == QUOTED_IDENT || // Because when expr only has 1 variable name e.g. x1, it also matches quoted ident
+            type == UNDERSCORED_EXPR ||
+            type == UNDERSCORE;
 }
 
-bool PQLSyntaxChecker::validateStmtRef(std::string input) {
-    std::string type = Utility::getReferenceType(input);
-	return type == Utility::synonym ||
-            type == Utility::integer ||
-            type == Utility::underscore;
+bool PQLSyntaxChecker::validateStmtRef(ReferenceType type) {
+	return type == SYNONYM ||
+            type == INTEGER ||
+            type == UNDERSCORE;
 }
 
-bool PQLSyntaxChecker::validateEntRef(std::string input) {
-    std::string type = Utility::getReferenceType(input);
-	return type == Utility::synonym ||
-            type== Utility::underscore ||
-            type == Utility::quoted_ident;
+bool PQLSyntaxChecker::validateEntRef(ReferenceType type) {
+	return type == SYNONYM ||
+            type== UNDERSCORE ||
+            type == QUOTED_IDENT;
 }
 
 bool PQLSyntaxChecker::validateAttrRef(std::string input) {
-        std::size_t periodIndex = input.find_first_of(".");
+        std::size_t periodIndex = input.find_first_of(Utility::ending);
         std::string synName = input.substr(0, periodIndex);
         std::string attrName = input.substr(periodIndex + 1);
         //synonym is valid, attrName is valid
         return validateSynonym(synName) && (Utility::attrNameSet.find(attrName) != Utility::attrNameSet.end());
-}
-
-
-bool PQLSyntaxChecker::validateRef(std::string input) {
-    std::string type = Utility::getReferenceType(input);
-    return type == Utility::quoted_ident ||
-        type == Utility::integer ||
-        validateAttrRef(input);
 }

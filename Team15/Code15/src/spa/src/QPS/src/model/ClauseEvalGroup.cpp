@@ -14,7 +14,6 @@ void ClauseEvalGroup::fillSynList() {
     for (Clause* c : clauseList) {
         std::vector<std::string> tempSynList = c->getSynList();
         synList.insert(std::end(synList), std::begin(tempSynList), std::end(tempSynList));
-        //synList.insert(tempSynList.begin(), tempSynList.end());
     }
 }
 

@@ -306,20 +306,20 @@ SemanticError
 62 - affects assign
 assign a1, a2;
 Select a2 such that Affects(a1, a2) with a1.stmt# = 4
-8, 12, 14
+8, 12, 14, 16
 5000
 63 - affects assign
 assign a1, a2;
 Select a1 such that Affects(a1, a2) with a2.stmt# = 14
-4, 5, 8, 10, 12, 13, 17
+4, 5, 8, 10, 12, 13
 5000
 64 - affects statement
 stmt s1, s2;
 Select s2 such that Affects(s1, s2) with s1.stmt# = 4
-8, 12, 14
+8, 12, 14, 16
 5000
 65 - affects statement
 stmt s1, s2;
 Select s1 such that Affects(s1, s2) with s2.stmt# = 14
-4, 5, 8, 10, 12, 13, 17
+4, 5, 8, 10, 12, 13
 5000

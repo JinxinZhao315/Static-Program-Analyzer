@@ -251,7 +251,22 @@ bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
     }
 
 }
-
+void SuchThatHandler::clearPkbTable(Relationship relationship) {
+    switch (relationship)
+    {
+        case AFFECTS:
+            pkb.clearAffects();
+            break;
+        case AFFECTS_STAR:
+            pkb.clearAffectsStar();
+            break;
+        case NEXT_STAR:
+            pkb.clearNextStar();
+            break;
+        default:
+            break;
+    }
+}
 
 Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchThatClause,
     ResultTable& resultTable, std::multimap<std::string, std::string> &synonymTable, 
@@ -265,13 +280,13 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     Result result;
 
     if (relationship == USES) {
-        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == Utility::procedure)) {
             relationship = USES_P;
         } else {
             relationship = USES_S;
         }
     } else if (relationship == MODIFIES) {
-        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == "procedure")) {
+        if (leftType == QUOTED_IDENT || (synonymTable.find(leftArg) != synonymTable.end() && synonymTable.find(leftArg)->second == Utility::procedure)) {
             relationship = MODIFIES_P;
         } else {
             relationship = MODIFIES_S;
@@ -281,6 +296,9 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Wildcard-Wildcard
     if (leftType == UNDERSCORE && rightType == UNDERSCORE) {
         bool isEmpty = getIsPkbEmpty(relationship);
+
+        clearPkbTable(relationship); 
+
         if (isEmpty) {
             result.setResultTrue(false);
             return result;
@@ -288,14 +306,19 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     }
     // Wildcard - Quoted_ident
     else if (leftType == UNDERSCORE && rightType == QUOTED_IDENT) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg))) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_LEADER, Utility::trim_double_quotes(rightArg));
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
     }
     // Wildcard-Int
     else if (leftType == UNDERSCORE && rightType == INTEGER) {
-        if (getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg)) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_LEADER, rightArg);
+        
+        clearPkbTable(relationship);
+
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -303,7 +326,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     // Quoted_ident - Wildcard
     else if (leftType == QUOTED_IDENT && rightType == UNDERSCORE) {
-        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg))) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, Utility::trim_double_quotes(leftArg));
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -321,7 +345,11 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
     // Int-Wildcard
     else if (leftType == INTEGER && rightType == UNDERSCORE) {
-        if (getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, leftArg)) {
+        bool isRelationshipEmpty = getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, leftArg);
+        
+        clearPkbTable(relationship);
+
+        if (isRelationshipEmpty) {
             result.setResultTrue(false);
             return result;
         }
@@ -329,6 +357,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Int-Int
     else if (leftType == INTEGER && rightType == INTEGER) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, rightArg);
+        clearPkbTable(relationship);
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
@@ -337,6 +366,7 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Int - Quoted_ident
     else if (leftType == INTEGER && rightType == QUOTED_IDENT) {
         bool isInRelationship = getIsInRelationship(relationship, leftArg, Utility::trim_double_quotes(rightArg));
+
         if (!isInRelationship) {
             result.setResultTrue(false);
             return result;
@@ -434,6 +464,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             //}
         }
 
+        clearPkbTable(relationship);
+
         if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             result.setResultTrue(false);
             return result;
@@ -528,6 +560,8 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                 resultTable.combineTable(tempTable);
             }
         }
+
+        clearPkbTable(relationship);
 
         if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             result.setResultTrue(false);
@@ -646,11 +680,13 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                 else {
                     synVals = getRelationshipSet(relationship, GET_LEADER, tuple[synInTableIndex]);
                 }
-
                 for (std::string synOutside : synVals) {
                     tempTable.insertTuple(Utility::mergeTuple(tuple, { synOutside }, {-1}));
                 }
             }
+
+            clearPkbTable(relationship);
+
             if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
                 result.setResultTrue(false);
                 return result;

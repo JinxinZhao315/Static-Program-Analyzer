@@ -57,15 +57,15 @@ vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType,
             lineNumSet = pkb.getAssignStmtsFromVar(arg);
         } else if (patternSynonType == WHILE_ENTITY) {
             lineNumSet = pkb.getWhileStmtsFromVar(arg);
-        } else { // if (patternSynonType == IF_ENTITY)
+        } else {
             lineNumSet = pkb.getIfStmtsFromVar(arg);
         }
-    } else { // type == GET_ALL
+    } else {
         if (patternSynonType == ASSIGN_ENTITY) {
             lineNumSet = pkb.getAllStmtNumsByType(ASSIGN);
         } else if (patternSynonType == WHILE_ENTITY) {
             lineNumSet = pkb.getWhileStmtsWithVars();
-        } else { // if (patternSynonType == "if")
+        } else {
             lineNumSet = pkb.getIfStmtsWithVars();
         }
     }
@@ -94,7 +94,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     bool isPartialMatch;
     if (secondType == UNDERSCORED_EXPR) {
         isPartialMatch = true;
-    } else  { // secondType = EXPR (full match) or UNDERSCORE (this bool is then useless)
+    } else  {
         isPartialMatch = false;
     }
 
@@ -134,7 +134,6 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         std::set<string> currFirstSynonValues = resultTable.containsSyn(firstArg)
             ? resultTable.getSynValues(firstArg)
             : Utility::getResultFromPKB(pkb, firstDeType);
-        //std::set<std::string> currFirstSynonValues = Utility::getResultFromPKB(pkb, firstDeType);
 
         ResultTable tempTable({patternSynon, firstArg });
 

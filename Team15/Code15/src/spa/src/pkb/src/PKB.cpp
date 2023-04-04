@@ -4,6 +4,7 @@ PKB::PKB() {
 	procTable = EntityTable<std::string>();
 	varTable = EntityTable<std::string>();
 	constTable = EntityTable<std::string>();
+	lineTable = EntityTable<Line>();
 	stmtTable = StatementTable();
 	followsTable = RelationshipTable<int, int>();
 	followsStarTable = RelationshipTable<int, int>();
@@ -25,60 +26,67 @@ PKB::PKB() {
 	assignPatternTable = PatternTable();
 	whilePatternTable = PatternTable();
 	ifPatternTable = PatternTable();
+	sp = new SourceProcessor();
 }
 
-//SP procedure
+//ADD
+//add procedure
 void PKB::addAllProcs(std::set<std::string> procNames) {
 	procTable.addAllEntities(procNames);
 }
 
-//SP variable
+//add variable
 void PKB::addAllVars(std::set<std::string> varNames) {
 	varTable.addAllEntities(varNames);
 }
 
-//SP constant
+//add constant
 void PKB::addAllConsts(std::set<std::string> constVals) {
 	constTable.addAllEntities(constVals);
 }
 
-//SP statement
+//add line
+void PKB::addAllLines(std::vector<Line> allLines) {
+	lineTable.addAllEntities(allLines);
+}
+
+//add statement
 void PKB::addAllStmts(std::unordered_map<KeywordsEnum, std::set<int>> stmtNums) {
 	stmtTable.addAllStatementNumbers(stmtNums);
 	stmtTable.addAllStatementNumbersByType(stmtNums);
 }
 
-//SP follows
+//add follows
 void PKB::addAllFollows(std::unordered_map<int, int> allLeaderToFollower) {
 	followsTable.addAllOneToOneRelationships(allLeaderToFollower);
 }
 
-//SP follows*
+//add follows*
 void PKB::addAllFollowsStar(std::unordered_map<int, std::set<int>> allLeaderToFollowers) {
 	followsStarTable.addAllManyToManyRelationships(allLeaderToFollowers);
 }
 
-//SP parent
+//add parent
 void PKB::addAllParent(std::unordered_map<int, std::set<int>> allParentToChildren) {
 	parentTable.addAllOnetoManyRelationships(allParentToChildren);
 }
 
-//SP parent*
+//add parent*
 void PKB::addAllParentStar(std::unordered_map<int, std::set<int>> allParentToChildren) {
 	parentStarTable.addAllManyToManyRelationships(allParentToChildren);
 }
 
-//SP uses statement-variable
+//add uses statement-variable
 void PKB::addAllUsesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
 	usesStmtTable.addAllManyToManyRelationships(allStmtToVars);
 }
 
-//SP uses procedure-variable
+//add uses procedure-variable
 void PKB::addAllUsesProc(std::unordered_map<std::string, std::set<std::string>> allProcToVars) {
 	usesProcTable.addAllManyToManyRelationships(allProcToVars);
 }
 
-//SP modifies statement-variable
+//add modifies statement-variable
 void PKB::addAllModifiesStmt(std::unordered_map<int, std::set<std::string>> allStmtToVars) {
 	modifiesStmtTable.addAllManyToManyRelationships(allStmtToVars);
 }
@@ -88,85 +96,104 @@ void PKB::addAllModifiesProc(std::unordered_map<std::string, std::set<std::strin
 	modifiesProcTable.addAllManyToManyRelationships(allProcToVars);
 }
 
-//SP calls
+//add calls
 void PKB::addAllCalls(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
 	callsTable.addAllManyToManyRelationships(allCallertoCallees);
 }
 
-//SP calls*
+//add calls*
 void PKB::addAllCallsStar(std::unordered_map<std::string, std::set<std::string>> allCallertoCallees) {
 	callsStarTable.addAllManyToManyRelationships(allCallertoCallees);
 }
 
-//SP next
+//add next
 void PKB::addAllNext(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
 	nextTable.addAllManyToManyRelationships(allPreviousToNexts);
 }
 
-//SP next*
+//add next*
 void PKB::addAllNextStar(std::unordered_map<int, std::set<int>> allPreviousToNexts) {
 	nextStarTable.addAllManyToManyRelationships(allPreviousToNexts);
-	nextStarTable.setToReady();
 }
 
-//SP affects
+//add affects
+void PKB::addAffectsModifierToUsers(int modifier, std::set<int> users) {
+	affectsTable.addLeftToRights(modifier, users);
+}
+
+void PKB::addAffectsUserToModifiers(int user, std::set<int> modifiers) {
+	affectsTable.addRightToLefts(user, modifiers);
+}
+
 void PKB::addAllAffects(std::unordered_map<int, std::set<int>> allModifierToUsers) {
 	affectsTable.addAllManyToManyRelationships(allModifierToUsers);
-	affectsTable.setToReady();
 }
 
-//SP affects*
+//add affects*
+void PKB::addAffectsStarModifierToUsers(int modifier, std::set<int> users) {
+	affectsStarTable.addLeftToRights(modifier, users);
+}
+
+void PKB::addAffectsStarUserToModifiers(int user, std::set<int> modifiers) {
+	affectsStarTable.addRightToLefts(user, modifiers);
+}
+
 void PKB::addAllAffectsStar(std::unordered_map<int, std::set<int>> allModifierToUsers) {
 	affectsStarTable.addAllManyToManyRelationships(allModifierToUsers);
-	affectsStarTable.setToReady();
 }
 
-//SP with read
+//add with (read)
 void PKB::addAllWithRead(unordered_map<int, std::string> readLineNumToVarName) {
 	withReadTable.addAllOneToOneRelationships(readLineNumToVarName);
 }
 
-//SP with print
+//add with (print)
 void PKB::addAllWithPrint(unordered_map<int, std::string> printLineNumToVarName) {
 	withPrintTable.addAllOneToOneRelationships(printLineNumToVarName);
 }
 
-//SP with call
+//add with (call)
 void PKB::addAllWithCall(unordered_map<int, std::string> callLineNumToProcName) {
 	withCallTable.addAllOneToOneRelationships(callLineNumToProcName);
 }
 
-//SP assign pattern
+//add assign pattern
 void PKB::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> lhsVarToRhsLine) {
 	assignPatternTable.addAllAssignPatterns(lhsVarToRhsLine);
 }
 
-//SP while pattern
+//add while pattern
 void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
 	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
 }
 
-//SP if pattern
+//add if pattern
 void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
 	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
 }
 
-//QPS procedure
+//GET
+//get procedure
 std::set<std::string> PKB::getAllProcNames() {
-	return procTable.getAllEntities();
+	return procTable.getEntitySet();
 }
 
-//QPS variable
+//get variable
 std::set<std::string> PKB::getAllVarNames() {
-	return varTable.getAllEntities();
+	return varTable.getEntitySet();
 }
 
-//QPS constant
+//get constant
 std::set<std::string> PKB::getAllConstVals() {
-	return constTable.getAllEntities();
+	return constTable.getEntitySet();
 }
 
-//QPS statement
+//get line
+std::vector<Line> PKB::getAllLines() {
+	return lineTable.getEntityVector();
+}
+
+//get statement
 std::set<int> PKB::getAllStmtNums() {
 	return stmtTable.getAllStatementNumbers();
 }
@@ -175,7 +202,7 @@ std::set<int> PKB::getAllStmtNumsByType(KeywordsEnum stmtType) {
 	return stmtTable.getAllStatementNumbersByType(stmtType);
 }
 
-//QPS follow
+//get follows
 int PKB::getFollowsLeaderNum(int followerNum, int invalidLeaderNum) {
 	return followsTable.getLeft(followerNum, invalidLeaderNum);
 }
@@ -200,7 +227,7 @@ bool PKB::isFollowsFollowerEmpty() {
 	return followsTable.isLeftToRightMapEmpty();
 }
 
-//QPS follows*
+//get follows*
 std::set<int> PKB::getFollowsStarLeaderNums(int followerNum) {
 	return followsStarTable.getAllLefts(followerNum);
 }
@@ -225,7 +252,7 @@ bool PKB::isFollowsStarFollowerEmpty() {
 	return followsStarTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS parent
+//get parent
 int PKB::getParentParentNum(int childNum, int invalidParentNum) {
 	return parentTable.getLeft(childNum, invalidParentNum);
 }
@@ -250,7 +277,7 @@ bool PKB::isParentChildEmpty() {
 	return parentTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS parent*
+//get parent*
 std::set<int> PKB::getParentStarParentNums(int childNum) {
 	return parentStarTable.getAllLefts(childNum);
 }
@@ -275,7 +302,11 @@ bool PKB::isParentStarChildEmpty() {
 	return parentStarTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS uses statement-variable
+//get uses statement-variable
+std::unordered_map<int, std::set<std::string>> PKB::getStmtUsesVarsMap() {
+	return usesStmtTable.getLeftToAllRightsMap();
+}
+
 std::set<std::string> PKB::getUsesVarsFromStmt(int stmtNum) {
 	return usesStmtTable.getAllRights(stmtNum);
 }
@@ -288,7 +319,7 @@ bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
 	return usesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
 
-//QPS uses procedure-variable
+//get uses procedure-variable
 std::set<std::string> PKB::getUsesVarsFromProc(std::string procName) {
 	return usesProcTable.getAllRights(procName);
 }
@@ -301,7 +332,11 @@ bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
 	return usesProcTable.inManyToManyRelationship(procName, varName);
 }
 
-//QPS modifies statement-variable
+//get modifies statement-variable
+std::unordered_map<int, std::set<std::string>> PKB::getStmtModifiesVarsMap() {
+	return modifiesStmtTable.getLeftToAllRightsMap();
+}
+
 std::set<std::string> PKB::getModifiesVarsFromStmt(int stmtNum) {
 	return modifiesStmtTable.getAllRights(stmtNum);
 }
@@ -314,7 +349,7 @@ bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
 	return modifiesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
 
-//QPS modifies procedure-variable
+//get modifies procedure-variable
 std::set<std::string> PKB::getModifiesVarsFromProc(std::string procName) {
 	return modifiesProcTable.getAllRights(procName);
 }
@@ -327,7 +362,7 @@ bool PKB::areInModifiesProcRelationship(std::string procName, std::string varNam
 	return modifiesProcTable.inManyToManyRelationship(procName, varName);
 }
 
-//QPS calls
+//get calls
 std::set<std::string> PKB::getCallsCallerNames(std::string calleeName) {
 	return callsTable.getAllLefts(calleeName);
 }
@@ -352,7 +387,7 @@ bool PKB::isCallsCalleeEmpty() {
 	return callsTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS calls*
+//get calls*
 std::set<std::string> PKB::getCallsStarCallerNames(std::string calleeName) {
 	return callsStarTable.getAllLefts(calleeName);
 }
@@ -377,7 +412,11 @@ bool PKB::isCallsStarCalleeEmpty() {
 	return callsStarTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS next
+//get next
+std::unordered_map<int, std::set<int>> PKB::getPreviousToNextStmtsMap() {
+	return nextTable.getLeftToAllRightsMap();
+}
+
 std::set<int> PKB::getPreviousStmtNums(int nextStmtNum) {
 	return nextTable.getAllLefts(nextStmtNum);
 }
@@ -402,26 +441,28 @@ bool PKB::isNextStmtEmpty() {
 	return nextTable.isLeftToAllRightsMapEmpty();
 }
 
-//QPS next*
-std::set<int> PKB::getStarPreviousStmtNums(int nextStmtNum) {
-	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getAllLefts(nextStmtNum);
+//get next*
+void PKB::prepareNextStarTable() {
+	if (isNextStarEmpty()) {
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, std::set<int>> nextStarMap = sp->getNextStarRS(nextMap);
+		addAllNextStar(nextStarMap);
 	}
-	return nextStarTable.getAllLefts(nextStmtNum);//TODO
+}
+
+std::set<int> PKB::getStarPreviousStmtNums(int nextStmtNum) {
+	prepareNextStarTable();
+	return nextStarTable.getAllLefts(nextStmtNum);
 }
 
 std::set<int> PKB::getStarNextStmtNums(int previousStmtNum) {
-	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.getAllRights(previousStmtNum);
-	}
-	return nextStarTable.getAllRights(previousStmtNum);//TODO
+	prepareNextStarTable();
+	return nextStarTable.getAllRights(previousStmtNum);
 }
 
 bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
-	if (nextStarTable.checkReadiness()) {
-		return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);
-	}
-	return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);//TODO
+	prepareNextStarTable();
+	return nextStarTable.inManyToManyRelationship(previousStmtNum, nextStmtNum);
 }
 
 bool PKB::isNextStarEmpty() {
@@ -438,29 +479,65 @@ bool PKB::isStarNextStmtEmpty() {
 
 void PKB::clearNextStar() {
 	nextStarTable.clearMaps();
-	nextStarTable.setToUnready();
 }
 
-//QPS affects
+//get affects
+std::unordered_map<int, std::set<int>> PKB::getAffectsModifierToUserStmtsMap() {
+	if (isAffectsEmpty()) {
+		std::vector<Line> lines = getAllLines();
+		std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+		std::set<std::string> variables = getAllVarNames();
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, std::set<int>> affectsMap = sp->getAffectsRSWithMultipleWildcards(lines, modifiesMap, usesMap, variables, nextMap);
+		addAllAffects(affectsMap);
+		return affectsMap;
+	}
+	return affectsTable.getLeftToAllRightsMap();
+}
+
 std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
-	if (affectsTable.checkReadiness()) {
+	if (affectsTable.isKeyInRightToAllLeftsMap(userStmtNum)) {
 		return affectsTable.getAllLefts(userStmtNum);
 	}
-	return affectsTable.getAllLefts(userStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, variables, nextMap);
+	addAffectsUserToModifiers(userStmtNum, modifiers);
+	return modifiers;
 }
 
 std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
-	if (affectsTable.checkReadiness()) {
+	if (affectsTable.isKeyInLeftToAllRightsMap(modifierStmtNum)) {
 		return affectsTable.getAllRights(modifierStmtNum);
 	}
-	return affectsTable.getAllRights(modifierStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, variables, nextMap);
+	addAffectsModifierToUsers(modifierStmtNum, users);
+	return users;
 }
 
 bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
-	if (affectsTable.checkReadiness()) {
-		return affectsTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);
+	if (affectsTable.inManyToManyRelationship(modifierStmtNum, userStmtNum)) {
+		return true;
 	}
-	return affectsTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, variables, nextMap);
+	if (boolResult) {
+		addAffectsModifierToUsers(modifierStmtNum, { userStmtNum });
+	}
+	return boolResult;
 }
 
 bool PKB::isAffectsEmpty() {
@@ -477,29 +554,65 @@ bool PKB::isAffectsUserStmtEmpty() {
 
 void PKB::clearAffects() {
 	affectsTable.clearMaps();
-	affectsTable.setToUnready();
 }
 
-//QPS affects*
+//get affects*
+std::unordered_map<int, std::set<int>> PKB::getAffectsStarModifierToUserStmtsMap() {
+	if (isAffectsStarEmpty()) {
+		std::vector<Line> lines = getAllLines();
+		std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+		std::set<std::string> variables = getAllVarNames();
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, std::set<int>> affectsStarMap = sp->getAffectsStarRSWithMultipleWildcards(lines, modifiesMap, usesMap, variables, nextMap);
+		addAllAffectsStar(affectsStarMap);
+		return affectsStarMap;
+	}
+	return affectsStarTable.getLeftToAllRightsMap();
+}
+
 std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
-	if (affectsStarTable.checkReadiness()) {
+	if (affectsStarTable.isKeyInRightToAllLeftsMap(userStmtNum)) {
 		return affectsStarTable.getAllLefts(userStmtNum);
 	}
-	return affectsStarTable.getAllLefts(userStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, variables, nextMap);
+	addAffectsStarUserToModifiers(userStmtNum, modifiers);
+	return modifiers;
 }
 
 std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
-	if (affectsStarTable.checkReadiness()) {
+	if (affectsStarTable.isKeyInLeftToAllRightsMap(modifierStmtNum)) {
 		return affectsStarTable.getAllRights(modifierStmtNum);
 	}
-	return affectsStarTable.getAllRights(modifierStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, variables, nextMap);
+	addAffectsStarModifierToUsers(modifierStmtNum, users);
+	return users;
 }
 
 bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
-	if (affectsStarTable.checkReadiness()) {
-		return affectsStarTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);
+	if (affectsStarTable.inManyToManyRelationship(modifierStmtNum, userStmtNum)) {
+		return true;
 	}
-	return affectsStarTable.inManyToManyRelationship(modifierStmtNum, userStmtNum);//TODO
+	std::vector<Line> lines = getAllLines();
+	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+	std::set<std::string> variables = getAllVarNames();
+	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, variables, nextMap);
+	if (boolResult) {
+		addAffectsStarModifierToUsers(modifierStmtNum, { userStmtNum });
+	}
+	return boolResult;
 }
 
 bool PKB::isAffectsStarEmpty() {
@@ -516,25 +629,24 @@ bool PKB::isAffectsStarUserStmtEmpty() {
 
 void PKB::clearAffectsStar() {
 	affectsStarTable.clearMaps();
-	affectsStarTable.setToUnready();
 }
 
-//QPS with read
+//get with (read)
 std::string PKB::getWithReadVarName(int readLineNum, std::string invalidVarName) {
 	return withReadTable.getRight(readLineNum, invalidVarName);
 }
 
-//QPS with print
+//get with (print)
 std::string PKB::getWithPrintVarName(int printLineNum, std::string invalidVarName) {
 	return withPrintTable.getRight(printLineNum, invalidVarName);
 }
 
-//QPS with call
+//get with (call)
 std::string PKB::getWithCallProcName(int callLineNum, std::string invalidProcName) {
 	return withCallTable.getRight(callLineNum, invalidProcName);
 }
 
-//QPS assign pattern
+//get assign pattern
 std::string PKB::getAssignVarFromStmt(int assignStmtNum) {
 	return assignPatternTable.getVarFromStmt(assignStmtNum);
 }
@@ -559,7 +671,7 @@ std::set<std::string> PKB::getAssignVarsFromExpr(std::vector<std::string> rhsExp
 	return assignPatternTable.getVarsFromExpr(rhsExpr);
 }
 
-//QPS while pattern
+//get while pattern
 std::set<int> PKB::getWhileStmtsWithVars() {
 	return whilePatternTable.getAllStmts();
 }
@@ -572,7 +684,7 @@ std::set<std::string> PKB::getWhileVarsFromStmt(int whileStmtNum) {
 	return whilePatternTable.getVarsFromStmt(whileStmtNum);
 }
 
-//QPS if pattern
+//get if pattern
 std::set<int> PKB::getIfStmtsWithVars() {
 	return ifPatternTable.getAllStmts();
 }

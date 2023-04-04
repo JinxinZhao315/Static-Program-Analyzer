@@ -23,6 +23,28 @@ public:
 		flipOneToManyRelationship(oneToManyRelationships);
 	}
 
+	inline void addLeftToRights(L left, std::set<R> rights) {
+		auto pair = leftToAllRightsMap.find(left);
+		if (pair == leftToAllRightsMap.end()) {
+			leftToAllRightsMap[left] = rights;
+		}
+		else {
+			pair->second.insert(rights.begin(), rights.end());
+		}
+		flipRightToAllLefts(left, rights);
+	}
+
+	inline void addRightToLefts(R right, std::set<L> lefts) {
+		auto pair = rightToAllLeftsMap.find(right);
+		if (pair == rightToAllLeftsMap.end()) {
+			rightToAllLeftsMap[right] = lefts;
+		}
+		else {
+			pair->second.insert(lefts.begin(), lefts.end());
+		}
+		flipLeftToAllRights(right, lefts);
+	}
+
 	inline R getRight(L left, R invalidRight) {
 		auto pair = leftToRightMap.find(left);
 		if (pair == leftToRightMap.end()) {
@@ -53,6 +75,10 @@ public:
 			return {};
 		}
 		return pair->second;
+	}
+
+	inline std::unordered_map<L, std::set<R>> getLeftToAllRightsMap() {
+		return leftToAllRightsMap;
 	}
 
 	inline bool inOneToOneRelationship(L left, R right) {
@@ -100,6 +126,20 @@ public:
 		return rightToAllLeftsMap.empty();
 	}
 
+	inline bool isKeyInLeftToAllRightsMap(L leftKey) {
+		if (leftToAllRightsMap.find(leftKey) == leftToAllRightsMap.end()) {
+			return false;
+		}
+		return true;
+	}
+
+	inline bool isKeyInRightToAllLeftsMap(R rightKey) {
+		if (rightToAllLeftsMap.find(rightKey) == rightToAllLeftsMap.end()) {
+			return false;
+		}
+		return true;
+	}
+
 	inline void clearMaps() {
 		clearLeftToRightMap();
 		clearRightToLeftMap();
@@ -107,33 +147,20 @@ public:
 		clearRightToAllLeftsMap();
 	}
 
-	inline bool checkReadiness() {
-		return isReady;
-	}
-
-	inline void setToReady() {
-		this->isReady = true;
-	}
-
-	inline void setToUnready() {
-		this->isReady = false;
-	}
-
 private:
 	std::unordered_map<L, R> leftToRightMap;
 	std::unordered_map<R, L> rightToLeftMap;
-	std::unordered_map<L, std::set<R> > leftToAllRightsMap;
-	std::unordered_map<R, std::set<L> > rightToAllLeftsMap;
-	bool isReady = false;
+	std::unordered_map<L, std::set<R>> leftToAllRightsMap;
+	std::unordered_map<R, std::set<L>> rightToAllLeftsMap;
 
-	inline void addRightToLeft(L left, R right) {
+	inline void flipRightToLeft(L left, R right) {
 		auto pair = rightToLeftMap.find(right);
 		if (pair == rightToLeftMap.end()) {
 			rightToLeftMap[right] = left;
 		}
 	}
 
-	inline void addRightToAllLefts(L left, std::set<R> rights) {
+	inline void flipRightToAllLefts(L left, std::set<R> rights) {
 		for (R right : rights) {
 			auto pair = rightToAllLeftsMap.find(right);
 			if (pair == rightToAllLeftsMap.end()) {
@@ -145,22 +172,34 @@ private:
 		}
 	}
 
+	inline void flipLeftToAllRights(R right, std::set<L> lefts) {
+		for (L left : lefts) {
+			auto pair = leftToAllRightsMap.find(left);
+			if (pair == leftToAllRightsMap.end()) {
+				leftToAllRightsMap[left] = { right };
+			}
+			else {
+				pair->second.insert(right);
+			}
+		}
+	}
+
 	inline void flipOneToOneRelationship(std::unordered_map<L, R> oneToOneRelationships) {
 		for (const auto& [left, right] : oneToOneRelationships) {
-			addRightToLeft(left, right);
+			flipRightToLeft(left, right);
 		}
 	}
 	
 	inline void flipManyToManyRelationship(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
 		for (const auto& [left, rights] : oneToManyRelationships) {
-			addRightToAllLefts(left, rights);
+			flipRightToAllLefts(left, rights);
 		}
 	}
 
 	inline void flipOneToManyRelationship(std::unordered_map<L, std::set<R>> oneToManyRelationships) {
 		for (const auto& [left, rights] : oneToManyRelationships) {
 			for (R right : rights) {
-				addRightToLeft(left, right);
+				flipRightToLeft(left, right);
 			}
 		}
 	}

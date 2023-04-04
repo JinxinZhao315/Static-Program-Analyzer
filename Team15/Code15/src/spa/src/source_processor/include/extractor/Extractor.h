@@ -13,9 +13,12 @@
 #include "NextRelationshipExtractor.h"
 #include "AffectsRelationshipExtractor.h"
 
+class VariableExtractor;
+class ProcedureExtractor;
+
 class Extractor {
 public:
-    Extractor(PKB* pkb);
+    Extractor();
     void extract(const vector<Line>& program);
     set<string> getVariables();
     set<string> getConstants();
@@ -48,9 +51,24 @@ public:
 
     unordered_map<int, set<int>> getNextRS();
 
-    bool getAffectsRS(int lineNum1, int lineNum2);
-
-    bool getAffectsStarRS(int lineNum1, int lineNum2);
+    bool getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
+    bool getAffectsStarRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
+    set<int> getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
+    set<int> getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
+    unordered_map<int, set<int>> getAffectsRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
+    unordered_map<int, set<int>> getAffectsStarRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            const unordered_map<int, set<int>>& cfg);
 
 private:
     unordered_map<int, set<int>> parentsRS;
@@ -85,6 +103,4 @@ private:
 
     VariableExtractor* variableExtractor;
     ProcedureExtractor* procedureExtractor;
-
-    PKB* pkb;
 };

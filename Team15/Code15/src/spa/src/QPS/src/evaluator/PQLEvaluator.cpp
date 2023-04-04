@@ -19,7 +19,6 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
 
     std::vector<std::string> selectedElemName;
     std::vector<std::string> clauseArgVec;
-    int clauseArgVecIndex = 0;
     ClauseEvalGroup originEvalGroup;
 
     for (Elem e : selectedElems)
@@ -27,20 +26,20 @@ std::set<std::string> PQLEvaluator::evaluate(Query query)
         selectedElemName.push_back(e.getSynName());
     }
 
-    for (int i = 0; i < suchThatVec.size(); i++) {
-        originEvalGroup.addClause(&suchThatVec[i]);
+    for (auto & suchThatCl : suchThatVec) {
+        originEvalGroup.addClause(&suchThatCl);
     }
 
-    for (int i = 0; i < patternVec.size(); i++) {
-        originEvalGroup.addClause(&patternVec[i]);
+    for (auto & patternCl : patternVec) {
+        originEvalGroup.addClause(&patternCl);
     }
 
-    for (int i = 0; i < withVec.size(); i++) {
-        originEvalGroup.addClause(&withVec[i]);
+    for (auto & withCl : withVec) {
+        originEvalGroup.addClause(&withCl);
     }
 
     std::vector<ClauseEvalGroup> clauseEvalGroups = separateEvalGroup(originEvalGroup);
-    for (ClauseEvalGroup group : clauseEvalGroups) {
+    for (const ClauseEvalGroup& group : clauseEvalGroups) {
         ResultTable tempTable = evalGroup(group, isEarlyExit, synonymTable, selectedElemName);
         if (isEarlyExit) {
             break;
@@ -67,7 +66,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
     ResultTable intermediateTable = ResultTable();
     int clauseArgVecIndex = 0;
     for (Clause* clause : clauseList) {
-        if (isEarlyExit == true) break;
+        if (isEarlyExit) break;
         switch (clause->getType())
         {
         case SUCH_THAT: {
@@ -96,6 +95,7 @@ ResultTable PQLEvaluator::evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
             //    }
             //    clauseArgVecIndex++;
             //}
+
             break;
         }
         case WITH: {
@@ -173,13 +173,13 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         switch (clauseSynList.size())
         {
         case 1: {
-            std::set<std::string>::iterator it = clauseSynList.begin();
+            auto it = clauseSynList.begin();
             std::string firstSyn = *it;
             synToSynConnectionMap[firstSyn] = std::set<std::string>();
             break;
         }
         case 2: {
-            std::set<std::string>::iterator it = clauseSynList.begin();
+            auto it = clauseSynList.begin();
             std::string firstSyn = *it;
             it++;
             std::string secondSyn = *(it);
@@ -191,18 +191,18 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         default:
             break;
         }
-        for (std::string syn : clauseSynList) {
+        for (const std::string& syn : clauseSynList) {
             synToClauseMap[syn].insert(i);
         }
     }
 
-    while (clauseListIntRep.size() > 0) {
+    while (!clauseListIntRep.empty()) {
         auto firstClauseIter = clauseListIntRep.begin();
         int firstClauseNum = *firstClauseIter;
         clauseListIntRep.erase(firstClauseNum);
         std::set<std::string> synList = clauseToSynMap.at(firstClauseNum);
         //group with single syn
-        if (synList.size() == 0) {
+        if (synList.empty()) {
             ClauseEvalGroup subGroup;
             subGroup.addClause(clauseList[firstClauseNum]);
             groupWithoutSyn.push_back(subGroup);
@@ -211,16 +211,16 @@ std::vector<ClauseEvalGroup> PQLEvaluator::separateEvalGroup(ClauseEvalGroup gro
         std::set<std::string> visitedSynList;
         std::set<int> currGroupClauses;
         //BFS to traverse the syn connection graph, result syn stored in visitedSynList, currGroupClauses will also be filled
-        while (synList.size() > 0) {
+        while (!synList.empty()) {
             std::set<std::string> tempSynList;
-            for (std::string syn : synList) {
+            for (const std::string& syn : synList) {
                 //syn not visited yet
                 if (visitedSynList.count(syn) == 0) {
                     std::set<int> relatedClauses = synToClauseMap.at(syn);
                     currGroupClauses.insert(relatedClauses.begin(), relatedClauses.end());
                     //find all the connected syn and add the syn in tempSynList
                     std::set<std::string> relatedSyns = synToSynConnectionMap.at(syn);
-                    for (std::string relatedSyn : relatedSyns) {
+                    for (const std::string& relatedSyn : relatedSyns) {
                         tempSynList.insert(relatedSyn);
                     }
                 }

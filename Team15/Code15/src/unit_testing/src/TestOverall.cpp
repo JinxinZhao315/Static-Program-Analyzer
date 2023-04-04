@@ -1,8 +1,9 @@
+#include <utility>
+
 #include "pkb/include/PKB.h"
 #include "QPS/include/evaluator/PQLEvaluator.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/PQLDriver.h"
 #include "source_processor/include/SourceProcessor.h"
 
@@ -11,22 +12,22 @@ using namespace std;
 
 void spDriver(std::string filename, PKB &pkb)
 {
-    SourceProcessor sourceProcessor = SourceProcessor(&pkb);
-    sourceProcessor.parseProgram(filename);
-    sourceProcessor.storeDataInPKB();
+    auto sourceProcessor = SourceProcessor();
+    sourceProcessor.parseProgram(std::move(filename), &pkb);
+    sourceProcessor.storeDataInPKB(&pkb);
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
 {
     PQLDriver pqlDriver = PQLDriver(pkb);
-    set<string> result = pqlDriver.processPQL(queryStr);
+    set<string> result = pqlDriver.processPQL(std::move(queryStr));
     return result;
 }
 
 set<string> testDriver(string filename, string queryStr)
 {
     PKB pkb;
-    spDriver(filename, pkb);
-    return qpsDriver(queryStr, pkb);
+    spDriver(std::move(filename), pkb);
+    return qpsDriver(std::move(queryStr), pkb);
 }
 
 #if __APPLE__
@@ -520,5 +521,23 @@ TEST_CASE("Overall test : optimization test 1") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };
+}
+//TEST_CASE("Overall test : optimization test 1") {
+//    string filename = source_optimization;
+//    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+//        Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6) and Follows* (n7, n8) and Follows* (n9, n10) pattern a(v, _)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "TRUE" };
+//    REQUIRE(result == expectedResult);
+//}
+
+TEST_CASE("Overall test : source-sample1.txt 3")
+{
+    string filename = source_sample1;
+    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
     REQUIRE(result == expectedResult);
 }

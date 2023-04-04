@@ -10,17 +10,18 @@ AbstractWrapper* WrapperFactory::createWrapper() {
 volatile bool AbstractWrapper::GlobalStop = false;
 
 // a default constructor
-TestWrapper::TestWrapper() : sourceProcessor(&pkb) {
+TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   this->pkb = PKB();
+  this->sourceProcessor = SourceProcessor();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
-    sourceProcessor.parseProgram(filename);
-    sourceProcessor.storeDataInPKB();
+    sourceProcessor.parseProgram(filename, &this->pkb);
+    sourceProcessor.storeDataInPKB(&this->pkb);
 }
 
 // method to evaluating a query

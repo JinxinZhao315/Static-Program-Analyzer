@@ -26,6 +26,7 @@ enum Relationship
     USES_P,
     MODIFIES_S,
     MODIFIES_P,
+    INVALID_RELATIONSHIP
 };
 
 enum ReferenceType
@@ -50,7 +51,8 @@ enum DesignEntity
     WHILE_ENTITY,
     IF_ENTITY,
     VARIABLE_ENTITY,
-    CONSTANT_ENTITY
+    CONSTANT_ENTITY,
+    INVALID_ENTITY
 };
 
 enum ClauseType
@@ -85,6 +87,7 @@ public:
     inline static const std::string exprFormat = "\"[\\s\\S]*\"";
 
     inline static const std::string whiteSpaces = " \t\n";
+    inline static const std::string ending = ".";
     inline static const std::string quote = "\"";
     inline static const std::string underscore = "_";
     inline static const std::string expr = "expr";
@@ -115,6 +118,7 @@ public:
     inline static const std::string varName = "varName";
     inline static const std::string stmtNum = "stmt#";
     inline static const std::string value = "value";
+
     inline static const Keywords keywords = Keywords();
 
     inline static const ReferenceType getEnumReferenceType(std::string input)
@@ -209,10 +213,6 @@ public:
         return s;
     }
 
-    inline static const bool isStarRelationship(std::string relationship)
-    {
-        return relationship.find('*') != std::string::npos;
-    }
 
     inline static const std::set<std::string> getResultFromPKB(PKB &pkb, std::string DeType)
     {
@@ -297,7 +297,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport designEntity string");
+            return INVALID_ENTITY;
         }
     }
 
@@ -353,7 +353,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport relationship string");
+            return INVALID_RELATIONSHIP;
         }
     }
 
@@ -400,7 +400,7 @@ public:
         }
         else
         {
-            throw std::runtime_error("Unsupport designEntity string");
+            return NONE;
         }
     }
 

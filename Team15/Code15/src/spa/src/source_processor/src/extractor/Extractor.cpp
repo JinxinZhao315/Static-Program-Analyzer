@@ -1,9 +1,8 @@
 #include "source_processor/include/extractor/Extractor.h"
 
-Extractor::Extractor(PKB* pkb) {
+Extractor::Extractor() {
     variableExtractor = new VariableExtractor();
     procedureExtractor = new ProcedureExtractor();
-    this->pkb = pkb;
 }
 
 set<string> Extractor::getVariables() {
@@ -120,25 +119,40 @@ unordered_map<int, set<int>> Extractor::getNextRS() {
     return this->nextRS;
 }
 
-bool Extractor::getAffectsRS(int lineNum1, int lineNum2) {
-    // TODO: add the following APIs
-    // const vector<Line>& program = pkb.getAllLines();
-    // const unordered_map<int, set<int>>& modifies = pkb->getAllModifiesStmt();
-    // const unordered_map<int, set<int>>& uses = pkb->getAllUsesStmt();
-    const set<string>& variables = pkb->getAllVarNames();
-    // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
-    // return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, false)
-    return true;
+bool Extractor::getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, false);
 }
 
-bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2) {
-    // const vector<Line>& program = pkb.getAllLines();
-    // const unordered_map<int, set<int>>& modifies = pkb->getAllModifiesStmt();
-    // const unordered_map<int, set<int>>& uses = pkb->getAllUsesStmt();
-    const set<string>& variables = pkb->getAllVarNames();
-    // const unordered_map<int, set<int>>& cfg = pkb->getAllNext();
-    // return extractAffectsRS(program, lineNum1, lineNum2, cfg, variables, modifies, uses, true);
-    return true;
+bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, true);
+}
+
+set<int> Extractor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, false);
+}
+
+set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, true);
+}
+
+unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsWithMultipleWildcards(program, cfg, variablesForAffects, modifies, uses, false);
+}
+
+unordered_map<int, set<int>> Extractor::getAffectsStarRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+        const unordered_map<int, set<int>>& cfg) {
+    return extractAffectsWithMultipleWildcards(program, cfg, variablesForAffects, modifies, uses, true);
 }
 
 void Extractor::extract(const vector<Line> &program) {
@@ -176,5 +190,3 @@ void Extractor::extract(const vector<Line> &program) {
 
     this->nextRS = extractNextRS(program, follows);
 }
-
-
