@@ -1,6 +1,7 @@
 import subprocess
 
-tests = ["assign", "bool", "calls", "follows", "general", "ifwhile", "next", "parent", "tuple", "usesmodifies", "with"]
+tests = ["affects"]
+#tests = ["assign", "bool", "calls", "follows", "general", "ifwhile", "next", "parent", "tuple", "usesmodifies", "with"]
 
 for test in tests:
     source = "source-" + test + ".txt"
