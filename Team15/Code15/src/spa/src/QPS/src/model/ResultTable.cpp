@@ -337,7 +337,10 @@ void ResultTable::deleteSynonym(std::string synonym) {
 void ResultTable::removeDuplicates() {
     std::set<std::vector<std::string>> distinctTupleSet;
     for (int i = 0; i < colNum; i++) {
-        distinctTupleSet.insert(getTuple(i));
+        std::vector<std::string> tuple = getTuple(i);
+        if (tuple.size() > 0) {
+            distinctTupleSet.insert(getTuple(i));
+        }
     }
     resultTable = {};
     for (int i = 0; i < rowNum;i++) {

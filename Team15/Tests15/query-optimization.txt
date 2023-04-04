@@ -1,20 +1,25 @@
 1 - prioritize clause without synonym, returning false immediately
-assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
-Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next*(n9, n10) and Follows(2, 1) pattern a(v, _)
-FALSE
-5000
-2 - same but FALSE in the middle
-assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
-Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Follows(2, 1) such that Next*(n7, n8) and Next*(n9, n10) pattern a(v, _)
-FALSE
-5000
-3 - same but FALSE at the beginning
-assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
-Select BOOLEAN such that Follows(2, 1) and Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next*(n9, n10) pattern a(v, _)
-FALSE
-5000
-4 - cache test
-assign a; variable v; stmt n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
-Select BOOLEAN such that Follows*(n1, n2) and Follows*(n3, n4) and Follows*(n5, n6) and Follows*(n7, n8) and Follows*(n9, n10) pattern a(v, _)
+assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
+Select BOOLEAN such that Follows* (n1, n2)
 TRUE
 5000
+2 - prioritize clause without synonym, returning false immediately
+assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
+Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4)
+TRUE
+5000
+2 - prioritize clause without synonym, returning false immediately
+assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
+Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6)
+TRUE
+5000
+3 - prioritize clause without synonym, returning false immediately
+assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
+Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6) and Follows* (n7, n8)
+TRUE
+10000
+4 - prioritize clause without synonym, returning false immediately
+assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
+Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6) and Follows* (n7, n8) and Follows* (n9, n10) pattern a(v, _)
+TRUE
+10000
