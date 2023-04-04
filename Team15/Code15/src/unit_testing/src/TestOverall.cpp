@@ -13,15 +13,9 @@ using namespace std;
 
 void spDriver(std::string filename, PKB &pkb)
 {
-<<<<<<< Updated upstream
-    SourceProcessor sourceProcessor = SourceProcessor();
-    sourceProcessor.parseProgram(filename, &pkb);
+    auto sourceProcessor = SourceProcessor();
+    sourceProcessor.parseProgram(std::move(filename), &pkb);
     sourceProcessor.storeDataInPKB(&pkb);
-=======
-    auto sourceProcessor = SourceProcessor(&pkb);
-    sourceProcessor.parseProgram(std::move(filename));
-    sourceProcessor.storeDataInPKB();
->>>>>>> Stashed changes
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
 {
