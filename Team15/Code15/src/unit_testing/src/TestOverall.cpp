@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "pkb/include/PKB.h"
 #include "QPS/include/evaluator/PQLEvaluator.h"
 #include "QPS/include/model/Result.h"
@@ -11,22 +13,28 @@ using namespace std;
 
 void spDriver(std::string filename, PKB &pkb)
 {
+<<<<<<< Updated upstream
     SourceProcessor sourceProcessor = SourceProcessor();
     sourceProcessor.parseProgram(filename, &pkb);
     sourceProcessor.storeDataInPKB(&pkb);
+=======
+    auto sourceProcessor = SourceProcessor(&pkb);
+    sourceProcessor.parseProgram(std::move(filename));
+    sourceProcessor.storeDataInPKB();
+>>>>>>> Stashed changes
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
 {
     PQLDriver pqlDriver = PQLDriver(pkb);
-    set<string> result = pqlDriver.processPQL(queryStr);
+    set<string> result = pqlDriver.processPQL(std::move(queryStr));
     return result;
 }
 
 set<string> testDriver(string filename, string queryStr)
 {
     PKB pkb;
-    spDriver(filename, pkb);
-    return qpsDriver(queryStr, pkb);
+    spDriver(std::move(filename), pkb);
+    return qpsDriver(std::move(queryStr), pkb);
 }
 
 #if __APPLE__
