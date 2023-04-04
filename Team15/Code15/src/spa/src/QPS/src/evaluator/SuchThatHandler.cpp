@@ -263,28 +263,92 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
         //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
-
+        ResultTable tempTable;
+        std::vector<std::string> synsToCheck = { leftArg };
         if (rightType == UNDERSCORE) {
-            for (auto currSynonVal: currSynonValues) {
-                if (!getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, currSynonVal)) {
-                    resultSynonValues.push_back(currSynonVal);
+            //just do a filtering
+            if (resultTable.containsSyn(leftArg)) {
+                tempTable = ResultTable(resultTable.getSynList());
+                std::vector<std::string> resultTableSynList = resultTable.getSynList();
+                std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), leftArg);
+                int synIndex = it - resultTableSynList.begin();
+                for (int i = 0; i < resultTable.getColNum(); i++) {
+                    std::vector<std::string> tuple = resultTable.getTuple(i);
+                    if (!getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, tuple[synIndex])) {
+                        tempTable.insertTuple(tuple);
+                    }
                 }
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable = tempTable;
             }
+            else {
+                for (auto currSynonVal : currSynonValues) {
+                    if (!getIsRelationshipSetEmpty(relationship, GET_FOLLOWER, currSynonVal)) {
+                        resultSynonValues.push_back(currSynonVal);
+                    }
+                }
+                tempTable = ResultTable(resultSynonValues, leftArg);
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable.combineTable(tempTable);
+            }
+            
         } else if (rightType == INTEGER || rightType == QUOTED_IDENT) {
-            for (auto currSynonVal : currSynonValues) {
-                bool isInRelationship = getIsInRelationship(relationship,
-                                                            currSynonVal,
-                                                            Utility::trim_double_quotes(rightArg));
-                if (isInRelationship) {
-                    resultSynonValues.push_back(currSynonVal);
+            if (resultTable.containsSyn(leftArg)) {
+                tempTable = ResultTable(resultTable.getSynList());
+                std::vector<std::string> resultTableSynList = resultTable.getSynList();
+                std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), leftArg);
+                int synIndex = it - resultTableSynList.begin();
+                for (int i = 0; i < resultTable.getColNum(); i++) {
+                    std::vector<std::string> tuple = resultTable.getTuple(i);
+                    if (getIsInRelationship(relationship, tuple[synIndex], Utility::trim_double_quotes(rightArg))) {
+                        tempTable.insertTuple(tuple);
+                    }
                 }
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable = tempTable;
             }
+            else {
+                for (auto currSynonVal : currSynonValues) {
+                    if (getIsInRelationship(relationship,currSynonVal,Utility::trim_double_quotes(rightArg))) {
+                        resultSynonValues.push_back(currSynonVal);
+                    }
+                }
+                tempTable = ResultTable(resultSynonValues, leftArg);
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable.combineTable(tempTable);
+            }
+
+            //for (auto currSynonVal : currSynonValues) {
+            //    bool isInRelationship = getIsInRelationship(relationship,
+            //                                                currSynonVal,
+            //                                                Utility::trim_double_quotes(rightArg));
+            //    if (isInRelationship) {
+            //        resultSynonValues.push_back(currSynonVal);
+            //    }
+            //}
         }
 
-        if (resultSynonValues.empty()) {
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             result.setResultTrue(false);
             return result;
         }
+
         result.setClauseResult(ResultTable(resultSynonValues, leftArg));
     }
     // Wilcard / Int / Quoted-ident - Synon
@@ -296,30 +360,90 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
         //std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;
-
+        ResultTable tempTable;
+        std::vector<std::string> synsToCheck = {rightArg};
         if (leftType == UNDERSCORE) {
-            for (auto currSynonVal : currSynonValues) {
-                if (!getIsRelationshipSetEmpty(relationship, GET_LEADER, currSynonVal)) {
-                    resultSynonValues.push_back(currSynonVal);
+            if (resultTable.containsSyn(rightArg)) {
+                tempTable = ResultTable(resultTable.getSynList());
+                std::vector<std::string> resultTableSynList = resultTable.getSynList();
+                std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), rightArg);
+                int synIndex = it - resultTableSynList.begin();
+                for (int i = 0; i < resultTable.getColNum(); i++) {
+                    std::vector<std::string> tuple = resultTable.getTuple(i);
+                    if (!getIsRelationshipSetEmpty(relationship, GET_LEADER, tuple[synIndex])) {
+                        tempTable.insertTuple(tuple);
+                    }
                 }
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable = tempTable;
+            }
+            else {
+                for (auto currSynonVal : currSynonValues) {
+                    if (!getIsRelationshipSetEmpty(relationship, GET_LEADER, currSynonVal)) {
+                        resultSynonValues.push_back(currSynonVal);
+                    }
+                }
+                tempTable = ResultTable(resultSynonValues, rightArg);
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable.combineTable(tempTable);
             }
         }
         else if (leftType == INTEGER || leftType == QUOTED_IDENT) {
-            for (auto currSynonVal : currSynonValues) {
+            /*for (auto currSynonVal : currSynonValues) {
                 bool isInRelationship = getIsInRelationship(relationship,
                                                             Utility::trim_double_quotes(leftArg),
                                                             currSynonVal);
                 if (isInRelationship) {
                     resultSynonValues.push_back(currSynonVal);
                 }
+            }*/
+            if (resultTable.containsSyn(rightArg)) {
+                tempTable = ResultTable(resultTable.getSynList());
+                std::vector<std::string> resultTableSynList = resultTable.getSynList();
+                std::vector<std::string>::iterator it = std::find(resultTableSynList.begin(), resultTableSynList.end(), rightArg);
+                int synIndex = it - resultTableSynList.begin();
+                for (int i = 0; i < resultTable.getColNum(); i++) {
+                    std::vector<std::string> tuple = resultTable.getTuple(i);
+                    if (getIsInRelationship(relationship, Utility::trim_double_quotes(leftArg), tuple[synIndex])) {
+                        tempTable.insertTuple(tuple);
+                    }
+                }
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable = tempTable;
+            }
+            else {
+                for (auto currSynonVal : currSynonValues) {
+                    if (getIsInRelationship(relationship, Utility::trim_double_quotes(leftArg), currSynonVal)) {
+                        resultSynonValues.push_back(currSynonVal);
+                    }
+                }
+                tempTable = ResultTable(resultSynonValues, rightArg);
+                if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                    result.setResultTrue(false);
+                    return result;
+                }
+                removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+                resultTable.combineTable(tempTable);
             }
         }
 
-        if (resultSynonValues.empty()) {
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             result.setResultTrue(false);
             return result;
         }
-        result.setClauseResult(ResultTable(resultSynonValues, rightArg));
+        /*result.setClauseResult(ResultTable(resultSynonValues, rightArg));*/
     }
     // Synon - Synon
     else if (leftType == SYNONYM && rightType == SYNONYM) {
@@ -359,6 +483,10 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                     }
                 }
             }
+            if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                result.setResultTrue(false);
+                return result;
+            }
             //delete unnecessary synonym before merging
             removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
             resultTable.combineTable(tempTable);
@@ -378,8 +506,12 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                     tempTable.insertTuple(tuple);
                 }
             }
+            if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                result.setResultTrue(false);
+                return result;
+            }
             resultTable = tempTable;
-            removeUselessSyns(synsToCheck, tempTable, evalSynList, synEvalPosition);
+            removeUselessSyns(synsToCheck, resultTable, evalSynList, synEvalPosition);
         }
         //one syn is in resultTable but another one not
         else {
@@ -423,11 +555,15 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                     }
                 }
             }
+            if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
+                result.setResultTrue(false);
+                return result;
+            }
             resultTable = tempTable;
             removeUselessSyns(synsToCheck, resultTable, evalSynList, synEvalPosition);
         }
             
-        if (resultTable.isTableEmpty()) {
+        if (resultTable.isTableEmpty() && !resultTable.isSynListEmpty()) {
             result.setResultTrue(false);
             return result;
         }
