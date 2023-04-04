@@ -35,7 +35,6 @@ public:
 	void tokenizeWithClause(std::string& input, std::vector<WithClause>& withClauseVec, std::multimap<std::string, std::string> varTable);
 private:
     PQLSyntaxChecker syntaxChecker;
-//	std::string trim(std::string input);
 	std::string extractKeyword(std::string &input);
     std::string peekKeyword(std::string input, std::string delimiter);
     std::vector<std::string> tokenizeCsv(std::string);
@@ -43,4 +42,10 @@ private:
     std::vector<std::string> relationships = {"Follows", "Follows*", "Parent", "Parent*",
                                                     "Uses", "Modifies", "Calls", "Calls*",
                                                     "Next", "Next*", "Affects", "Affects*"};
+    string SELECT = "Select";
+    string SUCH = "such";
+    string THAT = "that";
+    string PATTERN = "pattern";
+    string WITH = "with";
+    string AND = "and";
 };

@@ -1,10 +1,8 @@
 #include "pkb/include/PKB.h"
 #include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/evaluator/ClauseHandler.h"
-#include "QPS/include/evaluator/ModifiesSHandler.h"
 #include "TestUtility.h"
 #include "catch.hpp"
 
@@ -21,21 +19,6 @@ TEST_CASE("ModifiesS Integer Underscore test") {
 
     set<string> set1({ "k" });
     pkb.addAllModifiesStmt({ {1, set1} });
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-    
-    pkb.addModifiesStmt(1, set1);
-
-    pkb.addStmt("read", 3);
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, _)", pkb);
     
@@ -118,26 +101,6 @@ TEST_CASE("ModifiesS Integer Variable test") {
     set<string> set3({ "x" });
     pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
 
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-
-    pkb.addModifiesStmt(1, set1);
-
-    pkb.addStmt("read", 3);
-
-    set<string> set3({ "x" });
-
-    pkb.addModifiesStmt(3, set3);
-    */
-
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, b)", pkb);
     
     REQUIRE(retStr1 == "1,2");
@@ -172,25 +135,6 @@ TEST_CASE("ModifiesS Statement Variable test") {
     set<string> set1({ "k" });
     set<string> set3({ "x" });
     pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-
-    pkb.addModifiesStmt(1, set1);
-
-    pkb.addStmt("read", 3);
-
-    set<string> set3({ "x" });
-
-    pkb.addModifiesStmt(3, set3);
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, b)", pkb);
     
@@ -219,25 +163,6 @@ TEST_CASE("ModifiesS Statement IdentString test") {
     set<string> set1({ "k" });
     set<string> set3({ "x" });
     pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-
-    pkb.addModifiesStmt(1, set1);
-
-    pkb.addStmt("read", 3);
-
-    set<string> set3({ "x" });
-
-    pkb.addModifiesStmt(3, set3);
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, \"k\")", pkb);
     
@@ -271,26 +196,6 @@ TEST_CASE("ModifiesS Statement Underscore test") {
     set<string> set2({ "y" });
     set<string> set3({ "x" });
     pkb.addAllModifiesStmt({ {1, set1}, {2, set2}, {3, set3} });
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-    pkb.addModifiesStmt(1, set1);
-
-    set<string> set2({ "y" });
-    pkb.addModifiesStmt(2, set2);
-
-    pkb.addStmt("read", 3);
-
-    set<string> set3({ "x" });
-    pkb.addModifiesStmt(3, set3);
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(a, _)", pkb);
     

@@ -1,8 +1,5 @@
-//
-// Created by Jinxin Zhao on 3/2/23.
-//
-
 #include "QPS/include/model/ResultTable.h"
+
 ResultTable::ResultTable() {
     this->resultTable = {};
     this->synList = {};
@@ -120,12 +117,6 @@ void ResultTable::combineTable(ResultTable tempResultTable) {
     }
 }
 
-//void ResultTable::filterTable(void (*func)(int, int)) {
-//
-//}
-
-
-
 std::vector<std::string> ResultTable::getSynList() {
     return this->synList;
 }
@@ -192,12 +183,12 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
 std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
         if (isEarlyExit) {
-            return std::set<std::string>();
+            return {};
         }
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
-        for (int i = 0; i < selectedElem.size(); i++) {
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[i].getSynName());
+        for (auto & elem : selectedElem) {
+            auto it = std::find(synList.begin(), synList.end(), elem.getSynName());
             synNameIndex.push_back(it - synList.begin());
         }
 
@@ -211,13 +202,6 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
                 else {
                     tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j].getAttrRef(), pkb) + " ";
                 }
-                //if (selectedElem[j].isElemSynonym()) {
-                //    tuple += resultTable[synNameIndex[j]][i] + " ";
-                //}
-                //else {
-                //    tuple += getAttrValue()
-                //}
-                
             }
             //pop the last white space
             tuple.pop_back();
@@ -229,9 +213,9 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         //not BOOLEAN or BOOLEAN is a synonym
         if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
             if (isEarlyExit) {
-                return std::set<std::string>();
+                return {};
             }
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
+            auto it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
             for (int i = 0; i < colNum; i++) {
@@ -287,25 +271,12 @@ bool ResultTable::isTupleMatch(std::vector<std::string> oldTuple, std::vector<st
 }
 
 
-
-
-
 void ResultTable::clearResultTable() {
     for (int i = 0; i < rowNum; i++) {
         this->resultTable[i] = {};
     }
     colNum = 0;
 }
-
-//void ResultTable::deleteTuple(int index) {
-//    //traverse every row of the table
-//    if (index >= 0 && index < colNum) {
-//        for (int i = 0; i < resultTable.size(); i++) {
-//            this->resultTable[i].erase(resultTable[i].begin() + index);
-//        }
-//        colNum--;
-//    }
-//}
 
 void ResultTable::insertTuple(std::vector<std::string> tuple) {
     if (tuple.size() == rowNum) {
@@ -317,7 +288,7 @@ void ResultTable::insertTuple(std::vector<std::string> tuple) {
         colNum++;
     }
     else {
-        //should throw exception ???
+        throw runtime_error("Result table tuple size != row number");
     }
 }
 
@@ -333,7 +304,7 @@ std::vector<std::string> ResultTable::mergeTuple(std::vector<std::string> oldTup
 
 
 void ResultTable::deleteSynonym(std::string synonym) {
-    std::vector<std::string>::iterator synNamePos = std::find(synList.begin(), synList.end(), synonym);
+    auto synNamePos = std::find(synList.begin(), synList.end(), synonym);
     int synIndex = std::distance(synList.begin(), synNamePos);
     if (synNamePos != synList.end()) {
         synList.erase(synNamePos);

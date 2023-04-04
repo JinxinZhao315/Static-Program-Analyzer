@@ -17,7 +17,6 @@ Ref::Ref(AttrRef input) {
 }
 
 
-//getter
 std::string Ref::getIdentValue() {
 	return this->identValue;
 }
@@ -30,8 +29,6 @@ AttrRef Ref::getAttrRef() {
 	return this->attrRef;
 }
 
-
-//check Ref type
 bool Ref::isRefIdent() {
 	return this->isIdent;
 }

@@ -213,10 +213,6 @@ public:
         return s;
     }
 
-    inline static const bool isStarRelationship(std::string relationship)
-    {
-        return relationship.find('*') != std::string::npos;
-    }
 
     inline static const std::set<std::string> getResultFromPKB(PKB &pkb, std::string DeType)
     {

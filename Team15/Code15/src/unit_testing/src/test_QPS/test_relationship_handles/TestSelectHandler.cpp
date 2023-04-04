@@ -3,8 +3,6 @@
 #include "QPS/include/tokenizer/PQLPreprocessor.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
-#include "QPS/include/evaluator/SelectHandler.h"
 #include "QPS/include/model/Elem.h"
 #include "TestUtility.h"
 #include "catch.hpp"

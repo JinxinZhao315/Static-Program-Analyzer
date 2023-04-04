@@ -195,8 +195,8 @@ bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::s
 		return false;
 	}
 
-	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator leftPairSetPointer = withLogicMap.find(leftAttrType);
-	std::unordered_map<std::string, std::unordered_map<std::string, std::string>>::iterator rightPairSetPointer = withLogicMap.find(rightAttrType);
+	auto leftPairSetPointer = withLogicMap.find(leftAttrType);
+	auto rightPairSetPointer = withLogicMap.find(rightAttrType);
 	std::unordered_map<std::string, std::string> leftPairSet = leftPairSetPointer->second;
 	std::unordered_map<std::string, std::string> rightPairSet = rightPairSetPointer->second;
 

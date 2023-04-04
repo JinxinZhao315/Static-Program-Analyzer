@@ -49,7 +49,7 @@ bool PQLSyntaxChecker::validatePattern(std::string synonym, std::string synonymT
         return validateEntRef(firstType) && validateExprSpec(secondType);
     } else if (enumDesignEntity == WHILE_ENTITY) {
         return validateEntRef(firstType) && secondArg == Utility::underscore;
-    } else { // if (synonymType == "if")
+    } else {
         return validateEntRef(firstType) && secondArg == Utility::underscore && thirdArg == Utility::underscore;
     }
 }

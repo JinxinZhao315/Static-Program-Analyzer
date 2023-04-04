@@ -286,7 +286,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
     // Synon - Wilcard / Int / Quoted-ident
     else if (leftType == SYNONYM && rightType != SYNONYM) {
         string synonDeType = synonymTable.find(leftArg)->second;
-        //Todo: should put this function here instead?
         std::set<string> synValuesStrSet = Utility::getResultFromPKB(pkb, synonDeType);
         std::vector<std::string> currSynonValues(synValuesStrSet.begin(), synValuesStrSet.end());
         std::vector<std::string> resultSynonValues;

@@ -4,7 +4,6 @@
 #include "QPS/include/evaluator/PQLEvaluator.h"
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
-#include "QPS/include/evaluator/FollowsHandler.h"
 #include "QPS/include/PQLDriver.h"
 #include "source_processor/include/SourceProcessor.h"
 
