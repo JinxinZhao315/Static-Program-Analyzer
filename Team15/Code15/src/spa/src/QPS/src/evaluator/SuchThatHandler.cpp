@@ -132,6 +132,96 @@ bool SuchThatHandler:: getIsInRelationship(Relationship relationship, string lef
 
 }
 
+std::set<std::string> SuchThatHandler::getRelationshipSet(Relationship relationship, string type, string arg) {
+    std::set<string> ret;
+
+    switch (relationship) {
+    case FOLLOWS:
+        if (type == GET_LEADER) {
+            int leader = pkb.getFollowsLeaderNum(stoi(arg), -1);
+            return leader == -1 ? std::set<std::string>{} : std::set<std::string>{ std::to_string(leader) };
+        }
+        else {
+            int follower = pkb.getFollowsFollowerNum(stoi(arg), -1);
+            return follower == -1 ? std::set<std::string>{} : std::set<std::string>{ std::to_string(follower) };
+        }
+    case FOLLOWS_STAR:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getFollowsStarLeaderNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getFollowsStarFollowerNums(stoi(arg)));
+        }
+    case PARENT:
+        if (type == GET_LEADER) {
+            int parent = pkb.getParentParentNum(stoi(arg), -1);
+            return parent == -1 ? std::set<std::string>{} : std::set<std::string>{ std::to_string(parent) };
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getParentChildNums(stoi(arg)));
+        }
+    case PARENT_STAR:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getParentStarParentNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getParentStarChildNums(stoi(arg)));
+        }
+    case CALLS:
+        if (type == GET_LEADER) {
+            return pkb.getCallsCallerNames(arg);
+        }
+        else {
+            return pkb.getCallsCalleeNames(arg);
+        }
+    case CALLS_STAR:
+        if (type == GET_LEADER) {
+            return pkb.getCallsStarCallerNames(arg);
+        }
+        else {
+            return pkb.getCallsStarCalleeNames(arg);
+        }
+    case NEXT:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getPreviousStmtNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getNextStmtNums(stoi(arg)));
+        }
+    case NEXT_STAR:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getStarPreviousStmtNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getStarNextStmtNums(stoi(arg)));
+        }
+    case AFFECTS:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getAffectsModifierStmtNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getAffectsUserStmtNums(stoi(arg)));
+        }
+    case AFFECTS_STAR:
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getAffectsStarModifierStmtNums(stoi(arg)));
+        }
+        else {
+            return Utility::convertIntSetToStrSet(pkb.getAffectsStarUserStmtNums(stoi(arg)));
+        }
+    case USES_P:
+        return  pkb.getUsesVarsFromProc(arg);
+    case USES_S:
+        return pkb.getUsesVarsFromStmt(stoi(arg));
+    case MODIFIES_S:
+        return pkb.getModifiesVarsFromStmt(stoi(arg));
+    case MODIFIES_P:
+        return pkb.getModifiesVarsFromProc(arg);
+    default:
+        throw PQLSyntaxError("Unknown relationship type");
+
+    }
+}
 
 bool SuchThatHandler:: getIsPkbEmpty(Relationship relationship) {
     switch (relationship) {
@@ -474,14 +564,22 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             else {
                 tempTable = ResultTable({ leftArg, rightArg });
                 for (int i = 0; i < currLeftValues.size(); i++) {
-                    for (int j = 0; j < currRightValues.size(); j++) {
-                        std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
-                        bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
-                        if (isInRelationship) {
-                            tempTable.insertTuple(tuple);
-                        }
+                    std::set<std::string>synVals = getRelationshipSet(relationship, GET_FOLLOWER, currLeftValues[i]);
+                    for (std::string synVal : synVals) {
+                        std::vector<std::string> tuple = std::vector{ currLeftValues[i], synVal };
+                        tempTable.insertTuple(tuple);
                     }
                 }
+                //tempTable = ResultTable({ leftArg, rightArg });
+                //for (int i = 0; i < currLeftValues.size(); i++) {
+                //    for (int j = 0; j < currRightValues.size(); j++) {
+                //        std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
+                //        bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
+                //        if (isInRelationship) {
+                //            tempTable.insertTuple(tuple);
+                //        }
+                //    }
+                //}
             }
             if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
                 result.setResultTrue(false);
@@ -541,18 +639,16 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
             for (int i = 0; i < resultTable.getColNum(); i++) {
                 std::vector<std::string> tuple = resultTable.getTuple(i);
-                for (int j = 0; j < synOutsideTableVec.size(); j++) {
-                    bool isInRelationship;
-                    if (resultTable.containsSyn(leftArg)) {
-                        isInRelationship = getIsInRelationship(relationship, tuple[synInTableIndex], synOutsideTableVec[j]);
-                    }
-                    else {
-                        isInRelationship = getIsInRelationship(relationship, synOutsideTableVec[j], tuple[synInTableIndex]);
-                    }
-                    
-                    if (isInRelationship) {
-                        tempTable.insertTuple(Utility::mergeTuple(tuple, { synOutsideTableVec[j] }, {-1}));
-                    }
+                std::set<std::string>synVals;
+                if (resultTable.containsSyn(leftArg)) {
+                    synVals = getRelationshipSet(relationship, GET_FOLLOWER, tuple[synInTableIndex]);
+                }
+                else {
+                    synVals = getRelationshipSet(relationship, GET_LEADER, tuple[synInTableIndex]);
+                }
+
+                for (std::string synOutside : synVals) {
+                    tempTable.insertTuple(Utility::mergeTuple(tuple, { synOutside }, {-1}));
                 }
             }
             if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {

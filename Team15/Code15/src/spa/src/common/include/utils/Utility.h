@@ -428,4 +428,12 @@ public:
         }
         return resultTuple;
     }
+
+    inline static const std::set<std::string> convertIntSetToStrSet(std::set<int> intSet) {
+        std::set<std::string> strSet;
+        for (int i : intSet) {
+            strSet.insert(std::to_string(i));
+        }
+        return strSet;
+    }
 };
