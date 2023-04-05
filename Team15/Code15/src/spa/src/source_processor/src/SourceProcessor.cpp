@@ -27,19 +27,19 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllFollowsStar(extractor->getFollowsStarRS());
     pkb->addAllParent(extractor->getParentRS());
     pkb->addAllParentStar(extractor->getParentStarRS());
-    pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllUsesStmt(extractor->getUsesRS());
-    pkb->addAllAssignPatterns(extractor->getAssignsRS());
-    pkb->addAllIfPatterns(extractor->getIfRS());
-    pkb->addAllWhilePatterns(extractor->getWhileRS());
     pkb->addAllUsesProc(extractor->getProcedureUsesRS());
+    pkb->addAllModifiesStmt(extractor->getModifiesRS());
     pkb->addAllModifiesProc(extractor->getProcedureModifiesRS());
     pkb->addAllCalls(extractor->getCallsRS());
     pkb->addAllCallsStar(extractor->getCallsStarRS());
+    pkb->addAllNext(extractor->getNextRS());
     pkb->addAllWithRead(extractor->getReadLineNumToVarName());
     pkb->addAllWithPrint(extractor->getPrintLineNumToVarName());
     pkb->addAllWithCall(extractor->getCallLineNumToProcName());
-    pkb->addAllNext(extractor->getNextRS());
+    pkb->addAllAssignPatterns(extractor->getAssignsRS());
+    pkb->addAllWhilePatterns(extractor->getWhileRS());
+    pkb->addAllIfPatterns(extractor->getIfRS());
 }
 
 void SourceProcessor::printParsedProgram() {

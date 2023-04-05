@@ -123,10 +123,6 @@ public:
 
 	bool isFollowsEmpty();
 
-	bool isFollowsLeaderEmpty();
-
-	bool isFollowsFollowerEmpty();
-
 	//get follows*
 	std::set<int> getFollowsStarLeaderNums(int followerNum);
 
@@ -135,10 +131,6 @@ public:
 	bool areInFollowsStarRelationship(int leaderNum, int followerNum);
 
 	bool isFollowsStarEmpty();
-
-	bool isFollowsStarLeaderEmpty();
-
-	bool isFollowsStarFollowerEmpty();
 
 	//get parent
 	int getParentParentNum(int childNum, int invalidParentNum);
@@ -149,10 +141,6 @@ public:
 
 	bool isParentEmpty();
 
-	bool isParentParentEmpty();
-
-	bool isParentChildEmpty();
-
 	//get parent*
 	std::set<int> getParentStarParentNums(int childNum);
 
@@ -162,23 +150,15 @@ public:
 
 	bool isParentStarEmpty();
 
-	bool isParentStarParentEmpty();
-
-	bool isParentStarChildEmpty();
-
 	//get uses statement-variable
 	std::unordered_map<int, std::set<std::string>> getStmtUsesVarsMap();
 	
 	std::set<std::string> getUsesVarsFromStmt(int stmtNum);
 
-	std::set<int> getUsesStmtsFromVar(std::string varName);
-
 	bool areInUsesStmtRelationship(int stmtNum, std::string varName);
 
 	//get uses procedure-variable
 	std::set<std::string> getUsesVarsFromProc(std::string procName);
-
-	std::set<std::string> getUsesProcsFromVar(std::string varName);
 
 	bool areInUsesProcRelationship(std::string procName, std::string varName);
 
@@ -187,14 +167,10 @@ public:
 	
 	std::set<std::string> getModifiesVarsFromStmt(int stmtNum);
 
-	std::set<int> getModifiesStmtsFromVar(std::string varName);
-
 	bool areInModifiesStmtRelationship(int stmtNum, std::string varName);
 
 	//get modifies procedure-variable
 	std::set<std::string> getModifiesVarsFromProc(std::string procName);
-
-	std::set<std::string> getModifiesProcsFromVar(std::string varName);
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
@@ -207,10 +183,6 @@ public:
 
 	bool isCallsEmpty();
 
-	bool isCallsCallerEmpty();
-
-	bool isCallsCalleeEmpty();
-
 	//get calls*
 	std::set<std::string> getCallsStarCallerNames(std::string calleeName);
 
@@ -219,10 +191,6 @@ public:
 	bool areInCallsStarRelationship(std::string callerName, std::string calleeName);
 
 	bool isCallsStarEmpty();
-
-	bool isCallsStarCallerEmpty();
-
-	bool isCallsStarCalleeEmpty();
 
 	//get next
 	std::unordered_map<int, std::set<int>> getPreviousToNextStmtsMap();
@@ -235,10 +203,6 @@ public:
 
 	bool isNextEmpty();
 
-	bool isPreviousStmtEmpty();
-
-	bool isNextStmtEmpty();
-
 	//get next*
 	void prepareNextStarTable();
 
@@ -250,15 +214,9 @@ public:
 
 	bool isNextStarEmpty();
 
-	bool isStarPreviousStmtEmpty();
-
-	bool isStarNextStmtEmpty();
-
 	void clearNextStar();
 
 	//get affects
-	std::unordered_map<int, std::set<int>> getAffectsModifierToUserStmtsMap();
-
 	std::set<int> getAffectsModifierStmtNums(int userStmtNum);
 
 	std::set<int> getAffectsUserStmtNums(int modifierStmtNum);
@@ -267,15 +225,9 @@ public:
 
 	bool isAffectsEmpty();
 
-	bool isAffectsModifierStmtEmpty();
-
-	bool isAffectsUserStmtEmpty();
-
 	void clearAffects();
 
 	//get affects*
-	std::unordered_map<int, std::set<int>> getAffectsStarModifierToUserStmtsMap();
-
 	std::set<int> getAffectsStarModifierStmtNums(int userStmtNum);
 
 	std::set<int> getAffectsStarUserStmtNums(int modifierStmtNum);
@@ -283,10 +235,6 @@ public:
 	bool areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum);
 
 	bool isAffectsStarEmpty();
-
-	bool isAffectsStarModifierStmtEmpty();
-
-	bool isAffectsStarUserStmtEmpty();
 
 	void clearAffectsStar();
 
@@ -300,8 +248,6 @@ public:
 	std::string getWithCallProcName(int callLineNum, std::string invalidProcName);
 
 	//get assign pattern
-	std::string getAssignVarFromStmt(int assignStmtNum);
-
 	std::set<int> getAssignStmtsFromVar(std::string lhsVarName);
 
 	std::set<std::vector<std::string>> getAssignExprsFromStmt(int assignStmtNum);
@@ -310,21 +256,15 @@ public:
 
 	std::set<std::vector<std::string>> getAssignExprsFromVar(std::string lhsVarName);
 
-	std::set<std::string> getAssignVarsFromExpr(std::vector<std::string> rhsExpr);
-
 	//get while pattern
 	std::set<int> getWhileStmtsWithVars();
 
 	std::set<int> getWhileStmtsFromVar(std::string controlVarName);
 
-	std::set<std::string> getWhileVarsFromStmt(int whileStmtNum);
-
 	//get if pattern
 	std::set<int> getIfStmtsWithVars();
 
 	std::set<int> getIfStmtsFromVar(std::string controlVarName);
-
-	std::set<std::string> getIfVarsFromStmt(int ifStmtNum);
 
 private:
 	EntityTable<std::string> procTable;
