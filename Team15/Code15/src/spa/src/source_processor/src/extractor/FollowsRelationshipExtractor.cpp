@@ -46,6 +46,6 @@ tuple<unordered_map<int, int>, unordered_map<int, set<int>>> extractFollowsRelat
         }
     }
     unordered_map<int, set<int>> followsStarRS;
-    generateTransitiveRelationship(followsRS, followsStarRS);
+    generateTransitiveRelationship(followsRS, followsStarRS, false);
     return make_tuple(followsRS, followsStarRS);
 }
