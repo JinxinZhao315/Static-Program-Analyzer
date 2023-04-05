@@ -29,7 +29,7 @@ tuple<unordered_map<int, set<int>>, unordered_map<int, set<int> >> extractParent
     }
     // store info for last procedure
     unordered_map<int, set<int>> parentsStarRS;
-    generateTransitiveRelationship(parentsRS, parentsStarRS);
+    generateTransitiveRelationship(parentsRS, parentsStarRS, false);
 
     return make_tuple(parentsRS, parentsStarRS);
 }

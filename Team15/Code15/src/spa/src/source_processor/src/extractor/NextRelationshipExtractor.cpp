@@ -111,7 +111,7 @@ unordered_map<int, set<int>> extractNextRS(const vector<Line>& program, const un
 
 unordered_map<int, set<int>> extractNextStarRS(const unordered_map<int, set<int>>& nextRS) {
     unordered_map<int, set<int>> nextStarRS;
-    generateTransitiveRelationship(nextRS, nextStarRS);
+    generateTransitiveRelationship(nextRS, nextStarRS, true);
     return nextStarRS;
 }
 

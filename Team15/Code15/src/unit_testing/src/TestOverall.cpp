@@ -41,6 +41,7 @@ string source7 = "../../../../Tests15/source-7.txt";
 string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
 string source_with = "../../../../Tests15/with.txt";
 string source_ifwhile = "../../../../Tests15/source-ifwhile.txt";
+string source_optimization = "../../../../Tests15/source-optimization.txt";
 #elif _WIN32
 string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
 string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
