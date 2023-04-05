@@ -43,22 +43,6 @@ public:
 		return allStmtsSet;
 	}
 
-	inline std::string getVarFromStmt(int assignStmtNum) {
-		auto pair = stmtToVarMap.find(assignStmtNum);
-		if (pair == stmtToVarMap.end()) {
-			return "0";
-		}
-		return pair->second;
-	}
-
-	inline std::set<std::string> getVarsFromStmt(int whileOrIfStmtNum) {
-		auto pair = stmtToVarsMap.find(whileOrIfStmtNum);
-		if (pair == stmtToVarsMap.end()) {
-			return {};
-		}
-		return pair->second;
-	}
-
 	inline std::set<int> getStmtsFromVar(std::string varName) {
 		auto pair = varToStmtsMap.find(varName);
 		if (pair == varToStmtsMap.end()) {
@@ -86,14 +70,6 @@ public:
 	inline std::set<std::vector<std::string>> getExprsFromVar(std::string lhsVarName) {
 		auto pair = varToExprsMap.find(lhsVarName);
 		if (pair == varToExprsMap.end()) {
-			return {};
-		}
-		return pair->second;
-	}
-
-	inline std::set<std::string> getVarsFromExpr(std::vector<std::string> rhsExpr) {
-		auto pair = exprToVarsMap.find(rhsExpr);
-		if (pair == exprToVarsMap.end()) {
 			return {};
 		}
 		return pair->second;
