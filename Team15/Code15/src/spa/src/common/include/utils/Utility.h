@@ -63,6 +63,19 @@ enum ClauseType
     PATTERN
 };
 
+enum PriorityLevel {
+    ZERO = 0,
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+    FIVE = 5,
+    SIX = 6,
+    SEVEN = 7,
+    EIGHT = 8,
+    NINE = 9
+};
+
 class Utility
 {
 public:
@@ -118,6 +131,9 @@ public:
     inline static const std::string varName = "varName";
     inline static const std::string stmtNum = "stmt#";
     inline static const std::string value = "value";
+
+    inline static const std::vector<PriorityLevel> priorityList = { 
+        ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE };
 
     inline static const Keywords keywords = Keywords();
 
@@ -435,5 +451,9 @@ public:
             strSet.insert(std::to_string(i));
         }
         return strSet;
+    }
+
+    inline static const bool comparator(pair<int, PriorityLevel> a, pair<int, PriorityLevel> b) {
+        return a.second > b.second;
     }
 };

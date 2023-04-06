@@ -23,11 +23,8 @@ public:
 
 private:
     PKB pkb;
-    // helper function
-    bool isArgUsedLater(std::vector<std::string> selectedSyn, std::vector<std::string> argList, int currArgPos);
-    std::vector<ClauseEvalGroup> separateEvalGroup(ClauseEvalGroup group);
-    ResultTable evalGroup(ClauseEvalGroup group, bool& isEarlyExit,
-    std::multimap<std::string, std::string>synonymTable, std::vector<std::string>selectedElemName);
+    void evalClause(Clause* clause, bool& isEarlyExit, std::multimap<std::string, std::string> synonymTable, 
+        ResultTable& resultTable, std::vector<std::string> synUsageSequence, int& currSynEvalPos);
 };
 
 

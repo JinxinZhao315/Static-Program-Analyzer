@@ -8,38 +8,37 @@ void Query::setSynonymTable(std::multimap<std::string, std::string> synonymTable
 	this->synonymTable = synonymTable;
 }
 
-void Query::setSelectClause(SelectClause selectClause) {
-	this->selectClause = selectClause;
+void Query::setClauseList(std::vector<Clause*> evalClauses) {
+	this->clauseList = evalClauses;
 }
 
-void Query::setPatternClauseVec(std::vector<PatternClause> patternClauseVec) {
-	this->patternClauseVec = patternClauseVec;
+void Query::addSelectClause(SelectClause* selectClause) {
+	clauseList.push_back(selectClause);
 }
-
-void Query::setSuchThatClauseVec(std::vector<SuchThatClause> suchThatClauseVec) {
-	this->suchThatClauseVec = suchThatClauseVec;
+void Query::addAllSuchThatClauses(std::vector<SuchThatClause*>& suchThatClauseVec) {
+	for (SuchThatClause* suchThatClause: suchThatClauseVec) {
+		clauseList.push_back(suchThatClause);
+	}
 }
-
-void Query::setWithClauseVec(std::vector<WithClause> withClauseVec) {
-	this->withClauseVec = withClauseVec;
+void Query::addAllPatternClauses(std::vector<PatternClause*>& patternClauseVec) {
+	for (PatternClause* patternClause : patternClauseVec) {
+		clauseList.push_back(patternClause);
+	}
+}
+void Query::addAllWithClauses(std::vector<WithClause*>& withClauseVec) {
+	for (WithClause* withClause : withClauseVec) {
+		clauseList.push_back(withClause);
+	}
 }
 
 std::multimap<std::string, std::string> Query::getSynonymTable() {
 	return synonymTable;
 }
 
-SelectClause Query::getSelectClause() {
-	return selectClause;
+std::vector<Clause*> Query::getClauseList() {
+	return clauseList;
 }
 
-std::vector<PatternClause> Query::getPatternClauseVec() {
-	return patternClauseVec;
-}
-
-std::vector<SuchThatClause> Query::getSuchThatClauseVec() {
-	return suchThatClauseVec;
-}
-
-std::vector<WithClause> Query::getWithClauseVec() {
-	return withClauseVec;
+SelectClause* Query::getSelectClause() {
+	return (static_cast<SelectClause*>(clauseList.back()));
 }

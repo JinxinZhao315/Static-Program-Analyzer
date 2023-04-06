@@ -49,10 +49,10 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
 
 void QueryTokenizer::tokenizeClauses(std::string input,
                                      std::multimap<std::string, std::string> varTable,
-                                     SelectClause& selectClause,
-                                     std::vector<SuchThatClause>& suchThatClauseVec,
-                                     std::vector<PatternClause>& patternClauseVec,
-									 std::vector<WithClause>& withClauseVec) {
+									 SelectClause*& selectClause,
+                                     std::vector<SuchThatClause*>& suchThatClauseVec,
+                                     std::vector<PatternClause*>& patternClauseVec,
+									 std::vector<WithClause*>& withClauseVec) {
 	std::string keyword = extractKeyword(input);
 	if (keyword != SELECT) {
 		throw PQLSyntaxError("PQL syntax error: No 'select' keyword");
@@ -112,7 +112,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 	}
 }
 
-void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClause>& withClauseVec, std::multimap<std::string, std::string> varTable) {
+void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClause*>& withClauseVec, std::multimap<std::string, std::string> varTable) {
 	std::size_t equalSignIndex = input.find_first_of('=');
 	if (equalSignIndex == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid with clause, no \"=\" sign");
@@ -135,11 +135,11 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 	Ref secondArg = tokenizeRef(secondArgStr, varTable);
 
 
-	withClauseVec.push_back(WithClause(firstArg, secondArg));
+	withClauseVec.push_back(new WithClause(firstArg, secondArg));
 }
 
 void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, 
-	SelectClause& selectClause) {
+	SelectClause*& selectClause) {
 	std::size_t elemEndIndex = input.find_first_of(Utility::whiteSpaces);
 	std::vector<std::string> elemStrList;
 	//multi clause
@@ -162,17 +162,17 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 		elemStrList.push_back(elem);
 		input = Utility::trim(input.substr(elemEndIndex + 1), Utility::whiteSpaces);
 	}
-	std::vector<Elem> elemList;
+	std::vector<Elem*> elemList;
 	for (std::string elemStr : elemStrList) {
 		if (syntaxChecker.validateAttrRef(elemStr)) {
 			std::size_t periodIndex = elemStr.find_first_of(".");
 			std::string synName = elemStr.substr(0, periodIndex);
 			std::string attrName = elemStr.substr(periodIndex + 1);
-			Elem elem(AttrRef(synName, varTable.find(synName)->second, attrName));
+			Elem* elem = new Elem(AttrRef(synName, varTable.find(synName)->second, attrName));
 			elemList.push_back(elem);
 		}
 		else if (syntaxChecker.validateSynonym(elemStr)) {
-			Elem elem(elemStr);
+			Elem* elem = new Elem(elemStr);
 			elemList.push_back(elem);
 		}
 		else {
@@ -180,10 +180,10 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 		}
 	}
 	
-	selectClause = SelectClause(elemList);
+	selectClause = new SelectClause(elemList);
 }
 
-void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec) {
+void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause*>& suchThatClauseVec) {
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t nextComma = input.find_first_of(",");
 	std::size_t nextRightPar = input.find_first_of(")");
@@ -201,12 +201,12 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 		throw PQLSyntaxError("PQL syntax error: Invalid such that relationship");
 	}
 	input = input.substr(nextRightPar + 1);
-	suchThatClauseVec.push_back(SuchThatClause(relationship, leftArg, rightArg));
+	suchThatClauseVec.push_back(new SuchThatClause(relationship, leftArg, rightArg));
 }
 
 void QueryTokenizer::tokenizePatternClause(std::string& input,
                                            std::multimap<std::string, std::string> varTable,
-                                           std::vector<PatternClause>& patternClauseVec) {
+                                           std::vector<PatternClause*>& patternClauseVec) {
 	std::size_t nextLeftPar = input.find_first_of("(");
 	std::size_t firstComma = input.find_first_of(",");
     std::size_t secondComma = input.find_first_of(",", firstComma + 1);
@@ -270,7 +270,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
         throw PQLSyntaxError("PQL syntax error: Invalid pattern clause if syntax");
     }
     input = input.substr(nextRightPar + 1);
-    patternClauseVec.push_back(PatternClause(synonym, firstArg, secondArg, thirdArg));
+    patternClauseVec.push_back(new PatternClause(synonym, firstArg, secondArg, thirdArg));
 }
 
 std::string QueryTokenizer::extractKeyword(std::string& input) {

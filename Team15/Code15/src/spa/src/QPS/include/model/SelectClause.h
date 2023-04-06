@@ -7,13 +7,13 @@
 
 class SelectClause : public Clause {
 private:
-    std::vector<Elem> synNames;
+    std::vector<Elem*> selectedElements;
 public:
 	SelectClause();
 
-	SelectClause(std::vector<Elem> synNames);
+	SelectClause(std::vector<Elem*>& selectedElements);
 
 	~SelectClause();
 
-	std::vector<Elem> getSynNameVec();
+	std::vector<Elem*> getSelectedElements();
 };

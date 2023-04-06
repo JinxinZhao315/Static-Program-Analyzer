@@ -41,7 +41,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
     )
 
 
-add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h)
+add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h "src/QPS/include/tokenizer/QueryEvalSeqOptimizer.h" "src/QPS/src/tokenizer/QueryEvalSeqOptimizer.cpp")
 
 
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

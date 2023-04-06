@@ -178,7 +178,7 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
     }
 }
 
-std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit) {
+std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
         if (isEarlyExit) {
             return {};
@@ -186,7 +186,7 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         std::vector<int> synNameIndex;
         //get the index of each synName in synList
         for (auto & elem : selectedElem) {
-            auto it = std::find(synList.begin(), synList.end(), elem.getSynName());
+            auto it = std::find(synList.begin(), synList.end(), elem->getSynName());
             synNameIndex.push_back(it - synList.begin());
         }
 
@@ -194,11 +194,11 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
         for (int i = 0; i < colNum; i++) {
             std::string tuple;
             for (int j = 0; j < selectedElem.size(); j++) {
-                if (selectedElem[j].isElemSynonym()) {
+                if (selectedElem[j]->isElemSynonym()) {
                     tuple += resultTable[synNameIndex[j]][i] + " ";
                 }
                 else {
-                    tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j].getAttrRef(), pkb) + " ";
+                    tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j]->getAttrRef(), pkb) + " ";
                 }
             }
             //pop the last white space
@@ -209,7 +209,7 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
     }
     else if (selectedElem.size() == 1) {
         //not BOOLEAN or BOOLEAN is a synonym
-        if (selectedElem[0].getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+        if (selectedElem[0]->getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
             if (isEarlyExit) {
                 return {};
             }
@@ -223,16 +223,16 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem> selectedE
             //        selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
             //    }
             //}
-            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0].getSynName());
+            std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0]->getSynName());
 
             int synIndex = it - synList.begin();
             std::set<std::string> selectedSynResult;
             for (int i = 0; i < colNum; i++) {
-                if (selectedElem[0].isElemSynonym()) {
+                if (selectedElem[0]->isElemSynonym()) {
                     selectedSynResult.insert(resultTable[synIndex][i]);
                 }
                 else {
-                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
+                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0]->getAttrRef(), pkb));
                 }
             }
             return selectedSynResult;

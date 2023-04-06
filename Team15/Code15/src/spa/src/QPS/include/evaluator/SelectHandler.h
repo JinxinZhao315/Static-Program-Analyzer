@@ -13,7 +13,7 @@ class SelectHandler{
 
 public:
     explicit SelectHandler(PKB &pkb);
-    std::vector<Elem> evalSelect(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
+    std::vector<Elem*> evaluate(SelectClause selectClause, std::multimap<std::string, std::string>& varTable, ResultTable& resultTable);
 
 private:
     PKB pkb;

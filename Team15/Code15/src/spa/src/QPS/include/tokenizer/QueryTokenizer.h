@@ -24,15 +24,15 @@ public:
 	std::pair<std::string, std::string> tokenizeQuery(std::string input);
 	void tokenizeClauses(std::string input,
         std::multimap<std::string, std::string> varTable,
-		SelectClause& selectClause,
-		std::vector<SuchThatClause>& suchThatClauseVec,
-		std::vector<PatternClause>& patternClauseVec,
-		std::vector<WithClause>& withClauseVec);
+		SelectClause*& selectClause,
+		std::vector<SuchThatClause*>& suchThatClauseVec,
+		std::vector<PatternClause*>& patternClauseVec,
+		std::vector<WithClause*>& withClauseVec);
 	std::multimap<std::string, std::string> tokenizeDeclaration(std::string declaration);
-	void tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, SelectClause& selectClause);
-	void tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause>& suchThatClauseVec);
-	void tokenizePatternClause(std::string& input, std::multimap<std::string, std::string> varTable, std::vector<PatternClause>& patternClauseVec);
-	void tokenizeWithClause(std::string& input, std::vector<WithClause>& withClauseVec, std::multimap<std::string, std::string> varTable);
+	void tokenizeSelectClause(std::string& input, std::multimap<std::string, std::string> varTable, SelectClause*& selectClause);
+	void tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause*>& suchThatClauseVec);
+	void tokenizePatternClause(std::string& input, std::multimap<std::string, std::string> varTable, std::vector<PatternClause*>& patternClauseVec);
+	void tokenizeWithClause(std::string& input, std::vector<WithClause*>& withClauseVec, std::multimap<std::string, std::string> varTable);
 private:
     PQLSyntaxChecker syntaxChecker;
 	std::string extractKeyword(std::string &input);

@@ -210,13 +210,35 @@ std::set<std::string> SuchThatHandler::getRelationshipSet(Relationship relations
             return Utility::convertIntSetToStrSet(pkb.getAffectsStarUserStmtNums(stoi(arg)));
         }
     case USES_P:
-        return  pkb.getUsesVarsFromProc(arg);
+        if (type == GET_LEADER) {
+            return  pkb.getUsesProcsFromVar(arg);
+        }
+        else {
+            return pkb.getUsesVarsFromProc(arg);
+        }
+        
     case USES_S:
-        return pkb.getUsesVarsFromStmt(stoi(arg));
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getUsesStmtsFromVar(arg));
+        }
+        else {
+            return pkb.getUsesVarsFromStmt(stoi(arg));
+        }
     case MODIFIES_S:
-        return pkb.getModifiesVarsFromStmt(stoi(arg));
+        if (type == GET_LEADER) {
+            return Utility::convertIntSetToStrSet(pkb.getModifiesStmtsFromVar(arg));
+        }
+        else {
+            return pkb.getModifiesVarsFromStmt(stoi(arg));
+        }
+        
     case MODIFIES_P:
-        return pkb.getModifiesVarsFromProc(arg);
+        if (type == GET_LEADER) {
+            return  pkb.getModifiesProcsFromVar(arg);
+        }
+        else {
+            return  pkb.getModifiesVarsFromProc(arg);
+        }
     default:
         throw PQLSyntaxError("Unknown relationship type");
 
@@ -604,16 +626,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
                         tempTable.insertTuple(tuple);
                     }
                 }
-                //tempTable = ResultTable({ leftArg, rightArg });
-                //for (int i = 0; i < currLeftValues.size(); i++) {
-                //    for (int j = 0; j < currRightValues.size(); j++) {
-                //        std::vector<std::string> tuple = std::vector{ currLeftValues[i], currRightValues[j] };
-                //        bool isInRelationship = getIsInRelationship(relationship, tuple[0], tuple[1]);
-                //        if (isInRelationship) {
-                //            tempTable.insertTuple(tuple);
-                //        }
-                //    }
-                //}
             }
             if (tempTable.isTableEmpty() && !tempTable.isSynListEmpty()) {
                 result.setResultTrue(false);
@@ -699,8 +711,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             result.setResultTrue(false);
             return result;
         }
-
-        /*result.setClauseResult(tempTable);*/
     }
 
 

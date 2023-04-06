@@ -57,7 +57,7 @@ public:
 
     std::vector<std::string> getTuple(int index);
 
-    std::set<std::string> getSelectedResult(std::vector<Elem> selectedElem, PKB &pkb, bool isEarlyExit);
+    std::set<std::string> getSelectedResult(std::vector<Elem*> selectedElem, PKB &pkb, bool isEarlyExit);
 
     std::string getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb);
 

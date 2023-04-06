@@ -10,115 +10,118 @@ PQLOneSynonymCheck::~PQLOneSynonymCheck() {
 
 bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
 	std::multimap<std::string, std::string> varTable = query.getSynonymTable();
-	SelectClause selectClause = query.getSelectClause();
-    std::vector<PatternClause> patternClauseVec = query.getPatternClauseVec();
-	std::vector<SuchThatClause> suchThatClauseVec = query.getSuchThatClauseVec();
-    std::vector<WithClause> withClauseVec = query.getWithClauseVec();
+    std::vector<Clause*> clauseList = query.getClauseList();
 
     // All the synonyms used in clauses must be declared exactly once.
 	for (auto iter = varTable.begin(); iter != varTable.end(); iter++) {
-
 		if (varTable.count(iter->first) != 1) {
 			return false;
 		}
 	}
-
-
-	// Select Clause
-    std::vector<Elem> elemVec = selectClause.getSynNameVec();
-
-    for (Elem elem : elemVec) {
-        if (elemVec.size() > 1) {
-            if (varTable.count(elem.getSynName()) != 1) { //multiple synonyms, can't be BOOLEAN
-                return false;
-            }
-        }
-        else {
-            if (elem.getSynName() == "BOOLEAN" && varTable.count(elem.getSynName()) > 1) { //if single syn and BOOLEAN, count can be 0 or 1
-                return false;
-            }
-            else if (elem.getSynName() != "BOOLEAN" && varTable.count(elem.getSynName()) != 1) { //single syn, count can only be 1
-                return false;
-            }
-        }
-    }
-
-    // SuchThat Clause
-    for (SuchThatClause suchThatClause: suchThatClauseVec) {
-        std::string suchThatLeftArg = suchThatClause.getLeftArg();
-        std::string suchThatRightArg = suchThatClause.getRightArg();
-        ReferenceType suchThatLeftType = Utility::getEnumReferenceType(suchThatLeftArg);
-        ReferenceType suchThatRightType = Utility::getEnumReferenceType(suchThatRightArg);
-        switch (suchThatLeftType)
+    for (Clause *clause : clauseList) {
+        switch (clause->getType())
         {
-        case SYNONYM: {
-            if (varTable.count(suchThatLeftArg) != 1) {
-                return false;
+        case SUCH_THAT: {
+            SuchThatClause* suchThatClause = (static_cast<SuchThatClause*>(clause));
+            std::string suchThatLeftArg = suchThatClause->getLeftArg();
+            std::string suchThatRightArg = suchThatClause->getRightArg();
+            ReferenceType suchThatLeftType = Utility::getEnumReferenceType(suchThatLeftArg);
+            ReferenceType suchThatRightType = Utility::getEnumReferenceType(suchThatRightArg);
+            switch (suchThatLeftType)
+            {
+            case SYNONYM: {
+                if (varTable.count(suchThatLeftArg) != 1) {
+                    return false;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            switch (suchThatRightType)
+            {
+            case SYNONYM: {
+                if (varTable.count(suchThatRightArg) != 1) {
+                    return false;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            break;
+        }
+        case PATTERN: {
+            PatternClause* patternClause = (static_cast<PatternClause*>(clause));
+            std::string patternSynonym = patternClause->getPatternSynonym();
+            std::string patternFirstArg = patternClause->getFirstArg();
+            ReferenceType patternSynonymType = Utility::getEnumReferenceType(patternSynonym);
+            ReferenceType patternFirstType = Utility::getEnumReferenceType(patternFirstArg);
+            switch (patternSynonymType)
+            {
+            case SYNONYM: {
+                if (varTable.count(patternSynonym) != 1) {
+                    return false;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            switch (patternFirstType)
+            {
+            case SYNONYM: {
+                if (varTable.count(patternFirstArg) != 1) {
+                    return false;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            break;
+        }
+        case WITH: {
+            WithClause* withClause = (static_cast<WithClause*>(clause));
+            if (withClause->isFirstArgAttrRef()) {
+                AttrRef firstAttrRef = withClause->getFirstArgAttrRef();
+                std::string firstArg = firstAttrRef.getSynName();
+                if (varTable.count(firstArg) != 1) {
+                    return false;
+                }
+            }
+            if (withClause->isSecondArgAttrRef()) {
+                AttrRef secondAttrRef = withClause->getSecondArgAttrRef();
+                std::string secondArg = secondAttrRef.getSynName();
+                if (varTable.count(secondArg) != 1) {
+                    return false;
+                }
+            }
+            break;
+        }
+        case SELECT: {
+            SelectClause* selectClause = (static_cast<SelectClause*>(clause));
+            std::vector<Elem*> elemVec = selectClause->getSelectedElements();
+
+            for (Elem* elem : elemVec) {
+                if (elemVec.size() > 1) {
+                    if (varTable.count(elem->getSynName()) != 1) { //multiple synonyms, can't be BOOLEAN, so each syn must appear exactly once
+                        return false;
+                    }
+                }
+                else {
+                    if (elem->getSynName() == "BOOLEAN" && varTable.count(elem->getSynName()) > 1) { //if single syn and BOOLEAN, count can be 0 or 1
+                        return false;
+                    }
+                    else if (elem->getSynName() != "BOOLEAN" && varTable.count(elem->getSynName()) != 1) { //single syn, count can only be 1
+                        return false;
+                    }
+                }
             }
             break;
         }
         default:
             break;
-        }
-        switch (suchThatRightType)
-        {
-        case SYNONYM: {
-            if (varTable.count(suchThatRightArg) != 1) {
-                return false;
-            }
-            break;
-        }
-        default:
-            break;
-        }
-    }
-
-    // Pattern Clause
-    for (PatternClause patternClause: patternClauseVec) {
-        // In a pattern clause, only the pattern synonym and the first argument can be synonyms
-        std::string patternSynonym = patternClause.getPatternSynonym();
-        std::string patternFirstArg = patternClause.getFirstArg();
-        ReferenceType patternSynonymType = Utility::getEnumReferenceType(patternSynonym);
-        ReferenceType patternFirstType = Utility::getEnumReferenceType(patternFirstArg);
-        switch (patternSynonymType)
-        {
-        case SYNONYM: {
-            if (varTable.count(patternSynonym) != 1) {
-                return false;
-            }
-            break;
-        }
-        default:
-            break;
-        }
-        switch (patternFirstType)
-        {
-        case SYNONYM: {
-            if (varTable.count(patternFirstArg) != 1) {
-                return false;
-            }
-            break;
-        }
-        default:
-            break;
-        }
-    }
-
-    //attrRef synName should be in varTable
-    for (WithClause withClause : withClauseVec) {
-        if (withClause.isFirstArgAttrRef()) {
-            AttrRef firstAttrRef = withClause.getFirstArgAttrRef();
-            std::string firstArg = firstAttrRef.getSynName();
-            if (varTable.count(firstArg) != 1) {
-                return false;
-            }
-        }
-        if (withClause.isSecondArgAttrRef()) {
-            AttrRef secondAttrRef = withClause.getSecondArgAttrRef();
-            std::string secondArg = secondAttrRef.getSynName();
-            if (varTable.count(secondArg) != 1) {
-                return false;
-            }
         }
     }
 

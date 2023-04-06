@@ -3,6 +3,7 @@
 #include "SelectClause.h"
 #include "WithClause.h"
 #include "SuchThatClause.h"
+#include "ClauseEvalGroup.h"
 #pragma once
 
 class Query
@@ -10,21 +11,17 @@ class Query
 
 private:
 	std::multimap<std::string, std::string> synonymTable;
-    SelectClause selectClause;
-    std::vector<PatternClause> patternClauseVec;
-	std::vector<SuchThatClause> suchThatClauseVec;
-	std::vector<WithClause> withClauseVec;
+	std::vector<Clause*> clauseList;
 public:
 	Query();
 	~Query();
 	void setSynonymTable(std::multimap<std::string, std::string> synonymTable);
-	void setSelectClause(SelectClause selectClause);
-	void setPatternClauseVec(std::vector<PatternClause> patternClauseVec);
-	void setSuchThatClauseVec(std::vector<SuchThatClause> suchThatClauseVec);
-	void setWithClauseVec(std::vector<WithClause> withClauseVec);
+	void setClauseList(std::vector<Clause*> evalClauses);
+	void addSelectClause(SelectClause* selectClase);
+	void addAllSuchThatClauses(std::vector<SuchThatClause*>& suchThatClauseVec);
+	void addAllPatternClauses(std::vector<PatternClause*>& patternClauseVec);
+	void addAllWithClauses(std::vector<WithClause*>& withClauseVec);
 	std::multimap<std::string, std::string> getSynonymTable();
-	SelectClause getSelectClause();
-    std::vector<PatternClause> getPatternClauseVec();
-    std::vector<SuchThatClause> getSuchThatClauseVec();
-	std::vector<WithClause> getWithClauseVec();
+	std::vector<Clause*> getClauseList();
+	SelectClause* getSelectClause();
 };
