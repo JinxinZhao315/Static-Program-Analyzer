@@ -102,6 +102,7 @@ jobs:
           - { source: source-ifwhile.txt, query: query-ifwhile.txt, output: ifwhile.xml }
           - { source: source-parent.txt, query: query-parent.txt, output: parent.xml }
           - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
+          - { source: source-next.txt, query: query-next.txt, output: next.xml }
 
     steps:
       - uses: actions/checkout@v3
