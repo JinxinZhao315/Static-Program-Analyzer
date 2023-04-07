@@ -54,6 +54,7 @@ string uses_modifies = "../../../../../../Tests15/source-usesmodifies.txt";
 string source_with = "../../../../../../Tests15/with.txt";
 string source_ifwhile = "../../../../../../Tests15/source-ifwhile.txt";
 string source_optimization = "../../../../../../Tests15/source-optimization.txt";
+string source_affects = "../../../../../../Tests15/source-affects.txt";
 #endif
 
 TEST_CASE("Overall test : source-usesmodifies.txt 1")
@@ -537,6 +538,16 @@ TEST_CASE("Overall test : source-sample1.txt 3")
 {
     string filename = source_sample1;
     string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Affects test : 1")
+{
+    string filename = source_affects;
+    string queryStr = "stmt s; Select BOOLEAN such that Affects* (4, 14)";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };

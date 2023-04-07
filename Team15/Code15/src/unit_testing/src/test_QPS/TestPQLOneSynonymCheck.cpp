@@ -65,7 +65,7 @@ TEST_CASE("PQLOneSynonym test 5") {
 		cout << "syntax correct" << endl;
 	}
 	catch (PQLSyntaxError e) {
-		cout << "syntax error 1*1 found, PQLOneSynonym test 5 failed" << endl;
+		cout << "syntax error 1*1 found, PQLOneSynonym test 5 passed" << endl;
 	}
 }
 TEST_CASE("PQLOneSynonym test 6") {
