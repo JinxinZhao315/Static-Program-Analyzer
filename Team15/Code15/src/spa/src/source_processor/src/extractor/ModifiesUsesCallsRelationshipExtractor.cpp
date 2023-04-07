@@ -64,7 +64,7 @@ ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, co
         }
     }
     // determine transitive relationship callsStar
-    generateTransitiveRelationship(result.callsRS, result.callsStarRS);
+    generateTransitiveRelationship(result.callsRS, result.callsStarRS, false);
     // determine transitive modification of variables through procedure calls
     updateProcModifiesAndUsesRS(result.procedureModifiesRS, result.procedureUsesRS, result.callsStarRS);
     updateCallStmtModifiesAndUsesRS(result.procedureModifiesRS, result.procedureUsesRS, result.modifiesRS, result.usesRS, callToProcName, callToStmtContainerStack);
