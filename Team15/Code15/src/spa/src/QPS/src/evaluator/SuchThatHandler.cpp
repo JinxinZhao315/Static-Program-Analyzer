@@ -606,7 +606,6 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             std::set<string> leftSynValuesStrSet = Utility::getResultFromPKB(pkb, leftDeType);
             std::set<string> rightSynValuesStrSet = Utility::getResultFromPKB(pkb, rightDeType);
             std::vector<std::string> currLeftValues(leftSynValuesStrSet.begin(), leftSynValuesStrSet.end());
-            std::vector<std::string> currRightValues(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end());
             if (isSynLeftRightArgSame) {
                 tempTable = ResultTable({ leftArg });
                 for (int i = 0; i < currLeftValues.size(); i++) {
@@ -620,9 +619,11 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
             else {
                 tempTable = ResultTable({ leftArg, rightArg });
                 for (int i = 0; i < currLeftValues.size(); i++) {
-                    std::set<std::string>synVals = getRelationshipSet(relationship, GET_FOLLOWER, currLeftValues[i]);
-                    for (std::string synVal : synVals) {
-                        std::vector<std::string> tuple = std::vector{ currLeftValues[i], synVal };
+                    std::set<std::string>followers = getRelationshipSet(relationship, GET_FOLLOWER, currLeftValues[i]);
+                    std::vector<std::string> synVals;
+                    std::set_intersection(rightSynValuesStrSet.begin(), rightSynValuesStrSet.end(), followers.begin(), followers.end(), std::back_inserter(synVals));
+                    for (std::string rightVal : synVals) {
+                        std::vector<std::string> tuple = std::vector{ currLeftValues[i], rightVal };
                         tempTable.insertTuple(tuple);
                     }
                 }
@@ -685,12 +686,14 @@ Result SuchThatHandler::evaluate(Relationship relationship, SuchThatClause suchT
 
             for (int i = 0; i < resultTable.getColNum(); i++) {
                 std::vector<std::string> tuple = resultTable.getTuple(i);
-                std::set<std::string>synVals;
+                std::vector<std::string>synVals;
                 if (resultTable.containsSyn(leftArg)) {
-                    synVals = getRelationshipSet(relationship, GET_FOLLOWER, tuple[synInTableIndex]);
+                    std::set<std::string> followers = getRelationshipSet(relationship, GET_FOLLOWER, tuple[synInTableIndex]);
+                    std::set_intersection(synOutsideTableSet.begin(), synOutsideTableSet.end(), followers.begin(), followers.end(), std::back_inserter(synVals));
                 }
                 else {
-                    synVals = getRelationshipSet(relationship, GET_LEADER, tuple[synInTableIndex]);
+                    std::set<std::string> leader = getRelationshipSet(relationship, GET_LEADER, tuple[synInTableIndex]);
+                    std::set_intersection(synOutsideTableSet.begin(), synOutsideTableSet.end(), leader.begin(), leader.end(), std::back_inserter(synVals));
                 }
                 for (std::string synOutside : synVals) {
                     tempTable.insertTuple(Utility::mergeTuple(tuple, { synOutside }, {-1}));
