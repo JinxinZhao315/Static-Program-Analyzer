@@ -155,10 +155,14 @@ public:
 	
 	std::set<std::string> getUsesVarsFromStmt(int stmtNum);
 
+	std::set<int> getUsesStmtsFromVar(std::string varName);
+
 	bool areInUsesStmtRelationship(int stmtNum, std::string varName);
 
 	//get uses procedure-variable
 	std::set<std::string> getUsesVarsFromProc(std::string procName);
+
+	std::set<std::string> getUsesProcsFromVar(std::string varName);
 
 	bool areInUsesProcRelationship(std::string procName, std::string varName);
 
@@ -167,10 +171,14 @@ public:
 	
 	std::set<std::string> getModifiesVarsFromStmt(int stmtNum);
 
+	std::set<int> getModifiesStmtsFromVar(std::string varName);
+
 	bool areInModifiesStmtRelationship(int stmtNum, std::string varName);
 
 	//get modifies procedure-variable
 	std::set<std::string> getModifiesVarsFromProc(std::string procName);
+
+	std::set<std::string> getModifiesProcsFromVar(std::string varName);
 
 	bool areInModifiesProcRelationship(std::string procName, std::string varName);
 
