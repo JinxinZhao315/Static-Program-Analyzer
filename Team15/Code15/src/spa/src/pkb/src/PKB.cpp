@@ -279,6 +279,10 @@ std::set<std::string> PKB::getUsesVarsFromStmt(int stmtNum) {
 	return usesStmtTable.getAllRights(stmtNum);
 }
 
+std::set<int> PKB::getUsesStmtsFromVar(std::string varName) {
+	return usesStmtTable.getAllLefts(varName);
+}
+
 bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
 	return usesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
@@ -286,6 +290,10 @@ bool PKB::areInUsesStmtRelationship(int stmtNum, std::string varName) {
 //get uses procedure-variable
 std::set<std::string> PKB::getUsesVarsFromProc(std::string procName) {
 	return usesProcTable.getAllRights(procName);
+}
+
+std::set<std::string> PKB::getUsesProcsFromVar(std::string varName) {
+	return usesProcTable.getAllLefts(varName);
 }
 
 bool PKB::areInUsesProcRelationship(std::string procName, std::string varName) {
@@ -301,6 +309,10 @@ std::set<std::string> PKB::getModifiesVarsFromStmt(int stmtNum) {
 	return modifiesStmtTable.getAllRights(stmtNum);
 }
 
+std::set<int> PKB::getModifiesStmtsFromVar(std::string varName) {
+	return modifiesStmtTable.getAllLefts(varName);
+}
+
 bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
 	return modifiesStmtTable.inManyToManyRelationship(stmtNum, varName);
 }
@@ -308,6 +320,10 @@ bool PKB::areInModifiesStmtRelationship(int stmtNum, std::string varName) {
 //get modifies procedure-variable
 std::set<std::string> PKB::getModifiesVarsFromProc(std::string procName) {
 	return modifiesProcTable.getAllRights(procName);
+}
+
+std::set<std::string> PKB::getModifiesProcsFromVar(std::string varName) {
+	return modifiesProcTable.getAllLefts(varName);
 }
 
 bool PKB::areInModifiesProcRelationship(std::string procName, std::string varName) {
