@@ -213,4 +213,14 @@ bool PQLRefConsistentLogic::isWithRefCompatible(std::string leftAttrType, std::s
 	return actualRightValueType == actualLeftValueType;
 }
 
+bool PQLRefConsistentLogic::isAttrRefCompatible(std::string attrType, std::string attrName) {
+	auto synEntry = withLogicMap.find(attrType);
+	//synKey can be PROCEDURE, CALL, VARIABLE, READ, WHILE, IF, ASSIGN, STMT, PRINT, CONSTANT
+	if (synEntry == withLogicMap.end()) {
+		return false;
+	}
+	std::unordered_map<std::string, std::string>synEntryMap  = synEntry->second;
+	return synEntryMap.find(attrName) != synEntryMap.end();
+}
+
 PQLRefConsistentLogic::~PQLRefConsistentLogic() {}

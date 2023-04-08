@@ -55,6 +55,7 @@ string source_with = "../../../../../../Tests15/with.txt";
 string source_ifwhile = "../../../../../../Tests15/source-ifwhile.txt";
 string source_optimization = "../../../../../../Tests15/source-optimization.txt";
 string source_affects = "../../../../../../Tests15/source-affects.txt";
+string source_invalid1 = "../../../../../../Tests15/g_invalid/1_source.txt";
 #endif
 
 TEST_CASE("Overall test : source-usesmodifies.txt 1")
@@ -558,6 +559,15 @@ TEST_CASE("Overall test : optimization test 1") {
 TEST_CASE("Overall test : with test 1") {
     string filename = source_with;
     string queryStr = "stmt s; constant c; Select s with s.stmt# = c.value";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "TRUE" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : invalid syntax 1") {
+    string filename = source_invalid1;
+    string queryStr = "stmt s; variable v; constant const; procedure p; Select p.stmt#";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };

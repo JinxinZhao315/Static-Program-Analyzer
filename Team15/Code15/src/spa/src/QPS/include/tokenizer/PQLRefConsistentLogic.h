@@ -84,4 +84,6 @@ public:
 	bool isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightValue);
 
 	bool isWithRefCompatible(std::string leftAttrType, std::string leftAttrName, std::string rightAttrType, std::string rightAttrName);
+
+	bool isAttrRefCompatible(std::string attrType, std::string attrName);
 };

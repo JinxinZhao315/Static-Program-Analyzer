@@ -145,6 +145,18 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
                 }
                 break;
             }
+            case SELECT: {
+                SelectClause* selectClause = (static_cast<SelectClause*>(clause));
+                std::vector<Elem*> elemList = selectClause->getSelectedElements();
+                for (Elem* e : elemList) {
+                    if (!e->isElemSynonym()){
+                        AttrRef attr = e->getAttrRef();
+                        std::string attrType = attr.getSynType();
+                        std::string attrName= attr.getAttrName();
+                        return refConsistentLogic->isAttrRefCompatible(attrType, attrName);
+                    }
+                }
+            }
         default:
             break;
         }

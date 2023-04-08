@@ -121,7 +121,7 @@ SyntaxError
 25- pattern invalid pattern assign parameter (stmtref,_)
 stmt s; assign a; variable v;
 Select BOOLEAN pattern a(s,_)
-SyntaxError
+SemanticError
 5000
 26- such that invalid Follows parameter(entref, int)
 stmt s; procedure p;
@@ -136,122 +136,122 @@ TRUE
 29- such that invalid Follows parameter
 procedure p, q;
 Select BOOLEAN such that Follows(p,q)
-SyntaxError
+SemanticError
 5000
 30- such that invalid Follows* parameter
 procedure p, q;
 Select BOOLEAN such that Follows*(p,q)
-SyntaxError
+SemanticError
 5000
 31- such that invalid Follows parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Follows(s,v)
-SyntaxError
+SemanticError
 5000
 32- such that invalid Follows parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Follows(v,s)
-SyntaxError
+SemanticError
 5000
 33- such that invalid Parent parameter
 procedure p, q;
 Select BOOLEAN such that Parent(p,q)
-SyntaxError
+SemanticError
 5000
 34- such that invalid Parent parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Parent(s,v)
-SyntaxError
+SemanticError
 5000
 35- such that invalid Parent parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Parent(v,s)
-SyntaxError
+SemanticError
 5000
 36- such that invalid Parent* parameter
 procedure p, q;
 Select BOOLEAN such that Parent*(p,q)
-SyntaxError
+SemanticError
 5000
 37- such that invalid Calls parameter
 stmt s,s1;
 Select BOOLEAN such that Calls(s,s1)
-SyntaxError
+SemanticError
 5000
 38- such that invalid Calls parameter
 stmt s,s1; variable v;
 Select BOOLEAN such that Calls(s,v)
-SyntaxError
+SemanticError
 5000
 39- such that invalid Calls parameter
 stmt s,s1; variable v;
 Select BOOLEAN such that Calls(v,s1)
-SyntaxError
+SemanticError
 5000
 40- such that invalid Next parameter
 procedure p, q;
 Select BOOLEAN such that Next(p,q)
-SyntaxError
+SemanticError
 5000
 41- such that invalid Next parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Next(s,v)
-SyntaxError
+SemanticError
 5000
 42- such that invalid Next parameter
 procedure p, q; variable v; stmt  s;
 Select BOOLEAN such that Next(s,v)
-SyntaxError
+SemanticError
 5000
 43- such that invalid Next* parameter
 procedure p, q;
 Select BOOLEAN such that Next*(p,q)
-SyntaxError
+SemanticError
 5000
 44- such that invalid Affects parameter
 procedure p, q;
 Select BOOLEAN such that Affects(p,q)
-SyntaxError
+SemanticError
 5000
 45- such that invalid Affects parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Affects(s,v)
-SyntaxError
+SemanticError
 5000
 46- such that invalid Affects parameter
 procedure p, q; variable v; stmt s;
 Select BOOLEAN such that Affects(v,s)
-SyntaxError
+SemanticError
 5000
 47- such that invalid Affects* parameter
 procedure p, q;
 Select BOOLEAN such that Affects*(p,q)
-SyntaxError
+SemanticError
 5000
 48- such that invalid ModifiesP parameter
 procedure p, q; stmt s;
 Select BOOLEAN such that Modifies(p,s)
-SyntaxError
+SemanticError
 5000
 49- such that invalid ModifiesS parameter
 procedure p, q; stmt s, s1;
 Select BOOLEAN such that Modifies(s,s1)
-SyntaxError
+SemanticError
 5000
 50- such that invalid ModifiesS parameter
 procedure p, q; stmt s, s1; variable v;
 Select BOOLEAN such that Modifies(v,s1)
-SyntaxError
+SemanticError
 5000
 51- such that invalid UsesP parameter
 procedure p, q; stmt s;
 Select BOOLEAN such that Uses(p,s)
-SyntaxError
+SemanticError
 5000
 52- such that invalid UsesS parameter
 procedure p, q; stmt s, s1;
 Select BOOLEAN such that Uses(s,s1)
-SyntaxError
+SemanticError
 5000
 53- Invalid with clause IDENT with space
 Select
@@ -281,7 +281,7 @@ SyntaxError
 58- Invalid while pattern stmtref parameter
 while w; stmt s;
 Select s pattern w(s, _)
-SyntaxError
+SemanticError
 5000
 59- Invalid while pattern second parameter not underscore
 while w; stmt s; variable v;
@@ -331,22 +331,22 @@ SyntaxError
 68- Invalid ref compare type  int to string
 stmt s; variable v;
 Select BOOLEAN with s.stmt# = v.varName
-SyntaxError
+SemanticError
 5000
 69- Invalid ref compare type  int to string
 stmt s; variable v;
 Select BOOLEAN with 1 = "hello"
-SyntaxError
+SemanticError
 5000
 70- Invalid ref compare type  string to int
 stmt s; variable v;
 Select BOOLEAN with "hello" = 1
-SyntaxError
+SemanticError
 5000
 71- Invalid ref compare type procName = int
 stmt s; variable v; call c;
 Select BOOLEAN with c.procName = 1
-SyntaxError
+SemanticError
 5000
 72- Invalid attribute ref
 stmt s; variable v; constant const
@@ -356,45 +356,45 @@ SyntaxError
 73- Invalid attribute ref
 stmt s; variable v; constant const; procedure p;
 Select p.stmt#
-SyntaxError
+SemanticError
 5000
 74- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a;
 Select a.varName
-SyntaxError
+SemanticError
 5000
 75- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a;
 Select s.varName
-SyntaxError
+SemanticError
 5000
 76- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w;
 Select w.varName
-SyntaxError
+SemanticError
 5000
 77- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w; call c;
 Select c.varName
-SyntaxError
+SemanticError
 5000
 78- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w; read r;
 Select r.procName
-SyntaxError
+SemanticError
 5000
 79- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w; print pr; read r;
 Select pr.procName
-SyntaxError
+SemanticError
 5000
 80- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w; print pr; read r; if ifs;
 Select ifs.value
-SyntaxError
+SemanticError
 5000
 81- Invalid attribute ref
 stmt s; variable v; constant const; procedure p; assign a; while w; print pr; read r; if ifs;
 Select v.value
-SyntaxError
+SemanticError
 5000
