@@ -14,7 +14,8 @@ class PatternHandler:  public ClauseHandler {
 public:
     explicit PatternHandler(PKB& pkb);
 //    Result evalPattern(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable);
-    Result evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) override;
+    Result evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable,
+        int& synEvalPosition, std::vector<std::string>evalSynList) override;
 private:
     string GET_FROM_VAR = "get_from_var";
     string GET_ALL = "get_all";

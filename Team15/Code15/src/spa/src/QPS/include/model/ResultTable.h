@@ -29,9 +29,9 @@ public:
     //result table with multi synonyms and multi tuples
     ResultTable(std::vector<std::vector<std::string>> resultTable, std::vector<std::string> synList);
 
-    int getRowNum();
+    int getSynNum();
 
-    int getColNum();
+    int getTupleNum();
 
     void resultTableCheckAndAdd(string arg, PKB pkb, string DeType);
     

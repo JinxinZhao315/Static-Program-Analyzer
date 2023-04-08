@@ -23,6 +23,9 @@ private:
     bool getIsPkbEmpty(Relationship relationship);
     std::set<std::string> getRelationshipSet(Relationship relationship, string type, string arg);
     void clearPkbTable(Relationship relatiionship);
+    void evaluateOneSynSuchThat(Relationship relationship, std::string synArg, std::string constArg,
+        bool isleftArgSyn, std::multimap<std::string, std::string>& synonymTable, ResultTable& resultTable,
+        int& synEvalPosition, std::vector<std::string>evalSynList);
 };
 
 

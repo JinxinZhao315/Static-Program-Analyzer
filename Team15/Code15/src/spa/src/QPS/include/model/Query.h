@@ -3,7 +3,6 @@
 #include "SelectClause.h"
 #include "WithClause.h"
 #include "SuchThatClause.h"
-#include "ClauseEvalGroup.h"
 #pragma once
 
 class Query

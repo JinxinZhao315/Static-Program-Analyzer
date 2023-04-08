@@ -123,11 +123,11 @@ std::vector<std::vector<std::string>> ResultTable::getResultTable() {
     return this->resultTable;
 }
 
-int ResultTable::getRowNum() {
+int ResultTable::getSynNum() {
     return this->rowNum;
 }
 
-int ResultTable::getColNum() {
+int ResultTable::getTupleNum() {
     return this->colNum;
 }
 
@@ -143,14 +143,14 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef attrRef, PKB &pkb) {
+std::string ResultTable::getAttrRefValue(int synIndex, int tupleIndex, AttrRef attrRef, PKB &pkb) {
     //attrbute is in the table
     if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
         attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
-        return resultTable[synIndex][colIndex];
+        return resultTable[synIndex][tupleIndex];
     }
     else if (attrRef.getSynType() == "call") {
-        int callLineNum = stoi(resultTable[synIndex][colIndex]);
+        int callLineNum = stoi(resultTable[synIndex][tupleIndex]);
         std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
         if (calledProcName == "-1") {
             //should throw error
@@ -158,7 +158,7 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
         return calledProcName;
     }
     else if (attrRef.getSynType() == "read") {
-        int readLineNum = stoi(resultTable[synIndex][colIndex]);
+        int readLineNum = stoi(resultTable[synIndex][tupleIndex]);
         std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
         if (readVarName == "-1") {
             //should throw error
@@ -166,7 +166,7 @@ std::string ResultTable::getAttrRefValue(int synIndex, int colIndex, AttrRef att
         return readVarName;
     }
     else if (attrRef.getSynType() == "print") {
-        int printLineNum = stoi(resultTable[synIndex][colIndex]);
+        int printLineNum = stoi(resultTable[synIndex][tupleIndex]);
         std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
         if (printVarName == "-1") {
             //should throw error

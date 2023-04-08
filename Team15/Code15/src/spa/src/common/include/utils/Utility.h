@@ -5,6 +5,7 @@
 #include <iterator>
 #include <set>
 #include "exceptions/PQLSyntaxError.h"
+#include "QPS/include/model/AttrRef.h"
 #include "pkb/include/PKB.h"
 
 #pragma once
@@ -455,5 +456,40 @@ public:
 
     inline static const bool comparator(pair<int, PriorityLevel> a, pair<int, PriorityLevel> b) {
         return a.second > b.second;
+    }
+
+    inline static const std::string getAttrRefValue(std::string synVal, AttrRef attrRef, PKB& pkb) {
+        //attrbute is in the table
+        if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
+            attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
+            return synVal;
+        }
+        else if (attrRef.getSynType() == "call") {
+            int callLineNum = stoi(synVal);
+            std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
+            if (calledProcName == "-1") {
+                //should throw error
+            }
+            return calledProcName;
+        }
+        else if (attrRef.getSynType() == "read") {
+            int readLineNum = stoi(synVal);
+            std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
+            if (readVarName == "-1") {
+                //should throw error
+            }
+            return readVarName;
+        }
+        else if (attrRef.getSynType() == "print") {
+            int printLineNum = stoi(synVal);
+            std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
+            if (printVarName == "-1") {
+                //should throw error
+            }
+            return printVarName;
+        }
+        else {
+            return "-1";
+        }
     }
 };

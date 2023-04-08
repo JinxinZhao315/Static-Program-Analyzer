@@ -77,7 +77,8 @@ vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType,
 }
 
 
-Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable,
+    int& synEvalPosition, std::vector<std::string>evalSynList) {
 
     string patternSynon = patternClause.getPatternSynonym();
     string firstArg = patternClause.getFirstArg();

@@ -7,7 +7,6 @@
 #include "QPS/include/evaluator/PatternHandler.h"
 #include "QPS/include/evaluator/SuchThatHandler.h"
 #include "common/include/utils/Utility.h"
-#include "../model/ClauseEvalGroup.h"
 #include <numeric>
 #include <string>
 #include <set>

@@ -2,7 +2,8 @@
 
 WithHandler::WithHandler(PKB& pkb) : ClauseHandler(pkb) {}
 
-Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable) {
+Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable,
+	int& synEvalPosition, std::vector<std::string>evalSynList) {
 	Result result;
 	std::vector<std::string> synList = resultTable.getSynList();
 	if (withClause.isFirstArgAttrRef() && !withClause.isSecondArgAttrRef()) {
@@ -12,18 +13,23 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
 		std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), firstSynName);
 		int firstSynIndex = it - synList.begin();
-		int tupleNum = resultTable.getColNum();
-		ResultTable tempResultTable({ firstSynName });
-		for (int col = 0; col < tupleNum; col++) {
-			std::string firstAttrRefValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
+		int tupleNum = resultTable.getTupleNum();
+		ResultTable tempTable(resultTable.getSynList());
+		for (int tupleIndex = 0; tupleIndex < tupleNum; tupleIndex++) {
+			std::vector<std::string> tuple = resultTable.getTuple(tupleIndex);
+			std::string firstAttrRefValue = Utility::getAttrRefValue(tuple[firstSynIndex], withClause.getFirstArgAttrRef(), pkb);
 			if (firstAttrRefValue == secondConstValue) {
-				tempResultTable.insertTuple({ resultTable.getTuple(col)[firstSynIndex] });
+				tempTable.insertTuple({ tuple });
 			}
 		}
-		if (tempResultTable.isTableEmpty()) {
+		
+		if (tempTable.isTableEmpty()) {
 			result.setResultTrue(false);
+			return result;
 		}
-		result.setClauseResult(tempResultTable);
+		removeUselessSyns({firstSynName}, resultTable, evalSynList, synEvalPosition);
+		resultTable = tempTable;
+		
 	}
 	else if (withClause.isFirstArgAttrRef() && withClause.isSecondArgAttrRef()){
 		std::string firstSynName = withClause.getFirstArgAttrRef().getSynName();
@@ -36,20 +42,22 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		std::vector<std::string>::iterator secondIt = std::find(synList.begin(), synList.end(), secondSynName);
 		int firstSynIndex = firstIt - synList.begin();
 		int secondSynIndex = secondIt - synList.begin();
-		int tupleNum = resultTable.getColNum();
-		ResultTable tempResultTable({ firstSynName, secondSynName });
-		for (int col = 0; col < tupleNum; col++) {
-			std::string firstAttrRefValue = resultTable.getAttrRefValue(firstSynIndex, col, withClause.getFirstArgAttrRef(), pkb);
-			std::string secondAttrRefValue = resultTable.getAttrRefValue(secondSynIndex, col, withClause.getSecondArgAttrRef(), pkb);
+		ResultTable tempTable(resultTable.getSynList());
+		for (int tupleIndex = 0; tupleIndex < resultTable.getTupleNum(); tupleIndex++) {
+			std::vector<std::string> tuple = resultTable.getTuple(tupleIndex);
+			std::string firstAttrRefValue = Utility::getAttrRefValue(tuple[firstSynIndex], withClause.getFirstArgAttrRef(), pkb);
+			std::string secondAttrRefValue = Utility::getAttrRefValue(tuple[secondSynIndex], withClause.getSecondArgAttrRef(), pkb);
 			if (firstAttrRefValue == secondAttrRefValue) {
-				tempResultTable.insertTuple({ resultTable.getTuple(col)[firstSynIndex], resultTable.getTuple(col)[secondSynIndex] });
+				tempTable.insertTuple(tuple);
 			}
 		}
 
-		if (tempResultTable.isTableEmpty()) {
+		if (tempTable.isTableEmpty()) {
 			result.setResultTrue(false);
+			return result;
 		}
-		result.setClauseResult(tempResultTable);
+		removeUselessSyns({ firstSynName, secondSynName }, resultTable, evalSynList, synEvalPosition);
+		resultTable = tempTable;
 	}
 	else {
 		throw PQLSemanticError("The left arg of with clause should not be const value!");

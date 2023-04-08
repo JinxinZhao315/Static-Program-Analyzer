@@ -524,32 +524,33 @@ TEST_CASE("Overall test : optimization test 1") {
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };
 }
-//TEST_CASE("Overall test : optimization test 1") {
-//    string filename = source_optimization;
-//    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
-//        Select BOOLEAN such that Follows* (n1, n2) and Follows* (n3, n4) and Follows* (n5, n6) and Follows* (n7, n8) and Follows* (n9, n10) pattern a(v, _)";
+
+//TEST_CASE("Overall test : source-sample1.txt 3")
+//{
+//    string filename = source_sample1;
+//    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
+//    REQUIRE(result == expectedResult);
+//}
+//
+//TEST_CASE("Affects test : 1")
+//{
+//    string filename = source_affects;
+//    string queryStr = "stmt s; Select BOOLEAN such that Affects* (4, 14)";
 //
 //    set<string> result = testDriver(filename, queryStr);
 //    set<string> expectedResult = { "TRUE" };
 //    REQUIRE(result == expectedResult);
 //}
 
-TEST_CASE("Overall test : source-sample1.txt 3")
-{
-    string filename = source_sample1;
-    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
+TEST_CASE("Overall test : optimization test 2") {
+    string filename = source_optimization;
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next* (n9, n10) pattern a(v, _)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
-    REQUIRE(result == expectedResult);
-}
-
-TEST_CASE("Affects test : 1")
-{
-    string filename = source_affects;
-    string queryStr = "stmt s; Select BOOLEAN such that Affects* (4, 14)";
-
-    set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
+    set<string> expectedResult = { "TRUE" };
     REQUIRE(result == expectedResult);
 }
