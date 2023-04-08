@@ -5,12 +5,13 @@ WithHandler::WithHandler(PKB& pkb) : ClauseHandler(pkb) {}
 Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, std::multimap<std::string, std::string>& synonymTable,
 	int& synEvalPosition, std::vector<std::string>evalSynList) {
 	Result result;
-	std::vector<std::string> synList = resultTable.getSynList();
+	
 	if (withClause.isFirstArgAttrRef() && !withClause.isSecondArgAttrRef()) {
 		std::string secondConstValue = withClause.getSecondArgConstValue();
 		std::string firstSynName = withClause.getFirstArgAttrRef().getSynName();
 		std::string firstSynType = withClause.getFirstArgAttrRef().getSynType();
 		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
+		std::vector<std::string> synList = resultTable.getSynList();
 		std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), firstSynName);
 		int firstSynIndex = it - synList.begin();
 		int tupleNum = resultTable.getTupleNum();
@@ -38,6 +39,7 @@ Result WithHandler::evaluate(WithClause withClause, ResultTable& resultTable, st
 		std::string secondSynType = withClause.getSecondArgAttrRef().getSynType();
 		resultTable.resultTableCheckAndAdd(firstSynName, pkb, firstSynType);
 		resultTable.resultTableCheckAndAdd(secondSynName, pkb, secondSynType);
+		std::vector<std::string> synList = resultTable.getSynList();
 		std::vector<std::string>::iterator firstIt = std::find(synList.begin(), synList.end(), firstSynName);
 		std::vector<std::string>::iterator secondIt = std::find(synList.begin(), synList.end(), secondSynName);
 		int firstSynIndex = firstIt - synList.begin();

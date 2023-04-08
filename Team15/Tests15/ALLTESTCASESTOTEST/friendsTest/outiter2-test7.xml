@@ -1,0 +1,36 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>friendsTest</name><parsing_time_taken>54.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="8" Uses="1" Pattern="2" SuchThat="1" CondNum="16" RelNum="4" comment="Multiple chained such that + pattern clauses">1</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select a1 such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"2*y"_) pattern if1(v1, _, _) and a1(_, _) and a1("x", _"x"_) and if1(_,_,_)]]></querystr>
+<stuans>7</stuans>
+<correct>7</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="9" Uses="1" Pattern="2" SuchThat="1" CondNum="17" RelNum="4" comment="Multiple chained pattern + such that clauses">2</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select a1 pattern a1(v1, _"x * y"_) pattern if1(v1, _, _) and a1(_, _) and a1("x", _"z"_) and if1(_,_,_) such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1)]]></querystr>
+<stuans>15</stuans>
+<correct>15</correct>
+<time_taken>38.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="4" SuchThat="4" CondNum="20" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses">3</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select a1 such that Modifies(pr1, v1) pattern if1(v1, _, _) such that Uses(a1, v1) pattern a1(_, _) such that Calls(pr1, pr2) pattern if1(_,_,_) such that Next (2, 3) pattern a1("z", _"z"_)]]></querystr>
+<stuans>13</stuans>
+<correct>13</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="4" Uses="1" Pattern="2" SuchThat="2" CondNum="11" RelNum="2" comment="Multiple chained interleaving pattern + such that clauses">4</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select a1 pattern a1("z", _"z"_) such that Modifies(pr1, v1) pattern if1(v1, _, _) such that Uses(a1, v1)]]></querystr>
+<stuans>13</stuans>
+<correct>13</correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

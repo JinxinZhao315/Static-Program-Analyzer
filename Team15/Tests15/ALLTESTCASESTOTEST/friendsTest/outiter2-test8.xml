@@ -1,0 +1,113 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>friendsTest</name><parsing_time_taken>30.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnBoolean="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained such that + pattern clauses BOOLEAN target">1</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select BOOLEAN such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained pattern + such that clauses BOOLEAN target">2</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select BOOLEAN pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_) such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Calls="1" Modifies="1" Next="1" UnnamedVar="6" Uses="1" Pattern="3" SuchThat="4" CondNum="18" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses BOOLEAN target">3</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select BOOLEAN such that Modifies(pr1, v1) pattern if1(v1, _, _) such that Uses(a1, v1) pattern a1(_, _) such that Calls(pr1, pr2) pattern if1(_,_,_) such that Next (2, 3)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Modifies="1" UnnamedVar="3" Uses="1" Pattern="1" SuchThat="2" CondNum="9" RelNum="2" comment="Multiple chained interleaving pattern + such that clauses BOOLEAN target">4</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select BOOLEAN such that Modifies(pr1, v1) pattern if1(v1, _, _) such that Uses(a1, v1)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>23.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained such that + pattern clauses multiple common syn target">5</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr1> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>Second,First</stuans>
+<correct>First,Second</correct>
+<time_taken>44.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained such that + pattern clauses multiple common syn target">6</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr2> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>Third,Second</stuans>
+<correct>Second,Third</correct>
+<time_taken>36.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained such that + pattern clauses multiple common syns target">7</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr1, pr2> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>Second Third,First Second</stuans>
+<correct>First Second,Second Third</correct>
+<time_taken>44.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained such that + pattern clauses multiple common syns target">8</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr1, v1, pr2> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>First i Second,Second i Third</stuans>
+<correct>First i Second,Second i Third</correct>
+<time_taken>44.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained pattern + such that clauses multiple common syns target">9</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <a1, v1, pr1> pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_) such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1)]]></querystr>
+<stuans>12 i First,12 i Second</stuans>
+<correct>12 i First,12 i Second</correct>
+<time_taken>54.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained pattern + such that clauses multiple common and uncommon syns target">10</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <a1, pl, v1> pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_) such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1)]]></querystr>
+<stuans>12 8 i,12 1 i,12 2 i,12 18 i,12 3 i,12 4 i,12 5 i,12 6 i,12 13 i,12 7 i,12 9 i,12 10 i,12 16 i,12 11 i,12 12 i,12 14 i,12 15 i,12 17 i</stuans>
+<correct>12 1 i,12 2 i,12 3 i,12 4 i,12 5 i,12 6 i,12 7 i,12 8 i,12 9 i,12 10 i,12 11 i,12 12 i,12 13 i,12 14 i,12 15 i,12 16 i,12 17 i,12 18 i</correct>
+<time_taken>50.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses some duplicate syns target">11</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <a1, v1, v1> pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_) such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1)]]></querystr>
+<stuans>12 i i</stuans>
+<correct>12 i i</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses some repeating duplicate syns target">12</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr1, v1, pr1, v1> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>First i First i,Second i Second i</stuans>
+<correct>First i First i,Second i Second i</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses one common syn target">13</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <v1> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>i</stuans>
+<correct>i</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses one uncommon syn target">14</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pr1> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>Second,First</stuans>
+<correct>First,Second</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" Modifies="1" Next="1" UnnamedVar="7" Uses="1" Pattern="2" SuchThat="1" CondNum="15" RelNum="4" comment="Multiple chained interleaving such that + pattern clauses one uncommon syn target">15</id><querystr><![CDATA[stmt s1; assign a1; if if1; variable v1; procedure pr1, pr2; prog_line pl; Select <pl> such that Uses(a1, v1) and Calls(pr1, pr2) and Next (2, 3) and Modifies(pr1, v1) pattern a1(v1, _"i"_) pattern if1(v1, _, _) and a1(_, _) and if1(_,_,_)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</correct>
+<time_taken>42.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

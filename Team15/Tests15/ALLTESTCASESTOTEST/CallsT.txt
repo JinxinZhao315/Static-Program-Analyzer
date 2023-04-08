@@ -1,0 +1,250 @@
+1 - anything callsT anything
+procedure p, q;
+Select p such that Calls*(_, _)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+2 - anything callsT procedure synonym
+procedure p;
+Select p such that Calls*(_, p)
+CryingFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,haiz,herp,procedure,weeb
+5000
+3 - anything callsT procedure synonym
+procedure p, q;
+Select q such that Calls*(_, p)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+4 - anything callsT undeclared procedure synonym
+procedure p, q;
+Select BOOLEAN such that Calls*(_, p1)
+
+5000
+5 - procedure synonym callsT anything
+procedure p;
+Select p such that Calls*(p, _)
+Aang,CryingFrog,HappyFrog,Sokka,Sushi,a,b,complicated,infiniteTsukuyomi,lastStretch,neeh,procedure,roadtofivehundred,weeb
+5000
+6 - procedure synonym callsT anything
+procedure p, q;
+Select q such that Calls*(p, _)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+7 - undeclared procedure synonym callsT anything
+procedure p, q;
+Select procedure such that Calls*(procedure, _)
+
+5000
+8 - anything callsT procedure string
+procedure p;
+Select p such that Calls*(_, "procedure")
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+9 - anything callsT procedure string
+procedure p;
+Select p.procName such that Calls*(_, "Sokka")
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+10 - anything callsT procedure string
+
+Select BOOLEAN such that Calls*(_, "flavours")
+TRUE
+5000
+11 - anything callsT procedure string
+procedure p;
+Select p such that Calls*(_, "testing")
+
+5000
+12 - procedure string callsT anything
+procedure p;
+Select p such that Calls*("procedure", _)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+13 - procedure string callsT anything
+procedure p;
+Select p such that Calls*("race", _)
+
+5000
+14 - procedure string callsT anything
+procedure p, q;
+Select <p, q> such that Calls*("ifs", _)
+
+5000
+15 - procedure string callsT anything
+procedure p;
+Select <p, p> such that Calls*("haiz", _)
+
+5000
+16 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "haiz")
+neeh
+5000
+17 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "stmtNum")
+
+5000
+18 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "fanmin")
+procedure,Aang,CryingFrog,HappyFrog,Sokka,Sushi,complicated,infiniteTsukuyomi,lastStretch,weeb
+5000
+19 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "a")
+weeb,Aang,Sokka
+5000
+20 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "complicated")
+lastStretch, weeb, Aang, Sokka
+5000
+21 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "weeb")
+Sokka,Aang
+5000
+22 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "b")
+a,Aang,Sokka,weeb
+5000
+23 - procedure synonym callsT procedure string
+procedure p, q;
+Select p such that Calls*(q, "c")
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+24 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "oneLiner")
+
+5000
+25 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p, "honkai")
+
+5000
+26 - procedure synonym callsT procedure string
+procedure p;
+Select p such that Calls*(p1, "procedure")
+
+5000
+27 - procedure synonym callsT procedure string
+procedure p;
+Select BOOLEAN such that Calls*(p, "finalStretch")
+FALSE
+5000
+28 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("longNose", p)
+
+5000
+29 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("Aang", p)
+Sokka,herp,Sushi,a,b,c,complicated,fanmin,flavours,procedure,weeb
+5000
+30 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("godHelpMe", p)
+
+5000
+31 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("a", p)
+b,c
+5000
+32 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("HappyFrog", p)
+CryingFrog,Sushi,fanmin,procedure
+5000
+33 - procedure string callsT procedure synonym
+procedure procedure;
+Select procedure such that Calls*("procedure", procedure)
+fanmin
+5000
+34 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("flavours", p)
+
+5000
+35 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("RV", p)
+
+5000
+36 - procedure string callsT procedure synonym
+procedure p, p1;
+Select p1 such that Calls*("herp", p)
+
+5000
+37 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("neeh", p)
+haiz
+5000
+38 - procedure string callsT procedure synonym
+procedure p, p1;
+Select p such that Calls*("roadtofivehundred", p1)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+39 - procedure string callsT procedure synonym
+procedure p;
+Select p such that Calls*("CryingFrog", p)
+Sushi,fanmin,procedure
+5000
+40 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("CryingFRog", "Sushi")
+FALSE
+5000
+41 - procedure string callsT procedure string
+while w;
+Select w such that Calls*("CryingFrog", "Sushi")
+104,107,114,116,123,126,13,133,141,147,163,164,165,171,174,178,183,188,193,198,203,208,214,219,224,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,329,338,346,350,36,360,362,363,369,370,377,380,390,397,4,403,41,422,434,463,467,47,471,476,480,490,497,61,63,66,91,93,98
+5000
+42 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("HappyFrog", "CryingFrog")
+TRUE
+5000
+43 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("Sushi", "procedure")
+TRUE
+5000
+44 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("procedure", "fanmin")
+TRUE
+5000
+45 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("fanmin", "RV")
+FALSE
+5000
+46 - procedure string callsT procedure string
+
+Select BOOLEAN such that Calls*("RV", "flavours")
+FALSE
+5000
+47 - procedure synonym callsT procedure synonym
+procedure p, p1;
+Select <p, p1.procName> such that Calls*(p, p1)
+Aang Sokka,Aang herp,CryingFrog Sushi,HappyFrog CryingFrog,Sokka weeb,Sushi procedure,a b,b c,complicated flavours,complicated procedure,infiniteTsukuyomi procedure,lastStretch RV,lastStretch complicated,neeh haiz,procedure fanmin,roadtofivehundred RV,roadtofivehundred flavours,weeb Sushi,weeb a,weeb complicated,Aang Sushi,Aang a,Aang b,Aang c,Aang complicated,Aang fanmin,Aang flavours,Aang procedure,Aang weeb,CryingFrog fanmin,CryingFrog procedure,HappyFrog Sushi,HappyFrog fanmin,HappyFrog procedure,Sokka Sushi,Sokka a,Sokka b,Sokka c,Sokka complicated,Sokka fanmin,Sokka flavours,Sokka procedure,Sushi fanmin,a c,complicated fanmin,infiniteTsukuyomi fanmin,lastStretch fanmin,lastStretch flavours,lastStretch procedure,weeb b,weeb c,weeb fanmin,weeb flavours,weeb procedure
+5000
+48 - procedure synonym callsT procedure synonym
+procedure p, p1;
+Select p such that Calls*(p, p1)
+Aang,CryingFrog,HappyFrog,Sokka,Sushi,a,b,complicated,infiniteTsukuyomi,lastStretch,neeh,procedure,roadtofivehundred,weeb
+5000
+49 - procedure synonym callsT procedure synonym
+procedure p, p1;
+Select p1 such that Calls*(p, p2)
+
+5000
+50 - procedure synonym callsT procedure synonym
+procedure p, p1;
+Select BOOLEAN such that Calls*(p, p2)
+
+5000

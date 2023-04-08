@@ -1,0 +1,50 @@
+1 - procedure synonym modifies variable synonym
+procedure p; variable v;
+Select p such that Modifies(p, v)
+CryingFrog, HappyFrog, Sushi, procedure, fanmin, RV, flavours, complicated, weeb, a, b, c, ifs, infiniteTsukuyomi, haiz, herp, neeh, Aang, Sokka, stmtNum, oneLiner, honkai, race, lastStretch, longNose, godHelpMe, roadtofivehundred
+5000
+2 - procedure synonym modifies anything
+procedure p;
+Select <p, p> such that Modifies(p, _)
+CryingFrog CryingFrog, HappyFrog HappyFrog, Sushi Sushi, procedure procedure, fanmin fanmin, RV RV, flavours flavours, complicated complicated, weeb weeb, a a, b b, c c, ifs ifs, infiniteTsukuyomi infiniteTsukuyomi, haiz haiz, herp herp, neeh neeh, Aang Aang, Sokka Sokka, stmtNum stmtNum, oneLiner oneLiner, honkai honkai, race race, lastStretch lastStretch, longNose longNose, godHelpMe godHelpMe, roadtofivehundred roadtofivehundred
+5000
+3 - procedure synonym modifies variable string
+procedure p;
+Select <p.procName> such that Modifies(p, "singaporean")
+race
+5000
+4 - anything modifies variable synonym
+variable v;
+Select BOOLEAN such that Modifies(_, v)
+FALSE
+5000
+5 - procedure string modifies variable synonym
+variable v;
+Select v.varName such that Modifies("haiz", v)
+h, e, p, part, w
+5000
+6 - procedure string modifies anything
+
+Select BOOLEAN such that Modifies("a", _)
+TRUE
+5000
+7 - procedure string modifies variable string
+
+Select BOOLEAN such that Modifies("roadtofivehundred", "long")
+TRUE
+5000
+8 - procedure modifies procedure
+procedure p, p1;
+Select BOOLEAN such that Modifies(p, p1)
+FALSE
+5000
+9 - procedure modifies integer
+procedure p;
+Select p such that Modifies(p, 1)
+
+5000
+10 - procedure modifies statement
+procedure p; stmt s;
+Select BOOLEAN such that Modifies(p, s)
+FALSE
+5000

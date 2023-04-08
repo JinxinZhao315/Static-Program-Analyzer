@@ -1,0 +1,111 @@
+1 - 2 patterns same variable
+assign a; if ifs; variable v;
+Select v pattern a(v, _"banana"_) and ifs(v, _, _)
+banana,cherry,sour
+5000
+2 - 2 different pattern no variable
+assign a; variable v;if ifs;
+Select a pattern ifs("derp", _, _) and a("boruto", _"sausgae"_)
+134
+5000
+3 - 2 different pattern different variable
+read r; while w; variable v, v1; if ifs;
+Select r pattern w(v, _) pattern ifs(v1, _, _) 
+112,113,118,155,168,170,180,185,190,195,200,205,210,216,221,226,232,237,242,247,252,257,262,267,272,277,28,282,287,292,297,302,307,319,322,324,355,364,382,385,387,39,393,396,408,411,414,43,48,54,58,70,73,77,85,96
+5000
+4 - 2 different pattern different variable
+variable v, v1; assign a; if ifs; 
+Select v pattern a(v, "wait * 1000") and ifs(v1, _, _)
+wait
+5000
+5 - 2 pattern same variable
+procedure p; assign a; variable v;
+Select p pattern a(v, _) pattern a(v, _"( 1 / 4 )"_)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+6 - 2 pattern no variable
+assign a; variable v;
+Select a pattern a(_, _"harness + food + horns"_) and a("app", _)
+331
+5000
+7 - 2 pattern one variable
+assign a; variable v;
+Select v pattern a(_, _"kaichou + confess"_) and a(v, _)
+kaichou
+5000
+8 - 2 pattern same variable select assign
+assign a; variable v;
+Select a pattern a(v, _"salty + fishy"_) pattern a(v, _"( salty % 0 + fishy )"_)
+101
+5000
+9 - 2 pattern same pattern one have variable
+call c; if ifs;
+Select c pattern ifs("bitter", _, _) pattern ifs("cherry", _, _)
+11,121,122,131,140,149,151,152,18,22,29,312,321,325,330,339,423,424,499,500
+5000
+10 - 2 pattern one have variable select if
+if ifs; variable v;
+Select ifs pattern ifs("rc4", _, _) pattern ifs(v, _, _)
+35
+5000
+11 - 2 pattern same variable select var
+assign a; variable v;
+Select v pattern a(v, _"indian * indonesia"_) pattern a(v, _"laos"_)
+kiwi
+5000
+12 - 2 different pattern one variable select all
+call c; if ifs; while w; variable v;
+Select c pattern ifs("a", _, _) pattern w(v, _)
+11,121,122,131,140,149,151,152,18,22,29,312,321,325,330,339,423,424,499,500
+5000
+13 - 2 pattern different variable slecte var
+assign a; variable v, v1;
+Select v pattern a(v, _) pattern a(v1, _"bb * 67678"_)
+aa
+5000
+14 - 2 different pattern no variable select all
+assign a; procedure p; if ifs;
+Select p pattern ifs(_, _, _) and a("y", _"x"_)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+15 - 2 pattern no variable select all
+assign a; procedure p;
+Select p pattern a(_, _"salmon + 3"_) and a("rice", _)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+16 - 2 different pattern one variable select var
+if ifs; while w; variable v; assign a;
+Select v pattern w(v, _) pattern a("cc", "aa") 
+a,appa,australian,azula,b,banana,bitter,boruto,c,chinese,complicated,confesses,disgusting,else,f,fishy,happy,hayasaka,hi,japanese,kaguya,kiwi,laos,malay,mongolian,nuns,print,procedure,quality,r,rc4,re,read,singaporean,sour,sucks,sword,tembu,tt,wait,weak,while,x,xt,xu,xxx,xxy,xxz,xyx,xyy,xyz,xzx,xzy,xzz,yc,yup,yxx,yxy,yxz,yyx,yyy,yyz,yzx,yzy,yzz,z,zxx,zxy,zxz,zyx,zyy,zyz,zzx,zzy,zzz
+5000
+17 - 2 different pattern different variable select pattern
+variable v, v1; assign a; if ifs; 
+Select a pattern a(v, "loser + nerd") and ifs(v1, _, _)
+30
+5000
+18 - 2 different pattern same variable select all
+call c; assign a; if ifs; variable v;
+Select c pattern a(v, _"indian"_) and ifs(v, _, _)
+11,121,122,131,140,149,151,152,18,22,29,312,321,325,330,339,423,424,499,500
+5000
+19 - 2 different pattern one variable select pattern
+if ifs; while w; variable v;
+Select ifs pattern ifs("kiwi", _, _) pattern w(v, _)
+399
+5000
+20 - 2 different pattern same variable selct pattern
+assign a; if ifs; variable v;
+Select ifs pattern a(v, _"trash"_) and ifs(v, _, _)
+135
+5000
+21 - 2 pattern both different variable select all
+procedure p; assign a; variable v, v1;
+Select p pattern a(v, _) pattern a(v1, _"laos + korean"_)
+Aang,CryingFrog,HappyFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,godHelpMe,haiz,herp,honkai,ifs,infiniteTsukuyomi,lastStretch,longNose,neeh,oneLiner,procedure,race,roadtofivehundred,stmtNum,weeb
+5000
+22 - 2 pattern both different variable select pattern
+procedure p;variable v, v1; while w;
+Select w pattern w(v, _) pattern w(v1, _)
+104,107,114,116,123,126,13,133,141,147,163,164,165,171,174,178,183,188,193,198,203,208,214,219,224,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,329,338,346,350,36,362,363,377,380,390,397,4,403,41,422,434,463,467,47,471,476,480,490,497,61,63,66,91,93,98
+5000
+

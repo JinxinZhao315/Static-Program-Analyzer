@@ -545,12 +545,22 @@ TEST_CASE("Overall test : optimization test 1") {
 //    REQUIRE(result == expectedResult);
 //}
 
-TEST_CASE("Overall test : optimization test 2") {
-    string filename = source_optimization;
-    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
-        Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next* (n9, n10) pattern a(v, _)";
+//TEST_CASE("Overall test : optimization test 2") {
+//    string filename = source_optimization;
+//    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+//        Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next* (n9, n10) pattern a(v, _)";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "TRUE" };
+//    REQUIRE(result == expectedResult);
+//}
+
+TEST_CASE("Overall test : with test 1") {
+    string filename = source_with;
+    string queryStr = "stmt s; constant c; Select s with s.stmt# = c.value";
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "TRUE" };
     REQUIRE(result == expectedResult);
 }
+

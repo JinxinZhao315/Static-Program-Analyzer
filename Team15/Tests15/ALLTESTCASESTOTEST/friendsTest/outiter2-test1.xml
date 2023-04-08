@@ -1,0 +1,190 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>friendsTest</name><parsing_time_taken>33.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">1</id><querystr><![CDATA[stmt s1; variable v1; Select s1 such that Uses(s1, v1)]]></querystr>
+<stuans>3,6,8,11,7,9,10,13,14,15,17,18</stuans>
+<correct>3,6,7,9,8,10,11,13,14,15,17,18</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">2</id><querystr><![CDATA[stmt s1; variable v1; Select s1 such that Modifies(s1, v1)]]></querystr>
+<stuans>3,6,1,2,4,5,11,7,8,10,9,12,13,14,15,16,17</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="One synonym, one wildcard (valid)">3</id><querystr><![CDATA[assign a1; Select a1 such that Uses(a1, _)]]></querystr>
+<stuans>13,14,7,9,11,15,17</stuans>
+<correct>7,9,11,13,14,15,17</correct>
+<time_taken>8.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="One synonym, one wildcard (valid)">4</id><querystr><![CDATA[assign a1; Select a1 such that Modifies(a1, _)]]></querystr>
+<stuans>12,4,13,14,5,7,9,11,15,16,17</stuans>
+<correct>4,5,7,9,11,12,13,14,15,16,17</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="One synonym, one exact match (valid)">5</id><querystr><![CDATA[print p1; Select p1 such that Uses(p1, "x")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="One synonym, one exact match (valid)">6</id><querystr><![CDATA[print p1; Select p1 such that Modifies(p1, "x")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>10.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">7</id><querystr><![CDATA[read r1; variable v1; Select r1 such that Uses(r1, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">8</id><querystr><![CDATA[read r1; variable v1; Select r1 such that Modifies(r1, v1)]]></querystr>
+<stuans>1,2</stuans>
+<correct>1,2</correct>
+<time_taken>11.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">9</id><querystr><![CDATA[while w1; variable v1; Select w1 such that Uses(w1, v1)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">10</id><querystr><![CDATA[while w1; variable v1; Select w1 such that Modifies(w1, v1)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>8.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">11</id><querystr><![CDATA[if if1; variable v1; Select if1 such that Uses(if1, v1)]]></querystr>
+<stuans>10</stuans>
+<correct>10</correct>
+<time_taken>10.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Double synonym (valid)">12</id><querystr><![CDATA[if if1; variable v1; Select if1 such that Modifies(if1, v1)]]></querystr>
+<stuans>10</stuans>
+<correct>10</correct>
+<time_taken>10.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Zero (valid)">13</id><querystr><![CDATA[variable v1; Select v1 such that Uses(0, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>23.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Zero (valid)">14</id><querystr><![CDATA[variable v1; Select v1 such that Modifies(0, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (invalid)">15</id><querystr><![CDATA[stmt s1; procedure pr1; Select s1 such that Uses(s1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (invalid)">16</id><querystr><![CDATA[stmt s1; procedure pr1; Select s1 such that Modifies(s1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (integer string) (invalid)">17</id><querystr><![CDATA[stmt s1; Select s1 such that Uses(s1, "9")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (integer string) (invalid)">18</id><querystr><![CDATA[stmt s1; Select s1 such that Modifies(s1, "9")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>9.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (empty string) (invalid)">19</id><querystr><![CDATA[stmt s1; Select s1 such that Uses(s1, "")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>12.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (empty string) (invalid)">20</id><querystr><![CDATA[stmt s1; Select s1 such that Modifies(s1, "")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>6.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (unknown variable) (invalid)">21</id><querystr><![CDATA[stmt s1; Select s1 such that Uses(s1, "invalid")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid second argument (unknown variable) (invalid)">22</id><querystr><![CDATA[stmt s1; Select s1 such that Modifies(s1, "invalid")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>8.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Negative number (invalid)">23</id><querystr><![CDATA[variable v1; Select v1 such that Uses(-1, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>8.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="Negative number (invalid)">24</id><querystr><![CDATA[variable v1; Select v1 such that Modifies(-1, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>9.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Ambiguous query due to wildcard (invalid)">25</id><querystr><![CDATA[variable v1; Select v1 such that Modifies(_, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>9.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Ambiguous query due to wildcard (invalid)">26</id><querystr><![CDATA[variable v1; Select v1 such that Uses(_, v1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

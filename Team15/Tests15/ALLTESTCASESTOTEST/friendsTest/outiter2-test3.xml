@@ -1,0 +1,99 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>friendsTest</name><parsing_time_taken>45.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnBoolean="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="Select BOOLEAN with pattern checking for nonexistent while">1</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select BOOLEAN pattern w1("NoSuchVar", _)]]></querystr>
+<stuans>FALSE</stuans>
+<correct>FALSE</correct>
+<time_taken>13.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Follows="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Select BOOLEAN with nonexistent wildcard">2</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select BOOLEAN such that Follows(_, 1)]]></querystr>
+<stuans>FALSE</stuans>
+<correct>FALSE</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Follows="1" UnnamedVar="3" SuchThat="1" CondNum="6" RelNum="1" comment="Select BOOLEAN with true wildcard clause">3</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select BOOLEAN such that Follows(_, _)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>13.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnBoolean="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select BOOLEAN with true clause">4</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select BOOLEAN such that Follows*(s1, w1)]]></querystr>
+<stuans>TRUE</stuans>
+<correct>TRUE</correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="3" SuchThat="1" CondNum="6" RelNum="1" comment="Select tuple with boolean clause">5</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <w1> such that Follows(_, _)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Incorrect tuple since theres no a1 declared">6</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <s1, a1> such that Follows(_, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>13.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Select tuple with false boolean clause">7</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <s1, w1> such that Follows(_, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>22.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple with false boolean clause">8</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <w1, pr1> such that Follows(w1, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple (1) with target synonym in clause">9</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <w1, s1> such that Follows(s1, 2)]]></querystr>
+<stuans>6 1</stuans>
+<correct>6 1</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple (1) with target synonym in clause">10</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <s1, w1> such that Follows(s1, 2)]]></querystr>
+<stuans>1 6</stuans>
+<correct>1 6</correct>
+<time_taken>21.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple (multiple) with target synonym in clause">11</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <s1, v1> such that Follows(s1, 2)]]></querystr>
+<stuans>1 x,1 z,1 y,1 i,1 v</stuans>
+<correct>1 x,1 z,1 i,1 y,1 v</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple with repeated synonym with target synonym not in clause">12</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <w1, w1> such that Follows(s1, 2)]]></querystr>
+<stuans>6 6</stuans>
+<correct>6 6</correct>
+<time_taken>18.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Select tuple with repeated synonym">13</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select <w1, s1, w1> such that Follows*(s1, 3)]]></querystr>
+<stuans>6 1 6,6 2 6</stuans>
+<correct>6 1 6,6 2 6</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

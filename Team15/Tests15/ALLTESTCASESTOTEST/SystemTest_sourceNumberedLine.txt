@@ -1,0 +1,1371 @@
+
+procedure CryingFrog
+{
+cry = 3; #Line number = 1
+
+frog = 2; #Line number = 2
+
+sad = 5; #Line number = 3
+
+while ( x > 4 ) #Line number = 4
+{
+r = b - 1; #Line number = 5
+
+}
+cry = 1; #Line number = 6
+
+frog = 2; #Line number = 7
+
+if ( cry >= frog ) then #Line number = 8
+{
+frog = frog + 10000; #Line number = 9
+
+}
+else
+{
+frog = frog * 3; #Line number = 10
+
+call Sushi; #Line number = 11
+
+}
+}
+procedure HappyFrog
+{
+happy = 99; #Line number = 12
+
+while ( happy >= 0 ) #Line number = 13
+{
+happy = happy - 1; #Line number = 14
+
+if ( happy == 2 ) then #Line number = 15
+{
+happy = happy + happy - 2; #Line number = 16
+
+}
+else
+{
+happy = happy - 1; #Line number = 17
+
+}
+}
+call CryingFrog; #Line number = 18
+
+}
+procedure Sushi
+{
+salmon = 5; #Line number = 19
+
+rice = salmon + 3; #Line number = 20
+
+vinegar = rice; #Line number = 21
+
+call procedure; #Line number = 22
+
+if ( salmon > 5 ) then #Line number = 23
+{
+print rice; #Line number = 24
+
+}
+else
+{
+print vinegar; #Line number = 25
+
+salmon = salmon + 43 % 8; #Line number = 26
+
+}
+}
+procedure procedure
+{
+if ( ( while <= if ) && ( ( ( procedure % 3 ) > 11111 ) || else == if ) ) then #Line number = 27
+{
+read else; #Line number = 28
+
+}
+else
+{
+call fanmin; #Line number = 29
+
+}
+}
+procedure fanmin
+{
+fm = loser + nerd; #Line number = 30
+
+}
+procedure RV
+{
+tembu = 0; #Line number = 31
+
+capt = 34; #Line number = 32
+
+rc4 = tembu - capt * 55; #Line number = 33
+
+yale = 99; #Line number = 34
+
+if ( rc4 >= yale ) then #Line number = 35
+{
+while ( rc4 != tembu ) #Line number = 36
+{
+usp = usp % temasek * eusoff / raffles; #Line number = 37
+
+print pGP; #Line number = 38
+
+}
+}
+else
+{
+read KE; #Line number = 39
+
+}
+}
+procedure flavours
+{
+if ( ( cherry >= banana ) || ( ( ( banana % 3 ) > sour ) && sweet == bitter ) ) then #Line number = 40
+{
+while ( bitter != 3 ) #Line number = 41
+{
+bitter = bitter + sweet; #Line number = 42
+
+read sweet; #Line number = 43
+
+print bitter; #Line number = 44
+
+sour = sour / 15 + ( sour % 17 ) - ( ( ( ( sour - 13 ) * 3 ) % 546 ) * 123 ) * ( banana % 6 ) + banana + banana + fishy * bitter; #Line number = 45
+
+if ( bitter > 8 ) then #Line number = 46
+{
+while ( bitter == fishy ) #Line number = 47
+{
+read fishy; #Line number = 48
+
+fishy = cherry + cherry; #Line number = 49
+
+cherry = fishy; #Line number = 50
+
+banana = banana - 45; #Line number = 51
+
+bitter = bitter + 17; #Line number = 52
+
+}
+print banana; #Line number = 53
+
+read cherry; #Line number = 54
+
+cherry = bitter + savoury; #Line number = 55
+
+}
+else
+{
+sour = sour + 74; #Line number = 56
+
+fishy = brown * salty; #Line number = 57
+
+read brown; #Line number = 58
+
+salty = salty % salty / banana; #Line number = 59
+
+fishy = banana * banana + 3; #Line number = 60
+
+while ( banana != 1 ) #Line number = 61
+{
+banana = banana; #Line number = 62
+
+}
+while ( sour >= bitter ) #Line number = 63
+{
+bitter = sour; #Line number = 64
+
+sour = sour + 5; #Line number = 65
+
+while ( bitter > sour ) #Line number = 66
+{
+sour = sour + savoury + 1 * savoury + ( savoury % 6 ); #Line number = 67
+
+plain = plain; #Line number = 68
+
+print plain; #Line number = 69
+
+read cherry; #Line number = 70
+
+print cherry; #Line number = 71
+
+}
+print cherry; #Line number = 72
+
+}
+}
+read savoury; #Line number = 73
+
+savoury = savoury + savoury - 156 + 1 * savoury % ( savoury * 6 ) + ( ( savoury / savoury ) % plain + savoury + 8 ); #Line number = 74
+
+print savoury; #Line number = 75
+
+}
+print savoury; #Line number = 76
+
+read fishy; #Line number = 77
+
+fishy = savoury + 123; #Line number = 78
+
+fishy = fishy + savoury + fishy + disgusting + fishy + cherry / disgusting + cherry * disgusting + cherry + ( 3543 % 126 ) - cherry * banana + sour / bitter - bitter; #Line number = 79
+
+disgusting = disgusting * 1; #Line number = 80
+
+disgusting = disgusting / 1; #Line number = 81
+
+disgusting = disgusting + 1; #Line number = 82
+
+disgusting = disgusting; #Line number = 83
+
+}
+else
+{
+print savoury; #Line number = 84
+
+read banana; #Line number = 85
+
+fishy = salty + 123; #Line number = 86
+
+disgusting = disgusting * 1; #Line number = 87
+
+disgusting = disgusting / 1; #Line number = 88
+
+disgusting = disgusting + 1; #Line number = 89
+
+disgusting = disgusting; #Line number = 90
+
+while ( disgusting > banana ) #Line number = 91
+{
+disgusting = disgusting - 1; #Line number = 92
+
+while ( banana == 1 ) #Line number = 93
+{
+banana = banana + 5; #Line number = 94
+
+cherry = fishy; #Line number = 95
+
+read cherry; #Line number = 96
+
+print disgusting; #Line number = 97
+
+while ( disgusting != 1 ) #Line number = 98
+{
+print disgusting; #Line number = 99
+
+}
+cherry = cherry + 6; #Line number = 100
+
+}
+banana = salty + fishy - cherry + ( cherry % 0 ) + banana * banana + disgusting / disgusting - disgusting * salty + ( salty % 0 + fishy ); #Line number = 101
+
+}
+}
+print cherry; #Line number = 102
+
+cherry = cherry; #Line number = 103
+
+while ( disgusting != banana ) #Line number = 104
+{
+print bland; #Line number = 105
+
+bland = bland * banana * sour; #Line number = 106
+
+while ( sour == sour ) #Line number = 107
+{
+cherry = banana; #Line number = 108
+
+bitter = bitter; #Line number = 109
+
+cherry = cherry + 1; #Line number = 110
+
+print cherry; #Line number = 111
+
+read cherry; #Line number = 112
+
+}
+read sour; #Line number = 113
+
+}
+}
+procedure complicated
+{
+while ( else != while || complicated >= procedure ) #Line number = 114
+{
+while = while - 1; #Line number = 115
+
+while ( 45 < 55 && 44 / ( print * read ) ) #Line number = 116
+{
+print read; #Line number = 117
+
+read print; #Line number = 118
+
+else = else - 1; #Line number = 119
+
+}
+if ( derp == herp ) then #Line number = 120
+{
+call flavours; #Line number = 121
+
+}
+else
+{
+call procedure; #Line number = 122
+
+while ( 5 >= nuns ) #Line number = 123
+{
+nuns = nuns - 1; #Line number = 124
+
+priest = priest + 5; #Line number = 125
+
+}
+}
+}
+while ( x > 3 ) #Line number = 126
+{
+if ( y != x || z && x <= 4 ) then #Line number = 127
+{
+z = z + 1; #Line number = 128
+
+}
+else
+{
+g = t + 5 * 3 / tt; #Line number = 129
+
+}
+}
+}
+procedure weeb
+{
+if ( naruto > onepiece ) then #Line number = 130
+{
+call a; #Line number = 131
+
+}
+else
+{
+print cultured; #Line number = 132
+
+}
+while ( boruto == sucks ) #Line number = 133
+{
+boruto = boruto - sausgae; #Line number = 134
+
+if ( sakura == bestGurl ) then #Line number = 135
+{
+sakura = trash; #Line number = 136
+
+}
+else
+{
+hinata = sakura + black + hair; #Line number = 137
+
+}
+hinata = hinata - plot * armour; #Line number = 138
+
+neji = dead; #Line number = 139
+
+call complicated; #Line number = 140
+
+while ( kaguya != confesses ) #Line number = 141
+{
+kaichou = kaichou + confess; #Line number = 142
+
+ishigami = bestboi * 999999; #Line number = 143
+
+chika = dd * 3 / 6 * ishigami % 44; #Line number = 144
+
+hayasaka = kaichou; #Line number = 145
+
+hayasaka = 10; #Line number = 146
+
+while ( hayasaka == quality ) #Line number = 147
+{
+if ( hair == cut ) then #Line number = 148
+{
+call Sushi; #Line number = 149
+
+}
+else
+{
+print kaichou; #Line number = 150
+
+}
+}
+}
+}
+}
+procedure a
+{
+call b; #Line number = 151
+
+}
+procedure b
+{
+call c; #Line number = 152
+
+}
+procedure c
+{
+print x; #Line number = 153
+
+z = y + 5; #Line number = 154
+
+}
+procedure ifs
+{
+read b; #Line number = 155
+
+if ( af < 1 ) then #Line number = 156
+{
+if ( b < 1 ) then #Line number = 157
+{
+if ( c < 1 ) then #Line number = 158
+{
+print x; #Line number = 159
+
+}
+else
+{
+print c; #Line number = 160
+
+}
+}
+else
+{
+print b; #Line number = 161
+
+}
+}
+else
+{
+print af; #Line number = 162
+
+}
+while ( a < b ) #Line number = 163
+{
+while ( b < c ) #Line number = 164
+{
+while ( c < x ) #Line number = 165
+{
+y = 0; #Line number = 166
+
+print y; #Line number = 167
+
+}
+}
+}
+read yc; #Line number = 168
+
+if ( yc > a ) then #Line number = 169
+{
+read y; #Line number = 170
+
+}
+else
+{
+while ( yc < b ) #Line number = 171
+{
+if ( yc == c ) then #Line number = 172
+{
+print y; #Line number = 173
+
+}
+else
+{
+while ( yc != x ) #Line number = 174
+{
+z = x * a * b * c / yc; #Line number = 175
+
+}
+}
+}
+}
+}
+procedure infiniteTsukuyomi
+{
+xxx = 160; #Line number = 176
+
+print xxx; #Line number = 177
+
+while ( xxx > 76 ) #Line number = 178
+{
+xxx = xxx + 36 - 51; #Line number = 179
+
+read xxx; #Line number = 180
+
+xxy = 191; #Line number = 181
+
+print xxy; #Line number = 182
+
+while ( xxy > 65 ) #Line number = 183
+{
+xxy = xxy + 5 - 29; #Line number = 184
+
+read xxy; #Line number = 185
+
+xxz = 177; #Line number = 186
+
+print xxz; #Line number = 187
+
+while ( xxz > 96 ) #Line number = 188
+{
+xxz = xxz + 40 - 68; #Line number = 189
+
+read xxz; #Line number = 190
+
+xyx = 143; #Line number = 191
+
+print xyx; #Line number = 192
+
+while ( xyx > 9 ) #Line number = 193
+{
+xyx = xyx + 29 - 73; #Line number = 194
+
+read xyx; #Line number = 195
+
+xyy = 182; #Line number = 196
+
+print xyy; #Line number = 197
+
+while ( xyy > 88 ) #Line number = 198
+{
+xyy = xyy + 26 - 57; #Line number = 199
+
+read xyy; #Line number = 200
+
+xyz = 146; #Line number = 201
+
+print xyz; #Line number = 202
+
+while ( xyz > 65 ) #Line number = 203
+{
+xyz = xyz + 8 - 98; #Line number = 204
+
+read xyz; #Line number = 205
+
+xzx = 101; #Line number = 206
+
+print xzx; #Line number = 207
+
+while ( xzx > 87 ) #Line number = 208
+{
+xzx = xzx + 27 - 30; #Line number = 209
+
+read xzx; #Line number = 210
+
+xzy = 125; #Line number = 211
+
+it = derp / 4 * 55; #Line number = 212
+
+print xzy; #Line number = 213
+
+while ( xzy > 90 ) #Line number = 214
+{
+xzy = xzy + 14 - 99; #Line number = 215
+
+read xzy; #Line number = 216
+
+xzz = 179; #Line number = 217
+
+print xzz; #Line number = 218
+
+while ( xzz > 4 ) #Line number = 219
+{
+xzz = xzz + 32 - 96; #Line number = 220
+
+read xzz; #Line number = 221
+
+yxx = 120; #Line number = 222
+
+print yxx; #Line number = 223
+
+while ( yxx > 15 ) #Line number = 224
+{
+yxx = yxx + 22 - 87; #Line number = 225
+
+read yxx; #Line number = 226
+
+yxy = 118; #Line number = 227
+
+great = else + if; #Line number = 228
+
+print yxy; #Line number = 229
+
+while ( yxy > 75 ) #Line number = 230
+{
+yxy = yxy + 31 - 42; #Line number = 231
+
+read yxy; #Line number = 232
+
+yxz = 120; #Line number = 233
+
+print yxz; #Line number = 234
+
+while ( yxz > 6 ) #Line number = 235
+{
+yxz = yxz + 27 - 14; #Line number = 236
+
+read yxz; #Line number = 237
+
+yyx = 157; #Line number = 238
+
+print yyx; #Line number = 239
+
+while ( yyx > 14 ) #Line number = 240
+{
+yyx = yyx + 11 - 89; #Line number = 241
+
+read yyx; #Line number = 242
+
+yyy = 182; #Line number = 243
+
+print yyy; #Line number = 244
+
+while ( yyy > 51 ) #Line number = 245
+{
+yyy = yyy + 7 - 59; #Line number = 246
+
+read yyy; #Line number = 247
+
+yyz = 146; #Line number = 248
+
+print yyz; #Line number = 249
+
+while ( yyz > 29 ) #Line number = 250
+{
+yyz = yyz + 20 - 31; #Line number = 251
+
+read yyz; #Line number = 252
+
+yzx = 130; #Line number = 253
+
+print yzx; #Line number = 254
+
+while ( yzx > 25 ) #Line number = 255
+{
+yzx = yzx + 11 - 41; #Line number = 256
+
+read yzx; #Line number = 257
+
+yzy = 112; #Line number = 258
+
+print yzy; #Line number = 259
+
+while ( yzy > 24 ) #Line number = 260
+{
+yzy = yzy + 30 - 77; #Line number = 261
+
+read yzy; #Line number = 262
+
+yzz = 123; #Line number = 263
+
+print yzz; #Line number = 264
+
+while ( yzz > 83 ) #Line number = 265
+{
+yzz = yzz + 13 - 29; #Line number = 266
+
+read yzz; #Line number = 267
+
+zxx = 130; #Line number = 268
+
+print zxx; #Line number = 269
+
+while ( zxx > 47 ) #Line number = 270
+{
+zxx = zxx + 16 - 75; #Line number = 271
+
+read zxx; #Line number = 272
+
+zxy = 181; #Line number = 273
+
+print zxy; #Line number = 274
+
+while ( zxy > 55 ) #Line number = 275
+{
+zxy = zxy + 23 - 7; #Line number = 276
+
+read zxy; #Line number = 277
+
+zxz = 121; #Line number = 278
+
+print zxz; #Line number = 279
+
+while ( zxz > 85 ) #Line number = 280
+{
+zxz = zxz + 28 - 82; #Line number = 281
+
+read zxz; #Line number = 282
+
+zyx = 152; #Line number = 283
+
+print zyx; #Line number = 284
+
+while ( zyx > 36 ) #Line number = 285
+{
+zyx = zyx + 43 - 3; #Line number = 286
+
+read zyx; #Line number = 287
+
+zyy = 199; #Line number = 288
+
+print zyy; #Line number = 289
+
+while ( zyy > 27 ) #Line number = 290
+{
+zyy = zyy + 16 - 27; #Line number = 291
+
+read zyy; #Line number = 292
+
+zyz = 136; #Line number = 293
+
+print zyz; #Line number = 294
+
+while ( zyz > 40 ) #Line number = 295
+{
+zyz = zyz + 18 - 65; #Line number = 296
+
+read zyz; #Line number = 297
+
+zzx = 140; #Line number = 298
+
+print zzx; #Line number = 299
+
+while ( zzx > 57 ) #Line number = 300
+{
+zzx = zzx + 12 - 15; #Line number = 301
+
+read zzx; #Line number = 302
+
+zzy = 150; #Line number = 303
+
+print zzy; #Line number = 304
+
+while ( zzy > 42 ) #Line number = 305
+{
+zzy = zzy + 18 - 42; #Line number = 306
+
+read zzy; #Line number = 307
+
+zzz = 132; #Line number = 308
+
+print procedure; #Line number = 309
+
+while ( zzz > 81 ) #Line number = 310
+{
+zzz = zzz + 36 - 13; #Line number = 311
+
+call procedure; #Line number = 312
+
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+procedure haiz
+{
+h = 5; #Line number = 313
+
+e = l * 2; #Line number = 314
+
+p = 8 / h; #Line number = 315
+
+if ( c == t ) then #Line number = 316
+{
+part = e * h * h % ifs + p * w; #Line number = 317
+
+}
+else
+{
+w = p * e; #Line number = 318
+
+}
+}
+procedure herp
+{
+read ifs; #Line number = 319
+
+print p; #Line number = 320
+
+}
+procedure neeh
+{
+call haiz; #Line number = 321
+
+}
+procedure Aang
+{
+read appa; #Line number = 322
+
+appa = furry - 4; #Line number = 323
+
+read firelord; #Line number = 324
+
+call herp; #Line number = 325
+
+if ( aang == avatar ) then #Line number = 326
+{
+print respect; #Line number = 327
+
+}
+else
+{
+wait = wait * 1000; #Line number = 328
+
+while ( wait > 1000000 ) #Line number = 329
+{
+call Sokka; #Line number = 330
+
+app = harness + food + horns - ugly; #Line number = 331
+
+}
+print melonLord; #Line number = 332
+
+}
+}
+procedure Sokka
+{
+app = f + sword; #Line number = 333
+
+if ( app > 5 ) then #Line number = 334
+{
+sword = sword + 54; #Line number = 335
+
+azula = 7; #Line number = 336
+
+}
+else
+{
+app = sword + 7; #Line number = 337
+
+}
+while ( azula != appa && sword <= 0 || azula != weak ) #Line number = 338
+{
+call weeb; #Line number = 339
+
+if ( death == ineviteble ) then #Line number = 340
+{
+death = 0; #Line number = 341
+
+}
+else
+{
+app = appa; #Line number = 342
+
+}
+}
+}
+procedure stmtNum
+{
+a = 3; #Line number = 343
+
+b = 2; #Line number = 344
+
+c = 5; #Line number = 345
+
+while ( x > 4 ) #Line number = 346
+{
+r = b; #Line number = 347
+
+}
+}
+procedure oneLiner
+{
+a = 6; #Line number = 348
+
+b = hh; #Line number = 349
+
+while ( x < 6 ) #Line number = 350
+{
+a = a + 1; #Line number = 351
+
+}
+}
+procedure honkai
+{
+if ( 0 == 0 ) then #Line number = 352
+{
+left = left; #Line number = 353
+
+print right; #Line number = 354
+
+read maxi; #Line number = 355
+
+if ( 1 == 2 ) then #Line number = 356
+{
+normSq = z + ( ( ( ( ( y ) ) ) ) ); #Line number = 357
+
+}
+else
+{
+a = 1 + ( 1 / 2 ) + ( 1 / 3 ) + ( 1 / 4 ) + ( 1 / 5 ); #Line number = 358
+
+if ( 1 == 2 ) then #Line number = 359
+{
+while ( 1 == 2 ) #Line number = 360
+{
+if = if + else + while + then + procedure; #Line number = 361
+
+}
+}
+else
+{
+while ( x > z ) #Line number = 362
+{
+while ( while > while ) #Line number = 363
+{
+read read; #Line number = 364
+
+}
+x = y; #Line number = 365
+
+y = normSq + 3; #Line number = 366
+
+if ( ! ( ( x < y ) || ( ( ( y <= z ) && ( x > y ) ) || ( x + 5 - 6 % 8 >= 90000 ) ) ) ) then #Line number = 367
+{
+y = 1; #Line number = 368
+
+}
+else
+{
+while ( 1 == 2 ) #Line number = 369
+{
+while ( 1 == 2 ) #Line number = 370
+{
+left = left; #Line number = 371
+
+}
+}
+}
+}
+}
+}
+left = left99; #Line number = 372
+
+print right99; #Line number = 373
+
+}
+else
+{
+supppppppppppppppppppppperrrrrrrrrrrrrrrrrlongvarrrrrrrrrrriablename = 123456789; #Line number = 374
+
+}
+}
+procedure race
+{
+chinese = chinese + 66; #Line number = 375
+
+print chinese; #Line number = 376
+
+while ( mongolian > chinese ) #Line number = 377
+{
+chinese = mongolian + murican; #Line number = 378
+
+murican = malay; #Line number = 379
+
+while ( australian > 0 ) #Line number = 380
+{
+australian = 0; #Line number = 381
+
+read korean; #Line number = 382
+
+indian = 9; #Line number = 383
+
+if ( indian <= singaporean ) then #Line number = 384
+{
+read japanese; #Line number = 385
+
+}
+else
+{
+indian = indian + india + singapore + singaporean + indonesia; #Line number = 386
+
+read singaporean; #Line number = 387
+
+}
+}
+if ( thailand > indonesia ) then #Line number = 388
+{
+singaporean = 1; #Line number = 389
+
+while ( singaporean > japanese ) #Line number = 390
+{
+japanese = japanese; #Line number = 391
+
+}
+thailand = thailand + thailand * singaporean; #Line number = 392
+
+}
+else
+{
+read india; #Line number = 393
+
+japan = japan + 7; #Line number = 394
+
+print japan; #Line number = 395
+
+read singapore; #Line number = 396
+
+while ( laos > kiwi ) #Line number = 397
+{
+print laos; #Line number = 398
+
+if ( ( ( kiwi <= korean ) && ( ( indonesia != 166 ) && ( 6 > singaporean ) ) ) || ( ( hungarian + 1 ) == japan ) ) then #Line number = 399
+{
+kiwi = kiwi + indian * indonesia - laos; #Line number = 400
+
+laos = laos + korean; #Line number = 401
+
+chinese = chinese / chinese; #Line number = 402
+
+while ( malay == 1 ) #Line number = 403
+{
+japanese = malay; #Line number = 404
+
+print japanese; #Line number = 405
+
+japanese = japanese * 0; #Line number = 406
+
+}
+}
+else
+{
+murican = chinese + murican; #Line number = 407
+
+read murican; #Line number = 408
+
+print chinese; #Line number = 409
+
+}
+chinese = japan; #Line number = 410
+
+}
+read singaporean; #Line number = 411
+
+print korean; #Line number = 412
+
+}
+}
+print murican; #Line number = 413
+
+read japan; #Line number = 414
+
+japan = japan + 1; #Line number = 415
+
+}
+procedure lastStretch
+{
+a = b; #Line number = 416
+
+b = c; #Line number = 417
+
+c = 5; #Line number = 418
+
+if ( a == b ) then #Line number = 419
+{
+z = 5 * y % h + 1 - r; #Line number = 420
+
+y = u - m + n; #Line number = 421
+
+}
+else
+{
+while ( r != 6 ) #Line number = 422
+{
+call RV; #Line number = 423
+
+call complicated; #Line number = 424
+
+print Sushi; #Line number = 425
+
+x = x - 9; #Line number = 426
+
+}
+re = er + re; #Line number = 427
+
+qwerty = poij % 5 ( 5 * r + ( v - 8 * ( 4 / t ) * ( ( ( ( c + 7 ) ) ) ) ) ); #Line number = 428
+
+}
+}
+procedure longNose
+{
+aa = bb; #Line number = 429
+
+cc = aa; #Line number = 430
+
+a = b; #Line number = 431
+
+b = c; #Line number = 432
+
+c = 65; #Line number = 433
+
+while ( re > tt ) #Line number = 434
+{
+aa = a + 6; #Line number = 435
+
+}
+if ( hate == 666 ) then #Line number = 436
+{
+aa = re; #Line number = 437
+
+cde = aa; #Line number = 438
+
+aa = mnbvcxz; #Line number = 439
+
+cc = aa; #Line number = 440
+
+aa = 5; #Line number = 441
+
+}
+else
+{
+cde = aa; #Line number = 442
+
+aa = 343; #Line number = 443
+
+cc = aa; #Line number = 444
+
+aa = br * 343; #Line number = 445
+
+cde = aa; #Line number = 446
+
+aa = uu + 7; #Line number = 447
+
+cde = aa; #Line number = 448
+
+aa = bb * 67678; #Line number = 449
+
+cc = aa; #Line number = 450
+
+aa = bb; #Line number = 451
+
+rge = aa; #Line number = 452
+
+aa = aa; #Line number = 453
+
+cc = aa; #Line number = 454
+
+aa = afe; #Line number = 455
+
+ewf = aa; #Line number = 456
+
+aa = awd; #Line number = 457
+
+fw = aa; #Line number = 458
+
+aa = yuy * 7 / g % tyuio; #Line number = 459
+
+gergdrg = aa; #Line number = 460
+
+aa = bb; #Line number = 461
+
+cc = aa; #Line number = 462
+
+}
+}
+procedure godHelpMe
+{
+while ( x > 0 ) #Line number = 463
+{
+if ( x == 0 ) then #Line number = 464
+{
+print god; #Line number = 465
+
+}
+else
+{
+y = x * 9; #Line number = 466
+
+}
+while ( x <= 0 ) #Line number = 467
+{
+if ( x == 0 ) then #Line number = 468
+{
+print god; #Line number = 469
+
+}
+else
+{
+y = x / 56; #Line number = 470
+
+}
+while ( xt == 0 ) #Line number = 471
+{
+if ( x == 0 ) then #Line number = 472
+{
+print gopod; #Line number = 473
+
+z = x - 6; #Line number = 474
+
+}
+else
+{
+o = x + 7; #Line number = 475
+
+}
+while ( xu != 0 ) #Line number = 476
+{
+if ( x == 0 ) then #Line number = 477
+{
+print godpo; #Line number = 478
+
+}
+else
+{
+y = x - 376; #Line number = 479
+
+}
+while ( b > 0 ) #Line number = 480
+{
+if ( x == 0 ) then #Line number = 481
+{
+print godhh; #Line number = 482
+
+}
+else
+{
+y = y + 799; #Line number = 483
+
+}
+}
+}
+}
+}
+}
+}
+procedure roadtofivehundred
+{
+long = 7; #Line number = 484
+
+long = 7 * git; #Line number = 485
+
+hi = turn * long; #Line number = 486
+
+nm = hi + 90; #Line number = 487
+
+gr = r * 5; #Line number = 488
+
+yup = nm - 7 / ( long * r ); #Line number = 489
+
+while ( yup != hi ) #Line number = 490
+{
+f = 90 - tyj; #Line number = 491
+
+g = 99 - yup; #Line number = 492
+
+hi = long * hi; #Line number = 493
+
+if ( long > 66 ) then #Line number = 494
+{
+g = f / 55; #Line number = 495
+
+}
+else
+{
+g = f * ( f / 4 + ( long * hi - 22 ) * 3 ) + 44; #Line number = 496
+
+}
+while ( f != 0 ) #Line number = 497
+{
+if ( g < 0 ) then #Line number = 498
+{
+call RV; #Line number = 499
+
+}
+else
+{
+call flavours; #Line number = 500
+
+long = g * hi - turn + git; #Line number = 501
+
+git = 6; #Line number = 502
+
+print rrrre; #Line number = 503
+
+}
+}
+}
+}
+
+######################################################
+
+List of procedure names:
+
+1. CryingFrog
+
+2. HappyFrog
+
+3. Sushi
+
+4. procedure
+
+5. fanmin
+
+6. RV
+
+7. flavours
+
+8. complicated
+
+9. weeb
+
+10. a
+
+11. b
+
+12. c
+
+13. ifs
+
+14. infiniteTsukuyomi
+
+15. haiz
+
+16. herp
+
+17. neeh
+
+18. Aang
+
+19. Sokka
+
+20. stmtNum
+
+21. oneLiner
+
+22. honkai
+
+23. race
+
+24. lastStretch
+
+25. longNose
+
+26. godHelpMe
+
+27. roadtofivehundred
+
+Total Number of proceudres: 27

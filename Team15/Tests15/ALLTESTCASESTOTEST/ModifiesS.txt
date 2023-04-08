@@ -1,0 +1,200 @@
+1 - statement synonym modifies variable synonym
+call c; variable v;
+Select c.procName such that Modifies(c, v)
+Sushi, CryingFrog, procedure, fanmin, flavours, a, b, c, complicated, haiz, herp, Sokka, weeb, RV
+5000
+2 - statement synonym modifies anything
+assign a;
+Select <a.stmt#, a> such that Modifies(a, _)
+1 1, 10 10, 100 100, 101 101, 103 103, 106 106, 108 108, 109 109, 110 110, 115 115, 119 119, 12 12, 124 124, 125 125, 128 128, 129 129, 134 134, 136 136, 137 137, 138 138, 139 139, 14 14, 142 142, 143 143, 144 144, 145 145, 146 146, 154 154, 16 16, 166 166, 17 17, 175 175, 176 176, 179 179, 181 181, 184 184, 186 186, 189 189, 19 19,191 191,194 194,196 196,199 199,2 2,20 20,201 201,204 204,206 206,209 209,21 21,211 211,212 212,215 215,217 217,220 220,222 222,225 225,227 227,228 228,231 231,233 233,236 236,238 238,241 241,243 243,246 246,248 248,251 251,253 253,256 256,258 258,26 26,261 261,263 263,266 266,268 268,271 271,273 273,276 276,278 278,281 281,283 283,286 286,288 288,291 291,293 293,296 296,298 298,3 3,30 30,301 301,303 303,306 306,308 308,31 31,311 311,313 313,314 314,315 315,317 317,318 318,32 32,323 323,328 328,33 33,331 331,333 333,335 335,336 336,337 337,34 34,341 341,342 342,343 343,344 344,345 345,347 347,348 348,349 349,351 351,353 353,357 357,358 358,361 361,365 365,366 366,368 368,37 37,371 371,372 372,374 374,375 375,378 378,379 379,381 381,383 383,386 386,389 389,391 391,392 392,394 394,400 400,401 401,402 402,404 404,406 406,407 407,410 410,415 415,416 416,417 417,418 418,42 42,420 420,421 421,426 426,427 427,428 428,429 429,430 430,431 431,432 432,433 433,435 435,437 437,438 438,439 439,440 440,441 441,442 442,443 443,444 444,445 445,446 446,447 447,448 448,449 449,45 45,450 450,451 451,452 452,453 453,454 454,455 455,456 456,457 457,458 458,459 459,460 460,461 461,462 462,466 466,470 470,474 474,475 475,479 479,483 483,484 484,485 485,486 486,487 487,488 488,489 489,49 49,491 491,492 492,493 493,495 495,496 496,5 5,50 50,501 501,502 502,51 51,52 52,55 55,56 56,57 57,59 59,6 6,60 60,62 62,64 64,65 65,67 67,68 68,7 7,74 74,78 78,79 79,80 80,81 81,82 82,83 83,86 86,87 87,88 88,89 89,9 9,90 90,92 92,94 94,95 95
+5000
+3 - statement synonym modifies variable string
+read rd;
+Select <rd.stmt#, rd.varName> such that Modifies(rd, "else")
+28 else
+5000
+4 - anything modifies variable synonym
+variable v;
+Select v such that Modifies(_, v)
+
+5000
+5 - prog_line modifies variable synonym
+prog_line n; variable v;
+Select <n, v> such that Modifies(n, v) with n = 121
+121 banana, 121 bitter, 121 bland, 121 brown, 121 cherry, 121 disgusting, 121 fishy, 121 plain, 121 salty, 121 savoury, 121 sour, 121 sweet
+5000
+6 - statement integer modifies anything
+
+Select BOOLEAN such that Modifies(118, _)
+TRUE
+5000
+7 - statement integer modifies variable string
+
+Select BOOLEAN such that Modifies(35, "KE")
+TRUE
+5000
+8 - if synonym modifies
+if ifs; variable v;
+Select ifs such that Modifies (ifs, v)
+120,127,130,135,148,15,169,172,23,27,316,326,334,340,35,352,356,359,367,384,388,399,40,419,436,46,464,468,472,477,481,494,498,8
+5000
+9 - read synonym modifies
+read rd;
+Select <rd, rd.varName> such that Modifies(rd, "else")
+28 else
+5000
+10 - print synonym modifies
+print pn;
+Select BOOLEAN such that Modifies(pn, "rice")
+FALSE
+5000
+11 - statement synonym modifies
+stmt s;
+Select BOOLEAN such that Modifies(s, "rice")
+TRUE
+5000
+12 - call synonym modifies
+call c;
+Select c such that Modifies(c, _)
+11,121,122,131,140,149,151,152,18,22,29,312,321,325,330,339,423,424,499,500
+5000
+13 - while synonym modifies
+while w;
+Select <w, w.stmt#> such that Modifies(w, "usp")
+36 36,422 422,490 490,497 497
+5000
+14 - assign synonym modifies
+assign a;
+Select <a, a, a.stmt#, a.stmt#> such that Modifies(a, "fishy")
+49 49 49 49,57 57 57 57,60 60 60 60,78 78 78 78,79 79 79 79,86 86 86 86
+5000
+15 - statement synonym modifies variable synonym
+stmt s; variable v;
+Select v such that Modifies(s, v)
+KE,a,aa,app,appa,australian,azula,b,banana,bitter,bland,boruto,brown,c,capt,cc,cde,cherry,chika,chinese,cry,death,disgusting,e,else,ewf,f,firelord,fishy,fm,frog,fw,g,gergdrg,git,gr,great,h,happy,hayasaka,hi,hinata,if,ifs,india,indian,ishigami,it,japan,japanese,kaichou,kiwi,korean,laos,left,long,maxi,murican,neji,nm,normSq,nuns,o,p,part,plain,priest,print,qwerty,r,rc4,re,read,rge,rice,sad,sakura,salmon,salty,savoury,singapore,singaporean,sour,supppppppppppppppppppppperrrrrrrrrrrrrrrrrlongvarrrrrrrrrrriablename,sweet,sword,tembu,thailand,usp,vinegar,w,wait,while,x,xxx,xxy,xxz,xyx,xyy,xyz,xzx,xzy,xzz,y,yale,yc,yup,yxx,yxy,yxz,yyx,yyy,yyz,yzx,yzy,yzz,z,zxx,zxy,zxz,zyx,zyy,zyz,zzx,zzy,zzz
+5000
+16 - statement synonym modifies anything
+stmt s;
+Select s such that Modifies(s, _)
+1,10,100,101,103,104,106,107,108,109,11,110,112,113,114,115,116,118,119,12,120,121,122,123,124,125,126,127,128,129,13,130,131,133,134,135,136,137,138,139,14,140,141,142,143,144,145,146,147,148,149,15,151,152,154,155,16,163,164,165,166,168,169,17,170,171,172,174,175,176,178,179,18,180,181,183,184,185,186,188,189,19,190,191,193,194,195,196,198,199,2,20,200,201,203,204,205,206,208,209,21,210,211,212,214,215,216,217,219,22,220,221,222,224,225,226,227,228,23,230,231,232,233,235,236,237,238,240,241,242,243,245,246,247,248,250,251,252,253,255,256,257,258,26,260,261,262,263,265,266,267,268,27,270,271,272,273,275,276,277,278,28,280,281,282,283,285,286,287,288,29,290,291,292,293,295,296,297,298,3,30,300,301,302,303,305,306,307,308,31,310,311,312,313,314,315,316,317,318,319,32,321,322,323,324,325,326,328,329,33,330,331,333,334,335,336,337,338,339,34,340,341,342,343,344,345,346,347,348,349,35,350,351,352,353,355,356,357,358,359,36,360,361,362,363,364,365,366,367,368,369,37,370,371,372,374,375,377,378,379,380,381,382,383,384,385,386,387,388,389,39,390,391,392,393,394,396,397,399,4,40,400,401,402,403,404,406,407,408,41,410,411,414,415,416,417,418,419,42,420,421,422,423,424,426,427,428,429,43,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,45,450,451,452,453,454,455,456,457,458,459,46,460,461,462,463,464,466,467,468,47,470,471,472,474,475,476,477,479,48,480,481,483,484,485,486,487,488,489,49,490,491,492,493,494,495,496,497,498,499,5,50,500,501,502,51,52,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,7,70,73,74,77,78,79,8,80,81,82,83,85,86,87,88,89,9,90,91,92,93,94,95,96
+5000
+17 - statement synonym modifies variable string
+stmt s;
+Select s.stmt# such that Modifies(s, "yzy")
+178,183,188,193,198,203,208,214,219,224,230,235,240,245,250,255,258,260,261,262
+5000
+18 - read synonym modifies variable synonym
+read rd; variable v;
+Select <rd.varName, v> such that Modifies(rd, v)
+KE KE,appa appa,b b,banana banana,brown brown,cherry cherry,else else,firelord firelord,fishy fishy,ifs ifs,india india,japan japan,japanese japanese,korean korean,maxi maxi,murican murican,print print,read read,savoury savoury,singapore singapore,singaporean singaporean,sour sour,sweet sweet,xxx xxx,xxy xxy,xxz xxz,xyx xyx,xyy xyy,xyz xyz,xzx xzx,xzy xzy,xzz xzz,y y,yc yc,yxx yxx,yxy yxy,yxz yxz,yyx yyx,yyy yyy,yyz yyz,yzx yzx,yzy yzy,yzz yzz,zxx zxx,zxy zxy,zxz zxz,zyx zyx,zyy zyy,zyz zyz,zzx zzx,zzy zzy
+5000
+19 - read synonym modifies anything
+read rd;
+Select rd such that Modifies(rd, _)
+112,113,118,155,168,170,180,185,190,195,200,205,210,216,221,226,232,237,242,247,252,257,262,267,272,277,28,282,287,292,297,302,307,319,322,324,355,364,382,385,387,39,393,396,408,411,414,43,48,54,58,70,73,77,85,96
+5000
+20 - read synonym modifies variable string
+read rd;
+Select rd.varName such that Modifies(rd, "appa")
+appa
+5000
+21 - print synonym modifies variable synonym
+print pn; variable v;
+Select v such that Modifies(pn, v)
+
+5000
+22 - print synonym modifies anything
+print pn;
+Select BOOLEAN such that Modifies(pn, _)
+FALSE
+5000
+23 - print synonym modifies variable string
+print pn;
+Select pn such that Modifies(pn, "right")
+
+5000
+24 - call synonym modifies variable synonym
+call c; variable v;
+Select v such that Modifies(c, v)
+KE,app,azula,banana,bitter,bland,boruto,brown,capt,cherry,chika,cry,death,disgusting,e,else,fishy,fm,frog,g,h,hayasaka,hinata,ifs,ishigami,kaichou,neji,nuns,p,part,plain,priest,print,r,rc4,rice,sad,sakura,salmon,salty,savoury,sour,sweet,sword,tembu,usp,vinegar,w,while,yale,z
+5000
+25 - call synonym modifies anything
+call c;
+Select c.procName such that Modifies(c, _)
+CryingFrog,RV,Sokka,Sushi,a,b,c,complicated,fanmin,flavours,haiz,herp,procedure,weeb
+5000
+26 - call synonym modifies variable string
+call c;
+Select c such that Modifies(c, "rc4")
+423,499
+5000
+27 - while synonym modifies variable synonym
+while w; variable v;
+Select v.varName such that Modifies(w, v)
+KE,a,aa,app,australian,azula,banana,bitter,bland,boruto,brown,capt,cherry,chika,chinese,death,disgusting,else,f,fishy,fm,g,git,great,happy,hayasaka,hi,hinata,if,india,indian,ishigami,it,japan,japanese,kaichou,kiwi,korean,laos,left,long,murican,neji,nuns,o,plain,priest,print,r,rc4,read,rice,sakura,salmon,salty,savoury,singapore,singaporean,sour,sweet,sword,tembu,thailand,usp,vinegar,while,x,xxx,xxy,xxz,xyx,xyy,xyz,xzx,xzy,xzz,y,yale,yxx,yxy,yxz,yyx,yyy,yyz,yzx,yzy,yzz,z,zxx,zxy,zxz,zyx,zyy,zyz,zzx,zzy,zzz
+5000
+28 - while synonym modifies anything
+while w;
+Select w.stmt# such that Modifies(w, _)
+104,107,114,116,123,126,13,133,141,147,163,164,165,171,174,178,183,188,193,198,203,208,214,219,224,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,329,338,346,350,36,360,362,363,369,370,377,380,390,397,4,403,41,422,434,463,467,47,471,476,480,490,497,61,63,66,91,93
+5000
+29 - while synonym modifies variable string
+while w;
+Select w such that Modifies(w, "australian")
+377,380
+5000
+30 - if synonym modifies variable synonym
+if if; variable variable;
+Select variable such that Modifies(if, variable)
+KE,a,aa,app,azula,banana,bitter,bland,boruto,brown,capt,cc,cde,cherry,chika,chinese,death,disgusting,else,ewf,fishy,fm,frog,fw,g,gergdrg,git,happy,hayasaka,hinata,if,india,indian,ishigami,japan,japanese,kaichou,kiwi,laos,left,long,maxi,murican,neji,normSq,nuns,o,part,plain,priest,print,qwerty,rc4,re,read,rge,rice,sakura,salmon,salty,savoury,singapore,singaporean,sour,supppppppppppppppppppppperrrrrrrrrrrrrrrrrlongvarrrrrrrrrrriablename,sweet,sword,tembu,thailand,usp,vinegar,w,wait,while,x,y,yale,z
+5000
+31 - if synonym modifies anything
+if ifs;
+Select ifs such that Modifies(ifs, _)
+120,127,130,135,148,15,169,172,23,27,316,326,334,340,35,352,356,359,367,384,388,399,40,419,436,46,464,468,472,477,481,494,498,8
+5000
+32 - if synonym modifies variable string
+if ifs;
+Select ifs.stmt# such that Modifies(ifs, "normSq")
+352,356
+5000
+33 - assign synonym modifies variable synonym
+assign a; variable v;
+Select v such that Modifies(a, v)
+a,aa,app,appa,australian,azula,b,banana,bitter,bland,boruto,c,capt,cc,cde,cherry,chika,chinese,cry,death,disgusting,e,else,ewf,f,fishy,fm,frog,fw,g,gergdrg,git,gr,great,h,happy,hayasaka,hi,hinata,if,indian,ishigami,it,japan,japanese,kaichou,kiwi,laos,left,long,murican,neji,nm,normSq,nuns,o,p,part,plain,priest,qwerty,r,rc4,re,rge,rice,sad,sakura,salmon,salty,savoury,singaporean,sour,supppppppppppppppppppppperrrrrrrrrrrrrrrrrlongvarrrrrrrrrrriablename,sword,tembu,thailand,usp,vinegar,w,wait,while,x,xxx,xxy,xxz,xyx,xyy,xyz,xzx,xzy,xzz,y,yale,yup,yxx,yxy,yxz,yyx,yyy,yyz,yzx,yzy,yzz,z,zxx,zxy,zxz,zyx,zyy,zyz,zzx,zzy,zzz
+5000
+34 - assign synonym modifies anything
+assign a;
+Select a such that Modifies(a, _)
+1,10,100,101,103,106,108,109,110,115,119,12,124,125,128,129,134,136,137,138,139,14,142,143,144,145,146,154,16,166,17,175,176,179,181,184,186,189,19,191,194,196,199,2,20,201,204,206,209,21,211,212,215,217,220,222,225,227,228,231,233,236,238,241,243,246,248,251,253,256,258,26,261,263,266,268,271,273,276,278,281,283,286,288,291,293,296,298,3,30,301,303,306,308,31,311,313,314,315,317,318,32,323,328,33,331,333,335,336,337,34,341,342,343,344,345,347,348,349,351,353,357,358,361,365,366,368,37,371,372,374,375,378,379,381,383,386,389,391,392,394,400,401,402,404,406,407,410,415,416,417,418,42,420,421,426,427,428,429,430,431,432,433,435,437,438,439,440,441,442,443,444,445,446,447,448,449,45,450,451,452,453,454,455,456,457,458,459,460,461,462,466,470,474,475,479,483,484,485,486,487,488,489,49,491,492,493,495,496,5,50,501,502,51,52,55,56,57,59,6,60,62,64,65,67,68,7,74,78,79,80,81,82,83,86,87,88,89,9,90,92,94,95
+5000
+35 - assign synonym modifies variable string
+assign a;
+Select a.stmt# such that Modifies(a, "if")
+361
+5000
+36 - variable modifies variable
+variable v;
+Select BOOLEAN such that Modifies(v, v)
+FALSE
+5000
+37 - prog_line modifies variable synonym
+prog_line n; variable v;
+Select v.varName such that Modifies(n, v)
+KE,a,aa,app,appa,australian,azula,b,banana,bitter,bland,boruto,brown,c,capt,cc,cde,cherry,chika,chinese,cry,death,disgusting,e,else,ewf,f,firelord,fishy,fm,frog,fw,g,gergdrg,git,gr,great,h,happy,hayasaka,hi,hinata,if,ifs,india,indian,ishigami,it,japan,japanese,kaichou,kiwi,korean,laos,left,long,maxi,murican,neji,nm,normSq,nuns,o,p,part,plain,priest,print,qwerty,r,rc4,re,read,rge,rice,sad,sakura,salmon,salty,savoury,singapore,singaporean,sour,supppppppppppppppppppppperrrrrrrrrrrrrrrrrlongvarrrrrrrrrrriablename,sweet,sword,tembu,thailand,usp,vinegar,w,wait,while,x,xxx,xxy,xxz,xyx,xyy,xyz,xzx,xzy,xzz,y,yale,yc,yup,yxx,yxy,yxz,yyx,yyy,yyz,yzx,yzy,yzz,z,zxx,zxy,zxz,zyx,zyy,zyz,zzx,zzy,zzz
+5000
+38 - prog_line modifies anything
+prog_line n;
+Select n such that Modifies(n, _)
+1,10,100,101,103,104,106,107,108,109,11,110,112,113,114,115,116,118,119,12,120,121,122,123,124,125,126,127,128,129,13,130,131,133,134,135,136,137,138,139,14,140,141,142,143,144,145,146,147,148,149,15,151,152,154,155,16,163,164,165,166,168,169,17,170,171,172,174,175,176,178,179,18,180,181,183,184,185,186,188,189,19,190,191,193,194,195,196,198,199,2,20,200,201,203,204,205,206,208,209,21,210,211,212,214,215,216,217,219,22,220,221,222,224,225,226,227,228,23,230,231,232,233,235,236,237,238,240,241,242,243,245,246,247,248,250,251,252,253,255,256,257,258,26,260,261,262,263,265,266,267,268,27,270,271,272,273,275,276,277,278,28,280,281,282,283,285,286,287,288,29,290,291,292,293,295,296,297,298,3,30,300,301,302,303,305,306,307,308,31,310,311,312,313,314,315,316,317,318,319,32,321,322,323,324,325,326,328,329,33,330,331,333,334,335,336,337,338,339,34,340,341,342,343,344,345,346,347,348,349,35,350,351,352,353,355,356,357,358,359,36,360,361,362,363,364,365,366,367,368,369,37,370,371,372,374,375,377,378,379,380,381,382,383,384,385,386,387,388,389,39,390,391,392,393,394,396,397,399,4,40,400,401,402,403,404,406,407,408,41,410,411,414,415,416,417,418,419,42,420,421,422,423,424,426,427,428,429,43,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,45,450,451,452,453,454,455,456,457,458,459,46,460,461,462,463,464,466,467,468,47,470,471,472,474,475,476,477,479,48,480,481,483,484,485,486,487,488,489,49,490,491,492,493,494,495,496,497,498,499,5,50,500,501,502,51,52,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,7,70,73,74,77,78,79,8,80,81,82,83,85,86,87,88,89,9,90,91,92,93,94,95,96
+5000
+39 - prog_line modifies variable string
+prog_line n;
+Select n such that Modifies(n, "left")
+352,353,356,359,362,367,369,370,371,372
+5000
+40 - prog_line modifies prog_line
+prog_line n, n1;
+Select BOOLEAN such that Modifies(n, n1)
+FALSE
+5000

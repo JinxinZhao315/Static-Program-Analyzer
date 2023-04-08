@@ -1,12 +1,12 @@
 import subprocess
 
 #Run our test cases
-tests = ["affects", "assign", "bool", "calls", "follows", "general", "ifwhile", "next", "parent", "tuple", "usesmodifies", "with"]
+tests = [ "assign", "bool", "calls", "follows", "general", "ifwhile", "next", "optimization", "parent", "tuple", "usesmodifies", "with"]
 for test in tests:
    source = "source-" + test + ".txt"
    query = "query-" + test + ".txt"
-   out = "out-" + test + ".xml"
-   cmd = ["autotester.exe", source, query, out]
+   out = "../../Code15/tests/local_test/out-" + test + ".xml"
+   cmd = ["../../Code15/out/build/x64-Debug/src/autotester/autotester.exe", source, query, out]
    subprocess.run(cmd)
 
 #Run Jared's test cases

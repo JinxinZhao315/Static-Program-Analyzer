@@ -1,0 +1,211 @@
+1 - procedure procName exist
+procedure p;
+Select p with p.procName = "country"
+country
+5000
+3 - procedure procName does not exist
+procedure p;
+Select p with p.procName = "alibaba"
+none
+5000
+5 - call procName exist
+call c;
+Select c with c.procName = "TenWhileLoop"
+66, 85, 92, 224, 434
+5000
+7 - call procName does not exist
+call c;
+Select c with c.procName  = "TestB"
+none
+5000
+9 - variable exist
+variable v;
+Select v with v.varName = "usa"
+usa
+5000
+11 - variable does not exist
+variable v;
+Select v with v.varName = "asdasasdzxczxczc"
+none
+5000
+13 - read variable exist
+read r;
+Select r with r.varName = "a"
+1, 19, 158
+5000
+15 - read variable does not exist
+read r;
+Select r with r.varName = "hifive5"
+none
+5000
+17 - print variable exist
+print p;
+Select p with p.varName = "cherry"
+229, 255
+5000
+20 - print variable does not exist
+print p;
+Select p with p.varName = "malaysia"
+none
+5000
+21 - constant value exist.
+constant c;
+Select c with c.value = 7
+7
+5000
+23 - constant value does not exist.
+constant c;
+Select c with c.value = 929293939939293832828387383738
+none
+5000
+25 - stmt number exist.
+stmt s;
+Select s with s.stmt# = 5
+5
+5000
+27 - stmt number does not exist.
+stmt s;
+Select s with s.stmt# = 12941
+none
+5000
+29 - read number exist.
+read r;
+Select r with r.stmt# = 468
+468
+5000
+31 - read number does not exist.
+read r;
+Select r with r.stmt# = 12299
+none
+5000
+33 - read number is not a read stmt
+read r;
+Select r with r.stmt# = 461
+none
+5000
+35 - print stm number does not exist.
+print p;
+Select p with p.stmt# = 46111
+none
+5000
+37 - print stm number is not a print stm.
+print p;
+Select p with p.stmt# = 460
+none
+5000
+39 - call stm number exist
+call c;
+Select c with c.stmt# = 434
+434
+5000
+41 - call stm number does not exist
+call c;
+Select c with c.stmt# = 1922
+none
+5000
+43 - call is not a call stmt
+call c;
+Select c with c.stmt# = 438
+none
+5000
+45 - while stm number exist
+while w;
+Select w with w.stmt# = 429
+429
+5000
+47 - while stm number does not exist
+while w;
+Select w with w.stmt# = 192929
+none
+5000
+49 - while is not a while stmt
+while w;
+Select w with w.stmt# = 451
+none
+5000
+51 - if stm number exist
+if ifs;
+Select ifs with ifs.stmt# = 451
+451
+5000
+53 - if stm number does not exist
+if ifs;
+Select ifs with ifs.stmt# = 1929
+none
+5000
+55 - if is not an if stmt
+if ifs;
+Select ifs with ifs.stmt# = 463
+none
+5000
+57 - assign stm number exist
+assign a;
+Select a with a.stmt# = 456
+456
+5000
+59 - assign stm number does not exist
+assign al;
+Select a with a.stmt# = 45612
+none
+5000
+61 - assign is not an assign stmt
+assign al;
+Select a with a.stmt# = 471
+none
+5000
+69 - meaningless query if
+if ifs;
+Select ifs with ifs.stmt# = ifs.stmt#
+8, 26, 28, 33, 40, 54, 60, 74, 95, 156, 161, 162, 168, 173, 194, 202, 222, 233, 242, 268, 274, 347, 367, 370, 382, 394, 406, 420, 451, 462
+5000
+70 - if and another if
+if ifs, ifs1;
+Select ifs with ifs.stmt# = ifs1.stmt#
+8, 26, 28, 33, 40, 54, 60, 74, 95, 156, 161, 162, 168, 173, 194, 202, 222, 233, 242, 268, 274, 347, 367, 370, 382, 394, 406, 420, 451, 462
+5000
+71 - if and statement
+if ifs; stmt s;
+Select ifs with ifs.stmt# = s.stmt#
+8, 26, 28, 33, 40, 54, 60, 74, 95, 156, 161, 162, 168, 173, 194, 202, 222, 233, 242, 268, 274, 347, 367, 370, 382, 394, 406, 420, 451, 462
+5000
+72 - if and statement
+if ifs; stmt s;
+Select s with ifs.stmt# = s.stmt#
+8, 26, 28, 33, 40, 54, 60, 74, 95, 156, 161, 162, 168, 173, 194, 202, 222, 233, 242, 268, 274, 347, 367, 370, 382, 394, 406, 420, 451, 462
+5000
+75 - meaningless while
+while w;
+Select w with w.stmt# = w.stmt#
+15, 30, 42, 52, 56, 76, 81, 97, 101, 107, 108, 112, 114, 120, 123, 124, 128, 131, 133, 142, 157, 160, 163, 165, 170, 171, 172, 176, 198, 209, 216, 234, 245, 259, 269, 275, 289, 291, 294, 319, 321, 326, 332, 335, 342, 354, 358, 362, 373, 377, 391, 399, 410, 417, 429, 437, 440, 444, 453, 460
+5000
+76 - while and another while
+while w, w1;
+Select w with w.stmt# = w1.stmt#
+15, 30, 42, 52, 56, 76, 81, 97, 101, 107, 108, 112, 114, 120, 123, 124, 128, 131, 133, 142, 157, 160, 163, 165, 170, 171, 172, 176, 198, 209, 216, 234, 245, 259, 269, 275, 289, 291, 294, 319, 321, 326, 332, 335, 342, 354, 358, 362, 373, 377, 391, 399, 410, 417, 429, 437, 440, 444, 453, 460
+5000
+77 - while and another while
+while w; stmt s;
+Select w with s.stmt# = w.stmt#
+15, 30, 42, 52, 56, 76, 81, 97, 101, 107, 108, 112, 114, 120, 123, 124, 128, 131, 133, 142, 157, 160, 163, 165, 170, 171, 172, 176, 198, 209, 216, 234, 245, 259, 269, 275, 289, 291, 294, 319, 321, 326, 332, 335, 342, 354, 358, 362, 373, 377, 391, 399, 410, 417, 429, 437, 440, 444, 453, 460
+5000
+78 - while and another while
+while w; stmt s;
+Select s with s.stmt# = w.stmt#
+15, 30, 42, 52, 56, 76, 81, 97, 101, 107, 108, 112, 114, 120, 123, 124, 128, 131, 133, 142, 157, 160, 163, 165, 170, 171, 172, 176, 198, 209, 216, 234, 245, 259, 269, 275, 289, 291, 294, 319, 321, 326, 332, 335, 342, 354, 358, 362, 373, 377, 391, 399, 410, 417, 429, 437, 440, 444, 453, 460
+5000
+79 - meaningless read query
+read r; variable v;
+Select v with r.varName = v.varName
+a, b, x, r, c, s, i, p, f, read, pear, banana, grape, orange, avocado, kiwi, cherry, pur
+e, pink, red, brown, black, blue, green, while, print, bus, gojek, train, brazil, spain, malaysia, india, singapore, usa, japan
+5000
+91 - constant value and stmtNumber
+stmt s; constant c;
+Select s with c.value = s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 67, 100, 123, 126, 127, 156
+5000
+92 - constant value and stmtNumber
+stmt s; constant c;
+Select c with c.value = s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 67, 100, 123, 126, 127, 156
+5000

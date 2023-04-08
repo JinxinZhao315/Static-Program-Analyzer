@@ -1,0 +1,554 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>friendsTest</name><parsing_time_taken>74.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Self call syntax error">1</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; prog_line pl; Select pr1 such that Calls(pr1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>22.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Normal Call with first var returned">2</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, pr2)]]></querystr>
+<stuans>First,Second</stuans>
+<correct>First,Second</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid call with assign in first var">3</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(a1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>22.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid call with call stmt in first var">4</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(c1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Invalid call with pl not defined">5</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, pl)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>21.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Double wildcard Call">6</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(_, _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left wildcard, right syn call">7</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(_, pr1)]]></querystr>
+<stuans>Second,Third</stuans>
+<correct>Second,Third</correct>
+<time_taken>22.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left syn, right wildcard call">8</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, _)]]></querystr>
+<stuans>First,Second</stuans>
+<correct>First,Second</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, right IDENT call">9</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, "Third")]]></querystr>
+<stuans>Second</stuans>
+<correct>Second</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left IDENT, right syn call">10</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls("Second", pr2)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left, Right IDENT call">11</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls("First", "Second")]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>21.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, right IDENT non matching proc call">12</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, "9")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, right invalid IDENT">13</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr1, "")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>9.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, right IDENT, BOOLEAN call">14</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(pr2, "NotAProg")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>12.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left IDENT, right wildcard call">15</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls("Second", _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Calls="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left wildcard, Right IDENT call for no incoming proc">16</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls(_, "First")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>12.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Self call syntax error">17</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; prog_line pl; Select pr1 such that Calls*(pr1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left, Right syn callT">18</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, pr2)]]></querystr>
+<stuans>First,Second</stuans>
+<correct>First,Second</correct>
+<time_taken>14.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left invalid arg callT">19</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(a1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left invalid arg callT">20</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr2 such that Calls*(c1, pr1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Right non declared var">21</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, pl)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>5.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Double wildcard callT, BOOLEAN,">22</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(_, _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left wildcard, Right syn, callT">23</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(_, pr1)]]></querystr>
+<stuans>Second,Third</stuans>
+<correct>Second,Third</correct>
+<time_taken>18.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left syn, Right wildcard, callT">24</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, _)]]></querystr>
+<stuans>First,Second</stuans>
+<correct>First,Second</correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, Right IDENT, callT">25</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, "Third")]]></querystr>
+<stuans>First,Second</stuans>
+<correct>First,Second</correct>
+<time_taken>23.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left IDENT, right syn, callT, BOOLEAN">26</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*("Second", pr2)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left, Right IDENT callT, BOOLEAN">27</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*("First", "Third")]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, Right IDENT no proc callT">28</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, "9")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, Right IDENT empty INVALID">29</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(pr1, "")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Left syn, Right IDENT no proc callT">30</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr2 such that Calls*(pr1, "NotAProg")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left IDENT, right wildcard, callT, BOOLEAN">31</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*("First", _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>10.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Callsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Left wildcard, Right IDENT, callT, BOOLEAN">32</id><querystr><![CDATA[stmt s1; assign a1; call c1; procedure pr1, pr2; Select pr1 such that Calls*(_, "Third")]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Self CFG Next not possible">33</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, s1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next from stmt syn to assign syn">34</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, a1)]]></querystr>
+<stuans>4,12,11,8,6,10,13,14,16</stuans>
+<correct>4,6,8,10,11,12,13,14,16</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next from assign syn to stmt syn">35</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(a1, s1)]]></querystr>
+<stuans>17,6,13,8,14,5,15,18</stuans>
+<correct>5,6,8,13,14,15,17,18</correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next from assign syn to assign syn (self), BOOLEAN">36</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(a1, a1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next from assign syn to assign syn (other), BOOLEAN">37</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(a1, a2)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to read syn">38</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, r1)]]></querystr>
+<stuans>1</stuans>
+<correct>1</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to print syn">39</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, p1)]]></querystr>
+<stuans>17</stuans>
+<correct>17</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to proc syn">40</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, proc1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>13.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to call syn">41</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, c1)]]></querystr>
+<stuans>2,7</stuans>
+<correct>2,7</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to while syn">42</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, w1)]]></querystr>
+<stuans>5,9</stuans>
+<correct>5,9</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to if syn">43</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, if1)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next stmt syn to prog_line syn">44</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, n1)]]></querystr>
+<stuans>2,1,9,7,4,6,5,8,10,11,12,13,14,16,17</stuans>
+<correct>1,2,4,5,6,7,8,9,10,11,12,13,14,16,17</correct>
+<time_taken>43.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next proc syn not valid to stmt syn">45</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(proc1, s1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next assign syn to read syn">46</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(a1, r1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>37.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next read syn to proc syn invalid">47</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(r1, proc1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>11.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="CFG Next left wildcard to stmt syn">48</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(_, s1)]]></querystr>
+<stuans>9,10,2,3,5,6,7,8,11,12,13,14,15,17,18</stuans>
+<correct>2,3,5,6,7,8,9,10,11,12,13,14,15,17,18</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="3" SuchThat="1" CondNum="6" RelNum="1" comment="CFG Next Double wildcard, BOOLEAN">49</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(_, _)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="CFG Next Left stmt syn to Right wildcard">50</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, _)]]></querystr>
+<stuans>9,1,2,4,5,6,7,8,10,11,12,13,14,16,17</stuans>
+<correct>1,2,4,5,6,7,8,9,10,11,12,13,14,16,17</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left stmt syn to right INVALID IDENT">51</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, -1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>11.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left stmt syn to right INVALID IDENT">52</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, 0)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left IDENT to right stmt syn, no output">53</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(3, s1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left IDENT to right stmt syn, have output">54</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(1, s1)]]></querystr>
+<stuans>2</stuans>
+<correct>2</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left IDENT to right IDENT, no output">55</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(3, 7)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="CFG Next Left IDENT to right IDENT, while output">56</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(9,6)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Next clause as BOOLEAN (true)">57</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(n1, n2)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Valid Next clause progline after statement returns all statments except last statements for each procedure">58</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(s1, n1)]]></querystr>
+<stuans>2,1,9,7,4,6,5,8,10,11,12,13,14,16,17</stuans>
+<correct>1,2,4,5,6,7,8,9,10,11,12,13,14,16,17</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Next as BOOLEAN (false), Wildcard for next of last statement in a procedure">59</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(3, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Next="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Valid Next as BOOLEAN (false), wildcard before first statement in a procedure">60</id><querystr><![CDATA[stmt s1,s2; assign a1,a2; read r1,r2; print p1,p2; procedure proc1,proc2; call c1,c2; while w1,w2; if if1,if2; prog_line n1, n2; Select s1 such that Next(_, 4)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While statement with variable passed as control variable, valid input">61</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1(v1, _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While pattern with statement passed as control variable returns none">62</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1(s1, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="Select while statement with proc name being passed as a variable name returns none">63</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1(pr1, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>12.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="Select while statement with control const being a valid prog_line">64</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1(pl, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>8.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="While pattern wildcard, return BOOLEAN procedure">65</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1(_, _)]]></querystr>
+<stuans>First,Second,Third</stuans>
+<correct>First,Second,Third</correct>
+<time_taken>19.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While pattern empty entRef returns none">66</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1("", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>12.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While pattern non existing control constant returns none">67</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1("9", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>18.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While pattern non existing control variable returns none">68</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1("x", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="While pattern, non-existing control variable input returns none">69</id><querystr><![CDATA[stmt s1; while w1; variable v1; procedure pr1; prog_line pl; Select pr1 pattern w1("NoSuchVar", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>11.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern, existing variable as control variable">70</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1(v1, _, _)]]></querystr>
+<stuans>10</stuans>
+<correct>10</correct>
+<time_taken>17.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern, statement as input to entRef returns none">71</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1(s1, _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern procedure as control variable returns none">72</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1(pr1, _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>21.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern, prog line as the control const, INVALID first arg">73</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1(pl, _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>7.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="4" Pattern="1" CondNum="6" RelNum="0" comment="If pattern wildcard control variable returns all valid">74</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1(_, _, _)]]></querystr>
+<stuans>10</stuans>
+<correct>10</correct>
+<time_taken>13.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If Pattern empty IDENT returns none">75</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1("", _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>10.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern searching for non-existing IDENT returns none">76</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1("9", _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>22.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern check existing pattern variable">77</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1("x", _, _)]]></querystr>
+<stuans>10</stuans>
+<correct>10</correct>
+<time_taken>11.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="If pattern checking for non-existent control variable">78</id><querystr><![CDATA[stmt s1; if if1; variable v1; procedure pr1; prog_line pl; Select if1 pattern if1("NoSuchVar", _, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>20.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

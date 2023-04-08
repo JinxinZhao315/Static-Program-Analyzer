@@ -1,0 +1,256 @@
+1 - left int
+stmt s;
+Select s such that Affects(15, s)
+
+5000
+2 - left underscore
+stmt s;
+Select s such that Affects(_, s)
+
+5000
+3 - left stmt
+stmt s1, s2;
+Select s1 such that Affects(s1, s2)
+100,101,106,108,109,115,119,12,124,125,128,134,136,137,138,14,142,16,17,176,181,186,19,191,196,20,201,206,211,217,222,227,233,238,243,248,253,258,263,268,273,278,283,288,293,298,303,308,31,311,313,314,315,32,344,348,351,353,361,366,368,37,371,378,379,383,386,389,391,392,394,400,401,404,406,410,418,42,426,429,431,435,437,439,443,445,447,449,45,451,453,455,457,459,461,466,470,479,483,485,486,487,489,49,491,493,495,496,50,501,502,51,52,55,56,59,60,62,64,65,67,68,7,74,78,80,81,82,86,87,88,89,90,92,94
+5000
+
+5000
+5 - left read
+read r; stmt s;
+Select r such that Affects(r, s)
+
+5000
+6 - left print
+print p; stmt s;
+Select p such that Affects(p, s)
+
+5000
+7 - left call
+call ca; stmt s;
+Select ca such that Affects(ca, s)
+
+5000
+8 - left while
+while w; stmt s;
+Select w such that Affects(w, s)
+
+5000
+9 - left if
+if ifs; stmt s;
+Select ifs such that Affects(ifs, s)
+
+5000
+10 - left assign
+assign a; stmt s;
+Select a such that Affects(a, s)
+
+5000
+11 - right int
+stmt s;
+Select s such that Affects(s, 15)
+
+5000
+12 - right underscore
+stmt s;
+Select s such that Affects(s, _)
+
+5000
+13 - right stmt
+stmt s1, s2;
+Select s2 such that Affects(s1, s2)
+10,101,103,106,108,109,110,115,119,124,125,128,134,137,138,14,142,145,16,17,179,184,189,194,199,20,204,209,21,215,220,225,231,236,241,246,251,256,26,261,266,271,276,281,286,291,296,301,306,311,315,317,318,33,347,351,361,365,37,371,378,386,391,392,394,400,401,402,406,407,410,42,426,428,430,435,438,440,442,444,446,448,45,450,452,453,454,456,458,460,462,483,486,487,489,49,492,493,495,496,50,501,51,52,55,56,57,59,60,62,64,65,67,68,74,78,79,81,82,83,88,89,9,90,92,94,95
+5000
+
+15 - right read
+read r; stmt s;
+Select r such that Affects(s, r)
+
+5000
+16 - right print
+print p; stmt s;
+Select p such that Affects(s, p)
+
+5000
+17 - right call
+call ca; stmt s;
+Select ca such that Affects(s, ca)
+
+5000
+18 - right while
+while w; stmt s;
+Select w such that Affects(s, w)
+
+5000
+19 - right if
+if ifs; stmt s;
+Select ifs such that Affects(s, ifs)
+
+5000
+20 - right assign
+assign a; stmt s;
+Select a such that Affects(s, a)
+
+5000
+21 - left int star
+stmt s;
+Select s such that Affects*(15, s)
+
+5000
+22 - left underscore star
+stmt s;
+Select s such that Affects*(_, s)
+
+5000
+23 - left stmt star
+stmt s1, s2;
+Select s1 such that Affects*(s1, s2)
+
+5000
+
+25 - left read star
+read r; stmt s;
+Select r such that Affects*(r, s)
+
+5000
+26 - left print star
+print p; stmt s;
+Select p such that Affects*(p, s)
+
+5000
+27 - left call star
+call ca; stmt s;
+Select ca such that Affects*(ca, s)
+
+5000
+28 - left while star
+while w; stmt s;
+Select w such that Affects*(w, s)
+
+5000
+29 - left if star
+if ifs; stmt s;
+Select ifs such that Affects*(ifs, s)
+
+5000
+30 - left assign star
+assign a; stmt s;
+Select a such that Affects*(a, s)
+
+5000
+31 - right int star
+stmt s;
+Select s such that Affects*(s, 15)
+
+5000
+32 - right underscore star
+stmt s;
+Select s such that Affects*(s, _)
+
+5000
+33 - right stmt star
+stmt s1, s2;
+Select s2 such that Affects*(s1, s2)
+
+5000
+
+35 - right read star
+read r; stmt s;
+Select r such that Affects*(s, r)
+
+5000
+36 - right print star
+print p; stmt s;
+Select p such that Affects*(s, p)
+
+5000
+37 - right call star
+call ca; stmt s;
+Select ca such that Affects*(s, ca)
+
+5000
+38 - right while star
+while w; stmt s;
+Select w such that Affects*(s, w)
+
+5000
+39 - right if star
+if ifs; stmt s;
+Select ifs such that Affects*(s, ifs)
+
+5000
+40 - right assign star
+assign a; stmt s;
+Select a such that Affects*(s, a)
+
+5000
+41 - affects same synonym
+stmt s;
+Select s such that Affects(s, s)
+101,106,109,115,119,124,125,128,134,138,142,311,351,361,37,371,391,392,394,400,401,42,426,45,483,493,51,52,59,62,65,67,68,92,94
+5000
+42 - affects same synonym
+assign a;
+Select a such that Affects(a, a)
+
+5000
+43 - affects same synonym
+read rd;
+Select rd such that Affects(rd, rd)
+
+5000
+44 - affects same synonym
+print pn;
+Select pn such that Affects(pn, pn)
+
+5000
+45 - affects same synonym
+call c;
+Select c such that Affects(c, c)
+
+5000
+46 - affects same synonym
+while w;
+Select w such that Affects(w, w)
+
+5000
+47 - affects same synonym
+if i;
+Select i such that Affects(i, i)
+
+5000
+
+49 - affectsT same synonym
+stmt s;
+Select s such that Affects*(s, s)
+
+5000
+50 - affectsT same synonym
+assign a;
+Select a such that Affects*(a, a)
+
+5000
+51 - affectsT same synonym
+read rd;
+Select rd such that Affects*(rd, rd)
+
+5000
+52 - affectsT same synonym
+print pn;
+Select pn such that Affects*(pn, pn)
+
+5000
+53 - affectsT same synonym
+call c;
+Select c such that Affects*(c, c)
+
+5000
+54 - affectsT same synonym
+while w;
+Select w such that Affects*(w, w)
+
+5000
+55 - affectsT same synonym
+if i;
+Select BOOLEAN such that Affects*(i, i)
+FALSE
+5000

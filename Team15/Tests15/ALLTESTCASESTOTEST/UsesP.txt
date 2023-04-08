@@ -1,0 +1,50 @@
+1 - procedure synonym uses variable synonym
+procedure p; variable v;
+Select <p.procName> such that Uses(p, v)
+CryingFrog, HappyFrog, Sushi, procedure, fanmin, RV, flavours, complicated, weeb, a, b, c, ifs, infiniteTsukuyomi, haiz, herp, neeh, Aang, Sokka, stmtNum, oneLiner, honkai, race, lastStretch, longNose, godHelpMe, roadtofivehundred
+5000
+2 - procedure synonym uses anything
+procedure p;
+Select BOOLEAN such that Uses(p, _)
+TRUE
+5000
+3 - procedure synonym uses variable string
+procedure p;
+Select p such that Uses(p, "zxx")
+infiniteTsukuyomi
+5000
+4 - anything uses anything
+
+Select BOOLEAN such that Uses(_, _)
+FALSE
+5000
+5 - procedure string uses variable synonym
+variable v;
+Select v such that Uses("weeb", v)
+armour,banana,bestGurl,bestboi,bitter,black,bland,boruto,brown,cherry,complicated,confess,confesses,cultured,cut,dd,dead,derp,disgusting,else,fishy,hair,hayasaka,herp,hinata,if,inshigami,kaguya,kaichou,loser,naruto,nerd,nuns,onepiece,plain,plot,priest,print,procedure,quality,read,rice,sakura,salmon,salty,sausgae,savoury,sour,sucks,sweet,t,trash,tt,vinegar,while,x,y,z
+5000
+6 - procedure string uses anything
+if ifs;
+Select ifs such that Uses("neeh", _)
+120,127,130,135,148,15,156,157,158,169,172,23,27,316,326,334,340,35,352,356,359,367,384,388,399,40,419,436,46,464,468,472,477,481,494,498,8
+5000
+7 - procedure string uses variable string
+
+Select BOOLEAN such that Uses("complicated", "read")
+TRUE
+5000
+8 - procedure uses procedure
+procedure p, p1;
+Select BOOLEAN such that Uses(p, p1)
+FALSE
+5000
+9 - procedure uses integer
+procedure p;
+Select p such that Uses(p, 2)
+
+5000
+10 - procedure uses statement
+procedure p; stmt s;
+Select BOOLEAN such that Uses(p, s)
+FALSE
+5000
