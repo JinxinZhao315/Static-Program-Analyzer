@@ -16,17 +16,17 @@ void Query::addSelectClause(SelectClause* selectClause) {
 	clauseList.push_back(selectClause);
 }
 void Query::addAllSuchThatClauses(std::vector<SuchThatClause*>& suchThatClauseVec) {
-	for (SuchThatClause* suchThatClause: suchThatClauseVec) {
+	for (SuchThatClause*& suchThatClause: suchThatClauseVec) {
 		clauseList.push_back(suchThatClause);
 	}
 }
 void Query::addAllPatternClauses(std::vector<PatternClause*>& patternClauseVec) {
-	for (PatternClause* patternClause : patternClauseVec) {
+	for (PatternClause*& patternClause : patternClauseVec) {
 		clauseList.push_back(patternClause);
 	}
 }
 void Query::addAllWithClauses(std::vector<WithClause*>& withClauseVec) {
-	for (WithClause* withClause : withClauseVec) {
+	for (WithClause*& withClause : withClauseVec) {
 		clauseList.push_back(withClause);
 	}
 }

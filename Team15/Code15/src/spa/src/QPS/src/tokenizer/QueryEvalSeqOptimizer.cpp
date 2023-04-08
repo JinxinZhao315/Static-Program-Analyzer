@@ -117,10 +117,10 @@ std::vector<std::vector<int>> QueryEvalSeqOptimizer::seperateEvalGroup(std::vect
 std::vector<int> QueryEvalSeqOptimizer::generateOrderedEvalGroup(std::vector<Clause*> clauseList, std::vector<int> evalGroup,
     std::unordered_map<int, std::set<int>> clauseToClauseMap) {
     //find the clause with the highest priority in current group as a starting point for BFS
-    int highestPriorityClause = evalGroup[0];
+    int highestPriorityClause = 0;
     for (int clauseIntRep : evalGroup) {
         PriorityLevel currPriorityLevel = getPriority(clauseList[clauseIntRep]);
-        PriorityLevel highestPriorityLevel = getPriority(clauseList[clauseIntRep]);
+        PriorityLevel highestPriorityLevel = getPriority(clauseList[highestPriorityClause]);
         if (currPriorityLevel < highestPriorityLevel) {
             highestPriorityClause = clauseIntRep;
         }
@@ -140,7 +140,7 @@ std::vector<int> QueryEvalSeqOptimizer::generateOrderedEvalGroup(std::vector<Cla
             if (std::find(visitedClause.begin(), visitedClause.end(), clauseIntRep) == visitedClause.end()) {
                 visitedClause.push_back(clauseIntRep);
                 for (int connectedClause : clauseToClauseMap.at(clauseIntRep)) {
-                    tempPq.push(std::make_pair(connectedClause, getPriority(clauseList[clauseIntRep])));
+                    tempPq.push(std::make_pair(connectedClause, getPriority(clauseList[connectedClause])));
                 }
             }
         }

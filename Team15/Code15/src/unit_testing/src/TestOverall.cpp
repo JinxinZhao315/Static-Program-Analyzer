@@ -43,18 +43,18 @@ string source_with = "../../../../Tests15/with.txt";
 string source_ifwhile = "../../../../Tests15/source-ifwhile.txt";
 string source_optimization = "../../../../Tests15/source-optimization.txt";
 #elif _WIN32
-string source_sample1 = "../../../../../../Tests15/source-sample1.txt";
-string source_sample2 = "../../../../../../Tests15/source-sample2.txt";
-string source_sample3 = "../../../../../../Tests15/source-sample3.txt";
-string source_general = "../../../../../../Tests15/source-general.txt";
-string source_follows = "../../../../../../Tests15/source-follows.txt";
-string source_parent = "../../../../../../Tests15/source-parent.txt";
-string source7 = "../../../../../../Tests15/source-7.txt";
-string uses_modifies = "../../../../../../Tests15/source-usesmodifies.txt";
-string source_with = "../../../../../../Tests15/with.txt";
-string source_ifwhile = "../../../../../../Tests15/source-ifwhile.txt";
-string source_optimization = "../../../../../../Tests15/source-optimization.txt";
-string source_affects = "../../../../../../Tests15/source-affects.txt";
+string source_sample1 = "../../../../../../Tests15/local_test/source-sample1.txt";
+string source_sample2 = "../../../../../../Tests15/local_test/source-sample2.txt";
+string source_sample3 = "../../../../../../Tests15/local_test/source-sample3.txt";
+string source_general = "../../../../../../Tests15/local_test/source-general.txt";
+string source_follows = "../../../../../../Tests15/local_test/source-follows.txt";
+string source_parent = "../../../../../../Tests15/local_test/source-parent.txt";
+string source7 = "../../../../../../Tests15/local_test/source-7.txt";
+string uses_modifies = "../../../../../../Tests15/local_test/source-usesmodifies.txt";
+string source_with = "../../../../../../Tests15/local_test/with.txt";
+string source_ifwhile = "../../../../../../Tests15/local_test/source-ifwhile.txt";
+string source_optimization = "../../../../../../Tests15/local_test/source-optimization.txt";
+string source_affects = "../../../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../../../Tests15/g_invalid/1_source.txt";
 #endif
 
@@ -556,12 +556,22 @@ TEST_CASE("Overall test : optimization test 1") {
 //    REQUIRE(result == expectedResult);
 //}
 
+TEST_CASE("Overall test : optimization test 3") {
+    string filename = source_optimization;
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Next*(n1, n2) and Next*(n1, n2) and Follows*(n1, n2) and Parent(n1, n1) and Next* (n9, n10) pattern a(v, _) with n1.stmt#=n2.stmt#";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "FALSE" };
+    REQUIRE(result == expectedResult);
+}
+
 TEST_CASE("Overall test : with test 1") {
     string filename = source_with;
     string queryStr = "stmt s; constant c; Select s with s.stmt# = c.value";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "TRUE" };
+    set<string> expectedResult = { "4" };
     REQUIRE(result == expectedResult);
 }
 
@@ -570,7 +580,7 @@ TEST_CASE("Overall test : invalid syntax 1") {
     string queryStr = "stmt s; variable v; constant const; procedure p; Select p.stmt#";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "TRUE" };
+    set<string> expectedResult = { "SemanticError" };
     REQUIRE(result == expectedResult);
 }
 
