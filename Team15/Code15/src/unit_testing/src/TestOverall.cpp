@@ -651,3 +651,22 @@ TEST_CASE("Overall test : optimization test 4") {
     set<string> expectedResult = { "FALSE" };
     REQUIRE(result == expectedResult);
 }
+
+TEST_CASE("Overall test : source affects buggy") {
+    string filename = source_affects;
+    string queryStr1 = "stmt s;Select BOOLEAN such that Affects*(4, 15)";
+    string queryStr2 = "assign a1, a2;Select a2 such that Affects(a1, a2) with a1.stmt# = 4";
+    string queryStr3 = "stmt s1, s2;Select s2 such that Affects(s1, s2) with s1.stmt# = 4";
+
+    set<string> result1 = testDriver(filename, queryStr1);
+    set<string> result2 = testDriver(filename, queryStr2);
+    set<string> result3 = testDriver(filename, queryStr3);
+
+    set<string> expected1 = { "TRUE" };
+    set<string> expected2 = { "8", "12", "14", "16" };
+    set<string> expected3 = { "8", "12", "14", "16" };
+
+    REQUIRE(result1 == expected1);
+    REQUIRE(result2 == expected2);
+    REQUIRE(result3 == expected3);
+}
