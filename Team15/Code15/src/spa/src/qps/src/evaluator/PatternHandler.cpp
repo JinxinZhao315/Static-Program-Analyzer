@@ -7,19 +7,16 @@ vector<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, set<int
     vector <string> ret;
     for (int stmtNum : allStmtsWithLHS) {
         bool isMatch;
-        set < vector<string>> exprSet = pkb.getAssignExprsFromStmt(stmtNum);
-        for (vector<string> rhsTokensVec : exprSet) {
-            if (!isPartialMatch) {
-                isMatch = rhsTokensVec == substrTokens;
-            }
-            else {
-                isMatch = findIsPartialMatch(rhsTokensVec, substrTokens);
-            }
-            if (isMatch) {
-                  ret.push_back(to_string(stmtNum));
-            }
+        vector<string> expr = pkb.getAssignExprsFromStmt(stmtNum);
+        if (!isPartialMatch) {
+            isMatch = expr == substrTokens;
         }
-
+        else {
+            isMatch = findIsPartialMatch(expr, substrTokens);
+        }
+        if (isMatch) {
+                ret.push_back(to_string(stmtNum));
+        }
     }
     return ret;
 }
