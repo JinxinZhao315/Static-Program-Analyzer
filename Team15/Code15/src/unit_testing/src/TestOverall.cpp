@@ -31,17 +31,17 @@ set<string> testDriver(string filename, string queryStr)
 }
 
 #if __APPLE__
-string source_sample1 = "../../../../Tests15/source-sample1.txt";
-string source_sample2 = "../../../../Tests15/source-sample2.txt";
-string source_sample3 = "../../../../Tests15/source-sample3.txt";
-string source_general = "../../../../Tests15/source-general.txt";
-string source_follows = "../../../../Tests15/source-follows.txt";
-string source_parent = "../../../../Tests15/source-parent.txt";
-string source7 = "../../../../Tests15/source-7.txt";
-string uses_modifies = "../../../../Tests15/source-usesmodifies.txt";
-string source_with = "../../../../Tests15/with.txt";
-string source_ifwhile = "../../../../Tests15/source-ifwhile.txt";
-string source_optimization = "../../../../Tests15/source-optimization.txt";
+string source_sample1 = "../../../../Tests15/local_test/source-sample1.txt";
+string source_sample2 = "../../../../Tests15/local_test/source-sample2.txt";
+string source_sample3 = "../../../../Tests15/local_test/source-sample3.txt";
+string source_general = "../../../../Tests15/local_test/source-general.txt";
+string source_follows = "../../../../Tests15/local_test/source-follows.txt";
+string source_parent = "../../../../Tests15/local_test/source-parent.txt";
+string source7 = "../../../../Tests15/local_test/source-7.txt";
+string uses_modifies = "../../../../Tests15/local_test/source-usesmodifies.txt";
+string source_with = "../../../../Tests15/local_test/with.txt";
+string source_ifwhile = "../../../../Tests15/local_test/source-ifwhile.txt";
+string source_optimization = "../../../../Tests15/local_test/source-optimization.txt";
 string source_affects = "../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../Tests15/g_invalid/1_source.txt";
 #elif _WIN32
@@ -548,15 +548,15 @@ TEST_CASE("Affects test : 1")
     REQUIRE(result == expectedResult);
 }
 
-//TEST_CASE("Overall test : optimization test 2") {
-//    string filename = source_optimization;
-//    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
-//        Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next* (n9, n10) pattern a(v, _)";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "TRUE" };
-//    REQUIRE(result == expectedResult);
-//}
+TEST_CASE("Overall test : optimization test 2") {
+    string filename = source_optimization;
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Next*(n1, n2) and Next*(n3, n4) and Next*(n5, n6) and Next*(n7, n8) and Next* (n9, n10) pattern a(v, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "TRUE" };
+    REQUIRE(result == expectedResult);
+}
 
 TEST_CASE("Overall test : optimization test 3") {
     string filename = source_optimization;

@@ -57,8 +57,8 @@ bool checkPath(const vector<int>& path, const string& variable, const unordered_
     return check;
 }
 
-bool checkAffects(bool checkModifies, bool checkUses, bool checkPath) {
-    return checkModifies && checkUses && !checkPath;
+bool checkAffects(bool checkModifies, bool checkPath) {
+    return checkModifies && !checkPath;
 }
 
 bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, int lineNum1, int lineNum2,
@@ -143,9 +143,9 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
     if (usesRS.count(lineNum2) > 0) {
         varThatAreUsedInLineNum2 = usesRS.at(lineNum2);
     }
+
     for(const auto& v : varThatAreUsedInLineNum2) {
         bool modifies = checkModifies(line1, v, modifiesRS);
-        bool uses = checkUses(line2, v, usesRS);
         bool pathCheck = true;
         for(const auto& option : paths) {
             if(!checkPath(option, v, modifiesRS, program, lineNum1, lineNum2)) {
@@ -153,10 +153,10 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                 break;
             }
         }
-        if(checkAffects(modifies, uses, pathCheck)) {
+        if(checkAffects(modifies, pathCheck)) {
             affectedVars.insert(v);
         } else if(findAffectsStar) {
-            for(auto option : paths) {
+            for(const auto& option : paths) {
                 if(checkTransitivePath(option, program, lineNum1, lineNum2, cfg, variables, modifiesRS, usesRS)) {
                     affectedVars.insert(v);
                 }
