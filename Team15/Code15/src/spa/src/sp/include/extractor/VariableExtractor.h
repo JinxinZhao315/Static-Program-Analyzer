@@ -10,7 +10,6 @@ private:
     unordered_map<int, string> printLineNumToVarName;
 public:
     VariableExtractor();
-    bool findVariable(string token);
     void extractVariables(const vector<Line>& program);
     set<string> getVariables();
     void extractReadAndPrintLineNumToVarName(const vector<Line>& program);

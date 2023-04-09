@@ -23,12 +23,8 @@ void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<in
     path->pop_back();
 }
 
-Line findLine(const vector<Line>& program, int lineNum) {
-    Line result;
-    for(const auto& line : program) {
-        if(line.getLineNumber() == lineNum) result = line;
-    }
-    return result;
+Line findLine(int lineNum, unordered_map<int, Line> lineNumToLineMap) {
+    return lineNumToLineMap[lineNum];
 }
 
 bool checkAssign(const Line& line1, const Line& line2) {
@@ -42,10 +38,10 @@ bool checkModifies(const Line& line, const string& variable, unordered_map<int, 
 }
 
 bool checkPath(const vector<int>& path, const string& variable, const unordered_map<int, set<string>>& modifiesRS,
-               const vector<Line>& program, int lineNum1, int lineNum2) {
+               const vector<Line>& program, int lineNum1, int lineNum2, unordered_map<int, Line> lineNumToLineMap) {
     bool check = false;
     for(auto node : path) {
-        Line line = findLine(program, node);
+        Line line = findLine(node, lineNumToLineMap);
         KeywordsEnum type = line.getType();
         if(node == lineNum1 || node == lineNum2 || type == WHILE || type == IF) {
             continue;
@@ -62,12 +58,12 @@ bool checkAffects(bool checkModifies, bool checkPath) {
 
 bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, int lineNum1, int lineNum2,
                          const unordered_map<int, set<int>>& cfg,
-                         const set<string>& variables,
                          const unordered_map<int, set<string>>& modifiesRS,
-                         const unordered_map<int, set<string>>& usesRS) {
+                         const unordered_map<int, set<string>>& usesRS,
+                         unordered_map<int, Line> lineNumToLineMap) {
     for(auto node : path) {
-        if(extractAffectsRS(program, lineNum1, node, cfg, variables, modifiesRS, usesRS, false)
-            && extractAffectsRS(program, node, lineNum2, cfg, variables, modifiesRS, usesRS, false)) {
+        if(extractAffectsRS(program, lineNum1, node, cfg, modifiesRS, usesRS, false, lineNumToLineMap)
+            && extractAffectsRS(program, node, lineNum2, cfg, modifiesRS, usesRS, false, lineNumToLineMap)) {
             return true;
         }
     }
@@ -76,19 +72,18 @@ bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, i
 
 set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bool wildCardIsFirstArg,
                                     const unordered_map<int, set<int>>& cfg,
-                                    const set<string>& variables,
                                     const unordered_map<int, set<string>>& modifiesRS,
                                     const unordered_map<int, set<string>>& usesRS,
-                                    bool findAffectsStar) {
+                                    bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap) {
     set<int> stmtLineNums;
     for(const auto& line : program) {
         int otherLineNum = line.getLineNumber();
         if(lineNum > 0 && otherLineNum > 0 && lineNum != otherLineNum) {
             bool affects;
             if (wildCardIsFirstArg) {
-                affects = extractAffectsRS(program, otherLineNum, lineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar);
+                affects = extractAffectsRS(program, otherLineNum, lineNum, cfg,  modifiesRS, usesRS, findAffectsStar, lineNumToLineMap);
             } else {
-                affects = extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar);
+                affects = extractAffectsRS(program, lineNum, otherLineNum, cfg, modifiesRS, usesRS, findAffectsStar, lineNumToLineMap);
             }
             if(affects) {
                 stmtLineNums.insert(otherLineNum);
@@ -100,10 +95,9 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
 
 unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Line>& program,
                                                        const unordered_map<int, set<int>>& cfg,
-                                                       const set<string>& variables,
                                                        const unordered_map<int, set<string>>& modifiesRS,
                                                        const unordered_map<int, set<string>>& usesRS,
-                                                       bool findAffectsStar) {
+                                                       bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap) {
     unordered_map<int, set<int>> allAffects;
     for(int i = 0; i < program.size(); i++) {
         const Line& line = program[i];
@@ -112,7 +106,7 @@ unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Li
             const Line& otherLine = program[j];
             int otherLineNum = otherLine.getLineNumber();
             if(lineNum > 0 && otherLineNum > 0 && i != j
-                && extractAffectsRS(program, lineNum, otherLineNum, cfg, variables, modifiesRS, usesRS, findAffectsStar)) {
+                && extractAffectsRS(program, lineNum, otherLineNum, cfg, modifiesRS, usesRS, findAffectsStar, lineNumToLineMap)) {
                     allAffects[lineNum].insert(otherLineNum);
             };
         }
@@ -122,18 +116,17 @@ unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Li
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                           const unordered_map<int, set<int>>& cfg,
-                                          const set<string>& variables,
                                           const unordered_map<int, set<string>>& modifiesRS,
                                           const unordered_map<int, set<string>>& usesRS,
-                                          bool findAffectsStar) {
+                                          bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap) {
     pair<int, int> key = make_pair(lineNum1, lineNum2);
     if (cache.find(key) != cache.end()) {
         return cache[key];
     }
     set<string> affectedVars;
     unordered_map<int, set<int>> result;
-    Line line1 = findLine(program, lineNum1);
-    Line line2 = findLine(program, lineNum2);
+    Line line1 = findLine(lineNum1, lineNumToLineMap);
+    Line line2 = findLine(lineNum2, lineNumToLineMap);
     if(!checkAssign(line1, line2)) return false;
     vector<int> path;
     vector<vector<int>> paths;
@@ -149,7 +142,7 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
         bool modifies = checkModifies(line1, v, modifiesRS);
         bool pathCheck = true;
         for(const auto& option : paths) {
-            if(!checkPath(option, v, modifiesRS, program, lineNum1, lineNum2)) {
+            if(!checkPath(option, v, modifiesRS, program, lineNum1, lineNum2, lineNumToLineMap)) {
                 pathCheck = false;
                 break;
             }
@@ -158,7 +151,7 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
             affectedVars.insert(v);
         } else if(findAffectsStar) {
             for(const auto& option : paths) {
-                if(checkTransitivePath(option, program, lineNum1, lineNum2, cfg, variables, modifiesRS, usesRS)) {
+                if(checkTransitivePath(option, program, lineNum1, lineNum2, cfg, modifiesRS, usesRS, lineNumToLineMap)) {
                     affectedVars.insert(v);
                 }
             }

@@ -16,25 +16,24 @@ static unordered_map<pair<int, int>, bool, pair_hash> cache;
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                               const unordered_map<int, set<int>>& cfg,
-                                              const set<string>& variables,
                                               const unordered_map<int, set<string>>& modifiesRS,
                                               const unordered_map<int, set<string>>& usesRS,
-                                              bool findAffectsStar
+                                              bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap
                                               );
 
 set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bool wildCardIsFirstArg,
                                     const unordered_map<int, set<int>>& cfg,
-                                    const set<string>& variables,
                                     const unordered_map<int, set<string>>& modifiesRS,
                                     const unordered_map<int, set<string>>& usesRS,
-                                    bool findAffectsStar);
+                                    bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap
+                                    );
 
 unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Line>& program,
                                                                  const unordered_map<int, set<int>>& cfg,
-                                                                 const set<string>& variables,
                                                                  const unordered_map<int, set<string>>& modifiesRS,
                                                                  const unordered_map<int, set<string>>& usesRS,
-                                                                 bool findAffectsStar);
+                                                                 bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap
+                                                                 );
 
 void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<int>* path, vector<vector<int>>* paths,
          unordered_map<int, int>* visited);

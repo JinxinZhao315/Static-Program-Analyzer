@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "sp/include/extractor/Extractor.h"
 
 Extractor::Extractor() {
@@ -120,39 +122,39 @@ unordered_map<int, set<int>> Extractor::getNextRS() {
 }
 
 bool Extractor::getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, false);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, modifies, uses, false, std::move(lineNumToLineMap));
 }
 
 bool Extractor::getAffectsStarRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsRS(program, lineNum1, lineNum2, cfg, variablesForAffects, modifies, uses, true);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsRS(program, lineNum1, lineNum2, cfg, modifies, uses, true, std::move(lineNumToLineMap));
 }
 
 set<int> Extractor::getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, false);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, modifies, uses, false, std::move(lineNumToLineMap));
 }
 
 set<int> Extractor::getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, variablesForAffects, modifies, uses, true);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsWithWildcard(program, lineNum, wildcardIsFirstArg, cfg, modifies, uses, true, std::move(lineNumToLineMap));
 }
 
 unordered_map<int, set<int>> Extractor::getAffectsRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsWithMultipleWildcards(program, cfg, variablesForAffects, modifies, uses, false);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsWithMultipleWildcards(program, cfg, modifies, uses, false,std::move(lineNumToLineMap));
 }
 
 unordered_map<int, set<int>> Extractor::getAffectsStarRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
-        set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
-        const unordered_map<int, set<int>>& cfg) {
-    return extractAffectsWithMultipleWildcards(program, cfg, variablesForAffects, modifies, uses, true);
+        set<string>>& modifies, const unordered_map<int, set<string>>& uses,
+        const unordered_map<int, set<int>>& cfg, unordered_map<int, Line> lineNumToLineMap) {
+    return extractAffectsWithMultipleWildcards(program, cfg, modifies, uses, true, std::move(lineNumToLineMap));
 }
 
 void Extractor::extract(const vector<Line> &program) {
