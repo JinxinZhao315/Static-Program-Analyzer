@@ -109,8 +109,6 @@ public:
 	//get line
 	std::vector<Line> getAllLines();
 
-	std::set<Line> getAllAssignLines();
-
 	std::unordered_map<int, Line> getStmtNumToLineMap();
 
 	//get statement
@@ -283,7 +281,6 @@ private:
 	EntityTable<std::string> varTable;
 	EntityTable<std::string> constTable;
 	EntityTable<Line> lineTable;
-	EntityTable<Line> assignLineTable;
 	StatementTable stmtTable;
 	RelationshipTable<int, int> followsTable;
 	RelationshipTable<int, int> followsStarTable;

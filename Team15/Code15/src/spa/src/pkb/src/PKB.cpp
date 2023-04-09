@@ -5,7 +5,6 @@ PKB::PKB() {
 	varTable = EntityTable<std::string>();
 	constTable = EntityTable<std::string>();
 	lineTable = EntityTable<Line>();
-	assignLineTable = EntityTable<Line>();
 	stmtTable = StatementTable();
 	followsTable = RelationshipTable<int, int>();
 	followsStarTable = RelationshipTable<int, int>();
@@ -51,9 +50,6 @@ void PKB::addAllLines(std::vector<Line> allLines) {
 	lineTable.addAllEntities(allLines);
 	for (Line line : allLines) {
 		lineTable.addEntityMapping(line.getLineNumber(), line);
-		if (line.getType() == KeywordsEnum::ASSIGN) {
-			assignLineTable.addEntityToSet(line);
-		}
 	}
 }
 
@@ -198,10 +194,6 @@ std::set<std::string> PKB::getAllConstVals() {
 //get line
 std::vector<Line> PKB::getAllLines() {
 	return lineTable.getEntityVector();
-}
-
-std::set<Line> PKB::getAllAssignLines() {
-	return assignLineTable.getEntitySet();
 }
 
 std::unordered_map<int, Line> PKB::getStmtNumToLineMap() {
@@ -402,7 +394,7 @@ bool PKB::isNextEmpty() {
 
 //get next*
 void PKB::prepareNextStarTable() {
-	if (isNextStarEmpty()) {
+	if (nextStarTable.isEmpty()) {
 		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
 		std::unordered_map<int, std::set<int>> nextStarMap = sp->getNextStarRS(nextMap);
 		addAllNextStar(nextStarMap);
@@ -425,7 +417,13 @@ bool PKB::areInNextStarRelationship(int previousStmtNum, int nextStmtNum) {
 }
 
 bool PKB::isNextStarEmpty() {
-	return nextStarTable.isEmpty();
+	if (nextStarTable.isEmpty()) {
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, std::set<int>> nextStarMap = sp->getNextStarRS(nextMap);
+		addAllNextStar(nextStarMap);
+		return nextStarMap.empty();
+	}
+	return false;
 }
 
 void PKB::clearNextStar() {
@@ -442,8 +440,8 @@ std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
 }
@@ -455,10 +453,9 @@ std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsModifierToUsers(modifierStmtNum, users);
 	return users;
 }
@@ -470,10 +467,9 @@ bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineMap);
 	if (boolResult) {
 		addAffectsModifierToUsers(modifierStmtNum, { userStmtNum });
 	}
@@ -481,7 +477,19 @@ bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 }
 
 bool PKB::isAffectsEmpty() {
-	return affectsTable.isEmpty();
+	if (affectsTable.isEmpty()) {
+		std::vector<Line> lines = getAllLines();
+		std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+		std::unordered_map<int, std::set<int>> affectsMap = sp->getAffectsRSWithMultipleWildcards(lines, modifiesMap, usesMap, nextMap, lineMap);
+		if (affectsMap.empty()) {
+			return true;
+		}
+		affectsTable.addAllManyToManyRelationships(affectsMap);
+	}
+	return false;
 }
 
 void PKB::clearAffects() {
@@ -496,10 +504,9 @@ std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsStarUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
 }
@@ -511,10 +518,9 @@ std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsStarModifierToUsers(modifierStmtNum, users);
 	return users;
 }
@@ -526,10 +532,9 @@ bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-    std::unordered_map<int, Line> lineNumToLineMap = getStmtNumToLineMap();
-	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineNumToLineMap);
+    std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineMap);
 	if (boolResult) {
 		addAffectsStarModifierToUsers(modifierStmtNum, { userStmtNum });
 	}
@@ -537,7 +542,19 @@ bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 }
 
 bool PKB::isAffectsStarEmpty() {
-	return affectsStarTable.isEmpty();
+	if (affectsStarTable.isEmpty()) {
+		std::vector<Line> lines = getAllLines();
+		std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
+		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
+		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
+		std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
+		std::unordered_map<int, std::set<int>> affectsStarMap = sp->getAffectsStarRSWithMultipleWildcards(lines, modifiesMap, usesMap, nextMap, lineMap);
+		if (affectsStarMap.empty()) {
+			return true;
+		}
+		affectsStarTable.addAllManyToManyRelationships(affectsStarMap);
+	}
+	return false;
 }
 
 void PKB::clearAffectsStar() {
