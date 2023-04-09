@@ -1,0 +1,40 @@
+procedure proc1 {
+  a = 50;
+  read b;
+  c = 0;
+  if (a > b) then {
+    a = a / 2;
+    c = a; }
+  else {
+    a = a + 51;
+    c = a - b; }
+  d = 0;
+  while (c > 0) {
+    c = c - 1;
+    call proc2;
+    d = d + 1; }
+  print d; }
+
+procedure proc2 {
+  while (c >= 1) {
+    if (c == 1) then {
+      c = c - 1; }
+    else {
+      d = c; } } }
+
+procedure proc3 {
+  read e;
+  read f;
+  read g;
+  h = 0;
+  while (e > 0) {
+    e = e - 1;
+    while (f > 0) {
+      f = f - 1;
+      while (g > f) {
+        g = g - 1;
+        call proc4; } } }
+  print h; }
+
+procedure proc4 {
+  h = h + 1; }

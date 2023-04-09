@@ -1,0 +1,80 @@
+1 - follows
+stmt s;
+Select s such that Follows(9, s)
+10
+5000
+2 - follows
+stmt s;
+Select s such that Follows(s, 15)
+14
+5000
+3 - follows
+if i;
+Select i such that Follows(19, i)
+20
+5000
+4 - follows
+if i;
+Select i such that Follows(i, 23)
+20
+5000
+5 - follows
+while w;
+Select w such that Follows(10, w)
+11
+5000
+6 - follows
+while w;
+Select w such that Follows(w, 17)
+11
+5000
+7 - follows
+call c;
+Select c such that Follows(17, c)
+18
+5000
+8 - follows
+call c;
+Select c such that Follows(c, 25)
+24
+5000
+9 - follows*
+stmt s;
+Select s such that Follows*(9, s)
+10, 11, 17, 18
+5000
+10 - follows*
+stmt s;
+Select s such that Follows*(s, 15)
+13, 14
+5000
+11 - follows
+call c;
+Select c such that Follows*(1, c)
+18
+5000
+12 - follows
+call c;
+Select c such that Follows*(c, 25)
+24
+5000
+13 - follows
+if i;
+Select i such that Follows*(19, i)
+20
+5000
+14 - follows
+if i;
+Select i such that Follows*(i, 25)
+20
+5000
+15 - follows
+while w;
+Select w such that Follows*(1, w)
+11
+5000
+16 - follows
+while w;
+Select w such that Follows*(w, 18)
+11
+5000

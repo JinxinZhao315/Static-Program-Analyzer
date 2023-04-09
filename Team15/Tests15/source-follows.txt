@@ -1,0 +1,39 @@
+procedure proc1 {
+  x = 0;
+  y = 0;
+  a = 1;
+  b = 6;
+  c = 3;
+  d = 4;
+  e = 5;
+  count = 0;
+  x = c + d + e;
+  c = d + e;
+  while (count < 5) {
+    if (a < b) then {
+      a = a + 1;
+      y = 0 + 1;
+      count = count + 1;
+    } else {
+      count = count * 2;
+    }
+  }
+  y = c + d + e;
+  call proc2;
+}
+
+procedure proc2 {
+  f = 0;
+  if (f == 0) then {
+    f = f + 1;
+  } else {
+    f = f - 1;
+  }
+  f = 1;
+  call proc3;
+  f = 2;
+}
+
+procedure proc3 {
+  g = 0;
+}

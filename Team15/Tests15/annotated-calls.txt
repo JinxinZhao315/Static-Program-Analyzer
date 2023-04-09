@@ -1,0 +1,19 @@
+procedure main {
+//1  call proc1;
+//2  call proc2; }
+
+procedure proc1 {
+//3  call proc2;
+//4  call proc3; }
+
+procedure proc2 {
+//5  x = 0; }
+
+procedure proc3 {
+//6  call proc4; }
+
+procedure proc4 {
+//7  x = 0; }
+
+procedure proc5 {
+//8  x = 0; }

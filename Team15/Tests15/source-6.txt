@@ -1,0 +1,22 @@
+procedure proc1 {
+  while (a < 50) {
+    while (b > 1) {
+      if (c > 25) then {
+        if (d < 50) then {
+          e = f / 2;
+          g = h + 5;
+        } else {
+          if (i < 75) then {
+            j = k / 3;
+          } else {
+            l = m / 4;
+          }
+        }
+      } else {
+        n = o * 2;
+        p = q;
+      }
+    }
+    r = s + 1;
+  }
+ }
