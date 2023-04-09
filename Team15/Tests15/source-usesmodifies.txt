@@ -1,0 +1,57 @@
+procedure proc1 {
+  a = 99;
+  call proc2; }
+
+procedure proc2 {
+  b = a + 1;
+  call proc3; }
+
+procedure proc3 {
+  print a;
+  print b;
+  call proc4; }
+
+procedure proc4 {
+  read v;
+  read w;
+  while ((v >= 1) && (w <= 100)) {
+    if (v == a) then {
+      x = v / 3; }
+    else {
+      y = w / 4; }
+    z = v - w * x; } }
+
+procedure proc5 {
+  print b;
+  read w;
+  c = 10;
+  d = 5;
+  if (c < 20) then {
+    c = 10 + d; }
+  else {
+    c = d; } }
+
+procedure proc6 {
+  read e;
+  read f;
+  while (e != f) {
+    call proc7; } }
+
+procedure proc7 {
+  g = 0;
+  if (e > f) {
+    call proc8;
+    g = g + 1; }
+  else {
+    call proc9;
+    g = g - 1; } }
+
+procedure proc8 {
+  h = 0;
+  f = f * 2;
+  print h; }
+
+procedure proc9 {
+  h = 1;
+  f = f / 2;
+  print h; }
