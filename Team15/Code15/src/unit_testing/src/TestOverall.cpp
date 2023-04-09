@@ -642,7 +642,7 @@ TEST_CASE("Overall test : invalid syntax 4") {
         Select v such that Modifies(c, v) and Uses(a,v) such that Parent*(s,_)";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "a,cat,x,y,z" };
+    set<string> expectedResult = { "a","cat","x","y","z" };
     REQUIRE(result == expectedResult);
 }
 
@@ -652,6 +652,6 @@ TEST_CASE("Overall test : invalid syntax 5") {
         Select v such that Parent*(s,_) such that Modifies(c, v) and Uses(a,v) ";
 
     set<string> result = testDriver(filename, queryStr);
-    set<string> expectedResult = { "a,cat,x,y,z" };
+    set<string> expectedResult = { "a","cat","x","y","z" };
     REQUIRE(result == expectedResult);
 }
