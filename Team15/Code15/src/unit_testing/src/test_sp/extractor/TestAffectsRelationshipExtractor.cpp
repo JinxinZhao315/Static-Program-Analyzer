@@ -846,7 +846,7 @@ TEST_CASE("source affects") {
     auto usesRS = modifiesUses.usesRS;
 
     set<int> expected1 = {
-            5, 9, 11, 13
+        5, 9, 11, 13
     };
 
     clearCache();
