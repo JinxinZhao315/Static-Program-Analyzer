@@ -184,7 +184,8 @@ PriorityLevel QueryEvalSeqOptimizer::getPriority(Clause* clause) {
         return FIVE;
     }
     //suchthat clause with 2 syns: simple(7), medium(8), complex(10)
-    else if (clause->getType() == SUCH_THAT && clause->getSynList().size() == 2) {
+    //if (clause->getType() == SUCH_THAT && clause->getSynList().size() == 2) 
+    else {
         std::string relationship = (static_cast<SuchThatClause*>(clause))->getRelationShip();
         if (simpleRelationship.count(Utility::getRelationshipFromString(relationship)) > 0) {
             return SIX;

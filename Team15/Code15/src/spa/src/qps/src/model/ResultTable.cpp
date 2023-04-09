@@ -143,41 +143,6 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
-std::string ResultTable::getAttrRefValue(int synIndex, int tupleIndex, AttrRef attrRef, PKB &pkb) {
-    //attrbute is in the table
-    if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
-        attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
-        return resultTable[synIndex][tupleIndex];
-    }
-    else if (attrRef.getSynType() == "call") {
-        int callLineNum = stoi(resultTable[synIndex][tupleIndex]);
-        std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
-        if (calledProcName == "-1") {
-            //should throw error
-        }
-        return calledProcName;
-    }
-    else if (attrRef.getSynType() == "read") {
-        int readLineNum = stoi(resultTable[synIndex][tupleIndex]);
-        std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
-        if (readVarName == "-1") {
-            //should throw error
-        }
-        return readVarName;
-    }
-    else if (attrRef.getSynType() == "print") {
-        int printLineNum = stoi(resultTable[synIndex][tupleIndex]);
-        std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
-        if (printVarName == "-1") {
-            //should throw error
-        }
-        return printVarName;
-    }
-    else {
-        return "-1";
-    }
-}
-
 std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
         if (isEarlyExit) {
@@ -198,7 +163,7 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selected
                     tuple += resultTable[synNameIndex[j]][i] + " ";
                 }
                 else {
-                    tuple += getAttrRefValue(synNameIndex[j], i, selectedElem[j]->getAttrRef(), pkb) + " ";
+                    tuple += Utility::getAttrRefValue(resultTable[synNameIndex[j]][i], selectedElem[j]->getAttrRef(), pkb) + " ";
                 }
             }
             //pop the last white space
@@ -223,7 +188,7 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selected
                     selectedSynResult.insert(resultTable[synIndex][i]);
                 }
                 else {
-                    selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0]->getAttrRef(), pkb));
+                    selectedSynResult.insert(Utility::getAttrRefValue(resultTable[synIndex][i], selectedElem[0]->getAttrRef(), pkb));
                 }
             }
             return selectedSynResult;
