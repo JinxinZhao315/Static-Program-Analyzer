@@ -98,7 +98,7 @@ public:
     inline static const std::string synonymFormat = "[a-zA-Z][a-zA-Z0-9]*";
     inline static const std::string integerFormat = "[1-9][0-9]*";
     inline static const std::string quotedIdentFormat = "\"[a-zA-Z][a-zA-Z0-9]*\"";
-    inline static const std::string underscoredExprFormat = "_\"[\\s\\S]*\"_";
+    inline static const std::string underscoredExprFormat = "_[\\s]*\"[\\s\\S]*\"[\\s]*_";
     inline static const std::string exprFormat = "\"[\\s\\S]*\"";
 
     inline static const std::string whiteSpaces = " \t\n";
