@@ -18,29 +18,6 @@ string testUsesS(string queryStr) {
     pkb.addAllVars({ "x", "y", "k", "m", "i", "j", "t"});
 
     pkb.addAllUsesStmt({ {1, {"x", "y"}}, {2, {"i", "j"}}, {3, {"t"}}});
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-    pkb.addUsesStmt(1,  {"x", "y"});
-
-    pkb.addStmt("=", 2);
-    pkb.addVar("m");
-    pkb.addVar("i");
-    pkb.addVar("j");
-    pkb.addUsesStmt(2, {"i", "j"});
-
-    pkb.addStmt("print", 3);
-    pkb.addVar("t");
-    pkb.addUsesStmt(3, {"t"});
-    */
-
-    // Line 1: k = x + y;
-    // Line 2: m = i + j;
-    // Line 3: print t;
-
 
     string retStr = TestUtility::testDriver(queryStr, pkb);
     return retStr;

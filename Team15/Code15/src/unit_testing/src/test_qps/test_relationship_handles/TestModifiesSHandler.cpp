@@ -50,25 +50,6 @@ TEST_CASE("ModifiesS Integer IdentString test") {
     set<string> set1({ "k" });
     set<string> set3({ "x" });
     pkb.addAllModifiesStmt({ {1, set1}, {3, set3} });
-    //do not add one by one to pkb
-    /*
-    pkb.addStmt("=", 1);
-    pkb.addStmt("=", 2);
-
-    pkb.addVar("x");
-    pkb.addVar("y");
-    pkb.addVar("k");
-
-    set<string> set1({ "k" });
-
-    pkb.addModifiesStmt(1, set1);
-
-    pkb.addStmt("read", 3);
-
-    set<string> set3({ "x" });
-
-    pkb.addModifiesStmt(3, set3);
-    */
 
     string retStr1 = TestUtility::testDriver("assign a; variable b; Select a such that Modifies(1, \"k\")", pkb);
     
