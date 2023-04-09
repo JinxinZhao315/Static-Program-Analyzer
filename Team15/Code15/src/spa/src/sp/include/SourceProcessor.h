@@ -18,7 +18,7 @@ private:
     PKB* pkb;
 public:
     SourceProcessor();
-    void parseProgram(string fileName, PKB* pkb);
+    void parseProgram(const string& fileName, PKB* pkb);
     void extract(const vector<Line>& program);
     void storeDataInPKB(PKB* pkb);
 

@@ -794,3 +794,63 @@ TEST_CASE("test affects with wildcards simple") {
 
     REQUIRE(result14 == expected14);
 }
+
+TEST_CASE("source affects") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"a", "=", "0", ";"}, ASSIGN),
+            Line(2, {"c", "=", "5", ";"}, ASSIGN),
+            Line(3, {"read", "d", ";"}, READ),
+            Line(4, {"while", "(", "c", "!=", "0", ")", "{"}, WHILE),
+            Line(5, {"a", "=", "a", "+", "2", "*", "d", ";"}, ASSIGN),
+            Line(6, {"call", "B", ";"}, CALL),
+            Line(7, {"c", "=", "c", "-", "1", ";"}),
+            Line({"}"}, CLOSE_CURLY),
+            Line(8, {"if", "(", "a", "==", "1", ")", "then", "{"}, IF),
+            Line(9, {"a", "=", "a", "+", "1", ";"}, ASSIGN),
+            Line({"}", "else", "{"}, ELSE),
+            Line(10, {"B", "=", "1", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line(11, {"b", "=", "b", "+", "a", "+", "c", ";"}, ASSIGN),
+            Line(12, {"d", "=", "b", "+", "2", ";"}, ASSIGN),
+            Line(13, {"a", "=", "a", "*", "d", "+", "b", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+    };
+
+    const unordered_map<int, Line> lineNumToLineMap = {
+            { 1, Line(1, {"a", "=", "0", ";"}, ASSIGN)},
+            { 2, Line(2, {"c", "=", "5", ";"}, ASSIGN)},
+            { 3, Line(3, {"read", "d", ";"}, READ)},
+            { 4, Line(4, {"while", "(", "c", "!=", "0", ")", "{"}, WHILE)},
+            { 5, Line(5, {"a", "=", "a", "+", "2", "*", "d", ";"}, ASSIGN)},
+            { 6, Line(6, {"call", "B", ";"}, CALL)},
+            { 7, Line(7, {"c", "=", "c", "-", "1", ";"})},
+            { 8, Line(8, {"if", "(", "a", "==", "1", ")", "then", "{"}, IF)},
+            { 9, Line(9, {"a", "=", "a", "+", "1", ";"}, ASSIGN)},
+            { 10, Line(10, {"B", "=", "1", ";"}, ASSIGN)},
+            { 11, Line(11, {"b", "=", "b", "+", "a", "+", "c", ";"}, ASSIGN)},
+            { 12, Line(12, {"d", "=", "b", "+", "2", ";"}, ASSIGN)},
+            { 13, Line(13, {"a", "=", "a", "*", "d", "+", "b", ";"}, ASSIGN)},
+    };
+
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    set<int> expected1 = {
+        5, 9, 11, 13
+    };
+
+    clearCache();
+    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, modifiesRS, usesRS, false, lineNumToLineMap);
+
+    REQUIRE(expected1 == result1);
+}
