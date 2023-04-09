@@ -1,5 +1,5 @@
 // #include "catch.hpp"
-// #include "source_processor/include/parser/Parser.h"
+// #include "sp/include/parser/Parser.h"
 //
 // #if __APPLE__
 //     string sourceProgram = "Team15/Tests15/Sample_source.txt";

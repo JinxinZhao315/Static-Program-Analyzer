@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/ProcedureExtractor.h"
+#include "sp/include/extractor/ProcedureExtractor.h"
 
 TEST_CASE("extract procedures from mainProgram") {
     ProcedureExtractor* procedureExtractor = new ProcedureExtractor();

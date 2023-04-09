@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/AssignsRelationshipExtractor.h"
+#include "sp/include/extractor/AssignsRelationshipExtractor.h"
 
 unordered_map<string, set<Line>> extractAssignmentRS(const vector<Line>& program, const set<string>& variables) {
     unordered_map<string, set<Line>> assignsRS;

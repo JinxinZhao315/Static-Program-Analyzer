@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/ProcedureExtractor.h"
+#include "sp/include/extractor/ProcedureExtractor.h"
 
 string findProcedureName(vector<string> tokens) {
     for(auto token = begin(tokens); token != end(tokens); token++) {

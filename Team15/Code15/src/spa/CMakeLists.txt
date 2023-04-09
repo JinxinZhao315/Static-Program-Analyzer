@@ -13,10 +13,10 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/tokenizer/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/extractor/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/parser/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/src/tokeniser/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/src/extractor/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/src/parser/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/src/tokeniser/*.cpp"
     )
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
@@ -34,14 +34,14 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/hasher/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/table/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/extractor/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/parser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/source_processor/include/tokeniser/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/include/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/include/extractor/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/include/parser/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/include/tokeniser/*.h"
     )
 
 
-add_library(spa ${srcs} ${headers} src/source_processor/src/extractor/AffectsRelationshipExtractor.cpp src/source_processor/include/extractor/AffectsRelationshipExtractor.h "src/QPS/include/tokenizer/QueryEvalSeqOptimizer.h" "src/QPS/src/tokenizer/QueryEvalSeqOptimizer.cpp")
+add_library(spa ${srcs} ${headers} src/sp/src/extractor/AffectsRelationshipExtractor.cpp src/sp/include/extractor/AffectsRelationshipExtractor.h "src/QPS/include/tokenizer/QueryEvalSeqOptimizer.h" "src/QPS/src/tokenizer/QueryEvalSeqOptimizer.cpp")
 
 
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

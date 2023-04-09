@@ -4,7 +4,7 @@
 #include "pkb/include/table/EntityTable.h"
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
-#include "source_processor/include/SourceProcessor.h"
+#include "sp/include/SourceProcessor.h"
 
 class SourceProcessor;
 

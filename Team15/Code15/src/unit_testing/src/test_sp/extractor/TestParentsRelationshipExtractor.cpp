@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/ParentsRelationshipExtractor.h"
+#include "sp/include/extractor/ParentsRelationshipExtractor.h"
 
 TEST_CASE("extractParentsRelationship_noNesting_noParents") {
     auto [result, result2] = extractParentsRelationship(mainProgram);

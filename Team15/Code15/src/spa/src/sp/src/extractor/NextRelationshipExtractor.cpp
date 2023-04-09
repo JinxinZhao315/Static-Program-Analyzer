@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/NextRelationshipExtractor.h"
+#include "sp/include/extractor/NextRelationshipExtractor.h"
 
 Keywords nextKeywords;
 

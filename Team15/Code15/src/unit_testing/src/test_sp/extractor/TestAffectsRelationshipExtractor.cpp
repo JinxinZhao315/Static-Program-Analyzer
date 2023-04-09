@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/Extractor.h"
-#include "source_processor/include/extractor/AffectsRelationshipExtractor.h"
+#include "sp/include/extractor/Extractor.h"
+#include "sp/include/extractor/AffectsRelationshipExtractor.h"
 
 TEST_CASE("test affects simple") {
     const vector<Line>& lines = {

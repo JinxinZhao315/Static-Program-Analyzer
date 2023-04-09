@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/AssignsRelationshipExtractor.h"
+#include "sp/include/extractor/AssignsRelationshipExtractor.h"
 
 TEST_CASE("extractAssignmentRS_noAssignments") {
     set<string> variables;

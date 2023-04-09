@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/FollowsRelationshipExtractor.h"
+#include "sp/include/extractor/FollowsRelationshipExtractor.h"
 
 TEST_CASE("extractFollowsRelationship_noNesting") {
     auto [result, result2] = extractFollowsRelationship(mainProgram);

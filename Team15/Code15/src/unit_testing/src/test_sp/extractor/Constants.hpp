@@ -1,5 +1,5 @@
 #pragma once
-#include "source_processor/include/extractor/CommonExtractorHeader.h"
+#include "sp/include/extractor/CommonExtractorHeader.h"
 #include "catch.hpp"
 
 extern const vector<Line> mainProgram;

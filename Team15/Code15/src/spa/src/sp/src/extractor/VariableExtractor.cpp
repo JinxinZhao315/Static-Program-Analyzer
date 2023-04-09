@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/VariableExtractor.h"
+#include "sp/include/extractor/VariableExtractor.h"
 
 VariableExtractor::VariableExtractor() {
     keywords = new Keywords();

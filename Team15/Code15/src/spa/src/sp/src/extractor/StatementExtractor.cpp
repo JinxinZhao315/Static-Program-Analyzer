@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/StatementExtractor.h"
+#include "sp/include/extractor/StatementExtractor.h"
 
 void insertLineNumber(unordered_map<KeywordsEnum, set<int>>* statements, KeywordsEnum type, int* lineNumber) {
     statements->at(type).insert(*lineNumber);

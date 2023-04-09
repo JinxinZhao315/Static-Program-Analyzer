@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "source_processor/include/extractor/Extractor.h"
+#include "sp/include/extractor/Extractor.h"
 
 TEST_CASE("convertToPostfix_emptyTokenStringInput_shouldReturnEmptyString") {
     vector<string> tokens;

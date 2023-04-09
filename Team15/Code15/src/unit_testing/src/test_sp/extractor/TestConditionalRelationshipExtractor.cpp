@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/ConditionalRelationshipExtractor.h"
+#include "sp/include/extractor/ConditionalRelationshipExtractor.h"
 
 TEST_CASE("Single If with Greater Than") {
     const vector<Line>& lines = {

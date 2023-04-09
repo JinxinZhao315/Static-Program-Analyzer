@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/ConditionalRelationshipExtractor.h"
+#include "sp/include/extractor/ConditionalRelationshipExtractor.h"
 
 Keywords keywords;
 

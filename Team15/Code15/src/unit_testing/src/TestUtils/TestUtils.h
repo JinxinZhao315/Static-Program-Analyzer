@@ -1,7 +1,7 @@
 #pragma once
 
 #include "catch.hpp"
-#include "source_processor/include/extractor/CommonExtractorHeader.h"
+#include "sp/include/extractor/CommonExtractorHeader.h"
 
 void printNodes(const unordered_map<int, set<int>>& myMap);
 

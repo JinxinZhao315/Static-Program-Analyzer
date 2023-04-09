@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/ModifiesUsesCallsRelationshipExtractor.h"
+#include "sp/include/extractor/ModifiesUsesCallsRelationshipExtractor.h"
 
 // Test calls
 TEST_CASE("extractCalls_noCalls") {

@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/Extractor.h"
+#include "sp/include/extractor/Extractor.h"
 
 ProcedureExtractor nextTestProcExtractor;
 

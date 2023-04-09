@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/ConstantExtractor.h"
+#include "sp/include/extractor/ConstantExtractor.h"
 
 TEST_CASE("extract constants from mainProgram") {
 	set<string> results = extractConstants(mainProgram);

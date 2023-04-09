@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/AffectsRelationshipExtractor.h"
+#include "sp/include/extractor/AffectsRelationshipExtractor.h"
 
 void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<int>* path,
          vector<vector<int>>* paths, unordered_map<int, int>* visited) {

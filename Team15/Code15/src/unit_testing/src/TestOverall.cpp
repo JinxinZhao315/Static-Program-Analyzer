@@ -5,7 +5,7 @@
 #include "QPS/include/model/Result.h"
 #include "QPS/include/model/ResultTable.h"
 #include "QPS/include/PQLDriver.h"
-#include "source_processor/include/SourceProcessor.h"
+#include "sp/include/SourceProcessor.h"
 
 #include "catch.hpp"
 using namespace std;

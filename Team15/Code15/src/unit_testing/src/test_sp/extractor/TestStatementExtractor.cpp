@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "source_processor/include/extractor/StatementExtractor.h"
+#include "sp/include/extractor/StatementExtractor.h"
 #include "Constants.hpp"
 
 using namespace std;

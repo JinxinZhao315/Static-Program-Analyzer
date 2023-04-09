@@ -10,7 +10,7 @@
 #include <set>
 #include "../../spa/src/QPS/include/PQLDriver.h"
 #include "../../spa/src/pkb/include/PKB.h"
-#include "../../spa/src/source_processor/include/SourceProcessor.h"
+#include "../../spa/src/sp/include/SourceProcessor.h"
 
 class TestWrapper : public AbstractWrapper {
  public:

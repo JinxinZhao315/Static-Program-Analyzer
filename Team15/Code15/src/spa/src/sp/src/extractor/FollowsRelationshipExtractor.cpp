@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/FollowsRelationshipExtractor.h"
+#include "sp/include/extractor/FollowsRelationshipExtractor.h"
 
 tuple<unordered_map<int, int>, unordered_map<int, set<int>>> extractFollowsRelationship(const vector<Line>& program) {
     vector<int> v;

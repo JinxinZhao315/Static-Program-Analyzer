@@ -1,4 +1,4 @@
-#include "source_processor/include/extractor/ModifiesUsesCallsRelationshipExtractor.h"
+#include "sp/include/extractor/ModifiesUsesCallsRelationshipExtractor.h"
 
 ModifiesUsesCallsRS extractModifiesUsesAndCallRS(const vector<Line>& program, const set<string>& variables) {
     ModifiesUsesCallsRS result;

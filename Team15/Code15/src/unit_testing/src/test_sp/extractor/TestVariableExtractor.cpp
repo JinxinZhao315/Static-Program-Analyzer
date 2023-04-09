@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "Constants.hpp"
-#include "source_processor/include/extractor/VariableExtractor.h"
+#include "sp/include/extractor/VariableExtractor.h"
 
 
 TEST_CASE("extract variables from mainProgram") {
