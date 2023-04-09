@@ -442,7 +442,7 @@ std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, variables, nextMap);
+	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap);
 	addAffectsUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
 }
@@ -456,7 +456,7 @@ std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, variables, nextMap);
+	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap);
 	addAffectsModifierToUsers(modifierStmtNum, users);
 	return users;
 }
@@ -470,7 +470,7 @@ bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, variables, nextMap);
+	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap);
 	if (boolResult) {
 		addAffectsModifierToUsers(modifierStmtNum, { userStmtNum });
 	}
@@ -495,7 +495,7 @@ std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, variables, nextMap);
+	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap);
 	addAffectsStarUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
 }
@@ -509,7 +509,7 @@ std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, variables, nextMap);
+	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap);
 	addAffectsStarModifierToUsers(modifierStmtNum, users);
 	return users;
 }
@@ -523,7 +523,7 @@ bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
-	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, variables, nextMap);
+	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap);
 	if (boolResult) {
 		addAffectsStarModifierToUsers(modifierStmtNum, { userStmtNum });
 	}

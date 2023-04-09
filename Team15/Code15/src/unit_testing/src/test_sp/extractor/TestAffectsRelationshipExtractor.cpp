@@ -20,7 +20,7 @@ TEST_CASE("test affects simple") {
     auto modifiesRS = modifiesUses.modifiesRS;
     auto usesRS = modifiesUses.usesRS;
     clearCache();
-    bool result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     REQUIRE(result);
 }
 
@@ -47,7 +47,7 @@ TEST_CASE("test affects with calls") {
     auto modifiesRS = modifiesUses.modifiesRS;
     auto usesRS = modifiesUses.usesRS;
     clearCache();
-    bool result = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     REQUIRE(!result);
 }
 
@@ -84,43 +84,43 @@ TEST_CASE("test affects and affects star complex") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 2, 6, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 4, 8, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 4, 8, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 4, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 4, 10, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result4 = extractAffectsRS(lines, 6, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 6, 6, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result6 = extractAffectsRS(lines, 1, 8, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 1, 8, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 1, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 1, 10, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result8 = extractAffectsRS(lines, 1, 12, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 1, 12, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result9 = extractAffectsRS(lines, 2, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 10, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result10 = extractAffectsRS(lines, 9, 10, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 9, 10, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result11 = extractAffectsRS(lines, 9, 11, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 9, 11, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result12 = extractAffectsRS(lines, 9, 12, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 9, 12, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result13 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result13 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result14 = extractAffectsRS(lines, 9, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 9, 6, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result15 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+    bool result15 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, true);
     clearCache();
-    bool result16 = extractAffectsRS(lines, 1, 10, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 10, cfg, modifiesRS, usesRS, true);
     clearCache();
-    bool result17 = extractAffectsRS(lines, 1, 11, cfg, variables, modifiesRS, usesRS, true);
+    bool result17 = extractAffectsRS(lines, 1, 11, cfg, modifiesRS, usesRS, true);
     clearCache();
-    bool result18 = extractAffectsRS(lines, 1, 12, cfg, variables, modifiesRS, usesRS, true);
+    bool result18 = extractAffectsRS(lines, 1, 12, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(result1);
     REQUIRE(result2);
@@ -166,11 +166,11 @@ TEST_CASE("test affects star simple") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, true);
+    bool result3 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(result1);
     REQUIRE(result2);
@@ -200,21 +200,21 @@ TEST_CASE("test affects with while") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result4 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result6 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+    bool result7 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(!result1);
     REQUIRE(result2);
@@ -251,21 +251,21 @@ TEST_CASE("test affects with if") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result4 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
 
     clearCache();
-    bool result6 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, true);
+    bool result7 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(!result1);
     REQUIRE(result2);
@@ -307,15 +307,15 @@ TEST_CASE("test affects with nested if") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result1);
     REQUIRE(!result2);
@@ -324,13 +324,13 @@ TEST_CASE("test affects with nested if") {
     REQUIRE(!result5);
 
     clearCache();
-    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result6);
     REQUIRE(!result7);
@@ -338,28 +338,28 @@ TEST_CASE("test affects with nested if") {
     REQUIRE(!result9);
 
     clearCache();
-    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result10);
     REQUIRE(!result11);
     REQUIRE(!result12);
 
     clearCache();
-    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result13);
     REQUIRE(!result14);
 
     clearCache();
-    bool result15 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, true);
+    bool result15 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, true);
     clearCache();
-    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(!result15);
     REQUIRE(!result16);
@@ -390,13 +390,13 @@ TEST_CASE("test affects with nested while") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result1);
     REQUIRE(!result2);
@@ -404,28 +404,28 @@ TEST_CASE("test affects with nested while") {
     REQUIRE(!result4);
 
     clearCache();
-    bool result5 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result6 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 5, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result5);
     REQUIRE(!result6);
     REQUIRE(!result7);
 
     clearCache();
-    bool result8 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result9 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 3, 5, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result8);
     REQUIRE(!result9);
 
     clearCache();
-    bool result10 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 4, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result11 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, true);
+    bool result11 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, true);
     REQUIRE(result10);
     REQUIRE(result11);
 }
@@ -457,15 +457,15 @@ TEST_CASE("test affects with if nested in while") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result1);
     REQUIRE(!result2);
@@ -474,13 +474,13 @@ TEST_CASE("test affects with if nested in while") {
     REQUIRE(!result5);
 
     clearCache();
-    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result6);
     REQUIRE(!result7);
@@ -488,28 +488,28 @@ TEST_CASE("test affects with if nested in while") {
     REQUIRE(!result9);
 
     clearCache();
-    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result10);
     REQUIRE(!result11);
     REQUIRE(!result12);
 
     clearCache();
-    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result13);
     REQUIRE(result14);
 
     clearCache();
-    bool result15 = extractAffectsRS(lines, 5, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result15 = extractAffectsRS(lines, 5, 6, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(result15);
     REQUIRE(result16);
@@ -542,15 +542,15 @@ TEST_CASE("test affects with while nested in if") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    bool result1 = extractAffectsRS(lines, 1, 2, cfg, variables, modifiesRS, usesRS, false);
+    bool result1 = extractAffectsRS(lines, 1, 2, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result2 = extractAffectsRS(lines, 1, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result2 = extractAffectsRS(lines, 1, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result3 = extractAffectsRS(lines, 1, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result3 = extractAffectsRS(lines, 1, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result4 = extractAffectsRS(lines, 1, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result4 = extractAffectsRS(lines, 1, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result5 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result5 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result1);
     REQUIRE(!result2);
@@ -559,13 +559,13 @@ TEST_CASE("test affects with while nested in if") {
     REQUIRE(!result5);
 
     clearCache();
-    bool result6 = extractAffectsRS(lines, 2, 3, cfg, variables, modifiesRS, usesRS, false);
+    bool result6 = extractAffectsRS(lines, 2, 3, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result7 = extractAffectsRS(lines, 2, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result7 = extractAffectsRS(lines, 2, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result8 = extractAffectsRS(lines, 2, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result8 = extractAffectsRS(lines, 2, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result9 = extractAffectsRS(lines, 2, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result9 = extractAffectsRS(lines, 2, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result6);
     REQUIRE(!result7);
@@ -573,28 +573,28 @@ TEST_CASE("test affects with while nested in if") {
     REQUIRE(!result9);
 
     clearCache();
-    bool result10 = extractAffectsRS(lines, 3, 4, cfg, variables, modifiesRS, usesRS, false);
+    bool result10 = extractAffectsRS(lines, 3, 4, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result11 = extractAffectsRS(lines, 3, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result11 = extractAffectsRS(lines, 3, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result12 = extractAffectsRS(lines, 3, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result12 = extractAffectsRS(lines, 3, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result10);
     REQUIRE(!result11);
     REQUIRE(!result12);
 
     clearCache();
-    bool result13 = extractAffectsRS(lines, 4, 5, cfg, variables, modifiesRS, usesRS, false);
+    bool result13 = extractAffectsRS(lines, 4, 5, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result14 = extractAffectsRS(lines, 4, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result14 = extractAffectsRS(lines, 4, 6, cfg, modifiesRS, usesRS, false);
 
     REQUIRE(!result13);
     REQUIRE(result14);
 
     clearCache();
-    bool result15 = extractAffectsRS(lines, 5, 6, cfg, variables, modifiesRS, usesRS, false);
+    bool result15 = extractAffectsRS(lines, 5, 6, cfg, modifiesRS, usesRS, false);
     clearCache();
-    bool result16 = extractAffectsRS(lines, 1, 6, cfg, variables, modifiesRS, usesRS, true);
+    bool result16 = extractAffectsRS(lines, 1, 6, cfg, modifiesRS, usesRS, true);
 
     REQUIRE(result15);
     REQUIRE(result16);
@@ -622,9 +622,9 @@ TEST_CASE("test affects with wildcards simple") {
     auto usesRS = modifiesUses.usesRS;
 
     clearCache();
-    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, modifiesRS, usesRS, false);
     clearCache();
-    set<int> result2 = extractAffectsWithWildcard(lines, 1, true, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result2 = extractAffectsWithWildcard(lines, 1, true, cfg, modifiesRS, usesRS, false);
 
     set<int> expected1 = { 2 };
     set<int> expected2 = {  };
@@ -633,9 +633,9 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result2 == expected2);
 
     clearCache();
-    set<int> result3 = extractAffectsWithWildcard(lines, 2, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result3 = extractAffectsWithWildcard(lines, 2, false, cfg, modifiesRS, usesRS, false);
     clearCache();
-    set<int> result4 = extractAffectsWithWildcard(lines, 2, true, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result4 = extractAffectsWithWildcard(lines, 2, true, cfg, modifiesRS, usesRS, false);
 
     set<int> expected3 = { 3 };
     set<int> expected4 = { 1 };
@@ -644,9 +644,9 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result4 == expected4);
 
     clearCache();
-    set<int> result5 = extractAffectsWithWildcard(lines, 3, false, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result5 = extractAffectsWithWildcard(lines, 3, false, cfg, modifiesRS, usesRS, false);
     clearCache();
-    set<int> result6 = extractAffectsWithWildcard(lines, 3, true, cfg, variables, modifiesRS, usesRS, false);
+    set<int> result6 = extractAffectsWithWildcard(lines, 3, true, cfg, modifiesRS, usesRS, false);
 
     set<int> expected5 = { };
     set<int> expected6 = { 2 };
@@ -654,7 +654,7 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result5 == expected5);
     REQUIRE(result6 == expected6);
 
-    unordered_map<int, set<int>> result7 = extractAffectsWithMultipleWildcards(lines, cfg, variables, modifiesRS, usesRS, false);
+    unordered_map<int, set<int>> result7 = extractAffectsWithMultipleWildcards(lines, cfg, modifiesRS, usesRS, false);
     unordered_map<int, set<int>> expected7 = {
             {1, {2}},
             {2, {3}},
@@ -663,9 +663,9 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result7 == expected7);
 
     clearCache();
-    set<int> result8 = extractAffectsWithWildcard(lines, 1, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result8 = extractAffectsWithWildcard(lines, 1, false, cfg, modifiesRS, usesRS, true);
     clearCache();
-    set<int> result9 = extractAffectsWithWildcard(lines, 1, true, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result9 = extractAffectsWithWildcard(lines, 1, true, cfg, modifiesRS, usesRS, true);
 
     set<int> expected8 = { 2, 3 };
     set<int> expected9 = {  };
@@ -674,9 +674,9 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result9 == expected9);
 
     clearCache();
-    set<int> result10 = extractAffectsWithWildcard(lines, 2, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result10 = extractAffectsWithWildcard(lines, 2, false, cfg, modifiesRS, usesRS, true);
     clearCache();
-    set<int> result11 = extractAffectsWithWildcard(lines, 2, true, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result11 = extractAffectsWithWildcard(lines, 2, true, cfg, modifiesRS, usesRS, true);
 
     set<int> expected10 = { 3 };
     set<int> expected11 = { 1 };
@@ -685,9 +685,9 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result11 == expected11);
 
     clearCache();
-    set<int> result12 = extractAffectsWithWildcard(lines, 3, false, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result12 = extractAffectsWithWildcard(lines, 3, false, cfg, modifiesRS, usesRS, true);
     clearCache();
-    set<int> result13 = extractAffectsWithWildcard(lines, 3, true, cfg, variables, modifiesRS, usesRS, true);
+    set<int> result13 = extractAffectsWithWildcard(lines, 3, true, cfg, modifiesRS, usesRS, true);
 
     set<int> expected12 = { };
     set<int> expected13 = { 1, 2 };
@@ -695,7 +695,7 @@ TEST_CASE("test affects with wildcards simple") {
     REQUIRE(result12 == expected12);
     REQUIRE(result13 == expected13);
 
-    unordered_map<int, set<int>> result14 = extractAffectsWithMultipleWildcards(lines, cfg, variables, modifiesRS, usesRS, true);
+    unordered_map<int, set<int>> result14 = extractAffectsWithMultipleWildcards(lines, cfg, modifiesRS, usesRS, true);
     unordered_map<int, set<int>> expected14 = {
             {1, {2, 3}},
             {2, {3}},

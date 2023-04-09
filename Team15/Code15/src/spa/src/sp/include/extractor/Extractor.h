@@ -52,22 +52,22 @@ public:
     unordered_map<int, set<int>> getNextRS();
 
     bool getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
     bool getAffectsStarRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
     set<int> getAffectsRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
     set<int> getAffectsStarRSWithWildcard(int lineNum, bool wildcardIsFirstArg, const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
     unordered_map<int, set<int>> getAffectsRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
     unordered_map<int, set<int>> getAffectsStarRSWithMultipleWildcards(const vector<Line>& program, const unordered_map<int,
-            set<string>>& modifies, const unordered_map<int, set<string>>& uses, const set<string>& variablesForAffects,
+            set<string>>& modifies, const unordered_map<int, set<string>>& uses,
             const unordered_map<int, set<int>>& cfg);
 
 private:
