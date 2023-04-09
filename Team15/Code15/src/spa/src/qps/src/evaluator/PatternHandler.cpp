@@ -100,7 +100,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     }
 
     vector<string> secondArgPostfix;
-    if (secondType == EXPR || secondType == UNDERSCORED_EXPR) {
+    if (secondType == EXPR || secondType == UNDERSCORED_EXPR || secondType == QUOTED_IDENT) {
         string secondArgTrimmed = trimExpr(secondArg);
         vector<string> argTokens = simplifiedTokenise(secondArgTrimmed);
         secondArgPostfix = simplifiedConvertToPostfix(argTokens);
