@@ -1,5 +1,5 @@
 #include "pkb/include/PKB.h"
-#include "QPS/include/PQLDriver.h"
+#include "qps/include/PQLDriver.h"
 
 class TestUtility {
 public:

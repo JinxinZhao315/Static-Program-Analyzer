@@ -1,6 +1,6 @@
-#include "QPS/include/evaluator/ClauseHandler.h"
-#include "QPS/include/model/Query.h"
-#include "QPS/include/model/Result.h"
+#include "qps/include/evaluator/ClauseHandler.h"
+#include "qps/include/model/Query.h"
+#include "qps/include/model/Result.h"
 #include <set>
 #include "catch.hpp"
 #include <assert.h>

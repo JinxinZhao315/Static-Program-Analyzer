@@ -6,11 +6,11 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/src/models/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/src/utils/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/evaluator/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/model/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/src/tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/src/evaluator/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/src/model/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/src/tokenizer/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/sp/src/*.cpp"
@@ -25,11 +25,11 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/include/utils/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/common/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/evaluator/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/model/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/include/tokenizer/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/include/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/include/evaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/include/model/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/qps/include/tokenizer/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pkb/include/hasher/*.h"
@@ -41,7 +41,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
     )
 
 
-add_library(spa ${srcs} ${headers} src/sp/src/extractor/AffectsRelationshipExtractor.cpp src/sp/include/extractor/AffectsRelationshipExtractor.h "src/QPS/include/tokenizer/QueryEvalSeqOptimizer.h" "src/QPS/src/tokenizer/QueryEvalSeqOptimizer.cpp")
+add_library(spa ${srcs} ${headers} src/sp/src/extractor/AffectsRelationshipExtractor.cpp src/sp/include/extractor/AffectsRelationshipExtractor.h "src/qps/include/tokenizer/QueryEvalSeqOptimizer.h" "src/qps/src/tokenizer/QueryEvalSeqOptimizer.cpp")
 
 
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

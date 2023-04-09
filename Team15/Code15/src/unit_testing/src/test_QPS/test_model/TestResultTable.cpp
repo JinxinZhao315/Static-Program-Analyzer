@@ -1,8 +1,8 @@
-#include "QPS/include/model/ResultTable.h"
+#include "qps/include/model/ResultTable.h"
 #include "pkb/include/PKB.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
-#include "QPS/include/model/Elem.h"
+#include "qps/include/evaluator/PQLEvaluator.h"
+#include "qps/include/tokenizer/PQLPreprocessor.h"
+#include "qps/include/model/Elem.h"
 
 #include "catch.hpp"
 

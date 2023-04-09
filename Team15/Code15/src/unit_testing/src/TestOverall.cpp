@@ -1,10 +1,10 @@
 #include <utility>
 
 #include "pkb/include/PKB.h"
-#include "QPS/include/evaluator/PQLEvaluator.h"
-#include "QPS/include/model/Result.h"
-#include "QPS/include/model/ResultTable.h"
-#include "QPS/include/PQLDriver.h"
+#include "qps/include/evaluator/PQLEvaluator.h"
+#include "qps/include/model/Result.h"
+#include "qps/include/model/ResultTable.h"
+#include "qps/include/PQLDriver.h"
 #include "sp/include/SourceProcessor.h"
 
 #include "catch.hpp"

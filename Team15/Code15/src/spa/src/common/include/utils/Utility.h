@@ -5,7 +5,7 @@
 #include <iterator>
 #include <set>
 #include "exceptions/PQLSyntaxError.h"
-#include "QPS/include/model/AttrRef.h"
+#include "qps/include/model/AttrRef.h"
 #include "pkb/include/PKB.h"
 
 #pragma once

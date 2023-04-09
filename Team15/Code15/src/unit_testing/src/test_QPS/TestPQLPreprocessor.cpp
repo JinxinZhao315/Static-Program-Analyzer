@@ -1,7 +1,7 @@
-#include "QPS/include/tokenizer/PQLPreprocessor.h"
+#include "qps/include/tokenizer/PQLPreprocessor.h"
 #include "exceptions/PQLSyntaxError.h"
-#include "QPS/include/tokenizer/QueryTokenizer.h"
-#include "QPS/include/tokenizer/PQLSemanticCheck.h"
+#include "qps/include/tokenizer/QueryTokenizer.h"
+#include "qps/include/tokenizer/PQLSemanticCheck.h"
 
 #include <assert.h>
 #include "catch.hpp"

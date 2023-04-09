@@ -8,7 +8,7 @@
 // include your other headers here
 #include "AbstractWrapper.h"
 #include <set>
-#include "../../spa/src/QPS/include/PQLDriver.h"
+#include "../../spa/src/qps/include/PQLDriver.h"
 #include "../../spa/src/pkb/include/PKB.h"
 #include "../../spa/src/sp/include/SourceProcessor.h"
 
