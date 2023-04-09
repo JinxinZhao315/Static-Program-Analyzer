@@ -595,3 +595,12 @@ TEST_CASE("Overall test : invalid syntax 2") {
     REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Overall test : optimization test 4") {
+    string filename = source_optimization;
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Affects*(n1, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "FALSE" };
+    REQUIRE(result == expectedResult);
+}
