@@ -3,19 +3,19 @@
 
 PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
-
-set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, const vector<string>& rhs, const vector<string>& substrTokens) {
-    set <string> ret;
-    bool isMatch;
-    if (!isPartialMatch) {
-        isMatch = rhs == substrTokens;
-    } else {
-        isMatch =  findIsPartialMatch(rhs, substrTokens);
-    }
-    if (isMatch) {
-        set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhs);
-        for (int num : lineNumSet) {
-            ret.insert(to_string(num));
+vector<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, set<int> allStmtsWithLHS, const vector<string>& substrTokens) {
+    vector <string> ret;
+    for (int stmtNum : allStmtsWithLHS) {
+        bool isMatch;
+        vector<string> expr = pkb.getAssignExprsFromStmt(stmtNum);
+        if (!isPartialMatch) {
+            isMatch = expr == substrTokens;
+        }
+        else {
+            isMatch = findIsPartialMatch(expr, substrTokens);
+        }
+        if (isMatch) {
+                ret.push_back(to_string(stmtNum));
         }
     }
     return ret;
@@ -47,9 +47,8 @@ bool PatternHandler::findIsPartialMatch(vector<string> fullstrVec, vector<string
     return false;
 }
 
-vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType, const string& arg, const string& type) {
+set<int> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType, const string& arg, const string& type) {
     set<int> lineNumSet;
-    vector<string> strVec;
     if (type == GET_FROM_VAR) {
         if (patternSynonType == ASSIGN_ENTITY) {
             lineNumSet = pkb.getAssignStmtsFromVar(arg);
@@ -67,11 +66,7 @@ vector<string> PatternHandler::getLineNumsFromPkb(DesignEntity patternSynonType,
             lineNumSet = pkb.getIfStmtsWithVars();
         }
     }
-
-    for (int num : lineNumSet) {
-        strVec.push_back(to_string(num));
-    }
-    return strVec;
+    return lineNumSet;
 }
 
 
@@ -107,21 +102,16 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     if (firstType == UNDERSCORE) {
 
         std::vector<std::string> resultPatternSynonVals;
-        std::vector<std::string> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, Utility::empty, GET_ALL);
+        std::set<int> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, Utility::empty, GET_ALL);
 
         if (secondType == UNDERSCORE) {
-
-            resultPatternSynonVals = currPatternSynonVals;
+            for (int num : currPatternSynonVals) {
+                resultPatternSynonVals.push_back(to_string(num));
+            }
 
         } else {
-
-            for (auto lineNum : currPatternSynonVals) {
-                vector<string> rhs = pkb.getAssignExprsFromStmt(stoi(lineNum));
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
-                if (!matchingLines.empty()) {
-                    resultPatternSynonVals.push_back(lineNum);
-                }
-            }
+            vector<string> matchingLines = findMatchingLineNums(isPartialMatch, currPatternSynonVals, secondArgPostfix);
+            resultPatternSynonVals = matchingLines;
         }
 
 
@@ -139,18 +129,18 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         if (secondType == UNDERSCORE) {
 
             for (const string& currFirstVal: currFirstSynonValues) {
-                    vector<string> lineNumVec = getLineNumsFromPkb(patternTypeEnum, currFirstVal, GET_FROM_VAR);
+                    set<int> lineNumSet = getLineNumsFromPkb(patternTypeEnum, currFirstVal, GET_FROM_VAR);
                     // If second arg is wildcard, get every assign/while/if from pkb whose LHS is currFirstVal (a variable)
-                    for (const string& numStr : lineNumVec) { // Each num is a possible value of pattern synon
-                        tempTable.insertTuple({numStr, currFirstVal});
+                    for (auto num : lineNumSet) { // Each num is a possible value of pattern synon
+                        tempTable.insertTuple({to_string(num), currFirstVal});
                     }
             }
 
         } else {
 
             for (const string& currFirstVal: currFirstSynonValues) {
-                vector<string> rhs = pkb.getAssignExprsFromVar(currFirstVal);
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
+                set<int> allStmtWithLHS = pkb.getAssignStmtsFromVar(currFirstVal);
+                vector<string> matchingLines = findMatchingLineNums(isPartialMatch, allStmtWithLHS, secondArgPostfix);
                 if (!matchingLines.empty()) {
                     for (const string& lineStr : matchingLines) {
                         tempTable.insertTuple({lineStr, currFirstVal });
@@ -168,13 +158,16 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
 
 
         if (secondType == UNDERSCORE) {
-
-            patternSynonVals = getLineNumsFromPkb(patternTypeEnum, firstArgTrimmed, GET_FROM_VAR);
+            set<int> lineNumSet = getLineNumsFromPkb(patternTypeEnum, firstArgTrimmed, GET_FROM_VAR);
+            for (int lineNum : lineNumSet) {
+                patternSynonVals.push_back(to_string(lineNum));
+            }
+            
             // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
 
         } else {
-            vector<string> rhs = pkb.getAssignExprsFromVar(firstArgTrimmed);
-            set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
+            set<int> allStmtWithLHS = pkb.getAssignStmtsFromVar(firstArgTrimmed);
+            vector<string> matchingLines = findMatchingLineNums(isPartialMatch, allStmtWithLHS, secondArgPostfix);
             for (const string& lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
             }
@@ -276,6 +269,7 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
 std::string PatternHandler::trimExpr(string input) {
     std::string trimmed = input;
     trimmed = Utility::trim(trimmed, Utility::underscore);
+    trimmed = Utility::trim(trimmed, Utility::whiteSpaces);
     trimmed = Utility::trim(trimmed, Utility::quote);
     trimmed = Utility::trim(trimmed, Utility::whiteSpaces);
     return trimmed;

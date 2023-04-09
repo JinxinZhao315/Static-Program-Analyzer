@@ -47,6 +47,8 @@ string source_affects = "../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../Tests15/g_invalid/1_source.txt";
 string source_g8 = "../../../../Tests15/g/8_source.txt";
 string source_12 = "../../../../Tests15/g2/12_source.txt";
+string source_18 = "../../../../Tests15/g2/18_source.txt";
+string source_20 = "../../../../Tests15/g2/20_source.txt";
 #elif _WIN32
 string source_sample1 = "../../../../../../Tests15/local_test/source-sample1.txt";
 string source_sample2 = "../../../../../../Tests15/local_test/source-sample2.txt";
@@ -64,7 +66,10 @@ string source_affects = "../../../../../../Tests15/local_test/source-affects.txt
 string source_invalid1 = "../../../../../../Tests15/g_invalid/1_source.txt";
 string source_g8 = "../../../../../../Tests15/g/8_source.txt";
 string source_12 = "../../../../../../Tests15/g2/12_source.txt";
+string source_18 = "../../../../../../Tests15/g2/18_source.txt";
+string source_20 = "../../../../../../Tests15/g2/20_source.txt";
 #endif
+
 
 TEST_CASE("Overall test : source-usesmodifies.txt 1")
 {
@@ -360,24 +365,6 @@ TEST_CASE("Overall test : source1.txt 19 Select attribute")
 }
 
 
-
-
-//TEST_CASE("Overall test : source-stresstest 1")
-//{
-//    string filename = source_stresstest;
-//    string queryStr = "stmt s, s2; Select s such that Follows(s, s2)";
-//    PKB pkb;
-//    spDriver(filename, pkb);
-//
-//    string queryStr2 = "assign a1, a2, a3; stmt s1, s2, s3, s4, s5, s6, s7; variable v1, v2, v3;\
-//        Select <s1, s2, v2> such that Follows*(s3, s2) and Uses(s3, v1) \
-//        and Modifies(s3, \"x\") and Follows*(s1, s3) and Parent*(s4, s5) and Parent*(s6, s7) and Uses(s2, v1)";
-//    result = qpsDriver(queryStr2, pkb);
-//
-//    string queryStr3 = "stmt s1, s2; Select <s1, s2> such that Next*(s1, s2)";
-//    result = qpsDriver(queryStr3, pkb);
-//}
-
 TEST_CASE("Overall test : source3.txt 1")
 {
     // Enter source of SIMPLE code
@@ -534,16 +521,7 @@ TEST_CASE("Overall test : optimization test 1") {
     set<string> expectedResult = { "TRUE" };
 }
 
-//TEST_CASE("Overall test : source-sample1.txt 3")
-//{
-//    string filename = source_sample1;
-//    string queryStr = "stmt s; Select s such that Uses(s, \"x\")";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "16", "18", "19", "21", "22", "23", "24" };
-//    REQUIRE(result == expectedResult);
-//}
-//
+
 TEST_CASE("Affects test : 1")
 {
     string filename = source_affects;
@@ -600,26 +578,7 @@ TEST_CASE("Overall test : invalid syntax 2") {
     set<string> expectedResult = { "SemanticError" };
     REQUIRE(result == expectedResult);
 }
-//
-//TEST_CASE("Overall test : optimization test 4") {
-//    string filename = source_optimization;
-//    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
-//        Select BOOLEAN such that Affects*(n1, _)";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "FALSE" };
-//    REQUIRE(result == expectedResult);
-//}
 
-//TEST_CASE("Overall test :g8-7") {
-//    string filename = source_g8;
-//    string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; Select s such that Follows(s,_) pattern a(_, \"x\")";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "SemanticError" };
-//    REQUIRE(result == expectedResult);
-//}
-//
 TEST_CASE("Overall test :g8-57") {
     string filename = source_g8;
     string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; procedure p;  Select v such that Parent* (s, _) such that Modifies(c, v) and Uses(a, v)";
@@ -659,6 +618,30 @@ TEST_CASE("Overall test : invalid syntax 5") {
     set<string> expectedResult = { "a","cat","x","y","z" };
     REQUIRE(result == expectedResult);
 }
+
+
+TEST_CASE("Overall test :g18") {
+    string filename = source_18;
+    string queryStr = "assign a; variable v; while w; constant c; Select a such that Parent(_, a) pattern a(\"length\", _\"3\"_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "29" };
+    REQUIRE(result == expectedResult);
+}
+
+
+TEST_CASE("Overall test :g20") {
+    string filename = source_20;
+    string queryStr = "assign a, a1; if ifs; constant c; Select <a, c.value> pattern a(_, _ \"   a     *    b    \" _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "1 0","1 1","1 10","1 2","1 23","1 3","1 4","1 42",
+        "1 89","17 0","17 1","17 10","17 2","17 23","17 3","17 4","17 42","17 89","4 0"
+        ,"4 1","4 10","4 2","4 23","4 3","4 4","4 42","4 89" };
+    REQUIRE(result == expectedResult);
+}
+
+
 TEST_CASE("Overall test : optimization test 4") {
     string filename = source_optimization2;
     string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
