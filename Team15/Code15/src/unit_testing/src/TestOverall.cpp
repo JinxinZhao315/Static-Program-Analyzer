@@ -584,3 +584,12 @@ TEST_CASE("Overall test : invalid syntax 1") {
     REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Overall test : invalid syntax 2") {
+    string filename = source_invalid1;
+    string queryStr = "assign a;procedure p;Select <p.stmt#> ";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
+

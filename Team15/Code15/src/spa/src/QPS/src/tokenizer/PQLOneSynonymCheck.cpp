@@ -102,18 +102,19 @@ bool PQLOneSynonymCheck::checkPQLOneSynonym(Query query) {
         case SELECT: {
             SelectClause* selectClause = (static_cast<SelectClause*>(clause));
             std::vector<Elem*> elemVec = selectClause->getSelectedElements();
-
+            int elemVecSize = elemVec.size();
             for (Elem* elem : elemVec) {
-                if (elemVec.size() > 1) {
-                    if (varTable.count(elem->getSynName()) != 1) { //multiple synonyms, can't be BOOLEAN, so each syn must appear exactly once
+                std::string elemSynName = elem->getSynName();
+                if (elemVecSize > 1) {
+                    if (varTable.count(elemSynName) != 1) { //multiple synonyms, can't be BOOLEAN, so each syn must appear exactly once
                         return false;
                     }
                 }
                 else {
-                    if (elem->getSynName() == "BOOLEAN" && varTable.count(elem->getSynName()) > 1) { //if single syn and BOOLEAN, count can be 0 or 1
+                    if (elemSynName == Utility::boolean && varTable.count(elemSynName) > 1) { //if single syn and BOOLEAN, count can be 0 or 1
                         return false;
                     }
-                    else if (elem->getSynName() != "BOOLEAN" && varTable.count(elem->getSynName()) != 1) { //single syn, count can only be 1
+                    else if (elemSynName != Utility::boolean && varTable.count(elemSynName) != 1) { //single syn, count can only be 1
                         return false;
                     }
                 }
