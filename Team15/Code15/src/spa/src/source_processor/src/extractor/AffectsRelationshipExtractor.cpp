@@ -138,16 +138,16 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
     vector<vector<int>> paths;
     unordered_map<int, int> visited;
 
-    // TODO: check if nextStarRS can be used instead of DFS
-    // extractNextStarRS(cfg);
-    // the value is the set of nodes that it will visit later on which can then be used for affects
-
     dfs(cfg, lineNum1, lineNum2, &path, &paths, &visited);
-    for(const auto& v : variables) {
+    set<string> varThatAreUsedInLineNum2;
+    if (usesRS.count(lineNum2) > 0) {
+        varThatAreUsedInLineNum2 = usesRS.at(lineNum2);
+    }
+    for(const auto& v : varThatAreUsedInLineNum2) {
         bool modifies = checkModifies(line1, v, modifiesRS);
         bool uses = checkUses(line2, v, usesRS);
         bool pathCheck = true;
-        for(auto option : paths) {
+        for(const auto& option : paths) {
             if(!checkPath(option, v, modifiesRS, program, lineNum1, lineNum2)) {
                 pathCheck = false;
                 break;

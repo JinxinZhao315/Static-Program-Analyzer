@@ -538,15 +538,15 @@ TEST_CASE("Overall test : optimization test 1") {
 //    REQUIRE(result == expectedResult);
 //}
 //
-//TEST_CASE("Affects test : 1")
-//{
-//    string filename = source_affects;
-//    string queryStr = "stmt s; Select BOOLEAN such that Affects* (4, 14)";
-//
-//    set<string> result = testDriver(filename, queryStr);
-//    set<string> expectedResult = { "TRUE" };
-//    REQUIRE(result == expectedResult);
-//}
+TEST_CASE("Affects test : 1")
+{
+    string filename = source_affects;
+    string queryStr = "stmt s; Select BOOLEAN such that Affects* (4, 14)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "TRUE" };
+    REQUIRE(result == expectedResult);
+}
 
 //TEST_CASE("Overall test : optimization test 2") {
 //    string filename = source_optimization;
