@@ -6,6 +6,7 @@
 #include <string>
 #include <regex>
 #include <algorithm>
+#include <unordered_map>
 #include "common/include/models/Line.h"
 #include "common/include/models/Keywords.h"
 

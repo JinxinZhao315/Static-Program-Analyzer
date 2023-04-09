@@ -106,12 +106,16 @@ bool checkElse(vector <string>* line) {
 void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
     int lineNumber = 1;
     vector<Line> lines;
+    unordered_map<int, Line> lineNumToLineMap;
     for(auto line : *tokens) {
         KeywordsEnum keyword = findKeyword(line);
         bool hasLineNumber = checkKeywordHasLineNumber(keyword);
         Line* extractedLine;
         if(hasLineNumber) {
             extractedLine = new Line(lineNumber, *line, keyword);
+            if(lineNumber > 0) {
+                lineNumToLineMap[lineNumber] = *extractedLine;
+            }
             lineNumber++;
         } else {
             extractedLine = new Line(*line, keyword);
