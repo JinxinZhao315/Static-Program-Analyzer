@@ -1,5 +1,10 @@
 #include "sp/include/extractor/AffectsRelationshipExtractor.h"
 
+void clearCache() {
+    cache.clear();
+}
+
+
 void dfs(unordered_map<int, set<int>> cfg, int lineNum1, int lineNum2, vector<int>* path,
          vector<vector<int>>* paths, unordered_map<int, int>* visited) {
     path->push_back(lineNum1);
@@ -36,12 +41,6 @@ bool checkModifies(const Line& line, const string& variable, unordered_map<int, 
     return modifiedVars.find(variable) != modifiedVars.end();
 }
 
-bool checkUses(const Line& line, const string& variable, unordered_map<int, set<string>> usesRS) {
-    int lineNum = line.getLineNumber();
-    set<string> usedVars = usesRS[lineNum];
-    return usedVars.find(variable) != usedVars.end();
-}
-
 bool checkPath(const vector<int>& path, const string& variable, const unordered_map<int, set<string>>& modifiesRS,
                const vector<Line>& program, int lineNum1, int lineNum2) {
     bool check = false;
@@ -68,8 +67,7 @@ bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, i
                          const unordered_map<int, set<string>>& usesRS) {
     for(auto node : path) {
         if(extractAffectsRS(program, lineNum1, node, cfg, variables, modifiesRS, usesRS, false)
-            && extractAffectsRS(program, node, lineNum2, cfg, variables, modifiesRS, usesRS, false)
-        ) {
+            && extractAffectsRS(program, node, lineNum2, cfg, variables, modifiesRS, usesRS, false)) {
             return true;
         }
     }
@@ -83,7 +81,7 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
                                     const unordered_map<int, set<string>>& usesRS,
                                     bool findAffectsStar) {
     set<int> stmtLineNums;
-    for(auto line : program) {
+    for(const auto& line : program) {
         int otherLineNum = line.getLineNumber();
         if(lineNum > 0 && otherLineNum > 0 && lineNum != otherLineNum) {
             bool affects;
@@ -127,8 +125,11 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                           const set<string>& variables,
                                           const unordered_map<int, set<string>>& modifiesRS,
                                           const unordered_map<int, set<string>>& usesRS,
-                                          bool findAffectsStar
-) {
+                                          bool findAffectsStar) {
+    pair<int, int> key = make_pair(lineNum1, lineNum2);
+    if (cache.find(key) != cache.end()) {
+        return cache[key];
+    }
     set<string> affectedVars;
     unordered_map<int, set<int>> result;
     Line line1 = findLine(program, lineNum1);
@@ -164,5 +165,6 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
         }
     }
     bool affects = !affectedVars.empty();
+    cache[key] = affects;
     return affects;
 }

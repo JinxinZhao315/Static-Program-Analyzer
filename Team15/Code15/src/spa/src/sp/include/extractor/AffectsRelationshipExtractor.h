@@ -2,7 +2,17 @@
 
 #include <utility>
 #include "CommonExtractorHeader.h"
-#include "NextRelationshipExtractor.h"
+
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator() (const std::pair<T1, T2>& p) const {
+        return std::hash<T1>{}(p.first) ^ std::hash<T2>{}(p.second);
+    }
+};
+
+void clearCache();
+
+static unordered_map<pair<int, int>, bool, pair_hash> cache;
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                               const unordered_map<int, set<int>>& cfg,

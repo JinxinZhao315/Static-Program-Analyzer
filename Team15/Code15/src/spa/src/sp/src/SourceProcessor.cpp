@@ -16,6 +16,7 @@ void SourceProcessor::parseProgram(string fileName, PKB* pkb) {
     vector<Line> extractedLines = tokeniser->getExtractedLines();
     pkb->addAllLines(extractedLines);
     extract(extractedLines);
+    clearCache();
 }
 
 void SourceProcessor::storeDataInPKB(PKB* pkb) {
