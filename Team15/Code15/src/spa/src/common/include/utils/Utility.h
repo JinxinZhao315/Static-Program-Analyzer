@@ -125,6 +125,20 @@ public:
     inline static const char segmentationChar = ';';
     inline static const std::string minusOne = "-1";
     inline static const char quoteChar = '"';
+    inline static const std::string plusSign = "+";
+    inline static const std::string minusSign = "-";
+    inline static const std::string divideSign = "/";
+    inline static const std::string moduleSign = "%";
+    inline static const std::string timesSign = "*";
+    inline static const char plusSignChar = '+';
+    inline static const char minusSignChar = '-';
+    inline static const char divideSignChar = '/';
+    inline static const char moduleSignChar = '%';
+    inline static const char timesSignChar = '*';
+    inline static const char tabChar = '\t';
+    inline static const char nextLineChar = '\n';
+    inline static const char spaceChar = ' ';
+  
 
     inline static const std::string parent = "Parent";
     inline static const std::string parentStar = "Parent*";

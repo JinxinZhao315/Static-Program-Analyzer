@@ -14,5 +14,5 @@ std::pair<bool,std::string> PQLSemanticCheck::checkSemantics(Query query) {
 	if (!refConsistentCheckInstance->checkPQLRefConsistent(query)) {
 		return std::make_pair(false, "PQL semantic error: inconsistent reference");
 	};
-	return std::make_pair(true, "");
+	return std::make_pair(true, Utility::empty);
 }
