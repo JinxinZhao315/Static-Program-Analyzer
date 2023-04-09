@@ -26,8 +26,6 @@ public:
     void moveToNextKeyword(vector<string>* keywords, vector<string>* tokens, const string& token, int* currentPosition) const;
     Keywords* keywords;
     vector<string>* tokenise(const string& line) const;
-    void printTokens();
-    void printLines();
     void generateLineObjects(vector<vector<string>*>* tokens);
     vector<Line> getExtractedLines();
 };

@@ -3,14 +3,6 @@
 
 using namespace std;
 
-void Parser::printParsedProgram() {
-    cout << "--- Parsed file ---" << endl;
-    for (const auto &line : parsedFile) {
-        std::cout << line << endl;
-    }
-    cout << "--- End of file ---" << endl;
-
-}
 void Parser::parseProgram(const string& fileName) {
     ifstream file(fileName);
     if (!file.is_open()) {

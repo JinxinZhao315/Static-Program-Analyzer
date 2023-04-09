@@ -131,10 +131,3 @@ void Tokeniser::generateLineObjects(vector<vector<string> *> *tokens) {
 vector<Line> Tokeniser::getExtractedLines() {
     return this->extractedLines;
 }
-
-void Tokeniser::printLines() {
-    for(auto line: extractedLines) {
-        line.printLine();
-    }
-    cout << endl;
-}

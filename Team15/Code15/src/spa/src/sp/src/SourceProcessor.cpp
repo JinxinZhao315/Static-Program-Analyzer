@@ -43,14 +43,6 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
     pkb->addAllIfPatterns(extractor->getIfRS());
 }
 
-void SourceProcessor::printParsedProgram() {
-    cout << "Printing parsed program..." << endl;
-    parser->printParsedProgram();
-    cout << endl << "Printing extracted tokens..." << endl;
-    tokeniser->printLines();
-    extractor->printEntities();
-}
-
 void SourceProcessor::extract(const vector<Line>& program) {
     extractor->extract(program);
 }

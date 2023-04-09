@@ -14,7 +14,6 @@ class Parser {
 public:
     Parser() {}
     void parseProgram(const string& fileName);
-    void printParsedProgram();
     vector<string> getParsedProgram();
 private:
     vector<string> parsedFile;
