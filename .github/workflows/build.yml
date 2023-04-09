@@ -60,7 +60,7 @@ jobs:
       - name: Autotester (MacOS)
         run: |
           cd $GITHUB_WORKSPACE 
-          Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/${{ matrix.tests.source }} Team15/Tests15/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
+          Team15/Code15/cmake-build/src/autotester/autotester Team15/Tests15/local_test/${{ matrix.tests.source }} Team15/Tests15/local_test/${{ matrix.tests.query }} Team15/Code15/tests/${{ matrix.tests.output }}
       - name: Save Autotester Output (MacOS)
         uses: actions/upload-artifact@v3
         with:
@@ -118,7 +118,7 @@ jobs:
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE
-          ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/${{ matrix.tests.source }} ./Team15/Tests15/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
+          ./Team15/Code15/cmake-build/src/autotester/Release/autotester.exe ./Team15/Tests15/local_test/${{ matrix.tests.source }} ./Team15/Tests15/local_test/${{ matrix.tests.query }} ./Team15/Code15/tests/${{ matrix.tests.output }}
       - name: Save Autotester Output (Windows)
         uses: actions/upload-artifact@v3
         with:
