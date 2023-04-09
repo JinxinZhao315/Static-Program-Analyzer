@@ -20,13 +20,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
                 Relationship suchThatRefType = Utility::getRelationshipFromString(refType);
                 std::string suchThatLeftVarName = suchThatClause->getLeftArg();
                 std::string suchThatRightVarName = suchThatClause->getRightArg();
-                std::string suchThatLeftType = Utility::getReferenceType(suchThatClause->getLeftArg());
+                std::string suchThatLeftType = Utility::getReferenceType(suchThatLeftVarName);
 
                 if (suchThatLeftType == Utility::synonym) {
                     suchThatLeftType = varTable.find(suchThatLeftVarName)->second;
                 }
 
-                std::string suchThatRightType = Utility::getReferenceType(suchThatClause->getRightArg());
+                std::string suchThatRightType = Utility::getReferenceType(suchThatRightVarName);
                 if (suchThatRightType == Utility::synonym) {
                     suchThatRightType = varTable.find(suchThatRightVarName)->second;
                 }
@@ -152,13 +152,13 @@ bool PQLRefConsistentCheck::checkPQLRefConsistent(Query query) {
                     if (!e->isElemSynonym()){
                         AttrRef attr = e->getAttrRef();
                         std::string attrType = attr.getSynType();
-                        std::string attrName= attr.getAttrName();
+                        std::string attrName= attr.getAttrName();                     
                         return refConsistentLogic->isAttrRefCompatible(attrType, attrName);
                     }
                 }
             }
-        default:
-            break;
+            default:
+                break;
         }
     }
     return true;

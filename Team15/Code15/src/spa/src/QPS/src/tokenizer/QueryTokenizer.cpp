@@ -5,10 +5,10 @@ QueryTokenizer::QueryTokenizer() {
 }
 
 std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string input) {
-	size_t lastSemicolon = input.find_last_of(';');
+	size_t lastSemicolon = input.find_last_of(Utility::segmentationChar);
 	//no declaration, can be "Select BOOLEAN"
 	if (lastSemicolon == std::string::npos) {
-		return std::make_pair("", input);
+		return std::make_pair(Utility::empty, input);
 	}
 	else {
 		std::string declaration = Utility::trim(input.substr(0, lastSemicolon + 1), Utility::whiteSpaces);
@@ -18,7 +18,7 @@ std::pair<std::string, std::string> QueryTokenizer::tokenizeQuery(std::string in
 }
 
 std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std::string declaration) {
-    size_t semicolonPos = declaration.find(";");
+    size_t semicolonPos = declaration.find(Utility::segmentation);
     std::multimap<std::string, std::string> varTable;
     while (semicolonPos != std::string::npos) {
         size_t whiteSpacePos = declaration.find_first_of(Utility::whiteSpaces);
@@ -42,7 +42,7 @@ std::multimap<std::string, std::string> QueryTokenizer::tokenizeDeclaration(std:
         }
 
         declaration = Utility::trim(declaration.substr((semicolonPos + 1)), Utility::whiteSpaces);
-        semicolonPos = declaration.find(";");
+        semicolonPos = declaration.find(Utility::segmentation);
     }
 	return varTable;
 }
@@ -87,7 +87,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
             } else if (prevClauseType == WITH) {
                 tokenizeWithClause(input, withClauseVec, varTable);
             } else {
-                nextKeyword = peekKeyword(input, "(");
+                nextKeyword = peekKeyword(input, Utility::leftRoundBracket);
 				if (nextKeyword.empty()) {
 					throw PQLSyntaxError("PQL syntax error: Invalid use of and after pattern keyword");
 				}
@@ -113,7 +113,7 @@ void QueryTokenizer::tokenizeClauses(std::string input,
 }
 
 void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClause*>& withClauseVec, std::multimap<std::string, std::string> varTable) {
-	std::size_t equalSignIndex = input.find_first_of('=');
+	std::size_t equalSignIndex = input.find_first_of(Utility::equalSign);
 	if (equalSignIndex == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid with clause, no \"=\" sign");
 	}
@@ -122,11 +122,11 @@ void QueryTokenizer::tokenizeWithClause(std::string& input, std::vector<WithClau
 	input = Utility::trim(input.substr(equalSignIndex + 1), Utility::whiteSpaces);
 
 	std::size_t secondArgEndIndex = input.find_first_of(Utility::whiteSpaces);
-	std::string secondArgStr = "";
+	std::string secondArgStr = Utility::empty;
 	//this with clause is the last clause
 	if (secondArgEndIndex == std::string::npos) {
 		secondArgStr = input;
-		input = "";
+		input = Utility::empty;
 	}
 	else {
 		secondArgStr = input.substr(0, secondArgEndIndex);
@@ -143,8 +143,8 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 	std::size_t elemEndIndex = input.find_first_of(Utility::whiteSpaces);
 	std::vector<std::string> elemStrList;
 	//multi clause
-	if (input.size() > 0 && input[0] == '<') {
-		size_t rightAnglePos = input.find_first_of(">");
+	if (input.size() > 0 && input[0] == Utility::leftArrowBracketChar) {
+		size_t rightAnglePos = input.find_first_of(Utility::rightArrowBracket);
 		if (rightAnglePos == std::string::npos) {
 			throw PQLSyntaxError("PQL syntax error: Invalid multi-element list format in select clause");
 		}
@@ -154,7 +154,7 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 	//single clause, no whitespace on the left, so no other clauses except Select single element
 	else if (elemEndIndex == std::string::npos) {
 		elemStrList.push_back(input);
-		input = "";
+		input = Utility::empty;
 	}
 	//single clause, but other restriction after the select clause
 	else {
@@ -165,10 +165,17 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 	std::vector<Elem*> elemList;
 	for (std::string elemStr : elemStrList) {
 		if (syntaxChecker.validateAttrRef(elemStr)) {
-			std::size_t periodIndex = elemStr.find_first_of(".");
+			std::size_t periodIndex = elemStr.find_first_of(Utility::ending);
 			std::string synName = elemStr.substr(0, periodIndex);
 			std::string attrName = elemStr.substr(periodIndex + 1);
-			Elem* elem = new Elem(AttrRef(synName, varTable.find(synName)->second, attrName));
+			std::string synType;
+			if (varTable.find(synName) == varTable.end()) {
+				synType = Utility::ending;
+			}
+			else {
+				synType = varTable.find(synName)->second;
+			}
+			Elem* elem = new Elem(AttrRef(synName, synType, attrName));
 			elemList.push_back(elem);
 		}
 		else if (syntaxChecker.validateSynonym(elemStr)) {
@@ -184,9 +191,9 @@ void QueryTokenizer::tokenizeSelectClause(std::string& input, std::multimap<std:
 }
 
 void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<SuchThatClause*>& suchThatClauseVec) {
-	std::size_t nextLeftPar = input.find_first_of("(");
-	std::size_t nextComma = input.find_first_of(",");
-	std::size_t nextRightPar = input.find_first_of(")");
+	std::size_t nextLeftPar = input.find_first_of(Utility::leftRoundBracket);
+	std::size_t nextComma = input.find_first_of(Utility::coma);
+	std::size_t nextRightPar = input.find_first_of(Utility::rightRoundBracket);
 
 	if (nextLeftPar == std::string::npos || nextComma == std::string::npos || nextRightPar == std::string::npos) {
 		throw PQLSyntaxError("PQL syntax error: Invalid such that clause syntax");
@@ -207,9 +214,9 @@ void QueryTokenizer::tokenizeSuchThatClause(std::string& input, std::vector<Such
 void QueryTokenizer::tokenizePatternClause(std::string& input,
                                            std::multimap<std::string, std::string> varTable,
                                            std::vector<PatternClause*>& patternClauseVec) {
-	std::size_t nextLeftPar = input.find_first_of("(");
-	std::size_t firstComma = input.find_first_of(",");
-    std::size_t secondComma = input.find_first_of(",", firstComma + 1);
+	std::size_t nextLeftPar = input.find_first_of(Utility::leftRoundBracket);
+	std::size_t firstComma = input.find_first_of(Utility::coma);
+    std::size_t secondComma = input.find_first_of(Utility::coma, firstComma + 1);
 
     if (nextLeftPar == std::string::npos || firstComma == std::string::npos) {
         throw PQLSyntaxError("PQL syntax error: Invalid pattern clause syntax");
@@ -218,9 +225,9 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
     stack<char> stk;
     std::size_t nextRightPar = -1;
     for (size_t i = nextLeftPar; i < input.length(); i++ ) {
-        if (input[i] == '(') {
-            stk.push('(');
-        } else if (input[i] == ')') {
+        if (input[i] == Utility::leftRoundBracketChar) {
+            stk.push(Utility::leftRoundBracketChar);
+        } else if (input[i] == Utility::rightRoundBracketChar) {
             stk.pop();
         }
         if (stk.empty()) {
@@ -237,9 +244,11 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
 
     std::string firstArg;
     std::string secondArg;
-    std::string thirdArg = "";
+    std::string thirdArg = Utility::empty;
 
-    if (synonymType == "if") {
+	DesignEntity enumDesignEntity = Utility::getDesignEntityFromString(synonymType);
+
+    if (enumDesignEntity == IF_ENTITY) {
         // 3 arguments case
         if (secondComma == std::string::npos || secondComma > nextRightPar) {
             throw PQLSyntaxError("PQL syntax error: Only 1 comma in pattern clause if type");
@@ -252,7 +261,7 @@ void QueryTokenizer::tokenizePatternClause(std::string& input,
                                               Utility::whiteSpaces);
     } else {
         // 2 arguments case
-        if (! (synonymType == "assign" || synonymType == "while")) {
+        if (! (enumDesignEntity == ASSIGN_ENTITY || enumDesignEntity == WHILE_ENTITY)) {
             throw PQLSemanticError("PQL Semantic error: pattern clause synonym type is not assign, while or if");
         }
 
@@ -288,7 +297,7 @@ std::string QueryTokenizer::peekKeyword(std::string input, std::string delimiter
     input = Utility::trim(input, Utility::whiteSpaces);
     std::size_t nextDelimiter = input.find_first_of(delimiter);
     if (nextDelimiter == std::string::npos) {
-        return "";
+        return Utility::empty;
     }
     std::string keyword = Utility::trim(input.substr(0, nextDelimiter), Utility::whiteSpaces);
     return keyword;
@@ -297,12 +306,12 @@ std::string QueryTokenizer::peekKeyword(std::string input, std::string delimiter
 std::vector<std::string> QueryTokenizer::tokenizeCsv(std::string csv) {
     std::vector<std::string> ret;
     std::string remainder = csv;
-    size_t commaIndex = remainder.find(",");
+	size_t commaIndex = remainder.find(Utility::coma);
     while (commaIndex != std::string::npos) {
         std::string str = Utility::trim(remainder.substr(0, commaIndex), Utility::whiteSpaces);
         ret.push_back(str);
         remainder = Utility::trim(remainder.substr((commaIndex + 1)), Utility::whiteSpaces);
-        commaIndex = remainder.find(",");
+        commaIndex = remainder.find(Utility::coma);
     }
 
     if (remainder.empty()) {
@@ -330,7 +339,7 @@ Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, st
 	}
 
 	if (syntaxChecker.validateAttrRef(input)) {
-		std::size_t periodIndex = input.find_first_of(".");
+		std::size_t periodIndex = input.find_first_of(Utility::ending);
 		std::string synName = input.substr(0, periodIndex);
 		std::string synType = varTable.find(synName)->second;
 		std::string attrName = input.substr(periodIndex + 1);

@@ -110,6 +110,21 @@ public:
     inline static const std::string integer = "integer";
     inline static const std::string synonym = "synonym";
     inline static const std::string invalid = "Invalid";
+    inline static const std::string leftRoundBracket = "(";
+    inline static const std::string rightRoundBracket = ")";
+    inline static const char leftRoundBracketChar = '(';
+    inline static const char rightRoundBracketChar = ')';
+    inline static const std::string leftArrowBracket = "<";
+    inline static const std::string rightArrowBracket = ">";
+    inline static const char leftArrowBracketChar = '<';
+    inline static const char rightArrowBracketChar = '>';
+    inline static const std::string coma = ",";
+    inline static const std::string empty = "";
+    inline static const char equalSign = '=';
+    inline static const std::string segmentation = ";";
+    inline static const char segmentationChar = ';';
+    inline static const std::string minusOne = "-1";
+    inline static const char quoteChar = '"';
 
     inline static const std::string parent = "Parent";
     inline static const std::string parentStar = "Parent*";
@@ -132,6 +147,7 @@ public:
     inline static const std::string varName = "varName";
     inline static const std::string stmtNum = "stmt#";
     inline static const std::string value = "value";
+    inline static const std::string boolean = "BOOLEAN";
 
     inline static const std::vector<PriorityLevel> priorityList = { 
         ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE };
@@ -141,7 +157,7 @@ public:
     inline static const ReferenceType getEnumReferenceType(std::string input)
     {
         if (std::regex_match(input, std::regex(synonymFormat)))
-        {
+        { 
             return SYNONYM;
         }
         else if (std::regex_match(input, std::regex(integerFormat)))
@@ -223,7 +239,7 @@ public:
 
     inline static const std::string trim_double_quotes(std::string s)
     {
-        if (s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"')
+        if (s.length() >= 2 && s[0] == quoteChar && s[s.length() - 1] == quoteChar)
         {
             return s.substr(1, s.length() - 2);
         }
@@ -460,36 +476,36 @@ public:
 
     inline static const std::string getAttrRefValue(std::string synVal, AttrRef attrRef, PKB& pkb) {
         //attrbute is in the table
-        if (attrRef.getAttrName() == "stmt#" || attrRef.getAttrName() == "value" ||
-            attrRef.getSynType() == "procedure" || attrRef.getSynType() == "variable") {
+        if (attrRef.getAttrName() == Utility::stmtNum || attrRef.getAttrName() == Utility::value ||
+            attrRef.getSynType() == Utility::procedure || attrRef.getSynType() == Utility::variable) {
             return synVal;
         }
-        else if (attrRef.getSynType() == "call") {
+        else if (attrRef.getSynType() == Utility::call) {
             int callLineNum = stoi(synVal);
-            std::string calledProcName = pkb.getWithCallProcName(callLineNum, "-1");
-            if (calledProcName == "-1") {
+            std::string calledProcName = pkb.getWithCallProcName(callLineNum, Utility::minusOne);
+            if (calledProcName == Utility::minusOne) {
                 //should throw error
             }
             return calledProcName;
         }
-        else if (attrRef.getSynType() == "read") {
+        else if (attrRef.getSynType() == Utility::read) {
             int readLineNum = stoi(synVal);
-            std::string readVarName = pkb.getWithReadVarName(readLineNum, "-1");
-            if (readVarName == "-1") {
+            std::string readVarName = pkb.getWithReadVarName(readLineNum, Utility::minusOne);
+            if (readVarName == Utility::minusOne) {
                 //should throw error
             }
             return readVarName;
         }
-        else if (attrRef.getSynType() == "print") {
+        else if (attrRef.getSynType() == Utility::print) {
             int printLineNum = stoi(synVal);
-            std::string printVarName = pkb.getWithPrintVarName(printLineNum, "-1");
-            if (printVarName == "-1") {
+            std::string printVarName = pkb.getWithPrintVarName(printLineNum, Utility::minusOne);
+            if (printVarName == Utility::minusOne) {
                 //should throw error
             }
             return printVarName;
         }
         else {
-            return "-1";
+            return Utility::minusOne;
         }
     }
 };
