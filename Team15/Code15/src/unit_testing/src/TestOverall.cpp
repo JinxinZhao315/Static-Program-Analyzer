@@ -42,8 +42,11 @@ string uses_modifies = "../../../../Tests15/local_test/source-usesmodifies.txt";
 string source_with = "../../../../Tests15/local_test/with.txt";
 string source_ifwhile = "../../../../Tests15/local_test/source-ifwhile.txt";
 string source_optimization = "../../../../Tests15/local_test/source-optimization.txt";
+string source_optimization2 = "../../../../Tests15/local_test/source-optimization2.txt";
 string source_affects = "../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../Tests15/g_invalid/1_source.txt";
+string source_g8 = "../../../../Tests15/g/8_source.txt";
+string source_12 = "../../../../Tests15/g2/12_source.txt";
 #elif _WIN32
 string source_sample1 = "../../../../../../Tests15/local_test/source-sample1.txt";
 string source_sample2 = "../../../../../../Tests15/local_test/source-sample2.txt";
@@ -56,6 +59,7 @@ string uses_modifies = "../../../../../../Tests15/local_test/source-usesmodifies
 string source_with = "../../../../../../Tests15/local_test/with.txt";
 string source_ifwhile = "../../../../../../Tests15/local_test/source-ifwhile.txt";
 string source_optimization = "../../../../../../Tests15/local_test/source-optimization.txt";
+string source_optimization2 = "../../../../../../Tests15/local_test/source-optimization2.txt";
 string source_affects = "../../../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../../../Tests15/g_invalid/1_source.txt";
 string source_g8 = "../../../../../../Tests15/g/8_source.txt";
@@ -653,5 +657,14 @@ TEST_CASE("Overall test : invalid syntax 5") {
 
     set<string> result = testDriver(filename, queryStr);
     set<string> expectedResult = { "a","cat","x","y","z" };
+    REQUIRE(result == expectedResult);
+}
+TEST_CASE("Overall test : optimization test 4") {
+    string filename = source_optimization2;
+    string queryStr = "assign a; variable v; assign n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;\
+        Select BOOLEAN such that Affects*(n1, _)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "FALSE" };
     REQUIRE(result == expectedResult);
 }
