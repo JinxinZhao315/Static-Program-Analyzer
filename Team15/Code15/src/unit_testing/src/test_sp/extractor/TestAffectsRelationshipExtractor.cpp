@@ -850,7 +850,7 @@ TEST_CASE("source affects") {
     };
 
     clearCache();
-    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, modifiesRS, usesRS, true, lineNumToLineMap);
+    set<int> result1 = extractAffectsWithWildcard(lines, 1, false, cfg, modifiesRS, usesRS, false, lineNumToLineMap);
 
     REQUIRE(expected1 == result1);
 }
