@@ -47,6 +47,7 @@ jobs:
           - { source: source-parent.txt, query: query-parent.txt, output: parent.xml }
           - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
           - { source: source-next.txt, query: query-next.txt, output: next.xml }
+          - { source: source-affects.txt, query: query-affects.txt, output: affects.xml }
 
     steps:
       - uses: actions/checkout@v3
@@ -103,6 +104,7 @@ jobs:
           - { source: source-parent.txt, query: query-parent.txt, output: parent.xml }
           - { source: source-usesmodifies.txt, query: query-usesmodifies.txt, output: usesmodifies.xml }
           - { source: source-next.txt, query: query-next.txt, output: next.xml }
+          - { source: source-affects.txt, query: query-affects.txt, output: affects.xml }
 
     steps:
       - uses: actions/checkout@v3
