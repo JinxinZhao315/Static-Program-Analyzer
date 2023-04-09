@@ -143,6 +143,7 @@ std::vector<std::string> ResultTable::getTuple(int index) {
     return resultTuple;
 }
 
+
 std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selectedElem, PKB &pkb, bool isEarlyExit) {
     if (selectedElem.size() > 1) {
         if (isEarlyExit) {
@@ -203,6 +204,9 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selected
                 return { "TRUE" };
             }
         }
+    }
+    else {
+        throw runtime_error("There should be at least one element selected!");
     }
 }
 
