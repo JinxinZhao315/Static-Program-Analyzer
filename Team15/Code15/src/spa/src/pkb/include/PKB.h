@@ -260,11 +260,11 @@ public:
 	//get assign pattern
 	std::set<int> getAssignStmtsFromVar(std::string lhsVarName);
 
-	std::set<std::vector<std::string>> getAssignExprsFromStmt(int assignStmtNum);
+	std::vector<std::string> getAssignExprsFromStmt(int assignStmtNum);
 
 	std::set<int> getAssignStmtsFromExpr(std::vector<std::string> rhsExpr);
 
-	std::set<std::vector<std::string>> getAssignExprsFromVar(std::string lhsVarName);
+	std::vector<std::string> getAssignExprsFromVar(std::string lhsVarName);
 
 	//get while pattern
 	std::set<int> getWhileStmtsWithVars();

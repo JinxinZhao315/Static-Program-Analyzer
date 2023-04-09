@@ -167,12 +167,12 @@ void PKB::addAllAssignPatterns(std::unordered_map<std::string, std::set<Line>> l
 
 //add while pattern
 void PKB::addAllWhilePatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileLine) {
-	whilePatternTable.addAllWhileOrIfPatterns(controlVarToWhileLine);
+	whilePatternTable.addAllConditionalPatterns(controlVarToWhileLine);
 }
 
 //add if pattern
 void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine) {
-	ifPatternTable.addAllWhileOrIfPatterns(controlVarToIfLine);
+	ifPatternTable.addAllConditionalPatterns(controlVarToIfLine);
 }
 
 //GET
@@ -438,7 +438,6 @@ std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	std::vector<Line> lines = getAllLines();
 	std::unordered_map<int, std::set<std::string>> modifiesMap = getStmtModifiesVarsMap();
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
-	std::set<std::string> variables = getAllVarNames();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
 	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineMap);
@@ -581,7 +580,7 @@ std::set<int> PKB::getAssignStmtsFromVar(std::string lhsVarName) {
 	return assignPatternTable.getStmtsFromVar(lhsVarName);
 }
 
-std::set<std::vector<std::string>> PKB::getAssignExprsFromStmt(int assignStmtNum) {
+std::vector<std::string> PKB::getAssignExprsFromStmt(int assignStmtNum) {
 	return assignPatternTable.getExprsFromStmt(assignStmtNum);
 }
 
@@ -589,7 +588,7 @@ std::set<int> PKB::getAssignStmtsFromExpr(std::vector<std::string> rhsExpr) {
 	return assignPatternTable.getStmtsFromExpr(rhsExpr);
 }
 
-std::set<std::vector<std::string>> PKB::getAssignExprsFromVar(std::string lhsVarName) {
+std::vector<std::string> PKB::getAssignExprsFromVar(std::string lhsVarName) {
 	return assignPatternTable.getExprsFromVar(lhsVarName);
 }
 

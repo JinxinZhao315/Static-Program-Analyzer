@@ -4,20 +4,18 @@
 PatternHandler::PatternHandler(PKB &pkb) : ClauseHandler(pkb){}
 
 
-set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, const set<vector<string>>& allRHS, const vector<string>& substrTokens) {
+set<string> PatternHandler::findMatchingLineNums(bool isPartialMatch, const vector<string>& rhs, const vector<string>& substrTokens) {
     set <string> ret;
-    for (const vector<string>& rhsTokensVec : allRHS) {
-        bool isMatch;
-        if (!isPartialMatch) {
-            isMatch = rhsTokensVec == substrTokens;
-        } else {
-            isMatch =  findIsPartialMatch(rhsTokensVec, substrTokens);
-        }
-        if (isMatch) {
-            set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhsTokensVec);
-            for (int num : lineNumSet) {
-                ret.insert(to_string(num));
-            }
+    bool isMatch;
+    if (!isPartialMatch) {
+        isMatch = rhs == substrTokens;
+    } else {
+        isMatch =  findIsPartialMatch(rhs, substrTokens);
+    }
+    if (isMatch) {
+        set<int> lineNumSet = pkb.getAssignStmtsFromExpr(rhs);
+        for (int num : lineNumSet) {
+            ret.insert(to_string(num));
         }
     }
     return ret;
@@ -118,8 +116,8 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         } else {
 
             for (auto lineNum : currPatternSynonVals) {
-                set<vector<string>> allRHS = pkb.getAssignExprsFromStmt(stoi(lineNum));
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
+                vector<string> rhs = pkb.getAssignExprsFromStmt(stoi(lineNum));
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
                 if (!matchingLines.empty()) {
                     resultPatternSynonVals.push_back(lineNum);
                 }
@@ -151,8 +149,8 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
         } else {
 
             for (const string& currFirstVal: currFirstSynonValues) {
-                set<vector<string>> allRHS = pkb.getAssignExprsFromVar(currFirstVal);
-                set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
+                vector<string> rhs = pkb.getAssignExprsFromVar(currFirstVal);
+                set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
                 if (!matchingLines.empty()) {
                     for (const string& lineStr : matchingLines) {
                         tempTable.insertTuple({lineStr, currFirstVal });
@@ -175,8 +173,8 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
             // If second arg is wildcard, get every assign/while/if from pkb whose LHS is firstArgTrimmed (a variable)
 
         } else {
-            set<vector<string>> allRHS = pkb.getAssignExprsFromVar(firstArgTrimmed);
-            set<string> matchingLines = findMatchingLineNums(isPartialMatch, allRHS, secondArgPostfix);
+            vector<string> rhs = pkb.getAssignExprsFromVar(firstArgTrimmed);
+            set<string> matchingLines = findMatchingLineNums(isPartialMatch, rhs, secondArgPostfix);
             for (const string& lineStr : matchingLines) {
                 patternSynonVals.push_back(lineStr);
             }

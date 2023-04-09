@@ -28,7 +28,7 @@ public:
 		}
 	}
 
-	inline void addAllWhileOrIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine) {
+	inline void addAllConditionalPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToWhileOrIfLine) {
 		for (const auto& [var, lines] : controlVarToWhileOrIfLine) {
 			for (Line line : lines) {
 				int stmtNum = line.getLineNumber();
@@ -51,7 +51,7 @@ public:
 		return pair->second;
 	}
 
-	inline std::set<std::vector<std::string>> getExprsFromStmt(int assignStmtNum) {
+	inline std::vector<std::string> getExprsFromStmt(int assignStmtNum) {
 		auto pair = stmtToExprsMap.find(assignStmtNum);
 		if (pair == stmtToExprsMap.end()) {
 			return {};
@@ -67,7 +67,7 @@ public:
 		return pair->second;
 	}
 
-	inline std::set<std::vector<std::string>> getExprsFromVar(std::string lhsVarName) {
+	inline std::vector<std::string> getExprsFromVar(std::string lhsVarName) {
 		auto pair = varToExprsMap.find(lhsVarName);
 		if (pair == varToExprsMap.end()) {
 			return {};
@@ -80,9 +80,9 @@ private:
 	std::unordered_map<int, std::string> stmtToVarMap;
 	std::unordered_map<int, std::set<std::string>> stmtToVarsMap;
 	std::unordered_map<std::string, std::set<int>> varToStmtsMap;
-	std::unordered_map<int, std::set<std::vector<std::string>>> stmtToExprsMap;
+	std::unordered_map<int, std::vector<std::string>> stmtToExprsMap;
 	std::unordered_map<std::vector<std::string>, std::set<int>, VectorHasher> exprToStmtsMap;
-	std::unordered_map<std::string, std::set<std::vector<std::string>>> varToExprsMap;
+	std::unordered_map<std::string, std::vector<std::string>> varToExprsMap;
 	std::unordered_map<std::vector<std::string>, std::set<std::string>, VectorHasher> exprToVarsMap;
 
 	inline void addStmt(int stmtNum) {
@@ -116,10 +116,10 @@ private:
 	inline void mapStmtToExprs(int assignStmtNum, std::vector<std::string> rhsExpr) {
 		auto pair = stmtToExprsMap.find(assignStmtNum);
 		if (pair == stmtToExprsMap.end()) {
-			stmtToExprsMap[assignStmtNum] = { rhsExpr };
+			stmtToExprsMap[assignStmtNum] = rhsExpr;
 		}
 		else {
-			pair->second.insert(rhsExpr);
+			pair->second.insert(pair->second.end(), rhsExpr.begin(), rhsExpr.end());
 		}
 	}
 
@@ -136,10 +136,10 @@ private:
 	inline void mapVarToExprs(std::string lhsVarName, std::vector<std::string> rhsExpr) {
 		auto pair = varToExprsMap.find(lhsVarName);
 		if (pair == varToExprsMap.end()) {
-			varToExprsMap[lhsVarName] = { rhsExpr };
+			varToExprsMap[lhsVarName] = rhsExpr;
 		}
 		else {
-			pair->second.insert(rhsExpr);
+			pair->second.insert(pair->second.end(), rhsExpr.begin(), rhsExpr.end());
 		}
 	}
 
