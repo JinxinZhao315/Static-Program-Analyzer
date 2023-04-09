@@ -58,6 +58,8 @@ string source_ifwhile = "../../../../../../Tests15/local_test/source-ifwhile.txt
 string source_optimization = "../../../../../../Tests15/local_test/source-optimization.txt";
 string source_affects = "../../../../../../Tests15/local_test/source-affects.txt";
 string source_invalid1 = "../../../../../../Tests15/g_invalid/1_source.txt";
+string source_g8 = "../../../../../../Tests15/g/8_source.txt";
+string source_12 = "../../../../../../Tests15/g2/12_source.txt";
 #endif
 
 TEST_CASE("Overall test : source-usesmodifies.txt 1")
@@ -604,3 +606,52 @@ TEST_CASE("Overall test : invalid syntax 2") {
 //    set<string> expectedResult = { "FALSE" };
 //    REQUIRE(result == expectedResult);
 //}
+
+//TEST_CASE("Overall test :g8-7") {
+//    string filename = source_g8;
+//    string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; Select s such that Follows(s,_) pattern a(_, \"x\")";
+//
+//    set<string> result = testDriver(filename, queryStr);
+//    set<string> expectedResult = { "SemanticError" };
+//    REQUIRE(result == expectedResult);
+//}
+//
+TEST_CASE("Overall test :g8-57") {
+    string filename = source_g8;
+    string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; procedure p;  Select v such that Parent* (s, _) such that Modifies(c, v) and Uses(a, v)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "x" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : invalid syntax 3") {
+    string filename = source_invalid1;
+    string queryStr = "procedure pr1, pr2; print p; read r;\
+        Select pr2 such that Calls(pr1, pr2) with pr2.procName = p.varName with p1.varName = r.varName ";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "SemanticError" };
+    REQUIRE(result == expectedResult);
+}
+
+
+TEST_CASE("Overall test : invalid syntax 4") {
+    string filename = source_12;
+    string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; procedure p; \
+        Select v such that Modifies(c, v) and Uses(a,v) such that Parent*(s,_)";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "a,cat,x,y,z" };
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Overall test : invalid syntax 5") {
+    string filename = source_12;
+    string queryStr = "stmt s, s1; assign a, a1; print pr; read r; call c, c1; constant const; while w; if ifs; variable v; procedure p; \
+        Select v such that Parent*(s,_) such that Modifies(c, v) and Uses(a,v) ";
+
+    set<string> result = testDriver(filename, queryStr);
+    set<string> expectedResult = { "a,cat,x,y,z" };
+    REQUIRE(result == expectedResult);
+}

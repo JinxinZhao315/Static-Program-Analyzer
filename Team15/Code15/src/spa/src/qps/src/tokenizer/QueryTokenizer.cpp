@@ -341,7 +341,7 @@ Ref QueryTokenizer::tokenizeRef(std::string input, std::multimap<std::string, st
 	if (syntaxChecker.validateAttrRef(input)) {
 		std::size_t periodIndex = input.find_first_of(Utility::ending);
 		std::string synName = input.substr(0, periodIndex);
-		std::string synType = varTable.find(synName)->second;
+		std::string synType = varTable.count(synName) == 0 ? Utility::undefined_type : varTable.find(synName)->second;
 		std::string attrName = input.substr(periodIndex + 1);
 		return Ref(AttrRef(synName, synType, attrName));
 	}

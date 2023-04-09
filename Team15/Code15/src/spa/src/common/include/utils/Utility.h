@@ -90,6 +90,7 @@ public:
     inline static const std::string ifStmt = "if";
     inline static const std::string call = "call";
     inline static const std::string stmt = "stmt";
+    inline static const std::string undefined_type = "undefined_type";
 
     inline static const std::unordered_set<std::string> designEntitySet = {procedure, stmt, read, print,
                                                                            assign, call, whileStmt, ifStmt, variable, constant};

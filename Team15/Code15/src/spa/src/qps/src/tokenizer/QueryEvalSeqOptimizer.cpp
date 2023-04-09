@@ -117,7 +117,7 @@ std::vector<std::vector<int>> QueryEvalSeqOptimizer::seperateEvalGroup(std::vect
 std::vector<int> QueryEvalSeqOptimizer::generateOrderedEvalGroup(std::vector<Clause*> clauseList, std::vector<int> evalGroup,
     std::unordered_map<int, std::set<int>> clauseToClauseMap) {
     //find the clause with the highest priority in current group as a starting point for BFS
-    int highestPriorityClause = 0;
+    int highestPriorityClause = evalGroup[0];//set the max val to be the first clause
     for (int clauseIntRep : evalGroup) {
         PriorityLevel currPriorityLevel = getPriority(clauseList[clauseIntRep]);
         PriorityLevel highestPriorityLevel = getPriority(clauseList[highestPriorityClause]);
