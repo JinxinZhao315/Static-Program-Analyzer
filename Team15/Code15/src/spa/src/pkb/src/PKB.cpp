@@ -5,6 +5,7 @@ PKB::PKB() {
 	varTable = EntityTable<std::string>();
 	constTable = EntityTable<std::string>();
 	lineTable = EntityTable<Line>();
+	assignLineTable = EntityTable<Line>();
 	stmtTable = StatementTable();
 	followsTable = RelationshipTable<int, int>();
 	followsStarTable = RelationshipTable<int, int>();
@@ -48,6 +49,12 @@ void PKB::addAllConsts(std::set<std::string> constVals) {
 //add line
 void PKB::addAllLines(std::vector<Line> allLines) {
 	lineTable.addAllEntities(allLines);
+	for (Line line : allLines) {
+		lineTable.addEntityMapping(line.getLineNumber(), line);
+		if (line.getType() == KeywordsEnum::ASSIGN) {
+			assignLineTable.addEntityToSet(line);
+		}
+	}
 }
 
 //add statement
@@ -191,6 +198,14 @@ std::set<std::string> PKB::getAllConstVals() {
 //get line
 std::vector<Line> PKB::getAllLines() {
 	return lineTable.getEntityVector();
+}
+
+std::set<Line> PKB::getAllAssignLines() {
+	return assignLineTable.getEntitySet();
+}
+
+std::unordered_map<int, Line> PKB::getStmtNumToLineMap() {
+	return lineTable.getEntityMap();
 }
 
 //get statement
