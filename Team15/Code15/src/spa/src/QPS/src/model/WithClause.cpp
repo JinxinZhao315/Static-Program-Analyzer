@@ -31,7 +31,7 @@ std::string WithClause::getFirstArgConstValue() {
 		return this->firstArg.getIntegerValue();
 	}
 	else {
-		return "";
+		return Utility::empty;
 	}
 }
 
@@ -43,7 +43,7 @@ std::string WithClause::getSecondArgConstValue() {
 		return this->secondArg.getIntegerValue();
 	}
 	else {
-		return "";
+		return Utility::empty;
 	}
 }
 

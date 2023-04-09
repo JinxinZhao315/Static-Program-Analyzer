@@ -209,20 +209,11 @@ std::set<std::string> ResultTable::getSelectedResult(std::vector<Elem*> selected
     }
     else if (selectedElem.size() == 1) {
         //not BOOLEAN or BOOLEAN is a synonym
-        if (selectedElem[0]->getSynName() != "BOOLEAN" || isSynExist("BOOLEAN")) {
+        if (selectedElem[0]->getSynName() != Utility::boolean || isSynExist(Utility::boolean)) {
             if (isEarlyExit) {
                 return {};
             }
-            //std::set<std::string> selectedSynResult;
-            //std::set<std::string> synValues = getSynValues(selectedElem[0].getSynName());
-            //for (std::string syn : synValues) {
-            //    if (selectedElem[0].isElemSynonym()) {
-            //        selectedSynResult.insert(syn);
-            //    }
-            //    else {
-            //        selectedSynResult.insert(getAttrRefValue(synIndex, i, selectedElem[0].getAttrRef(), pkb));
-            //    }
-            //}
+        
             std::vector<std::string>::iterator it = std::find(synList.begin(), synList.end(), selectedElem[0]->getSynName());
 
             int synIndex = it - synList.begin();

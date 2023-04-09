@@ -109,7 +109,7 @@ Result PatternHandler::evaluate(PatternClause patternClause, ResultTable& result
     if (firstType == UNDERSCORE) {
 
         std::vector<std::string> resultPatternSynonVals;
-        std::vector<std::string> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, "", GET_ALL);
+        std::vector<std::string> currPatternSynonVals = getLineNumsFromPkb(patternTypeEnum, Utility::empty, GET_ALL);
 
         if (secondType == UNDERSCORE) {
 
@@ -198,10 +198,10 @@ vector<string> PatternHandler::simplifiedTokenise(const string& input) {
     std::string current_token;
 
     for (char c : input) {
-        if (c == ' ' || c == '\t' || c == '\n') {
+        if (c == Utility::spaceChar || c == Utility::tabChar || c == Utility::nextLineChar) {
             continue;
-        } else if (c == '+' || c == '-' || c == '*' || c == '/'
-            || c == '%' || c == '(' || c == ')') {
+        } else if (c == Utility::plusSignChar || c == Utility::minusSignChar || c == Utility::timesSignChar || c == Utility::divideSignChar
+            || c == Utility::moduleSignChar || c == Utility::leftRoundBracketChar || c == Utility::rightRoundBracketChar) {
             if (!current_token.empty()) {
                 tokens.push_back(current_token);
                 current_token.clear();
@@ -226,11 +226,11 @@ bool PatternHandler::isValidExprTerm(const string& token) {
 }
 
 bool PatternHandler::isValidStart(const string &token) {
-    return isValidExprTerm(token) || token == "(";
+    return isValidExprTerm(token) || token == Utility::leftRoundBracket;
 }
 
 bool PatternHandler::isValidEnd(const string &token) {
-    return isValidExprTerm(token) || token == ")";
+    return isValidExprTerm(token) || token == Utility::rightRoundBracket;
 }
 
 vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens) {
@@ -246,16 +246,16 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
     for (const string& token : tokens) {
         if (isValidExprTerm(token)) {
             result.push_back(token);
-        } else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
+        } else if (token == Utility::plusSign || token == Utility::minusSign || token == Utility::timesSign || token == Utility::divideSign || token == Utility::moduleSign) {
             while (!s.empty() && precedence(s.top()) >= precedence(token)) {
                 result.push_back(s.top());
                 s.pop();
             }
             s.push(token);
-        } else if (token == "(") {
+        } else if (token == Utility::leftRoundBracket) {
             s.push(token);
-        } else if (token == ")") {
-            while (s.top() != "(") {
+        } else if (token == Utility::rightRoundBracket) {
+            while (s.top() != Utility::leftRoundBracket) {
                 result.push_back(s.top());
                 s.pop();
             }
@@ -265,7 +265,7 @@ vector<string> PatternHandler::simplifiedConvertToPostfix(vector<string> tokens)
         }
     }
     while (!s.empty()) {
-        if (s.top() == "(") {
+        if (s.top() == Utility::leftRoundBracket) {
             throw PQLSyntaxError("PQL Syntax Error: Unclosed bracket in pattern expression");
         }
         result.push_back(s.top());
