@@ -60,7 +60,7 @@ bool checkTransitivePath(const vector<int>& path, const vector<Line>& program, i
                          const unordered_map<int, set<int>>& cfg,
                          const unordered_map<int, set<string>>& modifiesRS,
                          const unordered_map<int, set<string>>& usesRS,
-                         unordered_map<int, Line> lineNumToLineMap) {
+                         const unordered_map<int, Line>& lineNumToLineMap) {
     for(auto node : path) {
         if(extractAffectsRS(program, lineNum1, node, cfg, modifiesRS, usesRS, false, lineNumToLineMap)
             && extractAffectsRS(program, node, lineNum2, cfg, modifiesRS, usesRS, false, lineNumToLineMap)) {
@@ -74,7 +74,7 @@ set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bo
                                     const unordered_map<int, set<int>>& cfg,
                                     const unordered_map<int, set<string>>& modifiesRS,
                                     const unordered_map<int, set<string>>& usesRS,
-                                    bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap) {
+                                    bool findAffectsStar, const unordered_map<int, Line>& lineNumToLineMap) {
     set<int> stmtLineNums;
     for(const auto& line : program) {
         int otherLineNum = line.getLineNumber();
@@ -118,7 +118,7 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                           const unordered_map<int, set<int>>& cfg,
                                           const unordered_map<int, set<string>>& modifiesRS,
                                           const unordered_map<int, set<string>>& usesRS,
-                                          bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap) {
+                                          bool findAffectsStar, const unordered_map<int, Line>& lineNumToLineMap) {
     pair<int, int> key = make_pair(lineNum1, lineNum2);
     if (cache.find(key) != cache.end()) {
         return cache[key];

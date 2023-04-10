@@ -17,7 +17,6 @@ void SourceProcessor::parseProgram(const string& fileName, PKB* pkb) {
     vector<Line> extractedLines = tokeniser->getExtractedLines();
     pkb->addAllLines(extractedLines);
     extract(extractedLines);
-    clearCache();
 }
 
 void SourceProcessor::storeDataInPKB(PKB* pkb) {
@@ -46,6 +45,10 @@ void SourceProcessor::storeDataInPKB(PKB* pkb) {
 
 void SourceProcessor::extract(const vector<Line>& program) {
     extractor->extract(program);
+}
+
+void SourceProcessor::clearAffectsCache() {
+    clearCache();
 }
 
 bool SourceProcessor::getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,

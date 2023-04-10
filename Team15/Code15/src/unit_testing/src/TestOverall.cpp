@@ -10,10 +10,10 @@
 #include "catch.hpp"
 using namespace std;
 
-void spDriver(std::string filename, PKB &pkb)
+void spDriver(const string& filename, PKB &pkb)
 {
     auto sourceProcessor = SourceProcessor();
-    sourceProcessor.parseProgram(std::move(filename), &pkb);
+    sourceProcessor.parseProgram(filename, &pkb);
     sourceProcessor.storeDataInPKB(&pkb);
 }
 set<string> qpsDriver(std::string queryStr, PKB &pkb)
@@ -23,10 +23,10 @@ set<string> qpsDriver(std::string queryStr, PKB &pkb)
     return result;
 }
 
-set<string> testDriver(string filename, string queryStr)
+set<string> testDriver(const string& filename, string queryStr)
 {
     PKB pkb;
-    spDriver(std::move(filename), pkb);
+    spDriver(filename, pkb);
     return qpsDriver(std::move(queryStr), pkb);
 }
 
@@ -659,14 +659,14 @@ TEST_CASE("Overall test : source affects buggy") {
     string queryStr3 = "stmt s1, s2;Select s2 such that Affects(s1, s2) with s1.stmt# = 4";
 
     set<string> result1 = testDriver(filename, queryStr1);
-    set<string> result2 = testDriver(filename, queryStr2);
-    set<string> result3 = testDriver(filename, queryStr3);
-
     set<string> expected1 = { "TRUE" };
-    set<string> expected2 = { "8", "12", "14", "16" };
-    set<string> expected3 = { "8", "12", "14", "16" };
-
     REQUIRE(result1 == expected1);
+
+    set<string> result2 = testDriver(filename, queryStr2);
+    set<string> expected2 = { "8", "12", "14", "16" };
     REQUIRE(result2 == expected2);
+
+    set<string> result3 = testDriver(filename, queryStr3);
+    set<string> expected3 = { "8", "12", "14", "16" };
     REQUIRE(result3 == expected3);
 }

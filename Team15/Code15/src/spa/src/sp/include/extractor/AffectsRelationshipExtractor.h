@@ -18,14 +18,14 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                               const unordered_map<int, set<int>>& cfg,
                                               const unordered_map<int, set<string>>& modifiesRS,
                                               const unordered_map<int, set<string>>& usesRS,
-                                              bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap
+                                              bool findAffectsStar, const unordered_map<int, Line>& lineNumToLineMap
                                               );
 
 set<int> extractAffectsWithWildcard(const vector<Line>& program, int lineNum, bool wildCardIsFirstArg,
                                     const unordered_map<int, set<int>>& cfg,
                                     const unordered_map<int, set<string>>& modifiesRS,
                                     const unordered_map<int, set<string>>& usesRS,
-                                    bool findAffectsStar, unordered_map<int, Line> lineNumToLineMap
+                                    bool findAffectsStar, const unordered_map<int, Line>& lineNumToLineMap
                                     );
 
 unordered_map<int, set<int>> extractAffectsWithMultipleWildcards(const vector<Line>& program,

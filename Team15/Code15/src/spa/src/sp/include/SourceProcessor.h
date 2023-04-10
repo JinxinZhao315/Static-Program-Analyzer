@@ -21,6 +21,7 @@ public:
     void parseProgram(const string& fileName, PKB* pkb);
     void extract(const vector<Line>& program);
     void storeDataInPKB(PKB* pkb);
+    void clearAffectsCache();
 
     //API for PKB
     bool getAffectsRS(int lineNum1, int lineNum2, const vector<Line>& program, const unordered_map<int,
