@@ -1,0 +1,30 @@
+1 - affects boolean
+assign a;
+Select BOOLEAN such that Affects(_, _)
+TRUE
+5000
+2 - affects boolean
+assign a;
+Select BOOLEAN such that Affects(1, _)
+TRUE
+5000
+3 - affects boolean
+assign a;
+Select BOOLEAN such that Affects(_, 1)
+FALSE
+5000
+4 - affects boolean
+assign a;
+Select BOOLEAN such that Affects(13, _)
+FALSE
+5000
+5 - affects boolean
+assign a;
+Select BOOLEAN such that Affects(_, 13)
+TRUE
+5000
+6 - affects* boolean
+assign a;
+Select BOOLEAN such that Affects*(_, _)
+TRUE
+5000
