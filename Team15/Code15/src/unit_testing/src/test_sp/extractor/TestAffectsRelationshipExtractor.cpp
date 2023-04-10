@@ -854,3 +854,37 @@ TEST_CASE("source affects") {
 
     REQUIRE(expected1 == result1);
 }
+
+TEST_CASE("while loop bug test") {
+    const vector<Line>& lines = {
+            Line({"procedure", "A", "{"}, PROCEDURE),
+            Line(1, {"x", "=", "0", ";"}, ASSIGN),
+            Line(2, {"a", "=", "5", ";"}, ASSIGN),
+            Line(3, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE),
+            Line(4, {"i", "=", "i", ";"}, ASSIGN),
+            Line({"}"}, CLOSE_CURLY),
+            Line({"}"}, CLOSE_CURLY)
+    };
+    const unordered_map<int, Line> lineNumToLineMap = {
+            {1, Line(1, {"x", "=", "0", ";"}, ASSIGN)},
+            {2, Line(2, {"a", "=", "5", ";"}, ASSIGN)},
+            {3, Line(3, {"while", "(", "a", "!=", "0", ")", "{"}, WHILE)},
+            {4, Line(4, {"i", "=", "i"";"}, ASSIGN)},
+    };
+    ProcedureExtractor affectsTestProcExtractor;
+    VariableExtractor variableExtractor;
+    variableExtractor.extractVariables(lines);
+    set<string> variables = variableExtractor.getVariables();
+    auto [follows, followsStar] = extractFollowsRelationship(lines);
+    affectsTestProcExtractor.extractCallLineNumToProcName(lines);
+    auto callLineNumToProcName = affectsTestProcExtractor.getCallLineNumToProcName();
+    unordered_map<int, set<int>> cfg = extractNextRS(lines, follows);
+    auto modifiesUses = extractModifiesUsesAndCallRS(lines, variables);
+    auto modifiesRS = modifiesUses.modifiesRS;
+    auto usesRS = modifiesUses.usesRS;
+
+    clearCache();
+    bool result4 = extractAffectsRS(lines, 4, 4, cfg, modifiesRS, usesRS, false, lineNumToLineMap);
+
+    REQUIRE(result4);
+}
