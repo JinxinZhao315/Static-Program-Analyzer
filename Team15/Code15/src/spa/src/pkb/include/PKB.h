@@ -5,6 +5,7 @@
 #include "pkb/include/table/PatternTable.h"
 #include "pkb/include/table/StatementTable.h"
 #include "sp/include/SourceProcessor.h"
+#include "pkb/include/hasher/PairHasher.h"
 
 class SourceProcessor;
 
@@ -95,6 +96,9 @@ public:
 
 	//add if pattern
 	void addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> controlVarToIfLine);
+
+	//add cache
+	void addCache(std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache);
 
 	//GET
 	//get procedure
@@ -276,6 +280,9 @@ public:
 
 	std::set<int> getIfStmtsFromVar(std::string controlVarName);
 
+	//clear cache
+	void clearCache();
+
 private:
 	EntityTable<std::string> procTable;
 	EntityTable<std::string> varTable;
@@ -303,4 +310,5 @@ private:
 	PatternTable whilePatternTable;
 	PatternTable ifPatternTable;
 	SourceProcessor* sp;
+	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> affectsCache;
 };
