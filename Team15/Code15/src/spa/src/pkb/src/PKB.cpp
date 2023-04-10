@@ -445,7 +445,6 @@ std::set<int> PKB::getAffectsModifierStmtNums(int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	std::set<int> modifiers = sp->getAffectsRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
@@ -460,7 +459,6 @@ std::set<int> PKB::getAffectsUserStmtNums(int modifierStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	std::set<int> users = sp->getAffectsRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsModifierToUsers(modifierStmtNum, users);
 	return users;
@@ -475,7 +473,6 @@ bool PKB::areInAffectsRelationship(int modifierStmtNum, int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	bool boolResult = sp->getAffectsRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineMap);
 	if (boolResult) {
 		addAffectsModifierToUsers(modifierStmtNum, { userStmtNum });
@@ -490,7 +487,6 @@ bool PKB::isAffectsEmpty() {
 		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
 		std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-		std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 		std::unordered_map<int, std::set<int>> affectsMap = sp->getAffectsRSWithMultipleWildcards(lines, modifiesMap, usesMap, nextMap, lineMap);
 		if (affectsMap.empty()) {
 			return true;
@@ -514,7 +510,6 @@ std::set<int> PKB::getAffectsStarModifierStmtNums(int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	std::set<int> modifiers = sp->getAffectsStarRSWithWildcard(userStmtNum, true, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsStarUserToModifiers(userStmtNum, modifiers);
 	return modifiers;
@@ -529,7 +524,6 @@ std::set<int> PKB::getAffectsStarUserStmtNums(int modifierStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	std::set<int> users = sp->getAffectsStarRSWithWildcard(modifierStmtNum, false, lines, modifiesMap, usesMap, nextMap, lineMap);
 	addAffectsStarModifierToUsers(modifierStmtNum, users);
 	return users;
@@ -544,7 +538,6 @@ bool PKB::areInAffectsStarRelationship(int modifierStmtNum, int userStmtNum) {
 	std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 	std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
     std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 	bool boolResult = sp->getAffectsStarRS(modifierStmtNum, userStmtNum, lines, modifiesMap, usesMap, nextMap, lineMap);
 	if (boolResult) {
 		addAffectsStarModifierToUsers(modifierStmtNum, { userStmtNum });
@@ -559,7 +552,6 @@ bool PKB::isAffectsStarEmpty() {
 		std::unordered_map<int, std::set<std::string>> usesMap = getStmtUsesVarsMap();
 		std::unordered_map<int, std::set<int>> nextMap = getPreviousToNextStmtsMap();
 		std::unordered_map<int, Line> lineMap = getStmtNumToLineMap();
-		std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache = getCache();
 		std::unordered_map<int, std::set<int>> affectsStarMap = sp->getAffectsStarRSWithMultipleWildcards(lines, modifiesMap, usesMap, nextMap, lineMap);
 		if (affectsStarMap.empty()) {
 			return true;
@@ -624,7 +616,7 @@ std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
 }
 
 //get cache
-std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> PKB::getCache() {
+std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>>& PKB::getCache() {
 	return affectsCache;
 }
 

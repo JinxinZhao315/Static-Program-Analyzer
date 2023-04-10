@@ -281,7 +281,7 @@ public:
 	std::set<int> getIfStmtsFromVar(std::string controlVarName);
 
 	//get cache
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> getCache();
+	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>>& getCache();
 
 	//clear cache
 	void clearCache();
@@ -313,5 +313,5 @@ private:
 	PatternTable whilePatternTable;
 	PatternTable ifPatternTable;
 	SourceProcessor* sp;
-	std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> affectsCache;
+	static std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> affectsCache;
 };
