@@ -652,7 +652,16 @@ TEST_CASE("Overall test : optimization test 4") {
     REQUIRE(result == expectedResult);
 }
 
-TEST_CASE("Overall test : source affects buggy") {
+TEST_CASE("Overall test : source affects 1") {
+    string filename = source_affects;
+    string queryStr1 = "stmt s;Select BOOLEAN such that Affects*(4, 15)";
+
+    set<string> result1 = testDriver(filename, queryStr1);
+    set<string> expected1 = { "TRUE" };
+    REQUIRE(result1 == expected1);
+}
+
+TEST_CASE("Overall test : source affects") {
     string filename = source_affects;
     string queryStr1 = "stmt s;Select BOOLEAN such that Affects*(4, 15)";
     string queryStr2 = "assign a1, a2;Select a2 such that Affects(a1, a2) with a1.stmt# = 4";

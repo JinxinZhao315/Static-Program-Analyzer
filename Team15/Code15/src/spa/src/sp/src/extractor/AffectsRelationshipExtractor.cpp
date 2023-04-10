@@ -119,7 +119,7 @@ bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                           const unordered_map<int, set<string>>& modifiesRS,
                                           const unordered_map<int, set<string>>& usesRS,
                                           bool findAffectsStar, const unordered_map<int, Line>& lineNumToLineMap) {
-    pair<int, int> key = make_pair(lineNum1, lineNum2);
+    tuple<int, int, bool> key = make_tuple(lineNum1, lineNum2, findAffectsStar);
     if (cache.find(key) != cache.end()) {
         return cache[key];
     }

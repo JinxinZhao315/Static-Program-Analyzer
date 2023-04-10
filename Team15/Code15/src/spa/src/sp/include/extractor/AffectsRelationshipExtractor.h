@@ -3,16 +3,17 @@
 #include <utility>
 #include "CommonExtractorHeader.h"
 
-struct pair_hash {
-    template <class T1, class T2>
-    std::size_t operator() (const std::pair<T1, T2>& p) const {
-        return std::hash<T1>{}(p.first) ^ std::hash<T2>{}(p.second);
+struct tuple_hash {
+    template <class T1, class T2, class T3>
+    std::size_t operator() (const std::tuple<T1, T2, T3>& t) const {
+        return std::hash<T1>{}(std::get<0>(t)) ^ std::hash<T2>{}(std::get<1>(t)) ^ std::hash<T3>{}(std::get<2>(t));
     }
 };
 
 void clearCache();
 
-static unordered_map<pair<int, int>, bool, pair_hash> cache;
+static unordered_map<tuple<int, int, bool>, bool, tuple_hash> cache;
+
 
 bool extractAffectsRS(const vector<Line>& program, int lineNum1, int lineNum2,
                                               const unordered_map<int, set<int>>& cfg,
