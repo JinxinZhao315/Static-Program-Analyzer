@@ -170,42 +170,42 @@ Select <a,v.varName> such that Calls(_,_)
 5000
 Select tuple, calls wildcard synonym
 assign a; variable v; procedure p1;
-Select <a.stmt#, v.varName> such that Calls(_,p1);
+Select <a.stmt#, v.varName> such that Calls(_,p1)
 10 A,10 B,10 C,10 D,10 E,10 F,18 A,18 B,18 C,18 D,18 E,18 F,7 A,7 B,7 C,7 D,7 E,7 F
 5000
 Select tuple, calls wildcard identifier
 while w; if if;
-Select <w.stmt#, if.stmt#> such that Calls(_, "C");
+Select <w.stmt#, if.stmt#> such that Calls(_, "C")
 1 2,1 22,1 9,11 2,11 22,11 9,21 2,21 22,21 9
 5000
 Select tuple, calls synonym wildcard
 assign a; read r; procedure p1;
-Select <a.stmt#, r.varName> such that Calls(p1, _);
+Select <a.stmt#, r.varName> such that Calls(p1, _)
 10 A,10 E,10 F,18 A,18 E,18 F,7 A,7 E,7 F
 5000
 Select tuple, calls synonym synonym
 procedure p1, p2;
-Select <p1.procName, p2.procName> such that Calls(p1, p2);
+Select <p1.procName, p2.procName> such that Calls(p1, p2)
 A B,A F,B C,C D,D E,E F
 5000
 Select tuple, calls synonym identifier
 while w; variable v; procedure p1;
-Select <p1.procName, w.stmt#, v.varName> such that Calls(p1, "C");
+Select <p1.procName, w.stmt#, v.varName> such that Calls(p1, "C")
 B 1 A,B 1 B,B 1 C,B 1 D,B 1 E,B 1 F,B 11 A,B 11 B,B 11 C,B 11 D,B 11 E,B 11 F,B 21 A,B 21 B,B 21 C,B 21 D,B 21 E,B 21 F
 5000
 Select tuple, calls identifier wildcard
 if if; variable v; procedure p1;
-Select <p1.procName, if.stmt#, v.varName> such that Calls(p1, _);
+Select <p1.procName, if.stmt#, v.varName> such that Calls(p1, _)
 A 2 A,A 2 B,A 2 C,A 2 D,A 2 E,A 2 F,A 22 A,A 22 B,A 22 C,A 22 D,A 22 E,A 22 F,A 9 A,A 9 B,A 9 C,A 9 D,A 9 E,A 9 F,B 2 A,B 2 B,B 2 C,B 2 D,B 2 E,B 2 F,B 22 A,B 22 B,B 22 C,B 22 D,B 22 E,B 22 F,B 9 A,B 9 B,B 9 C,B 9 D,B 9 E,B 9 F,C 2 A,C 2 B,C 2 C,C 2 D,C 2 E,C 2 F,C 22 A,C 22 B,C 22 C,C 22 D,C 22 E,C 22 F,C 9 A,C 9 B,C 9 C,C 9 D,C 9 E,C 9 F,D 2 A,D 2 B,D 2 C,D 2 D,D 2 E,D 2 F,D 22 A,D 22 B,D 22 C,D 22 D,D 22 E,D 22 F,D 9 A,D 9 B,D 9 C,D 9 D,D 9 E,D 9 F,E 2 A,E 2 B,E 2 C,E 2 D,E 2 E,E 2 F,E 22 A,E 22 B,E 22 C,E 22 D,E 22 E,E 22 F,E 9 A,E 9 B,E 9 C,E 9 D,E 9 E,E 9 F
 5000
 Select tuple, calls identifier synonym
 call c; procedure p1;
-Select <p1.procName, c.procName> such that Calls("A", p1);
+Select <p1.procName, c.procName> such that Calls("A", p1)
 B B,B C,B D,B E,B F,F B,F C,F D,F E,F F
 5000
 Select tuple, calls identifier identifier
 read r; print p;
-Select <p.varName, r.varName> such that Calls("A", "B");
+Select <p.varName, r.varName> such that Calls("A", "B")
 D A,D E,D F,E A,E E,E F,F A,F E,F F
 5000
 Select with, calls wildcard wildcard
@@ -425,42 +425,42 @@ Select <a,v.varName> such that Calls*(_,_)
 5000
 Select tuple, calls* wildcard synonym
 assign a; variable v; procedure p1;
-Select <a.stmt#, v.varName> such that Calls*(_,p1);
+Select <a.stmt#, v.varName> such that Calls*(_,p1)
 10 A,10 B,10 C,10 D,10 E,10 F,18 A,18 B,18 C,18 D,18 E,18 F,7 A,7 B,7 C,7 D,7 E,7 F
 5000
 Select tuple, calls* wildcard identifier
 while w;read r;
-Select <w.stmt#, r.varName> such that Calls*(_, "C");
+Select <w.stmt#, r.varName> such that Calls*(_, "C")
 1 A,1 E,1 F,11 A,11 E,11 F,21 A,21 E,21 F
 5000
 Select tuple, calls* synonym wildcard
 assign a; read r; procedure p1;
-Select <a.stmt#, r.varName> such that Calls*(p1, _);
+Select <a.stmt#, r.varName> such that Calls*(p1, _)
 10 A,10 E,10 F,18 A,18 E,18 F,7 A,7 E,7 F
 5000
 Select tuple, calls* synonym synonym
 procedure p1, p2;
-Select <p1.procName, p2.procName> such that Calls*(p1, p2);
+Select <p1.procName, p2.procName> such that Calls*(p1, p2)
 A B,A C,A D,A E,A F,B C,B D,B E,B F,C D,C E,C F,D E,D F,E F
 5000
 Select tuple, calls* synonym identifier
 while w; if if; procedure p1;
-Select <p1.procName, w.stmt#, if.stmt#> such that Calls*(p1, "C");
+Select <p1.procName, w.stmt#, if.stmt#> such that Calls*(p1, "C")
 A 1 2,A 1 22,A 1 9,A 11 2,A 11 22,A 11 9,A 21 2,A 21 22,A 21 9,B 1 2,B 1 22,B 1 9,B 11 2,B 11 22,B 11 9,B 21 2,B 21 22,B 21 9
 5000
 Select tuple, calls* identifier wildcard
 if if; variable v; procedure p1;
-Select <p1.procName, if.stmt#, v.varName> such that Calls*(p1, _);
+Select <p1.procName, if.stmt#, v.varName> such that Calls*(p1, _)
 A 2 A,A 2 B,A 2 C,A 2 D,A 2 E,A 2 F,A 22 A,A 22 B,A 22 C,A 22 D,A 22 E,A 22 F,A 9 A,A 9 B,A 9 C,A 9 D,A 9 E,A 9 F,B 2 A,B 2 B,B 2 C,B 2 D,B 2 E,B 2 F,B 22 A,B 22 B,B 22 C,B 22 D,B 22 E,B 22 F,B 9 A,B 9 B,B 9 C,B 9 D,B 9 E,B 9 F,C 2 A,C 2 B,C 2 C,C 2 D,C 2 E,C 2 F,C 22 A,C 22 B,C 22 C,C 22 D,C 22 E,C 22 F,C 9 A,C 9 B,C 9 C,C 9 D,C 9 E,C 9 F,D 2 A,D 2 B,D 2 C,D 2 D,D 2 E,D 2 F,D 22 A,D 22 B,D 22 C,D 22 D,D 22 E,D 22 F,D 9 A,D 9 B,D 9 C,D 9 D,D 9 E,D 9 F,E 2 A,E 2 B,E 2 C,E 2 D,E 2 E,E 2 F,E 22 A,E 22 B,E 22 C,E 22 D,E 22 E,E 22 F,E 9 A,E 9 B,E 9 C,E 9 D,E 9 E,E 9 F
 5000
 Select tuple, calls* identifier synonym
 call c; procedure p1;
-Select <p1.procName, c.procName> such that Calls*("A", p1);
+Select <p1.procName, c.procName> such that Calls*("A", p1)
 B B,B C,B D,B E,B F,C B,C C,C D,C E,C F,D B,D C,D D,D E,D F,E B,E C,E D,E E,E F,F B,F C,F D,F E,F F
 5000
 Select tuple, calls* identifier identifier
 read r; print p;
-Select <p.varName, r.varName> such that Calls*("A", "B");
+Select <p.varName, r.varName> such that Calls*("A", "B")
 D A,D E,D F,E A,E E,E F,F A,F E,F F
 5000
 Select with, calls* wildcard wildcard
