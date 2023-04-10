@@ -175,11 +175,6 @@ void PKB::addAllIfPatterns(std::unordered_map<std::string, std::set<Line>> contr
 	ifPatternTable.addAllConditionalPatterns(controlVarToIfLine);
 }
 
-//add cache
-void PKB::addCache(std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>> cache) {
-	affectsCache = cache;
-}
-
 //GET
 //get procedure
 std::set<std::string> PKB::getAllProcNames() {
@@ -497,6 +492,7 @@ bool PKB::isAffectsEmpty() {
 }
 
 void PKB::clearAffects() {
+	sp->clearAffectsCache();
 	affectsTable.clearMaps();
 }
 
@@ -613,14 +609,4 @@ std::set<int> PKB::getIfStmtsWithVars() {
 
 std::set<int> PKB::getIfStmtsFromVar(std::string controlVarName) {
 	return ifPatternTable.getStmtsFromVar(controlVarName);
-}
-
-//get cache
-std::unordered_map<std::pair<int, int>, bool, PairHasher<int, int>>& PKB::getCache() {
-	return affectsCache;
-}
-
-//clear cache
-void PKB::clearCache() {
-	affectsCache.clear();
 }
