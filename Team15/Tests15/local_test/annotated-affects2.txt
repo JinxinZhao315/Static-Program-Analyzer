@@ -1,0 +1,20 @@
+procedure proc1 {
+//1  a = 0;
+//2  c = 5;
+//3  read d;
+//4  while (c != 0) {
+//5    a = a + 2 * d;
+//6    call proc2;
+//7    c = c - 1; }
+//8  if (a == 1) then {
+//9    a = a + 1; }
+     else {
+//10   b = 1; }
+//11 b = b + a + c;
+//12 d = b + 2;
+//13 a = a * d + b; }
+
+procedure proc2 {
+//14  b = 5;
+//15  e = b;
+//16  print e; }

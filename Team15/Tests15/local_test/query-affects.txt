@@ -323,3 +323,8 @@ stmt s1, s2;
 Select s1 such that Affects(s1, s2) with s2.stmt# = 14
 4, 5, 8, 10, 12, 13
 5000
+66 - affects chain boolean
+assign a1;
+Select BOOLEAN such that Affects(5, 10) and Affects(8, 12) and Affects(8, 14) and Affects(10, 10) and Affects(4, 8)
+TRUE
+5000
