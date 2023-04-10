@@ -1,0 +1,10 @@
+1 - affects
+assign a1, a2;
+Select a2 such that Affects(a1, a2)
+3
+5000
+2 - affects*
+assign a1, a2;
+Select a2 such that Affects*(a1, a2)
+3
+5000
